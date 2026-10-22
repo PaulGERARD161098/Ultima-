@@ -96,6 +96,51 @@ navigateur, une fois en ligne.
 
 ---
 
+## ✅ Gate ⑦ — Migration `leo_appels` (plafond d'appels de Léo) — CLOSE le 19/10
+
+**Où en est-on** : ✅ **appliquée par Paul le 19/10/2026 (≈ 18:45 UTC)**, SQL Editor du
+dashboard, projet `ultima`, fichier identique à la tête `3077897` d'Ultima-#400. Vérifiée :
+- étape 2 (`leo_appels-1-etat.sql`) : **16 lignes, toutes `ok = true`** (rapporté par Paul) ;
+- étape 3 (`leo_appels-2-plafond-annule.sql`) : `ERROR: P0001: PLAFOND_OK : 100 tentatives
+  acceptées, la suivante refusée (leo_calls_quota_exhausted) — transaction annulée, aucune
+  ligne ne reste` (capture de Paul).
+Ultima-#400 fusionnée ensuite par Paul (`d67998a`, sur `3077897`) : la migration est bien
+passée AVANT le code. **Reste ouvert** : l'inscription au registre `supabase_migrations` (voir
+« À savoir ») et la relecture des advisors sécurité/performance — les deux attendent un
+connecteur qui voie `ultima`. La procédure ci-dessous reste la référence pour rejouer ou
+vérifier.
+
+**Quoi** : `supabase/migrations/20261019160000_leo_appels.sql` — une table de journal
+(quadrant, modèle, phase, tokens : aucun contenu), RLS, écriture limitée à 6 colonnes,
+une trace = une tentative + une issue, plafond atomique 100 tentatives / 24 h / compte.
+Revue indépendante faite ; éprouvée sur PostgreSQL jetable (sabotages rouges) et dans la CI.
+
+**Les 4 gestes** (≈ 5 min) — dashboard Supabase → projet **ultima** (`leosfqyidgsaescjbfom`)
+→ **SQL Editor** → *New query* :
+1. Coller le contenu de `supabase/migrations/20261019160000_leo_appels.sql` → **Run**.
+   Attendu : « Success. No rows returned ».
+2. Coller `supabase/verifs/leo_appels-1-etat.sql` → **Run**. Attendu : **16 lignes, toutes
+   `ok = true`**. Une ligne à `false` nomme ce qui manque : ne rien fusionner, me la dire.
+3. Coller `supabase/verifs/leo_appels-2-plafond-annule.sql` → **Run**. ⚠️ **Le signal de
+   réussite est une erreur rouge** qui commence par **`PLAFOND_OK : 100 tentatives
+   acceptées, la suivante refusée`** : le script pose 100 tentatives au nom d'un compte réel,
+   constate le refus de la 101ᵉ, puis annule tout volontairement (aucune ligne ne reste).
+   `ECHEC …` = le plafond ne se comporte pas comme prévu.
+4. Me dire le résultat des étapes 2 et 3 (le texte, ou une capture) : je l'inscris ici et dans
+   `FINUBAR.md`, et la fusion d'Ultima-#400 peut alors être demandée.
+
+**À savoir** : l'éditeur SQL n'inscrit PAS la migration au registre
+`supabase_migrations.schema_migrations` (les précédentes l'ont été via le connecteur). Tant
+que mon connecteur ne voit pas `ultima`, l'écart base ⇄ registre reste à constater et à
+corriger (voir `supabase/releves/` : le dépôt doit décrire la base).
+
+**Retour arrière** — ⛔ destructif (perd le journal), uniquement sur ton geste, et seulement si
+la migration est appliquée sans que le code de #400 soit fusionné ou s'il faut annuler :
+`drop table public.leo_appels;` puis `drop function leo_private.appels_plafond();`
+(la table emporte son trigger). Le code de #400 retombe de toute façon sur son repli local.
+
+---
+
 *Rien dans ce runbook n'a été exécuté par Léo : gates dashboard = tes gestes ;
 gate ④ = ta validation de PR. Une fois une gate faite, coche-la ici ou dis-le,
 je mets à jour le CADRAGE.*

@@ -7,7 +7,8 @@ permissions:
   contents: read
 # Un nouveau push sur une PR annule le passage précédent de CETTE PR : il
 # testait une tête déjà dépassée (30/09 : 20 min perdues sur #321). Jamais sur
-# main, où chaque fusion est vérifiée jusqu'au bout (groupe = le commit).
+# main, où chaque fusion va jusqu'au bout (groupe = le commit) ; le harnais
+# navigateur n'y est sauté que dans les cas de l'étape « Portée du changement ».
 # `tests/unit-ci-groupes.mjs` vérifie que cette règle reste en place.
 concurrency:
   group: tests-${{ github.event.pull_request.number || github.sha }}
@@ -41,21 +42,65 @@ jobs:
             --workdir /travail "$image" sh -c 'node tests/lv1-isolation.mjs && npm test'
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 15 min était atteint : le 21/10 (#406) le groupe 0 a fini vert à 14:57 et a été
+    # annulé pendant le nettoyage. La limite ne facture rien, une relance si.
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         groupe: [0, 1]
     steps:
+      # fetch-depth 2 : le commit testé et ses parents, de quoi lire le diff net (la
+      # fusion d'une PR a deux parents ; HEAD^1 est sa base).
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 2
+      # Facture GitHub du 19/10/2026 : Ultima- ≈ 54 % des minutes Actions de
+      # l'organisation, et ce harnais = 27 min des 29 facturées par exécution.
+      # Aucun harnais navigateur ne lit de `.md` (mesuré : 59 fichiers, 3 données
+      # factices, 19 commentaires) : quand seuls des `.md` changent, il ne peut rien
+      # apprendre. Le job `unit` tourne TOUJOURS (il garde LECONS.md et le sceau).
+      # On saute des ÉTAPES, pas le job : le contrôle reste présent et vert, il
+      # n'y a donc jamais de contrôle « en attente ». Toute erreur, tout doute,
+      # tout fichier non `.md` → le harnais s'exécute. Gardé par
+      # `tests/unit-ci-md-seuls.mjs`, qui exécute CE script tel quel.
+      # Second cas (21/10, accord de Paul) : sur `main`, la fusion d'une PR à jour a
+      # EXACTEMENT le contenu de sa tête (HEAD^2), déjà testée verte avant fusion (gate
+      # de fusion) ; le rejouer coûtait ≈ 29 min facturées par PR de code (#406). Seul
+      # un `push` avec deux parents et un contenu identique saute : PR en retard sur
+      # `main`, push direct, `pull_request`, erreur → le harnais s'exécute.
+      - name: Portée du changement
+        id: portee
+        run: |
+          sauter=false
+          if fichiers=$(git diff --name-only HEAD^1 HEAD) && [ -n "$fichiers" ]; then
+            rc=0
+            printf '%s\n' "$fichiers" | grep -qvE '\.md$' || rc=$?
+            if [ "$rc" -eq 1 ]; then
+              sauter=true
+              echo "Harnais navigateur sauté : seuls des .md changent."
+            fi
+          fi
+          if [ "$sauter" != true ] && [ "${GITHUB_EVENT_NAME:-}" = push ] && git rev-parse -q --verify 'HEAD^2' >/dev/null; then
+            rc=0
+            git diff --quiet 'HEAD^2' HEAD || rc=$?
+            if [ "$rc" -eq 0 ]; then
+              sauter=true
+              echo "Harnais navigateur sauté : la fusion reprend à l'identique la tête de PR testée."
+            fi
+          fi
+          if [ "$sauter" != true ]; then echo "Harnais navigateur exécuté."; fi
+          echo "sauter=$sauter" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
+        if: steps.portee.outputs.sauter != 'true'
         with:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+        if: steps.portee.outputs.sauter != 'true'
       - name: Harnais navigateur isolé
+        if: steps.portee.outputs.sauter != 'true'
         run: |
           mkdir -p tests/.cache "$RUNNER_TEMP/lv1-memoire"
           cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"

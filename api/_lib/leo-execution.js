@@ -257,7 +257,10 @@ export const DEFAIRES = Object.freeze({
     libelle: { via: 'serment_id', table: 'serments', colonne: 'intitule' } },
   proposer_situation: { table: 'situations', retouche: true, libelle: { colonne: 'intitule' } },
   proposer_scenario: { table: 'scenarios', retouche: false,
-    libelle: { via: 'situation_id', table: 'situations', colonne: 'intitule' } }
+    libelle: { via: 'situation_id', table: 'situations', colonne: 'intitule' } },
+  // AMATSU (18/10/2026) : une lecture se défait par sa suppression ; sans
+  // `updated_at` ni policy UPDATE, rien ne peut avoir été retouché dessus.
+  proposer_lecture_amatsu: { table: 'amatsu_lectures', retouche: false, libelle: { colonne: 'objet' } }
 });
 
 // LE RELEVÉ DES DÉPENDANCES — toutes les clés étrangères qui pointent une table
@@ -291,7 +294,10 @@ export const DEPENDANCES = Object.freeze({
   scenarios: [
     { table: 'situations', colonne: 'scenario_advenu_id' },
     { table: 'scenario_liens', colonne: 'scenario_id' }
-  ]
+  ],
+  // Rien ne naît encore sur une lecture d'AMATSU (la passerelle est la 2b) :
+  // le relevé des migrations l'exigera le jour où une clé la visera.
+  amatsu_lectures: []
 });
 
 const CLES_DEFAIRE = ['etape', 'traceId'];

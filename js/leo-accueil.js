@@ -462,6 +462,26 @@
     // ci-dessus — bornes alignées sur les validateurs serveur (jamais de
     // troncature silencieuse : ce que la carte affiche est ce qui sera
     // stocké), résolution des *_ref côté front, aucun outil destructeur.
+    // ---- AMATSU (boucle 2a, 2026-10-18) : la lecture du dragon de l'air.
+    // Transversal : le même gabarit sert RIVEN, ADRAMELECH et IMLADRIK. Aucune
+    // *_ref : l'objet jugé est du texte dicté (la passerelle vers un objet
+    // existant est la boucle 2b). Bornes = validateLectureAmatsu (200/500/500/
+    // 500) — refus plutôt que troncature, comme partout ici.
+    if (outil === 'proposer_lecture_amatsu') {
+      var bornesLecture = { objet: 200, bise: 500, souffle: 500, ouragan: 500 };
+      var clesLecture = Object.keys(bornesLecture);
+      var corpsLecture = {};
+      for (var li = 0; li < clesLecture.length; li++) {
+        var cleLecture = clesLecture[li];
+        var valeurLecture = args[cleLecture];
+        if (typeof valeurLecture !== 'string' || !valeurLecture || valeurLecture.length > bornesLecture[cleLecture]) {
+          return { ok: false, raison: 'invalide' };
+        }
+        corpsLecture[cleLecture] = valeurLecture;
+      }
+      return { ok: true, url: '/api/amatsu-lectures', methode: 'POST', corps: corpsLecture };
+    }
+
     if (outil === 'proposer_page_journal') {
       if (typeof args.contenu !== 'string' || !args.contenu || args.contenu.length > 20000) {
         return { ok: false, raison: 'invalide' };
@@ -1249,6 +1269,11 @@
         if (typeof texteLeo === 'string' && texteLeo) {
           historique.push({ role: 'assistant', content: texteLeo });
           bulle('leo', texteLeo);
+          // 19/10 : le journal des appels est injoignable → plafond local, plus bas
+          // que celui de la base. Dit une fois par réponse, valeur exacte seulement.
+          if (data && data.journal === 'local') {
+            bulle('erreur', "Le journal des appels de Léo est injoignable : un plafond provisoire, plus bas, s'applique.");
+          }
         }
         if (proposition) {
           // La saisie reste coupée tant que la carte attend Paul (pas de rearmer).
@@ -1280,10 +1305,14 @@
           // La cause d'un 502 n'est affichée que si elle est dans la liste
           // fermée du serveur (MOTIF_CAUSE_IA) — jamais un texte quelconque.
           var cause = resultat.corps && typeof resultat.corps.cause === 'string' &&
-            /^ia (\d{3}( crédit)?|délai|réseau|vide)$/.test(resultat.corps.cause)
+            /^ia (\d{3}( crédit)?|délai|réseau|vide|plafond)$/.test(resultat.corps.cause)
             ? ' · ' + resultat.corps.cause : '';
-          bulle('erreur', "Léo n'a pas pu répondre (code " +
-            (Number.isInteger(resultat.statut) ? resultat.statut : '?') + cause + ') — réessayez.');
+          // 19/10 : le plafond d'appels sur 24 h n'est pas un incident à retenter —
+          // il se lève tout seul quand la fenêtre glisse, et le dire évite l'insistance.
+          bulle('erreur', resultat.corps && resultat.corps.cause === 'ia plafond'
+            ? "Léo a atteint son plafond d'appels sur 24 h (code 429 · ia plafond) — elle reprendra seule quand la fenêtre glisse."
+            : "Léo n'a pas pu répondre (code " +
+              (Number.isInteger(resultat.statut) ? resultat.statut : '?') + cause + ') — réessayez.');
         }
         rearmer();
       }, function () {

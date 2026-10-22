@@ -31,11 +31,11 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-13",
-    "commit": "5f29398c123592cae6acf7506ef5ea880f2ea289",
-    "quoi": "13/10 : #389, #392 — plan A→Z : gel C/N/D dans la reprise, levée par la règle 5, preuve de D3 ; lexique vocal RR = air/air, RO = air/eau."
+    "le": "2026-10-21",
+    "commit": "37e439212c4cbfdf2a69961f4fb4f7c8691def9b",
+    "quoi": "21/10 : grain remis à l'heure — AMATSU 2b fusionnée le 19/10 (#403, d4ff809) ; boucle coûts : RenoBoost#611 fusionnée le 21/10 (2015249, conflit FINUBAR résolu par fusion de main, CI verte sur daa5c84), production lue : /CLAUDE.md et /FINUBAR.md en 404, accueil en 200."
   },
-  "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
+  "prochaine_action": "Paul tranche la suite d'AMATSU : γ (le regard d'après) ou 2c (la passerelle vers l'objet jugé) — puis cadrage EL de la boucle retenue (CADRAGE-IMLADRIK.md §12).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -47,6 +47,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "AMATSU : boucles 1 (l'étoile), 2a (la voix de Léo), 2b-α (maquette) et 2b-β (la page de la rose des vents) FERMÉES — 2b fusionnée le 19/10 (#403, d4ff809 ; amatsu.html en production). Restent : γ (le regard d'après) et 2c (la passerelle vers l'objet jugé), à trancher par Paul ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché (piste non vérifiée : « Separate Production Secret Values »). Leçon payée à écrire dans memoire/LECONS.md : une mesure en unités viewBox ne dit rien de la lisibilité, mesurer la taille rendue. CADRAGE-IMLADRIK.md §12.6.",
+      "depuis": "2026-10-18"
+    },
+    {
+      "quoi": "Coûts (19/10 → 21/10) : leviers posés et fusionnés le 21/10 dans tous les dépôts où ils sont rentables — RenoBoost#611 (L3 + .md hors déploiement), RenoDevis#407 (L2 + .md exclus de Tailwind), Artidispo#160 et mon-dpe.fr#253 (L3), Ultima-#406 (limite navigateur 20 min). Tableau par dépôt : CLAUDE.md, « LES LEVIERS, DÉPÔT PAR DÉPÔT ». Restent : capture Usage Vercel du cycle 25/10 → 25/11 contre 197 h 24 de Build CPU (aucun gain promis avant) ; limite de dépense Anthropic (« 30 $ », non relue) ; migration leo_appels hors registre et advisors non relus (connecteur Supabase à autoriser par Paul) ; LECONS v103 à propager (2 leçons du 21/10 : déploiement absent ≠ ignoré ; 10ᵉ SHA complété de mémoire) ; artisan-builder L2 (gain modeste, non fait).",
+      "depuis": "2026-10-19"
+    },
     {
       "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés. Chaque système doit encore prouver son propre raccordement et ses contrôles ; aucun agent permanent activé par cette règle.",
       "depuis": "2026-10-13"
@@ -172,13 +180,54 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-13"
+  "maj": "2026-10-21"
 }
 ```
 
 <!-- finubar:fin -->
 
 ## Journal de reprise
+
+### 2026-10-19 — la CI bloquée vient de la facture ; Ultima- en est le premier poste
+
+Paul lit Billing : budget Actions de l'organisation à 100 %, autorisation de paiement
+refusée — c'est la cause des `startup_failure` du 18/10, pas le code. Usage par dépôt
+(brut, 1ᵉʳ–19/10) : Ultima- ≈ 37,3 $ sur 68,54 $, RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $.
+Dans Ultima-, `tests.yml` facture ≈ 29 min par exécution (27 pour le harnais navigateur),
+≈ 220 exécutions du 01 au 18/10 pour 71 PR ouvertes ; la moitié des commits mais un tiers des PR (diff net) sont des `.md` seuls : gain attendu d'un quart à un tiers d'Ultima-.
+Paul : « go, prépare le correctif ; Ultima doit rester le coordinateur ». Fait sur la
+branche `claude/ci-couts-md-seuls` (commit `0760404`) : le job navigateur saute ses étapes
+lourdes quand le diff net ne touche que des `.md` ; `tests/unit-ci-md-seuls.mjs` exécute le
+script tel quel (18 verdicts, 8 sabotages rouges). La règle de coûts devient canonique dans
+`CLAUDE.md` ; les trois leçons de la boucle sont écrites ICI (LECONS v94) puis à propager.
+Non éprouvé sur GitHub : première exécution réelle après déblocage.
+
+### 2026-10-19 (suite) — le plafond d'appels de Léo, revu puis corrigé
+
+Question de Paul : garder la tour de contrôle sans facture énorme. Lu à la source : le
+coût d'Ultima côté Vercel est du build (5,79 $ de 5,81 $), celui de Léo est chez Anthropic,
+sans compteur ni plafond avant cette boucle. Livré sur la même branche : journal
+`leo_appels` (tentative posée AVANT le coût, issue et tokens après, zéro contenu),
+plafond atomique 100/24 h par propriétaire, repli local 25/instance dit à l'écran. Revue
+indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigés — repli plus
+bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
+du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
+Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
+au hasard ; verdict d'absence vert avant la réponse) — leçons v98. Arbitrages de Paul (19/10) : plafond
+confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
+go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
+la fusion sur SHA.
+
+### 2026-10-19 (fin) — migration appliquée, #400 fusionnée
+
+Le connecteur Supabase de la séance de reprise n'était pas branché du tout : arrêt sans
+écriture, puis Paul applique lui-même les trois scripts du gate ⑦ (SQL Editor, projet
+`ultima`). Étape 2 : 16/16 vrais. Étape 3 : `PLAFOND_OK`, la 101ᵉ tentative refusée,
+rien ne reste — Paul l'a d'abord lu comme un échec parce que le succès s'affiche en rouge.
+CI verte 9/9 sur `3077897`, puis fusion par Paul (`d67998a`) : la migration est passée
+avant le code, le repli local ne joue plus qu'en panne. Restent ouverts : registre
+`supabase_migrations` et advisors (connecteur), limite de dépense Anthropic, propagation
+de LECONS v98.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 

@@ -216,6 +216,19 @@ export const BLASONS = {
     + '<path d="M20 51 H52" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
     + '<path d="M31 40 h10 m0 0 l-3.6 -3.6 m3.6 3.6 l-3.6 3.6" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
     'le portail d’un cap à venir'),
+  // AMATSU — le dragon de l'air (Paul, 18/10/2026 : « blason à dessiner »).
+  // Les trois vents de la carte gravée : trois souffles horizontaux, les deux
+  // premiers s'enroulent (la bise, le souffle), le troisième file droit et se
+  // prolonge d'un trait d'or (l'ouragan, qui emporte). Encre et or, comme les
+  // autres ; rien d'autre que du trait — un blason se lit à 24 px.
+  amatsu: disque(
+    '<g fill="none" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round">'
+    + '<path d="M17 29 H40 a5 5 0 1 0 -5 -5"/>'
+    + '<path d="M21 38 H49 a5.5 5.5 0 1 1 -5.5 5.5"/>'
+    + '<path d="M17 47 H36"/>'
+    + '</g>'
+    + '<path d="M40 47 h11" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round"/>',
+    'les trois vents d’Amatsu, le dragon de l’air'),
 
   // — Les caps de NICOL BOLAS.
   abaque: disque(

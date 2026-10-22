@@ -547,6 +547,38 @@ for (const [code, corps, suffixe] of [
     texteErreur === "Léo n'a pas pu répondre (code " + code + suffixe + ') — réessayez.', texteErreur);
 }
 
+// C3 ter. Le plafond d'appels (19/10) : un 429 « ia plafond » n'est pas un incident à
+// retenter (la bulle le dit, au féminin) ; le repli local se signale sans jamais
+// empêcher la réponse ; et une réponse normale ne porte AUCUNE mention de repli.
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => route.fulfill({ status: 429, contentType: 'application/json',
+  body: JSON.stringify({ ok: false, error: 'Plafond d’appels de Léo atteint (24 h)', cause: 'ia plafond' }) }));
+await ouvrirCartoucheVoix('voix-plafond');
+await pageV.locator('.leo-voix-champ').fill('Message au plafond');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-bulle-erreur', { timeout: 5000 });
+verifier('Plafond d’appels : la bulle le dit, au féminin, sans inviter à insister',
+  ((await pageV.locator('.leo-bulle-erreur').textContent()) || '') ===
+    "Léo a atteint son plafond d'appels sur 24 h (code 429 · ia plafond) — elle reprendra seule quand la fenêtre glisse.");
+for (const [journal, attendu] of [['local', 1], [undefined, 0]]) {
+  await pageV.unroute('**/api/leo');
+  await pageV.route('**/api/leo', (route) => route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Bonjour Paul.', ...(journal ? { journal } : {}) } }) }));
+  await ouvrirCartoucheVoix('voix-journal-' + (journal || 'base'));
+  await pageV.locator('.leo-voix-champ').fill('Bonjour');
+  await pageV.locator('.leo-voix-envoyer').click();
+  // ⛔ On attend le TEXTE de la réponse, pas un sélecteur : « .leo-bulle-leo » existe peut-être
+  // déjà (accueil) — le verdict d'ABSENCE ci-dessous serait alors vert avant que la réponse arrive.
+  await pageV.waitForFunction(() => [...document.querySelectorAll('.leo-bulle-leo')]
+    .some((b) => b.textContent === 'Bonjour Paul.'), null, { timeout: 5000 });
+  const erreurs = await pageV.locator('.leo-bulle-erreur').count();
+  const dit = erreurs ? ((await pageV.locator('.leo-bulle-erreur').first().textContent()) || '') : '';
+  verifier(journal
+    ? 'Repli local : la réponse arrive ET le plafond provisoire est signalé'
+    : 'Journal normal : aucune mention de repli (non-vacuité de l’absence)',
+  erreurs === attendu && (!attendu || /journal des appels de Léo est injoignable/.test(dit)), `erreurs=${erreurs} ${dit} | bulles: ${(await pageV.locator('.leo-bulle').allTextContents()).join(' / ')}`);
+}
+
 // ===================== C4-C7. Les mains de Léo (L2b, API stubées) =====================
 // La carte de confirmation est un rendu DÉTERMINISTE de la reformulation
 // SERVEUR ; l'exécution ne part QUE sur « Confirmer », vers l'API d'écriture

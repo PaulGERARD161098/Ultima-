@@ -312,6 +312,34 @@ const CATALOGUE = {
       echeance: { max: 10, requis: true, date: true, description: 'La date de relance au format AAAA-MM-JJ.' },
       note: { max: 500, description: 'Note dictée sur la relance (optionnelle).' }
     }
+  },
+
+  // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026 ; CADRAGE-IMLADRIK.md §12).
+  // Le seul outil TRANSVERSAL du catalogue : Amatsu ne porte pas d'objet, il
+  // pose sa question à ceux des autres caps — une décision, un projet, une
+  // idée, d'où qu'ils viennent. D'où `quadrant` en LISTE : la main est servie
+  // sur RIVEN, ADRAMELECH et IMLADRIK. NICOL BOLAS reste sans main — non par
+  // interdit, mais parce que rien ne s'y instruit avant que le quadrant ait
+  // une API (unit-leo-anneau) : le jour venu, on l'ajoute à la liste, nommément.
+  // VERT sous le critère de Paul : une lecture s'AJOUTE (POST
+  // /api/amatsu-lectures), ne modifie rien, et se défait par la suppression de
+  // sa cible (DEFAIRES, retouche false : pas d'updated_at, pas de policy UPDATE).
+  // Les quatre arguments sont REQUIS : Léo pose les trois vents AVANT d'appeler
+  // l'outil, et les réponses sont celles de Paul — jamais une note, jamais un
+  // verdict de sa main (§12.1).
+  proposer_lecture_amatsu: {
+    quadrant: ['riven', 'adramelech', 'imladrik'],
+    anneau: 'vert',
+    description: "Proposer d'enregistrer la lecture d'AMATSU, le dragon de l'air, " +
+      'sur une décision, un projet ou une idée que Paul lui soumet : ses ' +
+      'réponses aux trois vents, dans ses mots. À appeler SEULEMENT quand les ' +
+      'trois réponses ont été dictées — sinon, pose le vent qui manque.',
+    args: {
+      objet: { max: 200, requis: true, description: 'Ce que Paul soumet à Amatsu (la décision, le projet, l’idée), fidèle à la dictée.' },
+      bise: { max: 500, requis: true, description: 'Premier vent — « plus libre ? » : la réponse de Paul, dans ses mots.' },
+      souffle: { max: 500, requis: true, description: 'Deuxième vent — « cohérent avec moi-même, mes choix, ma paix ? » : sa réponse.' },
+      ouragan: { max: 500, requis: true, description: 'Troisième vent — « emporté par le vent ? » (la volatilité) : sa réponse.' }
+    }
   }
 };
 
@@ -347,7 +375,7 @@ for (const nom of Object.keys(CATALOGUE)) {
     if (arg.enum) properties[cle].enum = arg.enum.slice();
     if (arg.requis) required.push(cle);
   }
-  OUTILS_PAR_QUADRANT[outil.quadrant].push({
+  const schema = {
     name: nom,
     description: outil.description,
     input_schema: {
@@ -356,7 +384,10 @@ for (const nom of Object.keys(CATALOGUE)) {
       required,
       additionalProperties: false
     }
-  });
+  };
+  // `quadrant` : un identifiant, ou une LISTE pour un outil transversal
+  // (AMATSU, 18/10/2026). Même schéma servi à chaque quadrant nommé.
+  for (const q of [].concat(outil.quadrant)) OUTILS_PAR_QUADRANT[q].push(schema);
 }
 
 // Outils d'un quadrant → tableau, ou null si le catalogue est vide/inconnu.
@@ -459,7 +490,12 @@ export function anneauInterface(anneau, proposition, dernierMessage) {
     proposer_serment: /^(?:cree|creer|ajoute|ajouter|scelle|sceller)\s+(?:un\s+)?serment\b/,
     proposer_flamme: /^(?:cree|creer|ajoute|ajouter|allume|allumer)\s+(?:une\s+)?flamme\b/,
     proposer_situation: /^(?:cree|creer|ajoute|ajouter|capture|capturer)\s+(?:une\s+)?situation\b/,
-    proposer_scenario: /^(?:cree|creer|ajoute|ajouter)\s+(?:un\s+)?scenario\b/
+    proposer_scenario: /^(?:cree|creer|ajoute|ajouter)\s+(?:un\s+)?scenario\b/,
+    // AMATSU : « Amatsu, … » ouvre la lecture. Le vert sans demander exige en
+    // plus que les QUATRE valeurs soient mot pour mot dans le dernier message
+    // de Paul (règle commune ci-dessous) : trois réponses dictées sur trois
+    // tours retombent donc sur la carte — et c'est voulu.
+    proposer_lecture_amatsu: /^amatsu\b/
   }[proposition?.outil];
   if (!objet || !objet.test(demande)
     || /\b(?:ne|pas|sans|jamais|annule|annuler)\b/.test(dit)) return ANNEAU_PAR_DEFAUT;
@@ -482,7 +518,9 @@ export function validerProposition(nomOutil, args, quadrant) {
   const outil = typeof nomOutil === 'string'
     ? (Object.prototype.hasOwnProperty.call(CATALOGUE, nomOutil) ? CATALOGUE[nomOutil] : undefined)
     : undefined;
-  if (!outil || outil.quadrant !== quadrant) return { ok: false };
+  // Un outil transversal porte ses quadrants en liste ; un quadrant qui n'y
+  // figure pas (NICOL BOLAS pour AMATSU) est refusé comme un outil inconnu.
+  if (!outil || ![].concat(outil.quadrant).includes(quadrant)) return { ok: false };
   if (!args || typeof args !== 'object' || Array.isArray(args)) return { ok: false };
 
   const propres = {};
@@ -568,6 +606,9 @@ export function reformulerProposition(proposition) {
         ' : « ' + args.deroule + ' »' +
         (args.signaux ? ' Signaux : « ' + args.signaux + ' »' : '') +
         (args.parade ? ' Parade : « ' + args.parade + ' »' : '');
+    case 'proposer_lecture_amatsu':
+      return 'Amatsu lit « ' + args.objet + ' » — plus libre ? « ' + args.bise +
+        ' » · cohérent ? « ' + args.souffle + ' » · emporté ? « ' + args.ouragan + ' »';
     default:
       return '';
   }
@@ -701,6 +742,20 @@ export function construireSysteme(quadrant, avecOutils) {
           "(c'est la prochaine marche du chantier) : si Paul te dicte une action, " +
           'reformule-la précisément et invite-le à la porter en session avec Léo.'
       ];
+  // AMATSU, le dragon de l'air (18/10/2026) : sur les quadrants qui portent sa
+  // main, Léo sait quoi faire d'un « Amatsu, … » — poser les trois vents, puis
+  // seulement appeler l'outil. Lu dans le catalogue, jamais dans une seconde liste.
+  if (avecOutils && (OUTILS_PAR_QUADRANT[quadrant] || []).some((o) => o.name === 'proposer_lecture_amatsu')) {
+    reglesAction.push(
+      '- AMATSU, le dragon de l’air, souffle sur tous les quadrants. Quand Paul ' +
+        'lui soumet une décision, un projet ou une idée (« Amatsu, … »), pose-lui ' +
+        'les trois vents, un par un si besoin : plus libre ? cohérent avec ' +
+        'lui-même, ses choix, sa paix ? emporté par le vent ? Puis appelle ' +
+        'proposer_lecture_amatsu avec l’objet et ses trois réponses, dans ses ' +
+        'mots. Jamais une note, jamais un verdict de ta main : les réponses ' +
+        'sont les siennes, tu les gardes.'
+    );
+  }
   return [
     "Tu es Léo, la majordome d'Ultima, la plateforme personnelle de Paul.",
     'Tu es une femme ; tous tes accords sont au féminin.',
@@ -805,7 +860,7 @@ export function creerGardeVoix(intervalleMs, maxEntrees = 1000) {
 // crédit épuisé (400), une cadence (429), une surcharge (529) d'un délai.
 // ⛔ Jamais le message brut du fournisseur : un statut, ou un mot de la liste.
 // Le mot « crédit » est le seul tiré du message, et seulement comme étiquette.
-export const MOTIF_CAUSE_IA = /^ia (\d{3}( crédit)?|délai|réseau|vide)$/;
+export const MOTIF_CAUSE_IA = /^ia (\d{3}( crédit)?|délai|réseau|vide|plafond)$/;
 export function causeEchecIA(erreur) {
   if (!erreur || typeof erreur !== 'object') return 'ia réseau';
   const statut = Number.isInteger(erreur.status) ? erreur.status : null;

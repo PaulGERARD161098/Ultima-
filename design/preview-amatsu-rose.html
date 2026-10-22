@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Rose des vents d'Amatsu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!--
+  MAQUETTE DE TRAVAIL — boucle 2b-α d'AMATSU (CADRAGE-IMLADRIK.md §12.6).
+  AUCUNE DONNÉE RÉELLE : les douze lectures sont INVENTÉES (§5, IMLADRIK est
+  intime). La lecture réelle de Paul n'a pas été lue ; seul son COMPTE (1) l'a été.
+
+  Décision de Paul du 19/10 : une seule forme à maquetter, la rose des vents.
+  Ce que la page éprouve :
+    ① la relecture À LA DEMANDE — au repos, l'objet et la date ; au clic, les trois
+      vents (leçon VRANESH v1 : sur un cap intime, la densité est le défaut principal) ;
+    ② la tenue en VOLUME — 1 lecture (le réel d'aujourd'hui), 5, 12 (le pire cas
+      construit) ; la géométrie se MESURE : emprise contre viewBox, croisement des
+      étiquettes, mots affichés au repos ;
+    ③ le téléphone — la rose n'y porte plus ses étiquettes ; la liste devient la
+      surface de lecture (constat à trancher pour la 2b-β).
+
+  Convention de la carte savante : les huit vents des portulans, par leur initiale —
+  T(ramontane) au nord, G(rec), L(evant), S(iroc), O(stro), L(ibeccio), P(onant),
+  M(aestro). La lecture la plus récente souffle de la Tramontane ; les autres suivent
+  dans le sens des aiguilles, des plus récentes aux plus anciennes.
+
+  Zéro ressource externe, zéro CDN. Le script est inline parce que ce fichier n'est
+  pas servi par Vercel (le préfixe /design est privé, middleware.js) : il s'ouvre en
+  local ou en page claude.ai privée.
+-->
+<style>
+/* Mise en page : la nuit du ciel d'Ultima, un cartouche de parchemin qui porte la rose,
+   la parole de Léo à côté (au-dessous sur téléphone), le livre des lectures en bas. */
+:root {
+  --nuit: #03070e;
+  --nuit-voile: #0a1422;
+  --parchemin: #f4ecd8;
+  --parchemin-ombre: #e3d3ab;
+  --encre: #3b2f1c;
+  --encre-douce: #6a5636;
+  --or: #a9884a;
+  --or-clair: #d8bd82;
+  --lune: #e8dfc8;
+  --ok: #2f6b3a;
+  --ko: #a02c1a;
+  --police: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--nuit);
+  color: var(--lune);
+  font-family: var(--police);
+  font-size: 1rem;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 1.5rem 3rem;
+}
+.page { max-width: 72rem; margin: 0 auto; display: grid; gap: 1.5rem; }
+header { display: grid; gap: 0.35rem; }
+.fil { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--or-clair); }
+h1 { margin: 0; font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 600; letter-spacing: 0.04em; text-wrap: balance; }
+.chapeau { margin: 0; max-width: 62ch; color: var(--lune); opacity: 0.9; }
+.avertissement { margin: 0; font-size: 0.85rem; color: var(--or-clair); }
+
+.reglages { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
+.reglages .titre { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--or-clair); }
+.volumes { display: flex; gap: 0.4rem; }
+.volumes button {
+  font: inherit; font-size: 0.95rem; min-width: 2.75rem; min-height: 2.75rem; padding: 0 0.8rem;
+  background: transparent; color: var(--lune); border: 1px solid var(--or); border-radius: 2px; cursor: pointer;
+}
+.volumes button[aria-pressed="true"] { background: var(--or); color: var(--nuit); }
+.volumes button:focus-visible, .souffle:focus-visible, .livre button:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 2px; }
+.mesure { font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+.mesure .ok { color: #8fc79a; }
+.mesure .ko { color: #f0a08f; }
+
+.scene { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: 1.25rem; align-items: start; }
+.cartouche {
+  background: var(--parchemin); color: var(--encre); border: 1px solid var(--or);
+  box-shadow: inset 0 0 0 4px var(--parchemin), inset 0 0 0 5px var(--or);
+  padding: 0.75rem; min-width: 0;
+}
+.cartouche svg { display: block; width: 100%; height: auto; }
+.parole { display: grid; gap: 0.75rem; padding: 1rem 1.1rem; }
+.parole h2 { margin: 0; font-size: 1.15rem; line-height: 1.3; text-wrap: balance; }
+.parole .date { margin: 0; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--encre-douce); }
+.parole .repos { margin: 0; color: var(--encre-douce); font-style: italic; }
+.vents { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.7rem; }
+.vents li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+.vents svg { width: 2rem; height: 2rem; }
+.vents .q { display: block; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--encre-douce); }
+.vents .r { display: block; }
+
+.livre { display: grid; gap: 0.5rem; }
+.livre h2 { margin: 0; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--or-clair); font-weight: 400; }
+.livre ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.25rem; }
+.livre button {
+  font: inherit; width: 100%; text-align: left; display: grid; grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.75rem; padding: 0.55rem 0.75rem; min-height: 2.75rem; cursor: pointer;
+  background: var(--nuit-voile); color: var(--lune); border: 1px solid transparent; border-radius: 2px;
+}
+.livre button[aria-pressed="true"] { border-color: var(--or); }
+.livre .d { color: var(--or-clair); font-variant-numeric: tabular-nums; }
+.notes { font-size: 0.9rem; max-width: 64ch; display: grid; gap: 0.4rem; }
+.notes h2 { margin: 0; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--or-clair); font-weight: 400; }
+.notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
+
+/* La rose — couleurs tirées des jetons, rien en dur dans le dessin. */
+.rose-anneau { fill: none; stroke: var(--or); stroke-width: 1.4; }
+.rose-anneau-fin { fill: none; stroke: var(--encre); stroke-width: 0.8; }
+.rose-pointe-claire { fill: var(--parchemin); stroke: var(--encre); stroke-width: 0.8; }
+.rose-pointe-sombre { fill: var(--encre); }
+.rose-demi { fill: var(--parchemin-ombre); stroke: var(--encre-douce); stroke-width: 0.6; }
+.rose-initiale { fill: var(--encre); font-family: var(--police); font-size: 15px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; }
+.rose-initiale.nord { fill: var(--or); font-size: 18px; }
+.rose-legende { fill: var(--encre-douce); font-family: var(--police); font-size: 13px; font-style: italic; text-anchor: start; }
+.souffle { cursor: pointer; }
+.souffle .zone { fill: var(--parchemin); fill-opacity: 0; }
+.souffle .trait { stroke: var(--encre-douce); stroke-width: 0.8; stroke-dasharray: 2 3; }
+.souffle .point { fill: var(--parchemin); stroke: var(--encre); stroke-width: 1.4; }
+.souffle:hover .point, .souffle[aria-pressed="true"] .point { fill: var(--or); }
+.souffle .e-date { fill: var(--encre-douce); font-family: var(--police); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.souffle .e-objet { fill: var(--encre); font-family: var(--police); font-size: 15px; }
+.souffle[aria-pressed="true"] .e-objet { font-weight: 600; }
+
+@media (max-width: 52rem) {
+  .scene { grid-template-columns: minmax(0, 1fr); }
+  .souffle .etiquette, .rose-legende { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .souffle .point { transition: fill 0.15s ease; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="fil">Imladrik › Dragons › Amatsu · maquette</div>
+    <h1>La rose des vents d’Amatsu</h1>
+    <p class="chapeau">Relire ses lectures quand le vent est retombé. Au repos, chaque souffle dit sa date et son objet ; un clic rend les trois vents de ce jour-là.</p>
+    <p class="avertissement">Lectures inventées pour la maquette. Aucune donnée réelle n’est lue ici.</p>
+  </header>
+
+  <div class="reglages">
+    <span class="titre" id="volume-titre">Volume éprouvé</span>
+    <div class="volumes" role="group" aria-labelledby="volume-titre">
+      <button type="button" id="vol-1" data-volume="1" aria-pressed="true">1</button>
+      <button type="button" id="vol-5" data-volume="5" aria-pressed="false">5</button>
+      <button type="button" id="vol-12" data-volume="12" aria-pressed="false">12</button>
+    </div>
+    <div class="mesure" id="mesure" aria-live="polite"></div>
+  </div>
+
+  <div class="scene">
+    <div class="cartouche">
+      <svg id="rose" viewBox="0 0 900 720" role="img" aria-labelledby="rose-titre">
+        <title id="rose-titre">Rose des vents : une lecture par souffle, la plus récente au nord</title>
+        <g id="rose-fond"></g>
+        <g id="rose-souffles"></g>
+      </svg>
+    </div>
+    <aside class="cartouche parole" id="parole" aria-live="polite"></aside>
+  </div>
+
+  <section class="livre" aria-labelledby="livre-titre">
+    <h2 id="livre-titre">Le livre des lectures</h2>
+    <ol id="livre"></ol>
+  </section>
+
+  <section class="notes" aria-labelledby="notes-titre">
+    <h2 id="notes-titre">Ce que la maquette tranche, et ce qu’elle laisse à Paul</h2>
+    <ul>
+      <li>Au repos, rien que la date et l’objet. Les trois vents ne s’affichent qu’au clic, jamais au simple survol.</li>
+      <li>La page relit, elle n’écrit pas : une lecture se dicte toujours à Léo, « Amatsu, … ».</li>
+      <li>Au-delà de douze lectures, les plus anciennes se résument en un seul souffle, « N plus anciennes », ouvert dans le livre.</li>
+      <li>Sur téléphone, la rose garde ses souffles sans étiquettes, et le livre devient la surface de lecture.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  var CX = 450, CY = 360, R_ANNEAU = 200, R_SOUFFLE = 238, R_ETIQUETTE = 256;
+
+  // Jeu de maquette — INVENTÉ (§5). Du plus récent au plus ancien.
+  var LECTURES = [
+    { o: 'Prendre un associé', d: '17 oct.', b: 'Non : je perds la main sur mes choix.', s: 'Pas encore, je le connais trop peu.', u: 'Oui, c’est la fatigue qui parle.' },
+    { o: 'Le chantier de Lyon', d: '12 oct.', b: 'Oui, il finance six mois.', s: 'Oui, c’est le métier que j’aime.', u: 'Un peu : l’euphorie du rendez-vous.' },
+    { o: 'Quitter le groupe des anciens', d: '5 oct.', b: 'Oui, moins de bruit.', s: 'Oui.', u: 'Non, j’y pense depuis l’été.' },
+    { o: 'Racheter le camion', d: '28 sept.', b: 'Oui, je ne dépends plus de la location.', s: 'Oui.', u: 'Non.' },
+    { o: 'Écrire le livre maintenant', d: '21 sept.', b: 'Oui.', s: 'Je ne sais pas encore.', u: 'Peut-être : un dimanche de soleil.' },
+    { o: 'Vendre les parts de la SCI', d: '14 sept.', b: 'Oui, une charge de moins.', s: 'Oui, c’était décidé depuis longtemps.', u: 'Non.' },
+    { o: 'La présidence de l’asso', d: '2 sept.', b: 'Non, mes soirs s’envolent.', s: 'Non, ce n’est pas ma place.', u: 'Oui, la flatterie du moment.' },
+    { o: 'Trois mois en Écosse', d: '25 août', b: 'Oui.', s: 'Oui, c’est un vieux rêve.', u: 'Un peu.' },
+    { o: 'Couper les notifications', d: '19 août', b: 'Oui, tout de suite.', s: 'Oui.', u: 'Non.' },
+    { o: 'Reprendre le judo', d: '8 août', b: 'Oui, une heure à moi.', s: 'Oui.', u: 'Non.' },
+    { o: 'Signer le bail du local', d: '30 juil.', b: 'Non, trois ans d’engagement.', s: 'Oui, si l’activité suit.', u: 'Oui, la peur de rater l’occasion.' },
+    { o: 'Plus de travail le dimanche', d: '21 juil.', b: 'Oui.', s: 'Oui, c’est ma paix.', u: 'Non.' }
+  ];
+  var VENTS = [
+    { cle: 'b', nom: 'La bise', q: 'Plus libre ?' },
+    { cle: 's', nom: 'Le souffle', q: 'Cohérent avec moi-même, mes choix, ma paix ?' },
+    { cle: 'u', nom: 'L’ouragan', q: 'Emporté par le vent ?' }
+  ];
+  var etat = { volume: 1, choisie: -1 };
+
+  function svg(nom, attrs, parent) {
+    var n = document.createElementNS(NS, nom);
+    Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function el(nom, classe, texte, parent) {
+    var n = document.createElement(nom);
+    if (classe) n.className = classe;
+    if (texte !== undefined) n.textContent = texte;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function pt(angleDeg, r) {
+    var a = (angleDeg - 90) * Math.PI / 180;
+    return { x: CX + r * Math.cos(a), y: CY + r * Math.sin(a) };
+  }
+  function court(texte, max) { return texte.length <= max ? texte : texte.slice(0, max - 1) + '…'; }
+
+  // ---- La rose, dessinée une fois : seize pointes calculées, jamais tracées à la main.
+  function dessinerRose() {
+    var g = document.getElementById('rose-fond');
+    svg('circle', { cx: CX, cy: CY, r: R_ANNEAU, class: 'rose-anneau' }, g);
+    svg('circle', { cx: CX, cy: CY, r: R_ANNEAU - 14, class: 'rose-anneau-fin' }, g);
+    for (var k = 0; k < 16; k++) {
+      var angle = k * 22.5;
+      var principale = k % 2 === 0;
+      var long = principale ? 168 : 112;
+      var large = principale ? 16 : 10;
+      var bout = pt(angle, long), g1 = pt(angle - 90, large), g2 = pt(angle + 90, large);
+      if (principale) {
+        svg('polygon', { points: [CX, CY, bout.x, bout.y, g1.x, g1.y].join(' '), class: 'rose-pointe-claire' }, g);
+        svg('polygon', { points: [CX, CY, bout.x, bout.y, g2.x, g2.y].join(' '), class: 'rose-pointe-sombre' }, g);
+      } else {
+        svg('polygon', { points: [g1.x, g1.y, bout.x, bout.y, g2.x, g2.y, CX, CY].join(' '), class: 'rose-demi' }, g);
+      }
+    }
+    svg('circle', { cx: CX, cy: CY, r: 9, class: 'rose-pointe-claire' }, g);
+    ['T', 'G', 'L', 'S', 'O', 'L', 'P', 'M'].forEach(function (lettre, i) {
+      var p = pt(i * 45, R_ANNEAU - 30 + (i === 0 ? -2 : 0));
+      var t = svg('text', { x: p.x, y: p.y, class: 'rose-initiale' + (i === 0 ? ' nord' : '') }, g);
+      t.textContent = lettre;
+    });
+    var leg = svg('text', { x: 28, y: 700, class: 'rose-legende' }, g); // le coin du cartouche, hors des aires de vent
+    leg.textContent = 'La plus récente souffle de la Tramontane';
+  }
+
+  // ---- Les souffles : une lecture par aire, angle régulier selon le volume.
+  function dessinerSouffles() {
+    var g = document.getElementById('rose-souffles');
+    while (g.firstChild) g.removeChild(g.firstChild);
+    var jeu = LECTURES.slice(0, etat.volume);
+    jeu.forEach(function (lec, i) {
+      var angle = i * (360 / jeu.length);
+      var p = pt(angle, R_SOUFFLE), pa = pt(angle, R_ANNEAU), pe = pt(angle, R_ETIQUETTE);
+      var s = svg('g', { class: 'souffle', tabindex: '0', role: 'button', 'data-i': i,
+        'aria-pressed': String(etat.choisie === i), 'aria-label': lec.o + ', ' + lec.d }, g);
+      svg('line', { x1: pa.x, y1: pa.y, x2: p.x, y2: p.y, class: 'trait' }, s);
+      svg('circle', { cx: p.x, cy: p.y, r: 22, class: 'zone' }, s);
+      svg('circle', { cx: p.x, cy: p.y, r: 7, class: 'point' }, s);
+      var sin = Math.sin(angle * Math.PI / 180), cos = Math.cos(angle * Math.PI / 180);
+      var ancre = Math.abs(sin) < 0.3 ? 'middle' : (sin > 0 ? 'start' : 'end');
+      var et = svg('text', { class: 'etiquette', 'text-anchor': ancre }, s);
+      var x = pe.x, y;
+      if (ancre === 'middle') { y = cos > 0 ? pe.y - 26 : pe.y + 16; } else { y = pe.y - 4; }
+      var t1 = svg('tspan', { x: x, y: y, class: 'e-date' }, et); t1.textContent = lec.d;
+      var t2 = svg('tspan', { x: x, dy: 18, class: 'e-objet' }, et); t2.textContent = court(lec.o, 26);
+      s.addEventListener('click', function () { choisir(i); });
+      s.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); choisir(i); }
+      });
+    });
+  }
+
+  function dessinerLivre() {
+    var ol = document.getElementById('livre');
+    while (ol.firstChild) ol.removeChild(ol.firstChild);
+    LECTURES.slice(0, etat.volume).forEach(function (lec, i) {
+      var li = el('li', null, undefined, ol);
+      var b = el('button', null, undefined, li);
+      b.type = 'button'; b.id = 'livre-' + i; b.setAttribute('aria-pressed', String(etat.choisie === i));
+      el('span', 'd', lec.d, b); el('span', 'o', lec.o, b);
+      b.addEventListener('click', function () { choisir(i); });
+    });
+  }
+
+  function iconeVent(cle) {
+    var s = svg('svg', { viewBox: '0 0 32 32', 'aria-hidden': 'true', focusable: 'false' });
+    var g = svg('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round' }, s);
+    if (cle === 'b') svg('path', { d: 'M5 13 H20 a4 4 0 1 0 -4 -4' }, g);
+    if (cle === 's') svg('path', { d: 'M5 16 H27 M9 21 H23' }, g);
+    if (cle === 'u') svg('path', { d: 'M16 16 m0 -2 a2 2 0 1 1 -2 2 a5 5 0 0 1 5 -5 a8 8 0 0 1 8 8' }, g);
+    return s;
+  }
+
+  function dessinerParole() {
+    var p = document.getElementById('parole');
+    while (p.firstChild) p.removeChild(p.firstChild);
+    var lec = LECTURES[etat.choisie];
+    if (!lec || etat.choisie >= etat.volume) {
+      el('h2', null, 'Choisis un souffle', p);
+      el('p', 'repos', 'Les trois vents de la lecture s’affichent ici, au clic. Rien ne s’ouvre au simple survol.', p);
+      return;
+    }
+    el('p', 'date', lec.d, p);
+    el('h2', null, lec.o, p);
+    var ul = el('ul', 'vents', undefined, p);
+    VENTS.forEach(function (v) {
+      var li = el('li', null, undefined, ul);
+      li.appendChild(iconeVent(v.cle));
+      var bloc = el('div', null, undefined, li);
+      el('span', 'q', v.nom + ' — ' + v.q, bloc);
+      el('span', 'r', lec[v.cle], bloc);
+    });
+  }
+
+  function choisir(i) {
+    etat.choisie = i;
+    dessinerSouffles(); dessinerLivre(); dessinerParole();
+    var cible = document.querySelector('.souffle[data-i="' + i + '"]');
+    if (cible && document.activeElement && document.activeElement.closest && document.activeElement.closest('.souffle')) cible.focus();
+  }
+
+  // ---- La mesure : emprise contre viewBox, croisements, mots au repos.
+  function mesurer() {
+    var zone = document.getElementById('mesure');
+    while (zone.firstChild) zone.removeChild(zone.firstChild);
+    var etiquettes = Array.prototype.slice.call(document.querySelectorAll('#rose-souffles .etiquette'));
+    var visibles = etiquettes.filter(function (t) { return t.getBoundingClientRect().width > 0; });
+    if (!visibles.length) {
+      el('span', null, 'étiquettes masquées à cette largeur : la mesure se lit au-delà de 832 px', zone);
+      // Un état nommé, pas un vide : le livre devient la surface de lecture.
+      window.__mesureAmatsu = { volume: etat.volume, masquees: true, livre: document.querySelectorAll('#livre li').length };
+      return;
+    }
+    var boites = visibles.map(function (t) { return t.getBBox(); });
+    // La légende entre dans le cadre et les croisements : elle a déjà été
+    // couverte par l'étiquette du sud sans que la mesure le voie.
+    var legende = document.querySelector('#rose .rose-legende');
+    var toutes = legende ? boites.concat([legende.getBBox()]) : boites;
+    var dehors = toutes.filter(function (b) { return b.x < 0 || b.y < 0 || b.x + b.width > 900 || b.y + b.height > 720; }).length;
+    var croisements = 0;
+    for (var i = 0; i < toutes.length; i++) {
+      for (var j = i + 1; j < toutes.length; j++) {
+        var a = toutes[i], c = toutes[j];
+        if (a.x < c.x + c.width - 1 && c.x < a.x + a.width - 1 && a.y < c.y + c.height - 1 && c.y < a.y + a.height - 1) croisements += 1;
+      }
+    }
+    var empiete = boites.filter(function (b) {
+      var px = Math.max(b.x, Math.min(CX, b.x + b.width)), py = Math.max(b.y, Math.min(CY, b.y + b.height));
+      return Math.hypot(px - CX, py - CY) < R_ANNEAU + 2;
+    }).length;
+    var mots = visibles.map(function (t) { return t.textContent; }).join(' ').trim().split(/\s+/).filter(Boolean).length;
+    el('span', dehors === 0 ? 'ok' : 'ko', dehors === 0 ? 'cadre : tout est dans la carte ✓' : 'cadre : ' + dehors + ' étiquette(s) dehors ✗', zone);
+    el('span', croisements === 0 ? 'ok' : 'ko', croisements === 0 ? 'étiquettes : aucun croisement ✓' : 'étiquettes : ' + croisements + ' croisement(s) ✗', zone);
+    el('span', empiete === 0 ? 'ok' : 'ko', empiete === 0 ? 'rose : aucune étiquette dessus ✓' : 'rose : ' + empiete + ' étiquette(s) dessus ✗', zone);
+    el('span', null, 'mots au repos : ' + mots, zone);
+    window.__mesureAmatsu = { volume: etat.volume, dehors: dehors, croisements: croisements, empiete: empiete, mots: mots, n: boites.length };
+  }
+
+  function regler(volume) {
+    etat.volume = volume;
+    if (etat.choisie >= volume) etat.choisie = -1;
+    Array.prototype.forEach.call(document.querySelectorAll('.volumes button'), function (b) {
+      b.setAttribute('aria-pressed', String(Number(b.getAttribute('data-volume')) === volume));
+    });
+    dessinerSouffles(); dessinerLivre(); dessinerParole();
+    requestAnimationFrame(mesurer);
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.volumes button'), function (b) {
+    b.addEventListener('click', function () { regler(Number(b.getAttribute('data-volume'))); });
+  });
+  window.addEventListener('resize', function () { requestAnimationFrame(mesurer); });
+  window.__reglerAmatsu = regler;
+  window.__choisirAmatsu = choisir;
+  dessinerRose();
+  regler(1);
+})();
+</script>
+</body>
+</html>

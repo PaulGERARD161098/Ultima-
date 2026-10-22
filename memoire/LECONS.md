@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v93 2026-10-14 sha256:dab34a6f6684 -->
+<!-- lecons:empreinte v104 2026-10-22 sha256:6a2894ccb4f3 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,22 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UN DÉPLOIEMENT ABSENT N'EST PAS UN DÉPLOIEMENT IGNORÉ** *(2026-10-21)*. Un
+`ignoreCommand` qui saute un build laisse une trace : le déploiement existe, à l'état
+« Ignored ». Un commit sans AUCUN déploiement ne prouve rien sur la règle — ni qu'elle
+a sauté, ni qu'elle a laissé construire : la plateforme n'a peut-être jamais été
+prévenue. ⛔ Avant de conclure, deux lectures : **chercher par SHA** ET **lister le
+projet** autour de l'heure du commit. Rien dans les deux → « non déclenché », dit comme
+tel, jamais rangé dans « ignoré ». ⛔ La preuve qu'une règle de saut laisse passer le
+code est un déploiement **READY sur un commit de code**, lu à la source ; tant qu'il
+n'existe pas, elle n'est pas prouvée.
+*Incident : boucle coûts, 21/10. Trois fusions entre 15:30:47 et 15:30:59 UTC (Artidispo
+`c7fd2fd`, RenoDevis `09f6b5a`, mon-dpe.fr `a69d619`) n'ont produit aucun déploiement
+Vercel — ni ignoré, ni en erreur — alors que les commits d'avant et d'après ont déployé.
+Cause probable : notifications GitHub → Vercel non reçues (non prouvée). Paul : ne rien
+relancer. La preuve « le code construit encore » d'Artidispo et de mon-dpe.fr reste
+donc à lire au prochain commit de code.*
 
 **UN OBJET DE TUILE N'EST PAS UN BÂTIMENT** *(2026-10-12, mon-dpe.fr)*.
 Pour surligner le logement d'un client sur la carte 3D, on prenait l'objet
@@ -154,6 +170,12 @@ justes, le reste inventé. Vu en relisant la sortie de `git rev-parse` lancée j
 après, avant tout commit. ⇒ L'ordre se retourne : **le `rev-parse` d'abord, sa
 sortie injectée dans l'écriture** (`V=$(git rev-parse …)`), jamais l'écriture puis
 la vérification.
+⊕ **DIXIÈME, LE 21/10 (Ultima, grain Finubar) — et c'est encore l'aval qui a mordu.**
+Un SHA complet complété de mémoire à partir d'un préfixe juste, écrit dans le grain
+FINUBAR d'Ultima ; attrapé par `Ultima-/finubar/collecter.mjs` (« commit inatteignable »),
+pas par la relecture. Rien de nouveau dans la faute : la règle du 08/10 n'avait pas été
+appliquée. ⛔ Le préfixe vu dans un rapport, un journal ou une PR n'est pas une source :
+la seule source est `git rev-parse`, injectée telle quelle.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
@@ -972,6 +994,7 @@ suivant qui la paie.
 **UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN** *(2026-09-13, RenoBoost)*.
 `revoke all on function ... from anon, authenticated` a rendu `success:true` et n'a rien fait : `create function` accorde EXECUTE à PUBLIC, dont anon hérite. Mesuré : `has_function_privilege('anon', ...)` = true APRÈS le revoke. Corrigé par `from public` d'abord.
 ⇒ *Règle* : un droit se vérifie du côté où il peut être contourné (`has_function_privilege`, pas le retour de la migration), et `success:true` n'est pas une mesure.
+*Rechute du 2026-10-19 (Ultima-, AMATSU), sur une TABLE* : `revoke all on public.amatsu_lectures from anon` puis `grant select, insert, delete … to authenticated`. Mais Supabase accorde par défaut TOUS les droits sur une table neuve de `public` à anon ET à authenticated : le rôle connecté gardait UPDATE (bloqué par la RLS, faute de policy) et **TRUNCATE, que la RLS ne voit pas**. Trouvé à la relecture d'avant application, pas par un test : le harnais lisait le TEXTE de la migration. ⛔ Tout retirer d'abord (`from public, anon, authenticated`), puis donner la liste fermée ; et le prouver en EXÉCUTANT la migration dans un Postgres jetable qui reproduit les droits par défaut (`alter default privileges … grant all on tables to anon, authenticated`), puis `has_table_privilege` et un vrai `truncate` — l'ancien revoke y laissait passer le vidage (`tests/unit-amatsu-validate.mjs` §9).
 
 
 **LA CLÉ SERVICE PASSE OUTRE LA RLS : LE PÉRIMÈTRE SE POSE À LA MAIN** *(2026-09-15, RenoBoost)*.
@@ -1042,6 +1065,22 @@ ainsi : chercher le contenu interdit dans ce qui part, et exiger de ne pas l'y
 trouver. Vérifier seulement la présence du permis ne prouve rien.
 
 *Rechute du 2026-09-13 (RenoBoost)* : un harnais ouvrait les pages produit en `file://` alors qu'elles référencent leurs feuilles en racine-relatif (`href="/produit.css"`) — rien ne chargeait, 9 verdicts verts sur des pages NUES. Une page sans CSS n'a effectivement pas d'ombre : le harnais avait raison sur le fond, et c'est ce qui rend l'erreur dangereuse. Corrigé par un serveur HTTP et un verrou de non-vacuité (`.pp-btn` fait au moins 44px), 18/18 verts ensuite (`RenoBoost/tests/pages-produit.navigateur.mjs`). Trois autres sondes ont menti le même jour : un token hex comparé à un style calculé en rgb (0 défaut sur 1669 éléments), un fond translucide lu comme opaque, une sonde qui ne cherchait plus les bons tokens après conversion.
+
+*Rechute du 2026-10-19 (Ultima-)* : un verdict « aucune mention de repli » attendait `.leo-bulle-leo`, un sélecteur déjà présent avant la réponse (l'accueil de Léo) — l'absence était constatée avant que la réponse n'arrive. Le cas jumeau (« la mention est là ») a échoué au premier passage et réussi au deuxième : c'est ce passage au vert « au hasard » qui a trahi le défaut. ⛔ On attend le TEXTE exact de la réponse, jamais un sélecteur qui peut préexister ; et un harnais qui change de verdict d'un passage à l'autre ne garde rien : on le relance trois fois avant de le croire.
+
+**UN TEST DE COURSE QUI LAISSE LE CALENDRIER DÉCIDER NE GARDE RIEN** *(2026-10-19, Ultima-)*.
+Le plafond d'appels de Léo (verrou consultatif PostgreSQL) était éprouvé par 30 insertions
+simultanées à 90/100. Le sabotage « verrou retiré » est passé au vert au deuxième essai :
+les insertions étaient si brèves que chacune finissait avant que la suivante ne démarre —
+sans verrou, la course n'avait simplement pas lieu. Le verrou avait été prouvé la première
+fois, par chance. Corrigé : chaque client garde sa transaction ouverte 0,5 s après
+l'insertion, ce qui rend la course inévitable sans verrou ; sabotage rouge trois fois de
+suite (`Ultima-/tests/leo-appels-postgres.sh`). ⛔ Pour prouver un verrou, ne pas compter sur
+la concurrence « naturelle » : tenir la fenêtre ouverte, puis casser le verrou et exiger le
+rouge PLUSIEURS fois — un sabotage qui ne vire pas au rouge à tous les coups mesure le hasard.
+⚠️ Corollaire : un test qui ne tourne pas dans `run-unit.mjs` ne tourne pas dans la CI ;
+la partie du harnais que PGlite peut prouver (refus du 101ᵉ, droits, unicité) vit donc aussi
+dans `Ultima-/tests/unit-leo-appels-sql.mjs`, le reste (la course) restant au harnais réel.
 
 **UN RENVOI MORT SE LIT EXACTEMENT COMME UN RENVOI VALIDE** *(2026-09-07)*. Un
 « §11.8 » était cité cinq fois dans les documents d'Artidispo pour une section
@@ -1482,6 +1521,19 @@ le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
 
+**UNE PAGE REFONDUE L'EST AUSSI DANS SON APERÇU DE PARTAGE** *(2026-10-17, RenoBoost)*.
+L'accueil a été réécrit et fusionné (#608) sans relire ses balises `og:*` ni son `og-image.jpg`.
+Paul a envoyé le lien à un contact sur WhatsApp : l'aperçu affichait « Des chantiers signés, pas
+des promesses. » — la promesse interdite depuis le 11/09 (§12.2) — et « Régie commerciale ».
+Les tests gardaient le texte RENDU de la page ; rien ne lisait ce qu'elle dit quand on la partage.
+
+⛔ **Une refonte de page publique relit, dans la même boucle, `<title>`, `description`, `og:*`,
+`twitter:*`, JSON-LD et l'IMAGE de partage — tout ce qu'un lien affiche sans que la page soit ouverte.**
+
+⇒ **Garde posé : `RenoBoost/tests/partage.test.mjs` (interdits + image versionnée `?v=`) et
+`scripts/generer-og-image.mjs` (image régénérée, refuse une promesse interdite). L'aperçu déjà
+envoyé ne se rattrape pas : WhatsApp le fige à l'envoi.**
+
 **UN CHIFFRAGE SE FAIT AVEC LA RÈGLE CODÉE, PAS AVEC LA PREMIÈRE RÈGLE TROUVÉE** *(2026-10-09, RenoBoost + RenoDevis)*.
 Devis SOLA de deux monosplits : rendu trois fois avec des prix différents. ① Prix LN35 « introuvables »
 alors que la banque produits (`banques_reno`) les portait — je n'avais fouillé que `corpus_devis`.
@@ -1756,6 +1808,37 @@ pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arri
 quand même, **la rotation est la première action**, pas une note de fin.
 
 ## 4. Conduire une boucle
+
+**UNE SESSION LANCÉE SE RELIT À SON PREMIER ÉVÉNEMENT, PAS À SON ANNONCE** *(2026-10-19)*.
+J'ai lancé (`create_session`, 19:09:57) une session « migration `leo_appels` » avec pour source la
+branche `claude/ci-couts-md-seuls` — que Paul avait fusionnée (#400) et dont la branche avait été
+supprimée à 19:06:43. Erreur d'initialisation `ref_not_found` à 19:10:00, coût zéro. J'ai écrit
+« j'attends le résultat de la session migration » dans six messages pendant ≈ 45 minutes ; Paul a
+répondu « ok on attend la migration ». Un seul `get_session` (statut, `last_init_error`) l'a
+montré — fait à 19:50, quand le message n'arrivait pas. En plus, mon plan « pousser le lot sur
+#400 » était caduc depuis 19:06 : Paul avait fusionné entre deux de mes messages.
+⛔ **Après `create_session`, lire `get_session` et le premier événement de l'assistant AVANT
+d'annoncer une attente** : une annonce n'est pas une preuve. ⛔ **Avant de viser une branche,
+`git ls-remote` et l'état de la PR** (Paul fusionne sans prévenir). ⚠️ Un plan écrit « après la
+PR X » se relit à l'état de X avant chaque message qui l'invoque.
+
+**UN GO SE DEMANDE POUR UN GESTE DONT L'ACCÈS EST PROUVÉ** *(2026-10-19, Ultima-)*. J'ai
+demandé à Paul son go pour appliquer `leo_appels` sur la base d'Ultima, en m'appuyant sur le
+RUNBOOK du 11/07 (« vérifié en base » par le connecteur). Son go est arrivé ; `list_migrations`
+sur `leosfqyidgsaescjbfom` a répondu « permission denied » — le connecteur de la séance ne liste
+que Artidispo et RenoDevis. Coût : un aller-retour de Paul pour un go que je ne pouvais pas
+exécuter, après avoir écrit « j'attends ton go » comme si le geste m'appartenait. ⛔ Avant de
+demander un go (SQL, déploiement, envoi), prouver l'accès à la CIBLE par une lecture inoffensive
+(`list_migrations`, `select 1`) : un accès constaté il y a trois mois n'est pas un accès. ⚠️ Et
+jamais « un autre projet qui répond » : Artidispo et RenoDevis répondaient — ce n'étaient pas la
+base d'Ultima. Quand l'accès manque, le geste de Paul se prépare au dernier cran (procédure,
+script de vérification éprouvé sur une base jetable) au lieu de s'annoncer comme le mien.
+*Ajout du 2026-10-19 (Ultima-, AMATSU)* : **reconnecter un connecteur en cours de séance le
+RETIRE de la séance, il ne le rebranche pas** — les connecteurs se lisent à l'ouverture. Paul a
+reconnecté Supabase pour que j'applique `amatsu_lectures` ; tous les outils Supabase ont disparu.
+Coût : un aller-retour, puis Paul a appliqué lui-même. ⇒ Quand l'accès manque, proposer d'emblée
+les deux voies chiffrées : le geste de Paul tout de suite (SQL prêt à coller + requête de contrôle),
+ou une NOUVELLE séance après reconnexion — jamais « reconnecte et je le fais » dans la même séance.
 
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
@@ -2034,6 +2117,26 @@ dans le produit, seulement dans qui a décidé.
 ---
 
 ## 5. Plusieurs dépôts, plusieurs séances
+
+**« VIDE » SE MESURE CHEZ CEUX QUI LISENT, PAS SEULEMENT DANS LA LIGNE**
+*(2026-10-20)*. Une ligne d'une base partagée n'est pas vide parce que ses
+colonnes de montant le sont : elle peut être LUE par une autre brique, et porter
+du travail fait à la main dans un champ libre. ⛔ Avant de qualifier une ligne de
+« coquille », « factice » ou « sans valeur » — mot sur lequel Paul tranchera une
+suppression —, deux mesures : **qui la lit** (grep des autres dépôts sur la table
+et le filtre) et **ce qu'elle porte de manuel** (clés d'`extra` posées par un
+humain). Sans elles, la description est une déduction présentée comme un fait.
+*Incident : inventaire des dossiers e-mail de RénoDevis. J'ai présenté six devis
+« Signé » sans montant comme des « coquilles vides » ; Paul a répondu « retire
+aussi les 6 signés ». En cadrant la suite, `RenoBoost/pilotage-pros.js`,
+`RenoBoost/api/chaine-pose.mjs` et `RenoBoost/api/rp-sync-poses.mjs` lisent
+justement les devis `Signé` (pilotage, chaîne de pose, RénoPredict), et ces six
+dossiers portaient `signature_manuelle` et le texte du projet. Décision
+reposée à Paul, inversée (« les garder ») — rattrapé AVANT tout effet, mais une
+décision a été prise sur un fait faux.*
+⊕ Le corollaire : quand une vérification invalide une description déjà donnée à
+Paul, le dire en tête de la réponse suivante, avec ce qui change, avant toute
+autre chose.
 
 **METTRE À JOUR UN ÉTAT, C'EST METTRE À JOUR CE QUE L'INSTRUMENT LIT**
 *(2026-09-22)*. Un fichier d'état qui porte À LA FOIS de la prose pour l'humain
@@ -2395,6 +2498,75 @@ jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 
 ## 6. Économie
 
+**UNE ROUTINE DONT L'ARRÊT DÉPEND D'UN OUTIL ABSENT NE S'ARRÊTE JAMAIS — ELLE COÛTE** *(2026-10-19)*.
+La routine horaire « Réponse d'Henry » (créée le 28/09, session persistante) devait, si Henry
+répondait, prévenir Paul puis se supprimer (`delete_trigger`) ; et, à partir du 02/10 sans réponse,
+prévenir puis se supprimer. Dans une session DÉCLENCHÉE, ni Gmail ni `delete_trigger` n'existent :
+elle répondait chaque heure « Rien de nouveau : les outils Gmail et `delete_trigger` restent
+indisponibles », en relisant un contexte de 570 k tokens. Mesuré le 19/10 par `get_session`
+(`external_metadata.usage.cost_usd`) : **268,5 $ au tarif catalogue**, 346,9 M tokens de cache lus.
+Même schéma pour « Veille BTP » (quotidienne depuis le 13/08, Supabase absent, « Toujours
+identique ») : **40,5 $**, un cache de ≈ 258 k tokens réécrit chaque jour. Aucune des deux n'était
+visible de Finubar, qui indexe les DÉPÔTS, pas les routines ni les sessions : c'est Paul, en
+demandant « regarde ce qui se passe sur les autres sessions », qui a fait lire les chiffres.
+⛔ **Une routine reçoit une fin DURE à sa création** : un déclenchement unique (`run_once_at`), ou
+une périodicité dont le prompt teste une chose qui existe dans toute session déclenchée (la date)
+et s'arrête par un geste qu'elle sait faire — jamais une règle d'arrêt qui repose sur un outil
+optionnel (`delete_trigger`, Gmail, Supabase) que la session déclenchée peut ne pas avoir.
+⛔ **À chaque fin de séance : `list_triggers` (enabled) et le coût `get_session` des sessions
+persistantes de ces routines** — une dérive de coût se lit en une ligne, elle ne se devine pas.
+⚠️ Une session persistante relit TOUT son contexte à chaque réveil : un contrôle qui n'a pas besoin
+de mémoire se lance en session neuve à chaque déclenchement (`create_new_session_on_fire`).
+⚠️ `cost_usd` est un tarif catalogue, pas la facture : le forfait ou la console de Paul tranchent.
+
+**UN `startup_failure` PARTOUT, `main` COMPRIS, C'EST LE COMPTE — PAS LE CODE** *(2026-10-19)*.
+Depuis le 18/10 16:22 UTC, tous les workflows GitHub Actions tombaient en
+`startup_failure`, `main` compris. J'ai cherché dans les fichiers de workflow (un
+« workflow fantôme » supprimé) et noté « cause non établie ». La réponse était sur une
+page que je ne peux pas ouvrir : Billing de l'organisation — budget Actions à 100 %
+(« l'usage supplémentaire sera arrêté ») et autorisation de paiement refusée. Coût : la
+CI absente en fin de séance, une PR sans contrôle GitHub, une piste fausse entretenue des
+heures. ⛔ Une panne qui touche TOUS les workflows d'un compte à la fois : demander
+d'abord à Paul les pages Billing (une capture suffit), pas fouiller le code. ⚠️ Le budget
+s'arrête sans prévenir le dépôt : une alerte à 75 % se pose dans « Budgets and alerts »
+(geste de Paul). Puis l'onglet Usage **groupé par dépôt** a tranché en une capture :
+`Ultima-/.github/workflows/tests.yml` facturait ≈ 29 min par exécution (27 pour le
+harnais navigateur), jouée même pour un commit de `.md`.
+
+**UNE COMMANDE QUE LA PLATEFORME EXÉCUTE SE VÉRIFIE SUR LA PLATEFORME** *(2026-10-19)*.
+J'ai écrit l'`ignoreCommand` de Vercel de RenoBoost comme un script, éprouvé en local
+(tests verts, sabotages au rouge). Premier déploiement réel : `ERROR`, code 127 — Vercel
+SUPPRIME les fichiers de `RenoBoost/.vercelignore` (dont `RenoBoost/scripts/`) AVANT d'exécuter la
+commande, et tout code de sortie autre que 0 ou 1 casse le déploiement. Mise en ligne dans
+`RenoBoost/vercel.json` : 365 caractères pour un plafond de schéma de 256 → second `ERROR`.
+Deux aperçus perdus, rattrapés avant toute fusion. ⛔ Un test local prouve la logique, pas
+l'environnement : relire le journal du PREMIER déploiement réel, lire la doc du champ
+AVANT d'écrire sa valeur, et mettre en test toute limite de plateforme dès qu'on la
+découvre (`RenoBoost/tests/vercel-ignore-build.test.mjs`, `MAX_IGNORE_COMMAND`). Une
+commande lancée par une plateforme ne dépend d'aucun fichier qu'elle peut retirer, et
+ramène TOUT code inattendu à « construire ».
+
+*Rechute du 2026-10-19 (Ultima-, premier passage réel de la CI) — TROIS tentatives pour une seule fausse panne* :
+`tests/unit-ci-md-seuls.mjs` simulait un `grep` en panne. ① Un faux binaire dans `os.tmpdir()` : vert en
+local, rouge sur GitHub — le harnais tourne sous `docker --tmpfs /tmp`, monté `noexec` par défaut, le
+faux binaire n'était jamais exécuté et le VRAI grep répondait. ② Une fonction injectée par `BASH_ENV`,
+vérifiée sous un `/tmp` `noexec` en root : verte chez moi, rouge sur GitHub — dans l'environnement
+minimal du conteneur elle ne prenait pas effet (observé avec bash 5.2.21 : sans `SHLVL` dans
+l'environnement, la fonction n'agit pas ; cause non établie, le fichier est pourtant bien lu).
+③ Un LIEN SYMBOLIQUE vers `node` (qui refuse les options de grep et sort en erreur) : indépendant du
+montage de `/tmp` et de l'environnement ; vert dans le banc ci-dessous. Coût : trois passages de CI,
+dont deux rouges sur un test que je croyais éprouvé « comme la CI ». ⛔ Un banc qui reproduit UN facteur
+de l'environnement n'est pas l'environnement : mon `noexec` en root, avec l'environnement complet de la
+session, passait là où la CI échouait. Le banc qui reproduit : utilisateur `nobody`, `env -i` (PATH et
+HOME seulement), `TMPDIR` sur un tmpfs `noexec` (`mount -t tmpfs -o noexec,nosuid,mode=1777 tmpfs <dir>`,
+dossier lisible par `nobody` — pas sous `/tmp/claude-0`, remis en 700 par la séance). Il a reproduit
+l'échec de la CI à l'identique avec la version ②, et prouvé le correctif ③ (suite complète 68/68).
+⛔ Et le verrou de non-vacuité (« le faux grep MORD ici ») est ce qui a désigné la cause dès le premier
+passage réel : sans lui, le verdict aurait seulement dit `false`. ⚠️ Un sabotage se vérifie sur le BON
+verdict : mes trois « rouge ✔ » d'une passe étaient rouges pour `EACCES` (un dossier devenu illisible
+pour `nobody`), pas pour le sabotage — le script impose désormais la référence verte AVANT et nomme le
+verdict qui tombe.
+
 **`pkill -f` AVEC UN MOTIF QUE SA PROPRE COMMANDE CONTIENT TUE LE SHELL** *(2026-10-12)*.
 `pkill -f "next start -p 3123"` puis `pkill -f "http.server 8765"` : le motif
 figurait dans la ligne de commande du shell qui l'exécutait — le shell s'est tué
@@ -2402,6 +2574,11 @@ lui-même (code 144), deux fois dans la séance, et une restauration de fichier
 sabotage en dépendait. ⛔ Arrêter un processus par son **PID** (relu par `ps`,
 avec un motif `[n]ext-server` qui ne se reconnaît pas lui-même), jamais par un
 `pkill -f` sur une chaîne qu'on vient de taper.
+*Rechute du 2026-10-19 (Ultima-, AMATSU)* : `pkill -f "http.server 8123"` en tête
+de la commande qui devait committer et pousser — le shell s'est tué (code 144),
+rien n'a été committé, l'étape a été rejouée. La leçon était injectée à
+l'ouverture ; elle ne l'a pas empêché parce que le geste était un nettoyage
+« en passant », pas une étape pensée.
 
 **UN OUTIL LANCÉ PAR `npx` SANS INSTALLATION N'EST PAS L'OUTIL DU PROJET**
 *(2026-09-15)*. `npx eslint .` a rendu « rien à signaler » deux fois avant que

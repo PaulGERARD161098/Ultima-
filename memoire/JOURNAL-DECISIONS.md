@@ -4754,3 +4754,139 @@ RenoDevis »* · *« Merge 282 et fin de session »*.
 - **Premier signal réel du rappel ZOH SHIA** : RénoDevis `2d14e60` est un commit
   au-delà de la série, sans toucher ses fichiers ; l'extraction le confirme
   (495 fichiers, aucun nom propre).
+
+## 2026-10-15 — « Notre Kelvin » s'appelle VITRUVE, sur Mon DPE Facile
+
+Paul, en préparant son rendez-vous avec kelvin° : *« mon Kelvin c'est VITRUVE,
+renomme partout et fais aussi ressortir Mon DPE Facile »*.
+- Renommé dans les documents vivants : `PLAN-2026-09-30-chaine-A-Z.md` (C2, C3,
+  D3) et la maquette RenoBoost `maquettes/chaine-A-Z/` (libellés `mon-dpe.fr`
+  → « Mon DPE Facile »). kelvin° garde son nom : c'est la société d'en face.
+- ⛔ Non réécrits, délibérément : les cadrages datés, ce journal et les leçons.
+  Ce sont des archives ; on ne falsifie pas le compte rendu d'une séance.
+- Fiche du rendez-vous : doc « RDV kelvin° — fiche d'une page » (claude.ai).
+
+## 2026-10-18 — AMATSU, le dragon de l'air, huitième étoile des DRAGONS
+
+Dicté par Paul : *« Sur Imladrik créons un nouveau dragon : Amatsu, le dragon de
+l'air. Symbole de la liberté, de la colère, de la force de la nature […] Une
+décision, un projet, une idée me rendra-t-elle plus libre ? C'est ça le rôle
+d'Amatsu. La liberté c'est aussi ma cohérence avec moi-même, mes choix et ma
+paix. L'air c'est aussi la volatilité, donc vigilance à ne pas me laisser emporter
+par le vent. »* (mots complets : `CADRAGE-IMLADRIK.md` §12).
+
+**Décision de Paul** : un huitième dragon, **AMATSU — Dragon de l’air**. Son
+rôle : la question de la liberté posée à toute décision, projet ou idée ; la
+liberté entendue aussi comme cohérence avec soi, ses choix et sa paix ; vigilance
+sur la volatilité.
+⚠️ La dictée se termine sur « Agence à » : mot coupé, **non interprété** —
+question posée.
+
+**Livré (boucle 1)** : l'étoile d'attente — même geste que ZOH SHIA le 04/10 :
+registre (`amatsu`, épithète, mots de Paul, aucune cible), repli sans JavaScript
+(dit, sans lien), lexique vocal ; les verrous « sept dragons » refixés à huit dans
+douze harnais (deux trouvés par la mesure seulement : plein écran, retour des feuilles), « tous à page » transposé en « AMATSU seul attend, nommé ». **Le dry run a
+cédé** à 300 et 320 px (huit étoiles en colonne : l'épithète de RESHIRAM mordait le
+cœur de ZOH SHIA) — corrigé dans le moteur du ciel : quatre poses en diagonale pour
+les noms à deux lignes (`js/ciel.js`), rouge avant, vert après. Lecture
+proposée dans le cadrage : **Amatsu ne porte pas d'objet, il pose une question à
+ceux des autres caps** — trois vents : plus libre ? cohérent ? emporté ?
+**Reste** : la boucle 2 (forme et modèle), sur les cinq décisions de
+`CADRAGE-IMLADRIK.md` §12.4 ; reco : le souffle transversal par la voix de Léo
+(ZS), lecture en passerelle sur l'objet jugé, zéro table d'abord.
+
+## 2026-10-18 — AMATSU : les quatre décisions de la boucle 2 (panneaux)
+
+Paul, à 15 h 20 UTC, sur quatre panneaux de choix :
+1. **« Agence à… »** : rien, la phrase était finie — résidu de dictée.
+2. **AMATSU — Dragon de l’air** figés ; **un blason propre à dessiner** en boucle 2
+   (la bise, une spirale de vent), « portail » provisoire d'ici là.
+3. **Forme C : A puis B** — la voix de Léo d'abord (2a), la page et son registre
+   de lectures ensuite (2b).
+4. **La grille : les trois vents** — plus libre ? cohérent ? emporté ?
+
+Et, le même après-midi : *« on ne fusionnera que tout à la fin »* — #399 est la
+PR de séance ; tout le travail s'y empile, fusion unique sur son go final.
+
+## 2026-10-18 — AMATSU boucle 2a : la lecture par la voix de Léo est bâtie, la migration attend le go
+
+Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399 :
+- **`proposer_lecture_amatsu`**, premier outil **transversal** du catalogue (riven,
+  adramelech, imladrik ; NICOL BOLAS sans main), vert, quatre arguments requis ;
+  Léo pose les trois vents avant d'appeler, jamais une note ni un verdict de sa
+  main ; reformulation qui nomme les trois vents ; « Amatsu, … » reconnu.
+- **Migration `20261018160000_amatsu_lectures.sql` ÉCRITE, NON APPLIQUÉE** (gate
+  migration + §5 intime) : objet 200 · trois vents 500 · created_at ; RLS par
+  owner, aucune policy UPDATE, anon dehors. Route `/api/amatsu-lectures`,
+  validateur miroir, défaire (DEFAIRES/DEPENDANCES), gabarit front, blason
+  « amatsu » dessiné (les trois vents de la carte gravée).
+- **Prouvé** : unitaires 66/66, verrous refixés à la main (onze outils, dix verts
+  nommés, treize mains servies, chaque vert son défaire joué) ; `unit-amatsu-
+  validate` ; `smoke-draukhain` §G. **Éprouvé en le cassant** (copie jetable) :
+  borne API décalée → rouge ; AMATSU retiré d'un quadrant → rouge ; policy UPDATE
+  glissée dans la migration → rouge ; champ en trop dans le corps → §G rouge.
+- **Patrimoine navigateur sur l'arbre 2a** : vert, hormis le rouge RIVEN connu.
+  Un verdict de cadence du fond (`smoke-lv5-fond`, 1670 px, seuil 34 ms) a cédé
+  deux fois à 36,6 puis 37,9 ms ; rejoué un navigateur à la fois, `main` pur,
+  l'arbre de la boucle 1 et l'arbre 2a mesurent 32,8 · 30,1 · 31,1 ms, tous
+  verts : le conteneur, pas le code. La marge sous ce seuil est de 1 à 4 ms sur
+  cette machine — à savoir avant de croire un rouge isolé de ce harnais.
+- **Reste** : le go de Paul pour appliquer la migration, puis la **preuve réelle**
+  (une lecture dictée, lue via GET après auth) ; la 2b (page et registre de
+  relecture, passerelle vers l'objet jugé).
+
+## 2026-10-19 — AMATSU : la migration appliquée par Paul, après une faille fermée
+
+- **La relecture d'avant application a trouvé une faille** : Supabase donne par
+  défaut tous les droits sur une table neuve à `authenticated` ; la migration ne
+  les retirait qu'à anon. Le rôle connecté gardait UPDATE (bloqué par la RLS) et
+  **TRUNCATE, que la RLS ne voit pas**. Corrigé (`a8baa9e`) et prouvé en
+  l'exécutant dans un Postgres jetable aux droits de Supabase : l'ancienne version
+  laisse passer le vidage, la nouvelle le refuse.
+- **Paul a appliqué la migration lui-même** (« je vais l'appliquer ») : le
+  connecteur Supabase de la séance ne voyait pas le projet Ultima, et sa
+  reconnexion en cours de séance l'a retiré au lieu de le rebrancher (les
+  connecteurs se lisent à l'ouverture). Contrôle relu : six valeurs attendues.
+- **CI de #399 verte pour la première fois** (9/9 sur `a8baa9e`), après deux jours
+  de jobs morts : un workflow fantôme côté GitHub empêchait tout démarrage.
+- Paul a cherché à **cliquer l'étoile** : elle est inerte par décision (la page
+  est la 2b). Sa parole disait encore « sa forme reste à décider » — réécrite pour
+  dire où aller : « dis « Amatsu, … » à Léo ».
+- **Reste** : la preuve réelle (une lecture dictée, comptée en base).
+
+## 2026-10-19 — #400 puis #399 fusionnées ; AMATSU écrit en production
+
+- **#400 fusionnée** (`d67998a`), sur le go de Paul portant sur `3077897` (« fusionne
+  d'abord », lu comme « #400 d'abord » et confirmé sur panneau). **`main` ramené dans
+  #399** : seul conflit `FINUBAR.md`, les deux boucles gardées ; unitaires 69/69,
+  59 harnais (seul le rouge RIVEN connu du conteneur), CI 9/9 sur `dac150d`.
+- **#399 fusionnée** (`abe073b`), sur le go de Paul portant sur `dac150d`.
+- **Preuve réelle d'AMATSU, en production** : deux vents dictés → Léo n'écrit rien et
+  demande le troisième ; au troisième, carte confirmée, lecture en base à 19:42:09 UTC
+  (compte : 1). `leo_ecritures` vide sur la période : chemin de la carte, gardes tenues.
+- **La preview n'a pas permis la preuve** : `ULTIMA_PROPRIETAIRES` invisible malgré
+  « Production and Preview » et deux redéploiements — boucle ouverte, sans urgence.
+- **Leçons v99** : deux rechutes (les droits par défaut de Supabase sur une table ;
+  `pkill -f` qui tue son shell) et un ajout (reconnecter un connecteur en cours de
+  séance le retire). À propager aux neuf autres dépôts avec la v98 de #400.
+
+## 2026-10-19 — AMATSU 2b : la rose des vents choisie, puis bâtie
+
+- **Cadrage de la 2b** (§12.6 de `CADRAGE-IMLADRIK.md`), décisions de Paul sur
+  panneaux : α (maquette) puis β (page) ; le regard d'après **plus tard, en γ** ; une
+  seule forme à maquetter, **la rose des vents**.
+- **2b-α** : maquette `design/preview-amatsu-rose.html`, publiée en page claude.ai
+  privée ; données inventées. La mesure a trouvé l'étiquette du sud sur la légende,
+  qu'elle ne voyait pas : instrument étendu (rouge puis vert), légende au coin.
+- **Go de Paul : « go, la rose des vents »** → **2b-β bâtie** : `amatsu.html`,
+  `css/amatsu-rose.css`, `js/amatsu.js`, étoile ouverte, repli sans JavaScript lié,
+  harnais `smoke-amatsu`. La page relit et n'écrit pas : une lecture se dicte à Léo.
+- **Corrigé en route** : dans la colonne des quadrants, la rose tombait à 450 px
+  (étiquettes à 7 px) avec « zéro croisement » vert ⇒ page élargie, verdict de taille
+  rendue ajouté et éprouvé en le cassant.
+- **Verrous** : la liste « 13 verdicts dans 9 harnais » du cadrage était trop large ;
+  18 verdicts réellement refixés dans 7 fichiers (`unit-registre-lv3`,
+  `unit-adaptateur-lv4`, `smoke-console`, `smoke-imladrik-carto`,
+  `smoke-lv5-passerelle`, `smoke-quadrants`, `smoke-retour-feuilles`). IFULVIN
+  redevient la seule étoile inerte d'IMLADRIK, nommée.
+

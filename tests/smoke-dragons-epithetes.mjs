@@ -13,7 +13,7 @@
 //      et, miroir, un cap sans épithète (IFULVIN) dit toujours son état.
 //
 // ⛔ Chaque recherche d'absence est précédée de son verrou de non-vacuité :
-// sept épithètes mesurées, sinon « aucun croisement » ne veut rien dire.
+// huit épithètes mesurées (sept, puis AMATSU le 18/10/2026), sinon « aucun croisement » ne veut rien dire.
 // ⚠️ ÉPROUVÉ EN LE CASSANT : interligne mise à 0 dans `js/ciel.js` → l'épithète
 // recouvre son nom, ③ vire au rouge.
 import { chromium } from 'playwright';
@@ -140,8 +140,10 @@ async function contrasteEpithetes(page) {
 
 // ---- Le registre, d'abord : sans lui, tout le reste comparerait du vide ----
 console.log('— Le registre —');
-verifier('Verrou : sept dragons, chacun avec son épithète',
-  DRAGONS.length === 7 && DRAGONS.every((id) => typeof ATTENDU[id].epithete === 'string' && ATTENDU[id].epithete.startsWith('Dragon ')),
+// REFIXÉ À HUIT (18/10/2026) : AMATSU, le dragon de l'air — étoile d'attente, mais
+// une épithète comme les autres. Ni sept, ni neuf.
+verifier('Verrou : huit dragons, chacun avec son épithète',
+  DRAGONS.length === 8 && DRAGONS.every((id) => typeof ATTENDU[id].epithete === 'string' && ATTENDU[id].epithete.startsWith('Dragon ')),
   DRAGONS.join(','));
 
 // ---- ①②③④ Le ciel, à trois largeurs ----
@@ -153,29 +155,29 @@ for (const taille of [[300, 640], [320, 700], [360, 780], [390, 844], [414, 896]
   const m = await mesurer(page);
   if (!m) { verifier(`${cle} : la scène est peinte`, false); await contexte.close(); continue; }
   const p = m.paires;
-  verifier(`${cle} : verrou — sept étoiles, sept épithètes, quatorze lignes`,
-    p.length === 7 && p.every((x) => x.epithete !== null) && m.nbLignes === 14, `${p.length} étoiles, ${m.nbLignes} lignes`);
+  verifier(`${cle} : verrou — huit étoiles, huit épithètes, seize lignes`,
+    p.length === 8 && p.every((x) => x.epithete !== null) && m.nbLignes === 16, `${p.length} étoiles, ${m.nbLignes} lignes`);
   verifier(`${cle} : chaque épithète est celle du registre, mot pour mot`,
-    p.length === 7 && p.every((x) => ATTENDU[x.id] && x.epithete === ATTENDU[x.id].epithete),
+    p.length === 8 && p.every((x) => ATTENDU[x.id] && x.epithete === ATTENDU[x.id].epithete),
     p.map((x) => `${x.id}=${x.epithete}`).join(' | '));
   verifier(`${cle} : le nom reste le nom SEUL (ce que lisent les autres harnais)`,
-    p.length === 7 && p.every((x) => x.nom === ATTENDU[x.id].nom));
+    p.length === 8 && p.every((x) => x.nom === ATTENDU[x.id].nom));
   verifier(`${cle} : l'épithète suit son nom — même x, posée dessous`,
-    p.length === 7 && p.every((x) => Number.isFinite(x.xNom) && Math.abs(x.xNom - x.xEpi) < 0.05
+    p.length === 8 && p.every((x) => Number.isFinite(x.xNom) && Math.abs(x.xNom - x.xEpi) < 0.05
       && x.bn && x.be && x.be.top >= x.bn.top + x.bn.height * 0.5),
     p.map((x) => `${x.id}: Δx ${(x.xEpi - x.xNom).toFixed(2)}`).join(', '));
   verifier(`${cle} : rien ne se croise (lignes entre elles, lignes et cœurs d'étoile)`,
-    m.nbLignes === 14 && m.croisements.length === 0, m.croisements.join(', '));
-  verifier(`${cle} : rien ne sort du ciel`, m.nbLignes === 14 && m.hors.length === 0, m.hors.join(', '));
+    m.nbLignes === 16 && m.croisements.length === 0, m.croisements.join(', '));
+  verifier(`${cle} : rien ne sort du ciel`, m.nbLignes === 16 && m.hors.length === 0, m.hors.join(', '));
   const pxMin = Math.min(...p.map((x) => x.pxEpi));
-  verifier(`${cle} : aucune épithète sous ${PLANCHER_PX} px`, p.length === 7 && pxMin >= PLANCHER_PX - 0.05, `min ${pxMin.toFixed(1)} px`);
+  verifier(`${cle} : aucune épithète sous ${PLANCHER_PX} px`, p.length === 8 && pxMin >= PLANCHER_PX - 0.05, `min ${pxMin.toFixed(1)} px`);
   verifier(`${cle} : les épithètes sont peintes pleinement (menu)`,
-    p.length === 7 && p.every((x) => x.opEpi >= 0.85), p.map((x) => x.opEpi).join(','));
+    p.length === 8 && p.every((x) => x.opEpi >= 0.85), p.map((x) => x.opEpi).join(','));
   verifier(`${cle} : l'épithète est DITE par l'étoile, et pas deux fois`,
-    p.length === 7 && p.every((x) => x.epiMuette && x.label.includes(ATTENDU[x.id].epithete)));
+    p.length === 8 && p.every((x) => x.epiMuette && x.label.includes(ATTENDU[x.id].epithete)));
   const c = await contrasteEpithetes(page);
   verifier(`${cle} : les épithètes se lisent (contraste ≥ ${SEUIL})`,
-    c.nb === 7 && c.pire && c.pire.ratio >= SEUIL, c.pire ? `${c.nb} mesurées, pire ${c.pire.nom} ${c.pire.ratio.toFixed(2)}` : `${c.nb} mesurées`);
+    c.nb === 8 && c.pire && c.pire.ratio >= SEUIL, c.pire ? `${c.nb} mesurées, pire ${c.pire.nom} ${c.pire.ratio.toFixed(2)}` : `${c.nb} mesurées`);
   await contexte.close();
 }
 
@@ -215,12 +217,12 @@ console.log('— Le cartouche —');
   verifier('…et se tait de nouveau quand on s\'éloigne', r2.visible === false && r2.texte === '', JSON.stringify(r2));
   const vus = [];
   for (const id of DRAGONS) { vus.push({ id, ...(await lire(id)) }); }
-  verifier('Verrou : Léo a parlé pour les sept dragons', vus.filter((v) => v.nom).length === 7);
+  verifier('Verrou : Léo a parlé pour les huit dragons', vus.filter((v) => v.nom).length === 8);
   verifier('Léo dit l\'épithète À LA PLACE de l\'état, une seule ligne',
-    vus.length === 7 && vus.every((v) => v.nom === ATTENDU[v.id].nom && v.etat === ATTENDU[v.id].epithete && v.etats === 1),
+    vus.length === 8 && vus.every((v) => v.nom === ATTENDU[v.id].nom && v.etat === ATTENDU[v.id].epithete && v.etats === 1),
     vus.map((v) => `${v.id}: ${v.etat}`).join(' | '));
   verifier('Plus aucun « Ouvert » / « Privé » / « À venir » sur un dragon',
-    vus.length === 7 && vus.every((v) => !/^(Ouvert|Privé|À venir)$/.test(v.etat)));
+    vus.length === 8 && vus.every((v) => !/^(Ouvert|Privé|À venir)$/.test(v.etat)));
   await contexte.close();
 }
 {

@@ -41,18 +41,19 @@ assert.ok(actif.appels.includes('insert'));
 
 // ---------- La route /api/leo, reconstruite avec ses dépendances injectées ----------
 let construits = 0;
+let reponseTexte = false; // false : le modèle propose un outil ; true : il répond en texte seul.
 class AnthropicFactice {
   constructor() {
     construits++;
-    this.messages = { create: async () => ({ content: [
-      { type: 'tool_use', name: 'proposer_idee', input: { ...IDEE.args } }
-    ] }) };
+    this.messages = { create: async () => ({ content: reponseTexte
+      ? [{ type: 'text', text: 'Bonjour Paul.' }]
+      : [{ type: 'tool_use', name: 'proposer_idee', input: { ...IDEE.args } }] }) };
   }
 }
 const routeSource = readFileSync(new URL('../api/leo.js', import.meta.url), 'utf8')
   .replace(/^import[\s\S]*?;\n/gm, '')
   .replace('export default async function handler', 'return async function handler');
-function route({ auth = 'ok', coupees = false } = {}) {
+function route({ auth = 'ok', coupees = false, appel = null } = {}) {
   const deps = {
     ...leo,
     Anthropic: AnthropicFactice,
@@ -61,8 +62,16 @@ function route({ auth = 'ok', coupees = false } = {}) {
       ? { status: 'ok', user: { id: PAUL } } : { status: auth },
     ecrituresAutoCoupees: () => coupees,
     readJsonBody: async (req) => req.body,
+    // Le plafond d'appels (19/10) a ses propres harnais ; ici il laisse passer, sauf si
+    // le cas fournit `appel` { appels, resultat } pour l'espionner ou le faire refuser.
+    ouvrirAppel: async (...args) => {
+      if (!appel) return { ok: true, traceId: null, mode: 'base' };
+      appel.appels.push(args);
+      return appel.resultat;
+    },
+    cloreAppel: async () => ({ ok: false }),
     ok: (_res, data) => ({ status: 200, data }),
-    fail: (_res, status) => ({ status }),
+    fail: (_res, status, _message, extra) => ({ status, ...(extra || {}) }),
     methodNotAllowed: () => ({ status: 405 }),
     logError: () => {}, bodyFail: () => ({ status: 400 })
   };
@@ -88,6 +97,56 @@ assert.equal(vert.data.proposition.anneau, 'vert');
 const orange = await route({ coupees: true })({ method: 'POST', body: corps }, {});
 assert.equal(orange.status, 200);
 assert.equal(orange.data.proposition.anneau, 'orange');
+
+// ---------- Le plafond d'appels côté route (19/10, revue S7) ----------
+const espion = (resultat) => ({ appels: [], resultat });
+// Refus du plafond → 429 + cause en mot fermé, et le modèle n'est JAMAIS construit ni appelé.
+{
+  construits = 0;
+  const e = espion({ ok: false, status: 429, message: 'Plafond', cause: 'ia plafond' });
+  const r = await route({ appel: e })({ method: 'POST', body: corps }, {});
+  assert.equal(r.status, 429);
+  assert.equal(r.cause, 'ia plafond');
+  assert.equal(construits, 0, 'un plafond atteint ne construit aucun client Anthropic');
+  assert.equal(e.appels.length, 1);
+}
+// Une requête INVALIDE ne consomme pas le plafond : le compteur n'est jamais ouvert.
+for (const [nom, mauvais] of [
+  ['quadrant inconnu', { ...corps, quadrant: 'nimporte-quoi' }],
+  ['conversation vide', { ...corps, messages: [] }],
+  ['état invalide', { ...corps, etat: 'pas-un-objet' }]
+]) {
+  construits = 0;
+  const e = espion({ ok: true, traceId: null, mode: 'base' });
+  const r = await route({ appel: e })({ method: 'POST', body: mauvais }, {});
+  assert.equal(r.status, 400, nom);
+  assert.equal(e.appels.length, 0, `${nom} : le plafond n'est pas consommé`);
+  assert.equal(construits, 0, nom);
+}
+// Une requête valide ouvre UN appel, pour le bon propriétaire et le modèle effectivement utilisé.
+{
+  const e = espion({ ok: true, traceId: null, mode: 'base' });
+  const r = await route({ appel: e })({ method: 'POST', body: corps }, {});
+  assert.equal(r.status, 200);
+  assert.equal(e.appels.length, 1);
+  assert.equal(e.appels[0][1].proprietaire, PAUL);
+  assert.equal(e.appels[0][1].quadrant, 'adramelech');
+  assert.equal(typeof e.appels[0][1].modele, 'string');
+  assert.equal('journal' in r.data, false, 'mode base : aucune mention du repli');
+}
+// Repli local : la réponse le DIT (les deux sorties de succès : texte seul et proposition).
+{
+  const e = espion({ ok: true, traceId: null, mode: 'local' });
+  const avecProposition = await route({ appel: e })({ method: 'POST', body: corps }, {});
+  assert.ok(avecProposition.data.proposition, 'non-vacuité : la sortie « proposition » est bien celle qu\'on lit');
+  assert.equal(avecProposition.data.journal, 'local');
+  reponseTexte = true;
+  const texteSeul = await route({ appel: e })({ method: 'POST', body: corps }, {});
+  reponseTexte = false;
+  assert.equal(texteSeul.data.reponse, 'Bonjour Paul.');
+  assert.ok(!texteSeul.data.proposition, 'non-vacuité : la sortie « texte seul » est bien celle qu\'on lit');
+  assert.equal(texteSeul.data.journal, 'local');
+}
 
 // La route réelle appelle bien le garde propriétaire et plus requireUser.
 const source = readFileSync(new URL('../api/leo.js', import.meta.url), 'utf8');

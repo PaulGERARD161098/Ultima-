@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — AMATSU</title>
+  <meta name="description" content="AMATSU : la rose des vents des lectures de Paul, le dragon de l'air — privée, derrière authentification.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23241c12'/%3E%3Cpath d='M8 13 H19 a3 3 0 1 0 -3 -3 M10 18 H24 M8 23 H17' fill='none' stroke='%23e8cf8f' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/quadrant.css">
+  <!-- La rose des vents des lectures (boucle 2b-β, forme validée par Paul le
+       19/10 sur la maquette design/preview-amatsu-rose.html). -->
+  <link rel="stylesheet" href="css/amatsu-rose.css">
+  <!-- LV5 / P5b — LE SOL COMMUN. `ciel.css` d'abord : elle porte les jetons
+       de nuit (sur des CLASSES, pas sur `:root`), et `ciel-fond-page.css` les
+       consomme. Le registre est déclaré sur le `<body>`. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-fond-page.css">
+  <link rel="stylesheet" href="css/leo.css">
+</head>
+<body class="console page-quadrant ciel-noeud-coque" data-quadrant="amatsu" data-fond-etoile="atelier" data-leo-quadrant="imladrik">
+
+  <!-- Rose des vents décorative (registre carte savante), muette. -->
+  <div class="console-decor" aria-hidden="true">
+    <svg viewBox="0 0 72 72" focusable="false">
+      <circle cx="36" cy="36" r="26" fill="none" stroke="#c9a659" stroke-width="1.4" opacity="0.85"/>
+      <path d="M36 4 L42 30 L68 36 L42 42 L36 68 L30 42 L4 36 L30 30 Z"
+            fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
+      <path d="M36 18 L39 33 L54 36 L39 39 L36 54 L33 39 L18 36 L33 33 Z"
+            fill="#c9a659" stroke="none" opacity="0.55"/>
+      <text x="36" y="14" text-anchor="middle" font-size="9" fill="#e8cf8f" font-style="italic">N</text>
+    </svg>
+  </div>
+
+  <div class="console-conteneur">
+
+    <!-- ===== Bandeau : les trois vents (blason AMATSU, repris de
+         BLASONS.amatsu de js/blasons.mjs) + nom + mission + état ===== -->
+    <header class="console-entete quadrant-bandeau">
+      <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+           aria-label="Blason gravé : les trois vents d’Amatsu, le dragon de l’air" focusable="false">
+        <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+        <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+        <g fill="none" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round">
+          <path d="M17 29 H40 a5 5 0 1 0 -5 -5"/>
+          <path d="M21 38 H49 a5.5 5.5 0 1 1 -5.5 5.5"/>
+          <path d="M17 47 H36"/>
+        </g>
+        <path d="M40 47 h11" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <h1 class="console-titre">AMATSU</h1>
+      <p class="console-invite quadrant-mission">Le dragon de l’air&nbsp;: une décision,
+        un projet, une idée te rendra-t-elle plus libre&nbsp;? Relis tes lectures
+        quand le vent est retombé.</p>
+      <span class="quadrant-etat">Privé — auth requise</span>
+    </header>
+
+    <!-- ===== Les lectures DERRIÈRE AUTH (un seul état visible à la fois, piloté
+         par js/amatsu.js). AUCUNE lecture en dur ici : elles ne viennent QUE de
+         l'API authentifiée /api/amatsu-lectures (fail-closed sans session, §5
+         intime). La page relit, elle n'écrit pas : une lecture se dicte à Léo. ===== -->
+    <main class="quadrant-page" aria-label="Les lectures d’AMATSU">
+
+      <p id="amatsu-chargement" class="adr-chargement">Le vent se lève sur la rose…</p>
+
+      <section id="amatsu-auth" class="cartouche-page" hidden>
+        <h2>Authentification requise</h2>
+        <p>Tes lectures sont intimes&nbsp;: la rose ne s'ouvre qu'une fois ta session ouverte.</p>
+        <p><a class="retour-console" href="/">Se connecter depuis la boussole</a></p>
+      </section>
+
+      <section id="amatsu-erreur" class="cartouche-page" hidden>
+        <h2>Rose indisponible</h2>
+        <p>La lecture a échoué. Réessaie dans un instant.</p>
+      </section>
+
+      <div id="amatsu-registre" hidden>
+
+        <section class="cartouche-page" aria-labelledby="amatsu-titre-rose">
+          <h2 id="amatsu-titre-rose">La rose des vents</h2>
+          <p class="amatsu-note">Au repos, chaque souffle dit sa date et son objet&nbsp;;
+            un clic rend les trois vents de ce jour-là. La plus récente souffle de la
+            Tramontane, au nord.</p>
+          <p id="amatsu-vide" class="amatsu-vide" hidden>Aucune lecture encore. Dis
+            «&nbsp;Amatsu, …&nbsp;» à Léo&nbsp;: elle te pose les trois vents.</p>
+
+          <div class="amatsu-scene">
+            <div class="amatsu-cadre">
+              <svg id="amatsu-rose" class="amatsu-rose" viewBox="0 0 900 720"
+                   role="group" aria-labelledby="amatsu-rose-titre" focusable="false">
+                <title id="amatsu-rose-titre">Rose des vents : une lecture par souffle, la plus récente au nord</title>
+                <g id="amatsu-rose-fond"></g>
+                <g id="amatsu-souffles"></g>
+              </svg>
+            </div>
+            <aside id="amatsu-parole" class="amatsu-parole" aria-live="polite"></aside>
+          </div>
+        </section>
+
+        <section class="cartouche-page amatsu-livre" aria-labelledby="amatsu-titre-livre">
+          <h2 id="amatsu-titre-livre">Le livre des lectures</h2>
+          <ol id="amatsu-livre"></ol>
+        </section>
+      </div>
+
+      <p class="retour"><a class="retour-console" href="imladrik.html#constellation-dragons">Retour à la constellation des DRAGONS</a></p>
+    </main>
+  </div>
+
+  <!-- LV5 / P5b — le sol étoilé. AUCUNE boucle d'animation : peint une fois,
+       puis au redimensionnement seulement. -->
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel-fond-page.js"></script>
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <!-- Léo : la voix reste l'entrée d'une lecture (« Amatsu, … »), la page relit. -->
+  <script src="js/dictee.js"></script>
+  <script src="js/leo-accueil.js"></script>
+  <script src="js/amatsu.js"></script>
+  <script src="js/leo-partout.js"></script>
+</body>
+</html>

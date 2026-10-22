@@ -448,6 +448,107 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   + `pull_request` + lancement manuel). À répliquer dans les autres dépôts qui
   portent le même déclencheur.
 
+- **BUDGET FIXE — VERCEL ET GITHUB (règle canonique, tous les dépôts)** *(Paul,
+  2026-10-19 : « on paie trop » ; puis « il faut qu'Ultima reste le coordinateur »
+  — la règle vit ICI, les dépôts la résument)*. Les minutes GitHub Actions et le
+  compte Vercel sont **partagés par tous les dépôts** : avant d'ajouter un cron,
+  un workflow planifié, un déclencheur ou une étape de build **dans n'importe
+  lequel**, nommer ce que ça coûte (minutes par exécution × exécutions par jour ;
+  appels par jour ; déploiements) et le justifier.
+  **Relevé du 19/10 (captures de Paul — les factures ne se lisent pas depuis une
+  session)** : GitHub, organisation = 3 000 min incluses consommées, **facturable
+  50 $** (68,54 $ bruts − 18,54 $), budget Actions à 100 % et autorisation de
+  paiement refusée → **toutes les Actions en `startup_failure` depuis le 18/10
+  16:22 UTC**, `main` compris. Brut par dépôt, 1ᵉʳ–19/10 : **Ultima- ≈ 37,3 $**,
+  RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $, autres ≈ 3,5 $. Vercel Pro = 20 $ de
+  crédit consommés + 21,50 $ à la demande (cycle 25/09–25/10).
+  ⛔ **Un `startup_failure` sur TOUS les workflows d'un compte se lit d'abord dans
+  Billing, pas dans le code.**
+  ⛔ Ne pas couper un cron de surveillance (sentinelle, ghl-sync) pour économiser
+  sans l'avis de Paul.
+  ⚠️ Ultima- : `tests.yml` facture ≈ 29 min par exécution, dont 27 pour le harnais
+  navigateur. Il **saute ses étapes** (pas son job) quand le diff NET de la PR, ou
+  du commit fusionné, ne touche que des `.md` ; le job `unit` tourne toujours.
+  Gardé par `tests/unit-ci-md-seuls.mjs`, qui exécute le script de l'étape tel
+  quel. ✅ Éprouvé sur GitHub le 19/10 (Ultima-#401, `.md` seuls) : `browser (0)` et
+  `(1)` en 6 s, journal « Harnais navigateur sauté », contre ≈ 12,5 min chacun sur #400.
+  Leviers et incidents de RenoBoost (crons, `ignoreCommand` ≤ 256 caractères,
+  `.md` retirés du déploiement) : `RenoBoost/CLAUDE.md` « BUDGET FIXE » et
+  `RenoBoost/ROADMAP-2026-10-19-fin-de-session.md` §8. Pistes ouvertes : RenoDevis
+  (2ᵉ consommateur, non lu), la suite unitaire jouée trois fois par exécution.
+  **Vercel, projet `ultima`** (capture Usage de Paul, cycle 25/09–25/10, lue le 19/10) :
+  **5,81 $**, dont **5,79 $ de Build CPU (30 h)** ; fonctions 3,07 K invocations et 3 min
+  de CPU = 0,01 $. Le coût d'Ultima côté Vercel est donc du BUILD, pas de l'exécution
+  (`vercel.json` n'avait pas d'`ignoreCommand` : un build par push, documentation comprise —
+  posé le 19/10, voir « Où part le reste » ci-dessous). ⚠️ Le coût d'un appel de
+  Léo ne passe pas par Vercel : il est facturé par Anthropic.
+  **Le plafond d'appels de Léo** (19/10) : `api/_lib/leo-appels.js` + migration
+  `supabase/migrations/20261019160000_leo_appels.sql` (100 appels / 24 h / propriétaire,
+  atomique côté base ; valeur confirmée par Paul le 19/10). ✅ **Migration appliquée
+  par Paul le 19/10 (SQL Editor) et vérifiée : 16/16 contrôles vrais, `PLAFOND_OK` — la
+  101ᵉ tentative est refusée** (`RUNBOOK-GATES.md` gate ⑦). Code fusionné ensuite
+  (Ultima-#400, `d67998a`). ⚠️ Non inscrite au registre `supabase_migrations` (l'éditeur
+  SQL ne le fait pas) ; advisors non relus. Si le journal est injoignable, Léo tombe sur
+  son repli local (25 par instance, dit en log et dans la réponse, `journal: 'local'`) —
+  plus bas que la base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
+  console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
+
+- **OÙ PART LE RESTE — relevé du 19/10, lu aux sources, pas déduit** *(Paul : « regarde ce
+  qu'il se passe sur les autres sessions, il faut réduire les coûts dès maintenant »)*.
+  **Vercel, Build CPU du cycle 25/09–25/10** (capture de Paul) : 197 h 24 au total ;
+  `reno-devis-final` **104 h 04 (52,7 %)**, `ultima` 30 h 52 (15,6 %), `artidispo` 17 h 52
+  (9,1 %), `renoboost-ia` 16 h 56 (8,6 %), `mon-dpe-fr` 11 h 36 (5,9 %), six autres
+  15 h 24 (8,1 %). Au taux d'`ultima` (5,79 $ pour 30 h 52) : ≈ 37 $ — **estimation**, taux
+  supposé commun à tous les projets. ⚠️ Entre « Building » et « Ready », les aperçus affichent
+  ≈ 33 s (RenoDevis#395) et ≈ 6 s (Ultima-#404) : ces durées n'expliquent PAS 104 h ni 30 h de
+  Build CPU — **l'unité reste à comprendre** (la liste des déploiements est refusée, 403, à la
+  session : rien n'est compté). Ne pas promettre de gain proportionnel avant la capture du
+  cycle suivant.
+  **`ignoreCommand` — un commit dont TOUS les fichiers sont hors déploiement n'ouvre pas de
+  build.** RenoDevis : **#395 fusionnée le 19/10, prouvée sur Vercel** (code « Ready »,
+  commits de documentation « Ignored » ×2 ; règle par motifs, `lib/vercelIgnore.test.ts`).
+  RenoBoost : #611 (brouillon), la liste est `.vercelignore`. **Ultima : même chaîne que
+  RenoBoost, `.vercelignore` pour liste unique** (un fait, un seul endroit) ; rejouée sur
+  `main` depuis le 25/09 : 93 commits sur 176 (fusions comprises) sautés, 0 écart avec un
+  classement indépendant ; `tests/unit-vercel-ignore.mjs` (26 verdicts, 7 sabotages tous
+  rouges). ⚠️ Elle juge le dernier commit d'un push : **le dernier commit d'un push porte du
+  code** (ou est mixte). Le gain en dollars se lira sur la capture Usage du cycle suivant.
+  **Anthropic — les sessions et les routines** : `get_session` donne
+  `external_metadata.usage.cost_usd` (**tarif catalogue, pas la facture** : le forfait ou la
+  console de Paul tranchent) et `context_usage.used_tokens`. Les 40 dernières sessions
+  interactives ≈ 1 547 $ ; la routine horaire « Réponse d'Henry » ≈ **268,5 $** pour répondre
+  « rien de nouveau » ; « Veille BTP » ≈ 40,5 $. Les deux sont **désactivées** (19/10,
+  réversible) ; cause et règle : `memoire/LECONS.md`, « UNE ROUTINE DONT L'ARRÊT DÉPEND D'UN
+  OUTIL ABSENT… ». ⚠️ Une session coûte surtout par son contexte relu à chaque tour : au-delà
+  de ≈ 400 k tokens, repartir d'une session neuve avec un prompt de reprise. Limite de dépense
+  Anthropic : « 30 dollars » annoncés par Paul le 19/10, **non relus** dans la console.
+
+- **LES LEVIERS, DÉPÔT PAR DÉPÔT — fil rouge tenu ICI** *(Paul, 21/10 : « Ultima, dépôt fil
+  rouge de tous les autres, et réduction des coûts fixes pour tous »)*. L1 = CI sur `main` +
+  PR seulement ; L2 = CI lourde sautée quand le diff NET ne porte que des `.md` ; L3 =
+  `ignoreCommand` Vercel (commit 100 % documentation → pas de build ; toute erreur construit) ;
+  L4 = crons. Inventaire lu sur `main` de chaque dépôt le 21/10 ; durée = dernière PR fusionnée.
+
+  | Dépôt | CI / exécution | L1 | L2 | L3 | Note |
+  |---|---|---|---|---|---|
+  | Ultima- | ≈ 29 min | ✅ | ✅ #401 | ✅ #404 | limite navigateur 15 → 20 min (#406 : groupe 0 à 15 min 46 s) ; sur `main`, navigateur sauté si la fusion = tête de PR testée (21/10, ≈ 29 min par PR de code ; suite unitaire jouée 3× mesurée : 25,6 s, gain ≤ 1 min, non traitée) |
+  | RenoBoost | ≈ 6 min | ✅ | ❌ | ✅ #611 | `.md` retirés du déploiement, lus en 404 en production le 21/10 |
+  | RenoDevis | 7,6 min | ✅ | ✅ #407 | ✅ #395 | `.md` exclus de Tailwind (#407 : −224 octets, 2 classes mortes) |
+  | Artidispo | 4,3 min | ✅ | ❌ | ✅ #160 | aperçu « Ignored » constaté |
+  | mon-dpe.fr | 2,1 min | ✅ | ❌ | ✅ #253 | aperçu « Ignored » constaté ; dépôt en squash seulement |
+  | artisan-builder | 4,8 min | ✅ | ❌ | — | pas de `vercel.json` ; L2 possible, gain modeste |
+  | renoboost-console | 1,6 min | ✅ | — | ❌ | non rentable |
+  | RenoPredict | 0,9 min | ✅ | — | ❌ | non rentable ; cron sauvegarde Supabase quotidien, à garder |
+  | RenoAgenda | 0,2 min | ✅ | — | ❌ | non rentable |
+
+  ⛔ **Avant de poser un levier ailleurs, mesurer ce que la PR coûte** : une exécution de CI
+  pour la poser contre ce qu'elle épargne. ⚠️ **Tailwind v4 lit les `.md`** (et les
+  commentaires de `.yml`) : dans un dépôt Tailwind, sauter le build sur un diff `.md` exige
+  `@source not "../**/*.md"` (RenoDevis), sinon le CSS compilé diverge. Sur Vercel, sauter un
+  commit de doc n'a pas d'effet visible : les classes ajoutées ne servent à aucun composant.
+  ⚠️ **Premier push d'une branche** : `VERCEL_GIT_PREVIOUS_SHA` est vide, seul le dernier
+  commit est jugé — le dernier commit d'un push porte du code si l'on veut un aperçu.
+
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
 

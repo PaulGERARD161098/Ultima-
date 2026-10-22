@@ -4,116 +4,74 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-10-13",
+  "le": "2026-10-21",
   "projets": [
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/RenoBoost",
+      "depot": "PaulGERARD161098/RenoAgenda",
       "grain": {
-        "projet": "RénoBoost",
-        "depot": "PaulGERARD161098/RenoBoost",
-        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "RenoDevis/CADRAGE-2026-09-15-corpus-rapprochement.md §9 (devis assisté, preuves et boucles) · Ultima-/PLAN-2026-09-30-chaine-A-Z.md (LA route de la chaîne A→Z et son état vivant) · CADRAGE-2026-09-30-chaine-A-Z.md (l'inventaire et le raisonnement) · ROADMAP-2026-09-29-fin-de-session.md (LA source de la reprise du 30/09) · Présentation commerciale (Artifact) : https://claude.ai/artifact/RKoFTEYyXd9",
+        "projet": "RénoAgenda",
+        "depot": "PaulGERARD161098/RenoAgenda",
+        "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule.",
+        "rattache_a": "CADRAGE-2026-09-22-vitrine-particuliers.md (la vitrine, décisions D1-D6) · ROADMAP-ARTIDISPO.md (dates, produit fini) · CADRAGE-2026-09-03-rdv-omnicanal.md (raisonnement) · CADRAGE-OFFRE.md · TODO-PAUL.md · RenoBoost/ROADMAP-MASTER.md",
         "etat": "en_cours",
         "jalon": {
-          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
-          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+          "nom": "Artidispo — 20 artisans payants au 30/11/2026",
+          "critere_de_sortie": "20 abonnements actifs chez Stripe ; paliers 5 au 31/10, 12 au 15/11"
         },
         "dernier_arret": {
-          "le": "2026-10-10",
-          "quoi": "10/10 : renvoi vers la Directive MS fusionné (#596).",
-          "commit": "6f9e4f73f12c1c8ec581938c88e84f791a9a5384"
+          "le": "2026-09-30",
+          "quoi": "Bouclage transverse : CI une fois par push, LEÇONS v45, grain élagué (6 boucles : D4 déjà en prochaine action, 5 faites ou reprises par le dépôt Artidispo).",
+          "commit": "1372ad071f6aa882369b05697d1798cce67633cf"
         },
-        "prochaine_action": "Devis assisté : recette authentifiée avec RenoDevis, corpus et Gmail. Livraison #566/#218 faite. La chaîne A→Z conserve sa route dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md.",
+        "prochaine_action": "Boucle D4 : réduire partenaires.html au logo et fermer les colonnes démarchables de artisans_vitrine. Puis V1 : inventaire des réalisations avec accord.",
         "bloque_par": [
-          "Q10 : inscription RenoPredict de Matthieu (geste de Paul, « on verra plus tard » 06/10), puis vérification de liaison §3.3 quater et, si l'adresse diffère, une ligne SQL de lien…",
-          "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul.",
-          "PAUL : vérifier que Stripe est en LIVE côté Artidispo — la vitrine dit « déjà disponible ! » depuis le 29/09 (3259da4) ; sans Stripe live, un artisan inscrit ne peut pas payer",
-          "Les 14 PDF SOLA à déposer dans Drive + la réponse sur DEV235/201 (Paul, 30/09) ; le total des 9 devis signés (Paul)",
-          "Validation d'Henry sur la présentation commerciale, et partage de l'Artifact avec lui par Paul (menu Partager) — 28/09",
-          "Calendly : un seul événement actif sur le plan gratuit — tout nouvel événement créé par Paul coupe le site (mesuré 27/09)",
-          "Photo du centre DEKRA : accord du client + la renvoyer (non versionnée) — 22/09",
-          "Bandeau partenaires : le fichier du logo + l'accord d'y figurer (CLAUDE.md §12.5) — 22/09",
-          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
-          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+          "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
+          "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date",
+          "Relecture juriste des CGU avant la première signature client"
         ],
-        "en_attente_depuis": "2026-08-04",
+        "en_attente_depuis": "2026-07-15",
         "boucles_ouvertes": [
           {
-            "quoi": "Q10 — chaîne en production, NON éprouvée : 0 pose rattachée. Attend l'inscription RenoPredict de Matthieu puis un sticker (A9). Activation : CADRAGE-2026-09-30-chaine-A-Z.md §3.3…",
-            "depuis": "2026-10-06"
+            "quoi": "Le lot C ne vérifie que le RGE. « L'entreprise existe-t-elle et est-elle active » : `verif-entreprise.mjs` est prêt, à plier dans l'Edge Function `verifier-siret`.",
+            "depuis": "2026-09-01"
           },
           {
-            "quoi": "CA par artisan (05/10) : onglet « Devis & CA » + barre des cartes pros, sur branche claude/dazzling-brahmagupta-vrbbin. Reste la recette connectée de Paul sur la preview, puis la…",
-            "depuis": "2026-10-05"
-          },
-          {
-            "quoi": "Devis assisté : #566 et RenoDevis #218 fusionnés et déployés le 01/10. Restent trajet authentifié de bout en bout, corpus incomplet et Gmail ; aucun appel IA réel encore éprouvé.",
-            "depuis": "2026-10-01"
-          },
-          {
-            "quoi": "⚠️ HOPUS CLOS à 13/15 par Paul le 20/09 — puis la vitrine REFONDUE (326064e). Patterns NON re-mesurés depuis. Détail : ROADMAP-2026-09-20-fin-de-session.md",
-            "depuis": "2026-09-19"
-          },
-          {
-            "quoi": "⚖️ DEUX RÈGLES D'ARGENT DIVERGENT — la part fixe s'ajoute-t-elle à la commission (landing-core.js, testé) ou s'en déduit-elle (index.html §modele, arbitrage du 13/09) ? 900 €…",
-            "depuis": "2026-09-19"
-          },
-          {
-            "quoi": "Console lot 1 — PR #459 : indicateurs et raccourcis fiabilisés (le bilan serveur lisait un cache de 140 clients contre 169 fiches ; 7 devis « en attente » incluaient 2 Perdus).…",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "Console — PR #454 : corrections de mise en page, filtre Refusés, budgets et détails de RDV, testées (59 contrôles, jobs GitHub verts). ⚠️ LE CONTRÔLE VISUEL CONNECTÉ N'A JAMAIS…",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "Reprise radar : relancer l'import du 69 (« Rhone,… · département 69 ») — la mesure directe ET l'écart d'un couple douteux sont en ligne (#451). Ensuite : décider du ré-import de…",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "⚠️ AUCUNE PREUVE QUE LES CRONS PARTENT — le correctif du 15/09 est fusionné et déployé, mais rien ne prouve encore qu'il fonctionne. Mesure armée : `/api/linkedin` le 16/09 08:00…",
-            "depuis": "2026-09-15"
-          },
-          {
-            "quoi": "⏳ ATTEND PAUL — les 3 gestes du rail mail (Resend, Vercel, filtre Gmail), et le post LinkedIn de la semaine qui n'a jamais été généré : à publier à la main, le correctif ne vaut…",
-            "depuis": "2026-09-15"
+            "quoi": "`verifier-siret` v3 écrite et testée côté logique, jamais déployée ni exécutée : le déploiement est un geste humain.",
+            "depuis": "2026-09-03"
           }
         ],
-        "maj": "2026-10-06"
+        "maj": "2026-09-30"
       },
-      "recits": [
-        "bloque_par[]",
-        "boucles_ouvertes[].quoi"
-      ],
+      "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
-        "tete": "eb9dd14",
-        "tete_le": "2026-10-13T09:54:57+00:00",
-        "commits_depuis": 2,
+        "tete": "33bdcf0",
+        "tete_le": "2026-10-13T12:57:54+02:00",
+        "commits_depuis": 14,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-18",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.805Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.678Z",
+        "statut": "refuse",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 70,
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 21,
+      "jours_en_attente": 98,
       "rang": 0
     },
     {
@@ -162,159 +120,33 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
-        "tete": "9d60d65",
-        "tete_le": "2026-10-13T09:55:00+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
+        "tete": "c188c46",
+        "tete_le": "2026-10-13T12:57:58+02:00",
+        "commits_depuis": 2,
+        "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-18",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.842Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.712Z",
+        "statut": "refuse",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 70,
-      "rang": 1
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/DATARENO-",
-      "grain": {
-        "projet": "DATA RÉNO",
-        "depot": "PaulGERARD161098/DATARENO-",
-        "cap": "Transformer une base acquise de 12 554 contacts réno (consentement client) en RDV qualifiés PAC, par cold outreach EMAIL segmenté par méthode de chauffage. Le plus automatique possible : clic humain uniquement pour envoyer et pour booker. Autonome, hors stack RénoBoost.",
-        "rattache_a": "REPRISE.md (LE point de reprise, tenu en fin de chaque séance) · ROADMAP.md · TASKS.md (séquencement des phases) · SPEC.md (contrat de build figé) · PREMORTEM.md · GUIDE.md · LAUNCH.md · DEPLOY.md",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Gate 2 — le premier envoi réel : la chaîne brouillon → envoi → réponse tourne de bout en bout",
-          "critere_de_sortie": "Preflight GO (✅ 23/09) · test à blanc réussi (mail-tester ≥ 9/10, Gmail + Outlook en boîte de réception) · micro-lot de 25 relu par Paul et ENVOYÉ · au moins une réponse reçue et tracée. Détail : REPRISE.md"
-        },
-        "dernier_arret": {
-          "le": "2026-09-30",
-          "quoi": "Bouclage transverse : CI une fois par push, LEÇONS v45. Rien d'autre n'a bougé depuis le 23/09 (preflight GO, garde-fou liens_a_jour).",
-          "commit": "ea9f1a873f9c74800ee3bd37c62cf64854fb5cdb"
-        },
-        "prochaine_action": "Sur le PC d'envoi (C:\\Users\\User) seulement : relancer le preflight (liens_a_jour doit passer), puis le test à blanc sur test.sqlite, port 8766. Pas à pas : REPRISE.md.",
-        "bloque_par": [
-          "⚠️ Domaine renoadomicile.fr expire le 16/10/2026 — renouvellement à vérifier par Paul",
-          "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
-        ],
-        "en_attente_depuis": "2026-09-23",
-        "boucles_ouvertes": [],
-        "maj": "2026-09-30"
-      },
-      "recits": [],
-      "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": "2582190",
-        "tete_le": "2026-10-13T09:55:05+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
-      },
-      "mesure_le": "2026-10-13",
-      "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.902Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
-        "non_examines": [
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "jours_depuis_maj": 13,
-      "jours_en_attente": 20,
-      "rang": 1
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/RenoAgenda",
-      "grain": {
-        "projet": "RénoAgenda",
-        "depot": "PaulGERARD161098/RenoAgenda",
-        "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule.",
-        "rattache_a": "CADRAGE-2026-09-22-vitrine-particuliers.md (la vitrine, décisions D1-D6) · ROADMAP-ARTIDISPO.md (dates, produit fini) · CADRAGE-2026-09-03-rdv-omnicanal.md (raisonnement) · CADRAGE-OFFRE.md · TODO-PAUL.md · RenoBoost/ROADMAP-MASTER.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Artidispo — 20 artisans payants au 30/11/2026",
-          "critere_de_sortie": "20 abonnements actifs chez Stripe ; paliers 5 au 31/10, 12 au 15/11"
-        },
-        "dernier_arret": {
-          "le": "2026-09-30",
-          "quoi": "Bouclage transverse : CI une fois par push, LEÇONS v45, grain élagué (6 boucles : D4 déjà en prochaine action, 5 faites ou reprises par le dépôt Artidispo).",
-          "commit": "1372ad071f6aa882369b05697d1798cce67633cf"
-        },
-        "prochaine_action": "Boucle D4 : réduire partenaires.html au logo et fermer les colonnes démarchables de artisans_vitrine. Puis V1 : inventaire des réalisations avec accord.",
-        "bloque_par": [
-          "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
-          "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date",
-          "Relecture juriste des CGU avant la première signature client"
-        ],
-        "en_attente_depuis": "2026-07-15",
-        "boucles_ouvertes": [
-          {
-            "quoi": "Le lot C ne vérifie que le RGE. « L'entreprise existe-t-elle et est-elle active » : `verif-entreprise.mjs` est prêt, à plier dans l'Edge Function `verifier-siret`.",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "`verifier-siret` v3 écrite et testée côté logique, jamais déployée ni exécutée : le déploiement est un geste humain.",
-            "depuis": "2026-09-03"
-          }
-        ],
-        "maj": "2026-09-30"
-      },
-      "recits": [],
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": "1d211b3",
-        "tete_le": "2026-10-13T09:54:59+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
-      },
-      "mesure_le": "2026-10-13",
-      "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.830Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
-        "non_examines": [
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "jours_depuis_maj": 13,
-      "jours_en_attente": 90,
-      "rang": 2
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 15,
+      "jours_en_attente": 78,
+      "rang": 0
     },
     {
       "ok": true,
@@ -324,16 +156,16 @@ export default {
         "projet": "RénoDevis",
         "depot": "PaulGERARD161098/RenoDevis",
         "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche.",
-        "rattache_a": "CADRAGE-2026-09-15-corpus-rapprochement.md §9–13 (socle livré, voix/PDF, maquette reçue et implantation) · REPRISE-PILOTE-V3.md · LOT-PILOTE-2026-09-14.md · ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A)",
+        "rattache_a": "CADRAGE-2026-09-15-corpus-rapprochement.md §9–13 (socle livré, voix/PDF, maquette reçue et implantation) · REPRISE-PILOTE-V3.md · LOT-PILOTE-2026-09-14.md · ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A) · docs/whatsapp/roadmap-implementation.md (état WhatsApp courant)",
         "etat": "en_cours",
         "jalon": {
           "nom": "Jalon 1 boucle A — le premier euro encaissé",
           "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
         },
         "dernier_arret": {
-          "le": "2026-10-13",
-          "quoi": "13/10 : étude d’économies ouverte à l’air/air (#359, #363) ; #365 : dictée RR/RO, champ « Part chauffage », mode d’emploi SOLA.",
-          "commit": "d58730a4fe4712acff9449e52f70f8d966a25376"
+          "le": "2026-10-14",
+          "quoi": "Point WhatsApp : base centrale accessible, installation reçue, limites mesurées et précontrôle complété. Diagnostic Production Meta 14/10 23h25 : API access blocked ; canal/budget…",
+          "commit": "73f34fadd47c2f8fc04d04b8dd4363a0e460f387"
         },
         "prochaine_action": "Paul chiffre un devis RR et un devis RO sur RECETTE F6 et télécharge les deux études PDF ; relecture des chiffres avant le rendez-vous SOLA.",
         "bloque_par": [
@@ -349,16 +181,12 @@ export default {
             "depuis": "2026-10-13"
           },
           {
-            "quoi": "Pilote WhatsApp (Réno) : #332 fusionné (canal inerte) ; corrections de revue + recette isolée 15/15 sur #333 (non fusionnée). Reste : GO migration reprise, compte Meta + variables…",
-            "depuis": "2026-10-10"
+            "quoi": "Agent SOLA : accès base reçu, précontrôle quota/budget complété ; Meta refuse encore son API. Lire la restriction Meta puis lever, recontrôler et reconduire la fenêtre pilote sans…",
+            "depuis": "2026-10-14"
           },
           {
             "quoi": "Synchro Gmail branchée le 10/10 (actif:true 15:31 UTC, 47 devis email, 0 doublon). 38 devis à compléter (sans montant), donc pas relançables : voir E7.",
             "depuis": "2026-10-10"
-          },
-          {
-            "quoi": "WhatsApp (Réno) cadré au §9, table W0 appliquée. Numéro libéré le 09/10 (compte de l'appli supprimé par Paul). Reste le compte Meta, à créer par Paul.",
-            "depuis": "2026-10-09"
           },
           {
             "quoi": "Ordre (Paul, 10/10) : ZOH plan et base faits le 10/10, puis J4, puis la série ZOH (report déclaré dans Ultima), puis l'étoile « Réno sur WhatsApp » après W1.",
@@ -383,148 +211,46 @@ export default {
           {
             "quoi": "101 branches mortes à supprimer (65 non fusionnées + 36 fusionnées, liste avec SHA) : suppression refusée par le garde-fou de la séance ; Paul choisit entre une règle…",
             "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Réponse-type dictée → devis (cadrage du 06/10, lots A/B/C) : cadrée, NON codée par cette séance ; #297 (création guidée, fusionnée le 08/10) en couvre peut-être une partie, à…",
+            "depuis": "2026-10-06"
           }
         ],
         "maj": "2026-10-13"
       },
       "recits": [
+        "dernier_arret.quoi",
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
+        "tete": "dd806dc",
+        "tete_le": "2026-10-16T01:08:28+02:00",
+        "commits_depuis": 23,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-18",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.817Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.577Z",
+        "statut": "refuse",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 57,
-      "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Léo et FINUBAR — activation du site et des commandes",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, "
-        },
-        "dernier_arret": {
-          "le": "2026-10-13",
-          "quoi": "13/10 : #389, #392 — plan A→Z : gel C/N/D dans la reprise, levée par la règle 5, preuve de D3 ; lexique vocal RR = air/air, RO = air/eau.",
-          "commit": "5f29398c123592cae6acf7506ef5ea880f2ea289"
-        },
-        "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
-        "bloque_par": [
-          "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
-          "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…",
-          "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet…",
-          "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
-          "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
-          "La précision sur « mon dpe.fr » (VITRUVE)",
-          "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés.…",
-            "depuis": "2026-10-13"
-          },
-          {
-            "quoi": "LEÇONS v91 (12–13/10, quatre leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
-            "depuis": "2026-10-12"
-          },
-          {
-            "quoi": "ZOH · plan et base à jour le 10/10 (CADRAGE-2026-10-10-zohshia-mise-a-jour.md). Série : 32 conflits, dont 25 dans les fichiers de J4 ; à rafraîchir juste après J4 de RenoDevis…",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Dictée qui suit les pauses (#367) : non prouvée sur téléphone (le harnais simule les coupures). Recette = une dictée réelle de Paul, avec des pauses.",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "LEÇONS v86 dans Ultima seulement (les neuf autres en v85). À la propagation, préfixer l.663 `outils/` et l.2330 `package-lock.json` : lecons-chemins les signale.",
-            "depuis": "2026-10-10"
-          },
-          {
-            "quoi": "RIVEN deux cartes — à trancher par Paul : la bascule s'ouvre sur « Tout » (choix de séance : rien ne disparaît, et 9 harnais comptent les 9 fiches de démo). Passer le défaut à «…",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE dans le Chromium du conteneur de séance, sur main pur (8485ed5) comme sur la branche — mais VERT en CI le 08/10…",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Léo partout (js/leo-partout.js) monte la voix SANS candidats : sur adramelech.html et toute page hors /registre, « Crée une idée … » finit en carte « Action impossible en l'état »…",
-            "depuis": "2026-10-06"
-          },
-          {
-            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en…",
-            "depuis": "2026-10-02"
-          },
-          {
-            "quoi": "Chaîne — B3 codée le 12/10 (RenoDevis #348). B1 : code déjà en place, recette sur un devis réel issu d'un relevé. B4 : attend le geste de Paul. Détail : PLAN §2.",
-            "depuis": "2026-10-12"
-          }
-        ],
-        "maj": "2026-10-13"
-      },
-      "recits": [
-        "bloque_par[]",
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "racine",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-10-13",
-      "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.796Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
-        "non_examines": [
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 54,
-      "rang": 2
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 65,
+      "rang": 0
     },
     {
       "ok": true,
@@ -604,33 +330,33 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
-        "tete": "643a004",
-        "tete_le": "2026-10-13T09:55:03+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
+        "tete": "94d2cdd",
+        "tete_le": "2026-10-13T18:08:46+02:00",
+        "commits_depuis": 5,
+        "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-18",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.877Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.775Z",
+        "statut": "refuse",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 4,
-      "jours_en_attente": 53,
-      "rang": 2
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 12,
+      "jours_en_attente": 61,
+      "rang": 0
     },
     {
       "ok": true,
@@ -676,33 +402,33 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
+        "tete": "97f65ec",
+        "tete_le": "2026-10-14T00:42:58+02:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-18",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.864Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.751Z",
+        "statut": "refuse",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 53,
-      "rang": 2
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 61,
+      "rang": 0
     },
     {
       "ok": true,
@@ -719,44 +445,46 @@ export default {
           "critere_de_sortie": "ROADMAPARTIDISPO.md, Sprint inscription autonome : correctifs testés, contrat du parcours, accès et dépendances mesurés, puis preuves externes de docs/PREREQUIS_PRODUCTION.md. J1 reste ouvert tant que ces dernières manquent."
         },
         "dernier_arret": {
-          "le": "2026-10-08",
-          "quoi": "08/10 : #120 — SOLA GROUPE premier vrai artisan : décisions D-SOLA et mode opératoire du 09/10 (roadmap §5quinquies). Mail de préparation gardé pour vendredi.",
-          "commit": "965b176bb9ed0b9e003c8d05e4946e0c90a21ab1"
+          "le": "2026-10-20",
+          "quoi": "Liens publics préparés sur le go de Paul : fiche /r conservée, réservation /rdv directe partagée par espace pro et SMS, copie sans jeton et guide Google. 966/966 tests, build, 66…",
+          "commit": "a08aa1264920d97a81a959b2cea12eeb0e524df9"
         },
-        "prochaine_action": "Ven. 09/10 avec Matthieu : brancher SOLA (roadmap §5quinquies). Sortie : fiche publiée avec numéro Twilio ; requête de la procédure → sent et appelant_preserve.",
+        "prochaine_action": "Recevoir CI et aperçu de cette branche, vérifier la redirection courte, puis publier le front. Ensuite l’opérateur ayant les droits déploie twilio-voice et numero-artisan depuis…",
         "bloque_par": [
-          "08/10 [MESURÉ Gmail] : le mail « ce qu'il faut préparer » est parti à Henry seul ; Paul le fait avec Matthieu vendredi. ⛔ PÉRIMÉ : « envoyer le brouillon à Matthieu ».",
-          "Avant vendredi, gestes Paul : crédits OVH, solde Twilio, bundle France Business Approved. Henry propose d'y relier le Google Agenda de Matthieu : à trancher par Paul.",
-          "Hors séance du 09/10, la boucle de Claude reste P2 (G17), à ouvrir par son cadrage six points.",
-          "✅ FAIT ET MESURÉ LE 06/10 — NE PAS LE REJOUER : P1 PROUVÉE EN PRODUCTION (connexion 13:34, créneau retiré à 13:50, rendu à 13:55 ; révocation détectée à 14:05 → agenda périmé, 0…",
-          "✅ FAIT ET MESURÉ LE 06/10 — NE PAS LE REJOUER : migration 33 (cron_delai_30s) APPLIQUÉE EN PRODUCTION sur go de Paul : agenda-sync et purge-stockage replanifiés sous le même nom…",
-          "⚠️ CONSTAT DU 06/10, MINEUR : google-oauth-callback ne remet pas last_sync_error à nul en reconnectant ; jusqu'au passage suivant (≤ 5 min) la fiche reste « périmée » et ne vend…",
-          "✅ FAIT ET MESURÉ LE 06/10 — NE PAS LE REJOUER : CRON_SECRET posé (secrets des fonctions + coffre, 64 car.), pg_net 0.20.4, crons agenda-sync (*/5) et purge-stockage (h+10) ; les…",
-          "⏳ PAUL — ROTATION DU CRON_SECRET : la valeur a été montrée sur une capture le 06/10 (63 caractères sur 64 : ~1 000 essais suffisent) ; le coffre n'a PAS été mis à jour (updated_at…",
-          "⚠️ GOOGLE EN MODE TESTING (06/10) : le jeton est coupé à J+7 ; l'agenda devient alors périmé et, par D-STALE, LA FICHE CESSE DE VENDRE. Sans gravité pour la fiche de recette…",
-          "⚠️ CONSTAT DU 06/10, HORS BOUCLE : google-oauth-callback fait deux fetch SANS délai (règle « tout appel sortant a un délai ») et renvoie à la racine (/?calendar=…) — le site le…"
+          "⏳ 20/10 — Liens publics : CI/route courte sur aperçu à recevoir ; accès Supabase Artidispo refusé par le connecteur (lecture seule tentée, aucune écriture). Les déploiements Edge…",
+          "✅ 19/10 J2-bis SOLA FERMÉ : #150 et #152 fusionnées ; 4 migrations collées et contrôlées ; offrir-abonnement déployée ; SOLA déposée, offerte, publiée, numérotée. ⛔ PÉRIMÉ : «…",
+          "⏳ Avant tout envoi de sa fiche à Matthieu : photos de chantiers de SOLA à mettre à jour (Paul, via « Photos de sa fiche »). La photo d'équipe est en tête et la fiche publique est…",
+          "✅ MESURÉ le 20/10 dans le navigateur public : « climatisation » + 69130 retrouve SOLA GROUPE ; sa fiche /r/sola-groupe-ecully ouvre le bon formulaire de réservation et ses…",
+          "⏳ Téléphone SOLA : vérification Twilio + appel test (Paul), renvoi **61* (Matthieu, opérateur inconnu).",
+          "⚠️ CGV : le parrainage a ajouté un paragraphe à src/cgv.html sans changer sa date (« 18/09 ») — SOLA a accepté sur mandat « cgv-2026-09-18 » dont le texte a changé le 19/10…",
+          "⚠️ Abonnement offert × parrainage : un abonnement offert compte « actif » → SOLA peut devenir parrain ; décider si un pro offert touche une récompense (P3/P5).",
+          "⏭ F1 suite (mise de côté par Paul le 19/10) : autres photos (réalisation PV) ; F2 site + avis Google (D2) ; C3 purge des photos orphelines ; recette Managed Payments avant de…",
+          "✅ 19/10 PARRAINAGE P2 FERMÉ : #151 fusionnée (d6ee419) ; migration P1 20261019190000 posée par Paul (historique posé, contrôle OK, déclaré) ; create-checkout déployé depuis…",
+          "⏳ #150 (J2-bis suite : dépôt sur mandat, abonnement offert) est FUSIONNÉE dans main par une autre séance ; ses gestes pour Paul sont dans DEPLOIEMENT §4.9 (migration…"
         ],
         "en_attente_depuis": "2026-09-08",
         "boucles_ouvertes": [],
-        "maj": "2026-10-08"
+        "maj": "2026-10-19"
       },
       "recits": [
+        "dernier_arret.quoi",
+        "prochaine_action",
         "bloque_par[]"
       ],
       "ciel": "alpha",
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "956a0f7",
-        "tete_le": "2026-10-13T09:55:04+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
+        "tete": "c8d0d09",
+        "tete_le": "2026-10-20T20:02:49+02:00",
+        "commits_depuis": 14,
+        "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-21",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.890Z",
+        "lecture_le": "2026-10-21T13:58:03.811Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -768,9 +496,9 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 5,
-      "jours_en_attente": 35,
-      "rang": 2
+      "jours_depuis_maj": 2,
+      "jours_en_attente": 43,
+      "rang": 0
     },
     {
       "ok": true,
@@ -803,19 +531,188 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
+      "hors_seance": true,
+      "reprise": true,
+      "derive": {
+        "tete": "602a19b",
+        "tete_le": "2026-10-13T12:58:01+02:00",
+        "commits_depuis": 11,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-18",
+      "controle": {
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.731Z",
+        "statut": "refuse",
+        "examines": [],
+        "non_examines": [
+          "derive_git",
+          "rappel",
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 21,
+      "jours_en_attente": 41,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/DATARENO-",
+      "grain": {
+        "projet": "DATA RÉNO",
+        "depot": "PaulGERARD161098/DATARENO-",
+        "cap": "Transformer une base acquise de 12 554 contacts réno (consentement client) en RDV qualifiés PAC, par cold outreach EMAIL segmenté par méthode de chauffage. Le plus automatique possible : clic humain uniquement pour envoyer et pour booker. Autonome, hors stack RénoBoost.",
+        "rattache_a": "REPRISE.md (LE point de reprise, tenu en fin de chaque séance) · ROADMAP.md · TASKS.md (séquencement des phases) · SPEC.md (contrat de build figé) · PREMORTEM.md · GUIDE.md · LAUNCH.md · DEPLOY.md",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Gate 2 — le premier envoi réel : la chaîne brouillon → envoi → réponse tourne de bout en bout",
+          "critere_de_sortie": "Preflight GO (✅ 23/09) · test à blanc réussi (mail-tester ≥ 9/10, Gmail + Outlook en boîte de réception) · micro-lot de 25 relu par Paul et ENVOYÉ · au moins une réponse reçue et tracée. Détail : REPRISE.md"
+        },
+        "dernier_arret": {
+          "le": "2026-09-30",
+          "quoi": "Bouclage transverse : CI une fois par push, LEÇONS v45. Rien d'autre n'a bougé depuis le 23/09 (preflight GO, garde-fou liens_a_jour).",
+          "commit": "ea9f1a873f9c74800ee3bd37c62cf64854fb5cdb"
+        },
+        "prochaine_action": "Sur le PC d'envoi (C:\\Users\\User) seulement : relancer le preflight (liens_a_jour doit passer), puis le test à blanc sur test.sqlite, port 8766. Pas à pas : REPRISE.md.",
+        "bloque_par": [
+          "⚠️ Domaine renoadomicile.fr expire le 16/10/2026 — renouvellement à vérifier par Paul",
+          "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
+        ],
+        "en_attente_depuis": "2026-09-23",
+        "boucles_ouvertes": [],
+        "maj": "2026-09-30"
+      },
+      "recits": [],
+      "ciel": "alpha",
+      "hors_seance": true,
+      "reprise": true,
+      "derive": {
+        "tete": "4c707b1",
+        "tete_le": "2026-10-13T12:58:09+02:00",
+        "commits_depuis": 14,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-18",
+      "controle": {
+        "type": "github",
+        "lecture_le": "2026-10-21T13:58:03.811Z",
+        "statut": "refuse",
+        "examines": [],
+        "non_examines": [
+          "derive_git",
+          "rappel",
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "motif_controle": "accès GitHub refusé",
+      "jours_depuis_maj": 21,
+      "jours_en_attente": 28,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "grain": {
+        "projet": "RénoBoost",
+        "depot": "PaulGERARD161098/RenoBoost",
+        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
+        "rattache_a": "RenoDevis/CADRAGE-2026-09-15-corpus-rapprochement.md §9 (devis assisté, preuves et boucles) · Ultima-/PLAN-2026-09-30-chaine-A-Z.md (LA route de la chaîne A→Z et son état vivant) · CADRAGE-2026-09-30-chaine-A-Z.md (l'inventaire et le raisonnement) · ROADMAP-2026-09-29-fin-de-session.md (LA source de la reprise du 30/09) · Présentation commerciale (Artifact) : https://claude.ai/artifact/RKoFTEYyXd9",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
+          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+        },
+        "dernier_arret": {
+          "le": "2026-10-21",
+          "quoi": "21/10 : #611 fusionnée (2015249) après fusion de main dans la branche (conflit FINUBAR.md résolu, CI verte sur daa5c84) — refresh à 1 déclencheur, ignoreCommand, .md retirés du…",
+          "commit": "2015249bc9c9136aed9c1f69ea2c4163ea5a674c"
+        },
+        "prochaine_action": "Devis assisté : recette authentifiée avec RenoDevis, corpus et Gmail (Ultima-/PLAN-2026-09-30-chaine-A-Z.md).",
+        "bloque_par": [
+          "Q10 : inscription RenoPredict de Matthieu (geste de Paul, « on verra plus tard » 06/10), puis vérification de liaison §3.3 quater et, si l'adresse diffère, une ligne SQL de lien…",
+          "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul.",
+          "PAUL : vérifier que Stripe est en LIVE côté Artidispo — la vitrine dit « déjà disponible ! » depuis le 29/09 (3259da4) ; sans Stripe live, un artisan inscrit ne peut pas payer",
+          "Les 14 PDF SOLA à déposer dans Drive + la réponse sur DEV235/201 (Paul, 30/09) ; le total des 9 devis signés (Paul)",
+          "Validation d'Henry sur la présentation commerciale, et partage de l'Artifact avec lui par Paul (menu Partager) — 28/09",
+          "Calendly : un seul événement actif sur le plan gratuit — tout nouvel événement créé par Paul coupe le site (mesuré 27/09)",
+          "Photo du centre DEKRA : accord du client + la renvoyer (non versionnée) — 22/09",
+          "Bandeau partenaires : le fichier du logo + l'accord d'y figurer (CLAUDE.md §12.5) — 22/09",
+          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
+          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Revue Codex de #611 (21/10, arrivée APRÈS la fusion) : 9 constats P2, fils ouverts, aucun traité. Sept sur scripts/importer-leads-helloartisan.mjs (déjà joué : doublons internes à…",
+            "depuis": "2026-10-21"
+          },
+          {
+            "quoi": "Coûts fixes Vercel/GitHub (19/10) : #611 FUSIONNÉE le 21/10 (2015249) — en production, les .md répondent 404 (lu le 21/10). À constater sur la durée, non encore observé : un seul…",
+            "depuis": "2026-10-19"
+          },
+          {
+            "quoi": "Leads helloArtisan DOKLÈS/SPC (19/10) : 9 fiches et 5 RDV en base, script fusionné avec #611 le 21/10. Restent : tenir les RDV, issue des RDV sans écran, décisions RGPD/origine de…",
+            "depuis": "2026-10-19"
+          },
+          {
+            "quoi": "Q10 — chaîne en production, NON éprouvée : 0 pose rattachée. Attend l'inscription RenoPredict de Matthieu puis un sticker (A9). Activation : CADRAGE-2026-09-30-chaine-A-Z.md §3.3…",
+            "depuis": "2026-10-06"
+          },
+          {
+            "quoi": "CA par artisan (05/10) : onglet « Devis & CA » + barre des cartes pros, sur branche claude/dazzling-brahmagupta-vrbbin. Reste la recette connectée de Paul sur la preview, puis la…",
+            "depuis": "2026-10-05"
+          },
+          {
+            "quoi": "Devis assisté : #566 et RenoDevis #218 fusionnés et déployés le 01/10. Restent trajet authentifié de bout en bout, corpus incomplet et Gmail ; aucun appel IA réel encore éprouvé.",
+            "depuis": "2026-10-01"
+          },
+          {
+            "quoi": "⚠️ HOPUS CLOS à 13/15 par Paul le 20/09 — puis la vitrine REFONDUE (326064e). Patterns NON re-mesurés depuis. Détail : ROADMAP-2026-09-20-fin-de-session.md",
+            "depuis": "2026-09-19"
+          },
+          {
+            "quoi": "⚖️ DEUX RÈGLES D'ARGENT DIVERGENT — la part fixe s'ajoute-t-elle à la commission (landing-core.js, testé) ou s'en déduit-elle (index.html §modele, arbitrage du 13/09) ? 900 €…",
+            "depuis": "2026-09-19"
+          },
+          {
+            "quoi": "Console lot 1 — PR #459 : indicateurs et raccourcis fiabilisés (le bilan serveur lisait un cache de 140 clients contre 169 fiches ; 7 devis « en attente » incluaient 2 Perdus).…",
+            "depuis": "2026-09-14"
+          },
+          {
+            "quoi": "Console — PR #454 : corrections de mise en page, filtre Refusés, budgets et détails de RDV, testées (59 contrôles, jobs GitHub verts). ⚠️ LE CONTRÔLE VISUEL CONNECTÉ N'A JAMAIS…",
+            "depuis": "2026-09-14"
+          }
+        ],
+        "maj": "2026-10-21"
+      },
+      "recits": [
+        "dernier_arret.quoi",
+        "bloque_par[]",
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "ecbad6a",
-        "tete_le": "2026-10-13T09:55:01+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
-      "mesure_le": "2026-10-13",
+      "mesure_le": "2026-10-21",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-13T22:27:20.853Z",
+        "lecture_le": "2026-10-21T13:58:03.577Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -827,8 +724,116 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 13,
-      "jours_en_attente": 33,
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 78,
+      "rang": 2
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Léo et FINUBAR — activation du site et des commandes",
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, "
+        },
+        "dernier_arret": {
+          "le": "2026-10-21",
+          "quoi": "21/10 : grain remis à l'heure — AMATSU 2b fusionnée le 19/10 (#403, d4ff809) ; boucle coûts : RenoBoost#611 fusionnée le 21/10 (2015249, conflit FINUBAR résolu par fusion de main…",
+          "commit": "37e439212c4cbfdf2a69961f4fb4f7c8691def9b"
+        },
+        "prochaine_action": "Paul tranche la suite d'AMATSU : γ (le regard d'après) ou 2c (la passerelle vers l'objet jugé) — puis cadrage EL de la boucle retenue (CADRAGE-IMLADRIK.md §12).",
+        "bloque_par": [
+          "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
+          "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…",
+          "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet…",
+          "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
+          "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+          "La précision sur « mon dpe.fr » (VITRUVE)",
+          "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "AMATSU : boucles 1 (l'étoile), 2a (la voix de Léo), 2b-α (maquette) et 2b-β (la page de la rose des vents) FERMÉES — 2b fusionnée le 19/10 (#403, d4ff809 ; amatsu.html en…",
+            "depuis": "2026-10-18"
+          },
+          {
+            "quoi": "Coûts (19/10 → 21/10) : Ultima-#400 (plafond d'appels de Léo, migration appliquée par Paul, PLAFOND_OK — RUNBOOK-GATES.md gate ⑦), #401 (saut du harnais navigateur pour les .md…",
+            "depuis": "2026-10-19"
+          },
+          {
+            "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés.…",
+            "depuis": "2026-10-13"
+          },
+          {
+            "quoi": "LEÇONS v91 (12–13/10, quatre leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
+            "depuis": "2026-10-12"
+          },
+          {
+            "quoi": "ZOH · plan et base à jour le 10/10 (CADRAGE-2026-10-10-zohshia-mise-a-jour.md). Série : 32 conflits, dont 25 dans les fichiers de J4 ; à rafraîchir juste après J4 de RenoDevis…",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Dictée qui suit les pauses (#367) : non prouvée sur téléphone (le harnais simule les coupures). Recette = une dictée réelle de Paul, avec des pauses.",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "LEÇONS v86 dans Ultima seulement (les neuf autres en v85). À la propagation, préfixer l.663 `outils/` et l.2330 `package-lock.json` : lecons-chemins les signale.",
+            "depuis": "2026-10-10"
+          },
+          {
+            "quoi": "RIVEN deux cartes — à trancher par Paul : la bascule s'ouvre sur « Tout » (choix de séance : rien ne disparaît, et 9 harnais comptent les 9 fiches de démo). Passer le défaut à «…",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE dans le Chromium du conteneur de séance, sur main pur (8485ed5) comme sur la branche — mais VERT en CI le 08/10…",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Léo partout (js/leo-partout.js) monte la voix SANS candidats : sur adramelech.html et toute page hors /registre, « Crée une idée … » finit en carte « Action impossible en l'état »…",
+            "depuis": "2026-10-06"
+          }
+        ],
+        "maj": "2026-10-21"
+      },
+      "recits": [
+        "dernier_arret.quoi",
+        "bloque_par[]",
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "racine",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-21",
+      "controle": {
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-21T13:58:03.565Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
+        "non_examines": [
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 62,
       "rang": 2
     }
   ],
@@ -837,53 +842,25 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 0,
+    "repris": 7,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
-    "derives": 1,
-    "commits_inconnus": 6,
+    "derives": 8,
+    "commits_inconnus": 0,
     "boucles_ouvertes": 46,
     "gestes_de_paul": [
       {
-        "projet": "RénoBoost",
-        "geste": "Q10 : inscription RenoPredict de Matthieu (geste de Paul, « on verra plus tard » 06/10), puis vérification de liaison §3.3 quater et, si l'adresse diffère, une ligne SQL de lien…"
+        "projet": "RénoAgenda",
+        "geste": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux"
       },
       {
-        "projet": "RénoBoost",
-        "geste": "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul."
+        "projet": "RénoAgenda",
+        "geste": "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date"
       },
       {
-        "projet": "RénoBoost",
-        "geste": "PAUL : vérifier que Stripe est en LIVE côté Artidispo — la vitrine dit « déjà disponible ! » depuis le 29/09 (3259da4) ; sans Stripe live, un artisan inscrit ne peut pas payer"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Les 14 PDF SOLA à déposer dans Drive + la réponse sur DEV235/201 (Paul, 30/09) ; le total des 9 devis signés (Paul)"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Validation d'Henry sur la présentation commerciale, et partage de l'Artifact avec lui par Paul (menu Partager) — 28/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Calendly : un seul événement actif sur le plan gratuit — tout nouvel événement créé par Paul coupe le site (mesuré 27/09)"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Photo du centre DEKRA : accord du client + la renvoyer (non versionnée) — 22/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Bandeau partenaires : le fichier du logo + l'accord d'y figurer (CLAUDE.md §12.5) — 22/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+        "projet": "RénoAgenda",
+        "geste": "Relecture juriste des CGU avant la première signature client"
       },
       {
         "projet": "RénoPredict",
@@ -906,26 +883,6 @@ export default {
         "geste": "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
       },
       {
-        "projet": "DATA RÉNO",
-        "geste": "⚠️ Domaine renoadomicile.fr expire le 16/10/2026 — renouvellement à vérifier par Paul"
-      },
-      {
-        "projet": "DATA RÉNO",
-        "geste": "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
-      },
-      {
-        "projet": "RénoAgenda",
-        "geste": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux"
-      },
-      {
-        "projet": "RénoAgenda",
-        "geste": "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date"
-      },
-      {
-        "projet": "RénoAgenda",
-        "geste": "Relecture juriste des CGU avant la première signature client"
-      },
-      {
         "projet": "RénoDevis",
         "geste": "Paul valide les devis e-mail sur /devis/email (B3) avant la clé Stripe live (A6a)."
       },
@@ -940,34 +897,6 @@ export default {
       {
         "projet": "RénoDevis",
         "geste": "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet…"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "La précision sur « mon dpe.fr » (VITRUVE)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
       },
       {
         "projet": "artisan-builder",
@@ -1015,43 +944,43 @@ export default {
       },
       {
         "projet": "Artidispo",
-        "geste": "08/10 [MESURÉ Gmail] : le mail « ce qu'il faut préparer » est parti à Henry seul ; Paul le fait avec Matthieu vendredi. ⛔ PÉRIMÉ : « envoyer le brouillon à Matthieu »."
+        "geste": "⏳ 20/10 — Liens publics : CI/route courte sur aperçu à recevoir ; accès Supabase Artidispo refusé par le connecteur (lecture seule tentée, aucune écriture). Les déploiements Edge…"
       },
       {
         "projet": "Artidispo",
-        "geste": "Avant vendredi, gestes Paul : crédits OVH, solde Twilio, bundle France Business Approved. Henry propose d'y relier le Google Agenda de Matthieu : à trancher par Paul."
+        "geste": "✅ 19/10 J2-bis SOLA FERMÉ : #150 et #152 fusionnées ; 4 migrations collées et contrôlées ; offrir-abonnement déployée ; SOLA déposée, offerte, publiée, numérotée. ⛔ PÉRIMÉ : «…"
       },
       {
         "projet": "Artidispo",
-        "geste": "Hors séance du 09/10, la boucle de Claude reste P2 (G17), à ouvrir par son cadrage six points."
+        "geste": "⏳ Avant tout envoi de sa fiche à Matthieu : photos de chantiers de SOLA à mettre à jour (Paul, via « Photos de sa fiche »). La photo d'équipe est en tête et la fiche publique est…"
       },
       {
         "projet": "Artidispo",
-        "geste": "✅ FAIT ET MESURÉ LE 06/10 — NE PAS LE REJOUER : P1 PROUVÉE EN PRODUCTION (connexion 13:34, créneau retiré à 13:50, rendu à 13:55 ; révocation détectée à 14:05 → agenda périmé, 0…"
+        "geste": "✅ MESURÉ le 20/10 dans le navigateur public : « climatisation » + 69130 retrouve SOLA GROUPE ; sa fiche /r/sola-groupe-ecully ouvre le bon formulaire de réservation et ses…"
       },
       {
         "projet": "Artidispo",
-        "geste": "✅ FAIT ET MESURÉ LE 06/10 — NE PAS LE REJOUER : migration 33 (cron_delai_30s) APPLIQUÉE EN PRODUCTION sur go de Paul : agenda-sync et purge-stockage replanifiés sous le même nom…"
+        "geste": "⏳ Téléphone SOLA : vérification Twilio + appel test (Paul), renvoi **61* (Matthieu, opérateur inconnu)."
       },
       {
         "projet": "Artidispo",
-        "geste": "⚠️ CONSTAT DU 06/10, MINEUR : google-oauth-callback ne remet pas last_sync_error à nul en reconnectant ; jusqu'au passage suivant (≤ 5 min) la fiche reste « périmée » et ne vend…"
+        "geste": "⚠️ CGV : le parrainage a ajouté un paragraphe à src/cgv.html sans changer sa date (« 18/09 ») — SOLA a accepté sur mandat « cgv-2026-09-18 » dont le texte a changé le 19/10…"
       },
       {
         "projet": "Artidispo",
-        "geste": "✅ FAIT ET MESURÉ LE 06/10 — NE PAS LE REJOUER : CRON_SECRET posé (secrets des fonctions + coffre, 64 car.), pg_net 0.20.4, crons agenda-sync (*/5) et purge-stockage (h+10) ; les…"
+        "geste": "⚠️ Abonnement offert × parrainage : un abonnement offert compte « actif » → SOLA peut devenir parrain ; décider si un pro offert touche une récompense (P3/P5)."
       },
       {
         "projet": "Artidispo",
-        "geste": "⏳ PAUL — ROTATION DU CRON_SECRET : la valeur a été montrée sur une capture le 06/10 (63 caractères sur 64 : ~1 000 essais suffisent) ; le coffre n'a PAS été mis à jour (updated_at…"
+        "geste": "⏭ F1 suite (mise de côté par Paul le 19/10) : autres photos (réalisation PV) ; F2 site + avis Google (D2) ; C3 purge des photos orphelines ; recette Managed Payments avant de…"
       },
       {
         "projet": "Artidispo",
-        "geste": "⚠️ GOOGLE EN MODE TESTING (06/10) : le jeton est coupé à J+7 ; l'agenda devient alors périmé et, par D-STALE, LA FICHE CESSE DE VENDRE. Sans gravité pour la fiche de recette…"
+        "geste": "✅ 19/10 PARRAINAGE P2 FERMÉ : #151 fusionnée (d6ee419) ; migration P1 20261019190000 posée par Paul (historique posé, contrôle OK, déclaré) ; create-checkout déployé depuis…"
       },
       {
         "projet": "Artidispo",
-        "geste": "⚠️ CONSTAT DU 06/10, HORS BOUCLE : google-oauth-callback fait deux fetch SANS délai (règle « tout appel sortant a un délai ») et renvoie à la racine (/?calendar=…) — le site le…"
+        "geste": "⏳ #150 (J2-bis suite : dépôt sur mandat, abonnement offert) est FUSIONNÉE dans main par une autre séance ; ses gestes pour Paul sont dans DEPLOIEMENT §4.9 (migration…"
       },
       {
         "projet": "RénoBoost Console",
@@ -1064,6 +993,82 @@ export default {
       {
         "projet": "RénoBoost Console",
         "geste": "GEMINI_API_KEY en variable d'environnement : action de Paul"
+      },
+      {
+        "projet": "DATA RÉNO",
+        "geste": "⚠️ Domaine renoadomicile.fr expire le 16/10/2026 — renouvellement à vérifier par Paul"
+      },
+      {
+        "projet": "DATA RÉNO",
+        "geste": "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Q10 : inscription RenoPredict de Matthieu (geste de Paul, « on verra plus tard » 06/10), puis vérification de liaison §3.3 quater et, si l'adresse diffère, une ligne SQL de lien…"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul."
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "PAUL : vérifier que Stripe est en LIVE côté Artidispo — la vitrine dit « déjà disponible ! » depuis le 29/09 (3259da4) ; sans Stripe live, un artisan inscrit ne peut pas payer"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Les 14 PDF SOLA à déposer dans Drive + la réponse sur DEV235/201 (Paul, 30/09) ; le total des 9 devis signés (Paul)"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Validation d'Henry sur la présentation commerciale, et partage de l'Artifact avec lui par Paul (menu Partager) — 28/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Calendly : un seul événement actif sur le plan gratuit — tout nouvel événement créé par Paul coupe le site (mesuré 27/09)"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Photo du centre DEKRA : accord du client + la renvoyer (non versionnée) — 22/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Bandeau partenaires : le fichier du logo + l'accord d'y figurer (CLAUDE.md §12.5) — 22/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet…"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "La précision sur « mon dpe.fr » (VITRUVE)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
       }
     ]
   },
@@ -1083,16 +1088,17 @@ export default {
     "controles": [
       "PaulGERARD161098/Ultima-",
       "PaulGERARD161098/RenoBoost",
+      "paggerard-boop/Artidispo"
+    ],
+    "inaccessibles": [
       "PaulGERARD161098/RenoDevis",
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
       "PaulGERARD161098/mon-dpe.fr",
       "PaulGERARD161098/artisan-builder",
-      "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
     ],
-    "inaccessibles": [],
     "non_examines": [],
     "anomalies": [],
     "portee": "Registre seulement. PR, contrôles, permissions et dépendances non examinés."
@@ -1100,26 +1106,26 @@ export default {
   "cartouche": {
     "signaux": [
       {
-        "projet": "RénoBoost",
-        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
+        "projet": "RénoAgenda",
+        "dit": "a avancé de 14 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
         "projet": "RénoPredict",
-        "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
-        "pourquoi": "commit_inconnu"
+        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       },
       {
-        "projet": "DATA RÉNO",
-        "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
-        "pourquoi": "commit_inconnu"
+        "projet": "RénoDevis",
+        "dit": "a avancé de 23 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       }
     ],
     "action": {
-      "projet": "RénoBoost",
+      "projet": "RénoAgenda",
       "nature": "code",
-      "faire": "Devis assisté : recette authentifiée avec RenoDevis, corpus et Gmail. Livraison #566/#218 faite. La chaîne A→Z conserve sa route dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md.",
-      "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques."
+      "faire": "Boucle D4 : réduire partenaires.html au logo et fermer les colonnes démarchables de artisans_vitrine. Puis V1 : inventaire des réalisations avec accord.",
+      "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule."
     },
     "illisibles": 0,
     "hors_seance": 0
@@ -1127,8 +1133,8 @@ export default {
   "constellation": {
     "noeuds": [
       {
-        "id": "PaulGERARD161098/RenoBoost",
-        "libelle": "RénoBoost",
+        "id": "PaulGERARD161098/RenoAgenda",
+        "libelle": "RénoAgenda",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
         "signal": 1
@@ -1141,6 +1147,41 @@ export default {
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/RenoDevis",
+        "libelle": "RénoDevis",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/artisan-builder",
+        "libelle": "artisan-builder",
+        "constellation": "en_cours",
+        "ciel": "alpha",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/mon-dpe.fr",
+        "libelle": "mon-dpe.fr",
+        "constellation": "en_cours",
+        "ciel": "alpha",
+        "signal": 1
+      },
+      {
+        "id": "paggerard-boop/Artidispo",
+        "libelle": "Artidispo",
+        "constellation": "en_cours",
+        "ciel": "alpha",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/renoboost-console",
+        "libelle": "RénoBoost Console",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/DATARENO-",
         "libelle": "DATA RÉNO",
         "constellation": "en_attente_de_paul",
@@ -1148,15 +1189,8 @@ export default {
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/RenoAgenda",
-        "libelle": "RénoAgenda",
-        "constellation": "en_cours",
-        "ciel": "renoboost-ia",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/RenoDevis",
-        "libelle": "RénoDevis",
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
         "signal": 0
@@ -1167,34 +1201,6 @@ export default {
         "constellation": "en_cours",
         "ciel": "racine",
         "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/artisan-builder",
-        "libelle": "artisan-builder",
-        "constellation": "en_cours",
-        "ciel": "alpha",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/mon-dpe.fr",
-        "libelle": "mon-dpe.fr",
-        "constellation": "en_cours",
-        "ciel": "alpha",
-        "signal": 0
-      },
-      {
-        "id": "paggerard-boop/Artidispo",
-        "libelle": "Artidispo",
-        "constellation": "en_cours",
-        "ciel": "alpha",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/renoboost-console",
-        "libelle": "RénoBoost Console",
-        "constellation": "en_cours",
-        "ciel": "renoboost-ia",
-        "signal": 0
       }
     ],
     "relations": []
@@ -1202,11 +1208,11 @@ export default {
   "zohshia": {
     "mesurable": true,
     "base": "f1f9fb3",
-    "tete": "3b85c08",
-    "commits": 189,
-    "touchent": 85,
-    "fichiers_touches": 90,
-    "releve_le": "2026-10-10T16:16:47.004Z",
+    "tete": "dd806dc",
+    "commits": 361,
+    "touchent": 145,
+    "fichiers_touches": 111,
+    "releve_le": null,
     "report": {
       "valide": true,
       "le": "2026-10-10",
@@ -1214,8 +1220,8 @@ export default {
       "pourquoi": "25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul)"
     },
     "reprise": true,
-    "mesure_le": "2026-10-10",
+    "mesure_le": "2026-10-18",
     "alerte": true,
-    "phrase": "(mesure du 2026-10-10, reprise : la base de la série n'est pas un ancêtre de origin/main (historique réécrit, ou clone en retard)) ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 189 commit(s) depuis la série (f1f9fb3 → 3b85c08) (clone relevé le 2026-10-10 16:16 UTC), dont 85 sur des fichiers qu'elle retouche (90 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
+    "phrase": "(mesure du 2026-10-18, reprise : dépôt de référence absent de cette séance) ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 361 commit(s) depuis la série (f1f9fb3 → dd806dc) (date de relevé du clone inconnue), dont 145 sur des fichiers qu'elle retouche (111 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
   }
 };

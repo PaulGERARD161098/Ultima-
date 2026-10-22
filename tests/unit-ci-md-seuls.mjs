@@ -1,0 +1,183 @@
+// Unitaires de la CI — quand seuls des `.md` changent, le harnais navigateur est sauté.
+// Node pur, zéro réseau, zéro navigateur : le script de `tests.yml` est EXÉCUTÉ tel
+// quel, sur des dépôts jetables, avec le shell que GitHub lui donne (`bash -e`).
+//
+// ⛔ Pourquoi ce garde existe. Facture GitHub du 19/10/2026 : Ultima- ≈ 54 % des
+// minutes Actions de l'organisation, et le harnais navigateur = 27 des 29 minutes
+// facturées par exécution. La moitié des commits, mais un tiers des PR (11 sur 33
+// fusionnées, diff NET — ce que la règle lit), sont des `.md` seuls. Le danger
+// est d'UN seul côté : sauter un harnais qui aurait dû tourner — une PR de code
+// verte sans avoir été testée. Les cas « on exécute » pèsent donc plus lourd que
+// les cas « on saute », et chacun est construit sur une réponse connue d'avance.
+//
+// ⛔ Le cas qui a motivé le diff NET de la PR (et non celui du dernier commit) :
+// une PR porte du code (commit 1), puis une note (commit 2). Le passage du commit 1
+// est annulé par le suivant (`cancel-in-progress`). Si le commit 2 ne regardait que
+// lui-même, il sauterait le harnais — et le code ne serait testé nulle part.
+//
+// ⛔ Second cas (21/10) : sur `main` (`push`), la fusion d'une PR à jour reprend à
+// l'identique sa tête HEAD^2, déjà testée verte. Le danger est le même : sauter sur
+// une fusion dont le contenu n'a PAS été testé (PR en retard sur main, push direct,
+// événement `pull_request`, dont la réf de fusion a aussi deux parents).
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { join, dirname } from 'node:path';
+
+const verdicts = {};
+const yml = readFileSync(new URL('../.github/workflows/tests.yml', import.meta.url), 'utf8');
+
+// ---------- Lecture du workflow ----------
+const iUnit = yml.indexOf('\n  unit:');
+const iBrowser = yml.indexOf('\n  browser:');
+const unit = iUnit >= 0 && iBrowser > iUnit ? yml.slice(iUnit, iBrowser) : '';
+const browser = iBrowser >= 0 ? yml.slice(iBrowser) : '';
+// Les étapes du job navigateur : chacune commence par « \n      - ».
+const etapes = browser.split(/\n(?=      - )/).slice(1);
+const etapeDe = (motif) => etapes.find((e) => motif.test(e)) || '';
+const SI = "if: steps.portee.outputs.sauter != 'true'";
+
+const portee = etapeDe(/- name: Portée du changement/);
+const m = /run: \|\n((?: {10}.*(?:\n|$))+)/.exec(portee);
+const script = m ? m[1].replace(/^ {10}/gm, '') : '';
+
+// 0. Verrous de non-vacuité : sans job, sans étapes ni script lus, tout le reste est vert à vide.
+verdicts.jobsLus = unit.length > 100 && browser.length > 100;
+verdicts.etapesLues = etapes.length >= 5;
+verdicts.scriptLu = script.includes('git diff --name-only HEAD^1 HEAD') && script.includes('GITHUB_OUTPUT') &&
+  script.includes("git diff --quiet 'HEAD^2' HEAD");
+
+// 1. Structure du workflow.
+const lourdes = [etapeDe(/actions\/setup-node@v4/), etapeDe(/npm ci --ignore-scripts/), etapeDe(/name: Harnais navigateur isolé/)];
+verdicts.troisEtapesLourdesConditionnees = lourdes.every((e) => e.includes(SI));
+//    La détection elle-même ne doit JAMAIS être conditionnée (elle se sauterait elle-même),
+//    ni le checkout, qui la précède.
+verdicts.detectionEtCheckoutInconditionnels = !portee.includes('if:') && !etapeDe(/actions\/checkout@v4/).includes('if:');
+verdicts.detectionApresCheckoutAvantLeReste = etapes.findIndex((e) => e === etapeDe(/actions\/checkout@v4/)) <
+  etapes.findIndex((e) => e === portee) && etapes.findIndex((e) => e === portee) <
+  etapes.findIndex((e) => e === lourdes[0]);
+verdicts.historiqueSuffisant = /fetch-depth: 2/.test(etapeDe(/actions\/checkout@v4/));
+//    Le job `unit` garde LECONS.md et le sceau : il tourne toujours, sans condition d'étape.
+verdicts.jobUnitJamaisSaute = unit.length > 100 && !/sauter|portee/.test(unit);
+
+// ---------- Exécution du script réel sur des dépôts jetables ----------
+const racine = mkdtempSync(join(tmpdir(), 'ci-md-seuls-'));
+const fichierScript = join(racine, 'etape.sh');
+writeFileSync(fichierScript, script);
+
+const git = (cwd, ...a) => execFileSync('git',
+  ['-c', 'user.name=t', '-c', 'user.email=t@t.test', '-c', 'commit.gpgsign=false', ...a],
+  { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+
+let n = 0;
+function depot() {
+  const d = join(racine, `d${n += 1}`);
+  mkdirSync(d);
+  git(d, 'init', '-q', '-b', 'main');
+  ecrire(d, 'README.md'); ecrire(d, 'js/a.js');
+  git(d, 'add', '-A'); git(d, 'commit', '-q', '-m', 'base');
+  return d;
+}
+function ecrire(d, f) {
+  mkdirSync(dirname(join(d, f)), { recursive: true });
+  writeFileSync(join(d, f), `v${Math.random()}\n`);
+}
+/** Fusion d'une PR comme la voit GitHub : HEAD = fusion, HEAD^1 = base, HEAD^2 = tête de la PR. */
+function fusion(d, commits, { supprimer = [], vide = false, avance = false } = {}) {
+  git(d, 'switch', '-q', '-c', 'pr');
+  for (const fichiers of commits) {
+    fichiers.forEach((f) => ecrire(d, f));
+    git(d, 'add', '-A'); git(d, 'commit', '-q', '-m', 'c');
+  }
+  if (supprimer.length) { git(d, 'rm', '-q', ...supprimer); git(d, 'commit', '-q', '-m', 'rm'); }
+  if (vide) git(d, 'commit', '-q', '--allow-empty', '-m', 'vide');
+  git(d, 'switch', '-q', 'main');
+  //    `avance` : main a bougé pendant la PR — la fusion porte un contenu que la PR n'a jamais testé.
+  if (avance) { ecrire(d, 'js/main.js'); git(d, 'add', '-A'); git(d, 'commit', '-q', '-m', 'main'); }
+  git(d, 'merge', '-q', '--no-ff', 'pr', '-m', 'fusion');
+  return d;
+}
+/** Joue l'étape comme GitHub : `bash -e fichier`, GITHUB_OUTPUT en variable. L'événement est
+ *  TOUJOURS posé (`pull_request` par défaut) : celui de l'environnement hôte ne doit rien décider. */
+function joue(d, env = {}) {
+  const sortie = join(racine, `out${n += 1}`);
+  writeFileSync(sortie, '');
+  const r = spawnSync('/bin/bash', ['-e', fichierScript], { cwd: d, encoding: 'utf8', env: { ...process.env, GITHUB_EVENT_NAME: 'pull_request', ...env, GITHUB_OUTPUT: sortie } });
+  const lignes = readFileSync(sortie, 'utf8').split('\n').filter((l) => l.startsWith('sauter='));
+  return { code: r.status, valeur: lignes.length === 1 ? lignes[0].slice('sauter='.length) : `lignes:${lignes.length}` };
+}
+const saute = (r) => r.code === 0 && r.valeur === 'true';
+const execute = (r) => r.code === 0 && r.valeur === 'false';
+
+try {
+  if (verdicts.scriptLu) {
+    // 2. SAUTE — l'instrument répond « oui » sur un cas dont on connaît la réponse.
+    verdicts.sauteMdSeuls = saute(joue(fusion(depot(), [['NOTES.md', 'memoire/x.md']])));
+    verdicts.sauteMdSupprime = saute(joue(fusion(depot(), [], { supprimer: ['README.md'] })));
+
+    // 3. EXÉCUTE — le côté dangereux. Chaque cas est « non » et doit le rester.
+    verdicts.executeCodeSeul = execute(joue(fusion(depot(), [['js/b.js']])));
+    verdicts.executeMdEtCode = execute(joue(fusion(depot(), [['NOTES.md', 'js/b.js']])));
+    //    Le cas du diff NET : code d'abord, note ensuite — la PR entière porte du code.
+    verdicts.executeCodePuisNoteSurLaPR = execute(joue(fusion(depot(), [['js/b.js'], ['NOTES.md']])));
+    //    Suffixes voisins : seul `.md` exact (minuscules, en fin de nom) saute.
+    verdicts.executeSuffixesVoisins = ['NOTE.MD', 'a.mdx', 'a.md.bak', 'docs.md/x.js', 'md', 'LISEZMOI']
+      .every((f) => execute(joue(fusion(depot(), [[f]]))));
+    //    Diff vide : le garde `[ -n "$fichiers" ]` du script est REDONDANT avec la ligne vide que
+    //    `printf '%s\n'` envoie à grep (cette ligne ne finit pas par .md → exécute). Il reste, comme
+    //    intention lisible ; ce verdict verrouille le COMPORTEMENT. Éprouvé en retirant le garde ET la
+    //    fin de ligne : rouge (19/10) — retirer le garde seul ne change rien, et c'est normal.
+    verdicts.executeDiffVide = execute(joue(fusion(depot(), [], { vide: true })));
+    //    Pas de parent (premier commit, historique tronqué) : le diff est impossible → on exécute.
+    const seul = join(racine, 'seul'); mkdirSync(seul); git(seul, 'init', '-q', '-b', 'main');
+    ecrire(seul, 'NOTES.md'); git(seul, 'add', '-A'); git(seul, 'commit', '-q', '-m', 'seul');
+    verdicts.executeSansParent = execute(joue(seul));
+
+    // 4. Les erreurs ne valent JAMAIS « tout est .md ».
+    //    grep en erreur (code 2) : `! grep` ou `[ $? -ne 0 ]` l'aurait lu comme « rien d'autre qu'un .md ».
+    //    ⛔ Le faux `grep` est un LIEN SYMBOLIQUE vers `node` (déjà là, puisqu'il exécute ce test) :
+    //    appelé avec les options de grep, node les refuse (« bad option ») et sort en erreur, code 9.
+    //    Deux versions précédentes ont échoué sur GitHub alors qu'elles passaient en local (19/10) :
+    //    ① un faux binaire déposé dans os.tmpdir() — `docker --tmpfs /tmp` est monté `noexec`, il n'était
+    //    jamais exécuté ; ② une fonction injectée par BASH_ENV — dans un environnement minimal (celui du
+    //    conteneur) elle ne prenait pas effet. Un lien vers un binaire d'un dossier exécutable ne dépend
+    //    ni du montage de /tmp ni de l'environnement.
+    const ombre = join(racine, 'ombre'); mkdirSync(ombre);
+    symlinkSync(process.execPath, join(ombre, 'grep'));
+    //    Verrou de non-vacuité : le faux grep MORD dans CET environnement (sortie en erreur, ni 0 ni 1 :
+    //    1 = « aucune ligne » chez le vrai grep). Sans lui, le verdict ci-dessous mesurerait le vrai grep.
+    const sonde = spawnSync(join(ombre, 'grep'), ['-qvE', '\\.md$'], { encoding: 'utf8' });
+    verdicts.fauxGrepMordIci = sonde.status !== null && sonde.status !== 0 && sonde.status !== 1;
+    verdicts.executeGrepEnErreur = verdicts.fauxGrepMordIci &&
+      execute(joue(fusion(depot(), [['NOTES.md']]), { PATH: `${ombre}:${process.env.PATH}` }));
+    //    git introuvable.
+    verdicts.executeGitAbsent = execute(joue(fusion(depot(), [['NOTES.md']]), { PATH: '/nonexistent' }));
+
+    // 5. Sur main, la fusion identique à la tête de PR testée.
+    const surMain = { GITHUB_EVENT_NAME: 'push' };
+    //    SAUTE : PR de code à jour, fusionnée — contenu = HEAD^2, déjà testé.
+    verdicts.sauteFusionAJourSurMain = saute(joue(fusion(depot(), [['js/b.js']]), surMain));
+    //    EXÉCUTE : la même fusion vue par `pull_request` (réf de fusion, deux parents aussi).
+    verdicts.executeFusionAJourSurPR = execute(joue(fusion(depot(), [['js/b.js']])));
+    //    EXÉCUTE : main a avancé pendant la PR, le contenu fusionné n'a jamais été testé.
+    verdicts.executeFusionEnRetardSurMain = execute(joue(fusion(depot(), [['js/b.js']], { avance: true }), surMain));
+    //    EXÉCUTE : push direct sur main (un seul parent).
+    const direct = depot(); ecrire(direct, 'js/a.js'); git(direct, 'add', '-A'); git(direct, 'commit', '-q', '-m', 'direct');
+    verdicts.executePushDirectSurMain = execute(joue(direct, surMain));
+    //    EXÉCUTE : événement vide ou inconnu.
+    verdicts.executeEvenementVide = ['', 'workflow_dispatch', 'PUSH']
+      .every((e) => execute(joue(fusion(depot(), [['js/b.js']]), { GITHUB_EVENT_NAME: e })));
+    //    EXÉCUTE : git introuvable, même sur main.
+    verdicts.executeGitAbsentSurMain = execute(joue(fusion(depot(), [['js/b.js']]), { ...surMain, PATH: '/nonexistent' }));
+
+    // 6. L'étape elle-même ne casse jamais le job : code 0 dans tous les cas ci-dessus
+    //    (déjà vérifié par saute()/execute()), et une seule ligne de sortie (`lignes:1` sinon).
+  }
+} finally {
+  rmSync(racine, { recursive: true, force: true });
+}
+
+console.log(JSON.stringify(verdicts, null, 2));
+const ok = Object.values(verdicts).every((v) => v === true);
+console.log(ok ? 'UNIT-CI-MD-SEULS OK' : 'UNIT-CI-MD-SEULS ECHEC');
+process.exit(ok ? 0 : 1);

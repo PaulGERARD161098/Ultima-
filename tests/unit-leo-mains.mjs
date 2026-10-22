@@ -28,14 +28,16 @@ verdicts.frontExpose = typeof resoudreRef === 'function' &&
 // ---------- 1. Catalogue par quadrant ----------
 verdicts.catalogueRiven = Array.isArray(outilsPour('riven')) &&
   outilsPour('riven').map((o) => o.name).sort().join(',') ===
-  'proposer_besoin,proposer_journal,proposer_relance';
+  'proposer_besoin,proposer_journal,proposer_lecture_amatsu,proposer_relance';
 verdicts.catalogueAdramelech = Array.isArray(outilsPour('adramelech')) &&
   outilsPour('adramelech').map((o) => o.name).sort().join(',') ===
-  'proposer_enrichissement_idee,proposer_idee';
+  'proposer_enrichissement_idee,proposer_idee,proposer_lecture_amatsu';
 // IMLADRIK (boucle ④, 2026-07-30) : les 3 caps ont leurs mains.
 verdicts.catalogueImladrik = Array.isArray(outilsPour('imladrik')) &&
   outilsPour('imladrik').map((o) => o.name).sort().join(',') ===
-  'proposer_flamme,proposer_page_journal,proposer_scenario,proposer_serment,proposer_situation';
+  'proposer_flamme,proposer_lecture_amatsu,proposer_page_journal,proposer_scenario,proposer_serment,proposer_situation';
+// AMATSU (18/10/2026) : le seul outil TRANSVERSAL — servi aux trois quadrants
+// ci-dessus, et à eux seuls ; NICOL BOLAS reste vide (verdict catalogueVide).
 // bcp : catalogue VIDE → null (l'appel IA part sans le champ tools).
 verdicts.catalogueVide = outilsPour('bcp') === null &&
   outilsPour('inconnu') === null && outilsPour(undefined) === null;
@@ -390,6 +392,41 @@ verdicts.imladrikPlansRefus = (() => {
     CAND_IMLADRIK);
   return introuvable.ok === false && sansCandidats.ok === false &&
     horizonTropLong.ok === false && natureInconnue.ok === false;
+})();
+
+// ---------- AMATSU, le dragon de l'air (boucle 2a, 2026-10-18) ----------
+// La main transversale : valide sur RIVEN, ADRAMELECH et IMLADRIK, refusée
+// sur NICOL BOLAS (quadrant absent de sa liste), refusée sans l'un des trois
+// vents (les quatre champs sont requis : Léo pose les vents AVANT d'appeler).
+const LECTURE = { objet: 'Reprendre la boutique', bise: 'oui, moins de patron', souffle: 'oui, c’est moi', ouragan: 'un peu, j’étais en colère' };
+verdicts.amatsuTransversal = ['riven', 'adramelech', 'imladrik'].every((q) =>
+  validerProposition('proposer_lecture_amatsu', LECTURE, q).ok === true) &&
+  validerProposition('proposer_lecture_amatsu', LECTURE, 'bcp').ok === false &&
+  validerProposition('proposer_lecture_amatsu', LECTURE, 'inconnu').ok === false;
+verdicts.amatsuTroisVentsRequis = ['bise', 'souffle', 'ouragan', 'objet'].every((manque) => {
+  const args = { ...LECTURE }; delete args[manque];
+  const vide = { ...LECTURE, [manque]: '   ' };
+  return validerProposition('proposer_lecture_amatsu', args, 'imladrik').ok === false &&
+    validerProposition('proposer_lecture_amatsu', vide, 'imladrik').ok === false;
+});
+verdicts.amatsuBornes =
+  validerProposition('proposer_lecture_amatsu', { ...LECTURE, objet: 'x'.repeat(201) }, 'imladrik').ok === false &&
+  validerProposition('proposer_lecture_amatsu', { ...LECTURE, bise: 'x'.repeat(501) }, 'imladrik').ok === false &&
+  validerProposition('proposer_lecture_amatsu', { ...LECTURE, note: '5/10' }, 'imladrik').ok === false;
+// Reformulation déterministe : les trois vents, nommés, dans l'ordre de Paul.
+verdicts.amatsuReformule = reformulerProposition({ outil: 'proposer_lecture_amatsu', args: LECTURE }) ===
+  'Amatsu lit « Reprendre la boutique » — plus libre ? « oui, moins de patron » · cohérent ? « oui, c’est moi » · emporté ? « un peu, j’étais en colère »';
+// Gabarit : corps EXACT de /api/amatsu-lectures, aucune cible à résoudre ;
+// bornes serveur tenues (refus, jamais de troncature).
+verdicts.amatsuPlan = (() => {
+  const plan = construirePlanExecution({ outil: 'proposer_lecture_amatsu', args: LECTURE }, {});
+  const tropLong = construirePlanExecution(
+    { outil: 'proposer_lecture_amatsu', args: { ...LECTURE, souffle: 's'.repeat(501) } }, {});
+  const manque = construirePlanExecution(
+    { outil: 'proposer_lecture_amatsu', args: { objet: 'x', bise: 'y', souffle: 'z' } }, {});
+  return plan.ok === true && plan.url === '/api/amatsu-lectures' && plan.methode === 'POST' &&
+    JSON.stringify(plan.corps) === JSON.stringify(LECTURE) && plan.cible === undefined &&
+    tropLong.ok === false && manque.ok === false;
 })();
 
 // ---------- N. Alias de quadrant : 'traveler' → 'riven' (renommage 2026-08-11) ----------

@@ -145,15 +145,21 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     ['reshiram', 'reshiram.html'],
     ['zekrom', 'zekrom.html'],
     ['zohshia', 'zohshia.html'],
+    ['amatsu', 'amatsu.html'],
   ]) {
     verifier(`${id} → ${cible} (dans le repli sans JavaScript)`, cibles.includes(cible),
       JSON.stringify(cibles));
   }
-  verifier('Le repli sans JavaScript ne mène plus à TAO (sous verrou : sept liens lus)',
-    cibles.length === 7 && !cibles.some((c) => /tao/i.test(c)) && !/\btao\b/i.test(repli.texte),
+  verifier('Le repli sans JavaScript ne mène plus à TAO (sous verrou : huit liens lus)',
+    cibles.length === 8 && !cibles.some((c) => /tao/i.test(c)) && !/\btao\b/i.test(repli.texte),
     JSON.stringify(cibles));
   verifier('Le repli sans JavaScript dit IFULVIN, sans lien (étoile d\'attente)',
     /IFULVIN/.test(repli.texte) && !cibles.some((c) => /ifulvin/i.test(c)),
+    JSON.stringify(cibles));
+  // AMATSU fut dit sans lien du 18 au 19/10/2026 (étoile d'attente) ; sa page
+  // ouverte (2b-β), le repli le nomme ET y mène.
+  verifier('Le repli sans JavaScript nomme AMATSU et mène à sa page (19/10/2026)',
+    /AMATSU/.test(repli.texte) && cibles.includes('amatsu.html'),
     JSON.stringify(cibles));
   // « Aucun cap à venir restant » N'EST PLUS VRAI DE L'ARBRE : il reste UN cap à
   // venir, IFULVIN, sous ARMES. Au premier niveau il n'y en a toujours aucun (les
@@ -298,14 +304,14 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
 
   const dragonsAttendus = NOEUDS['constellation-dragons'].enfants;
   const capsD = await lireCaps(page);
-  // SEPT depuis le 04/10/2026 (ZOH SHIA, le dragon de la technologie).
-  verifier('DRAGONS (par l\'adresse) : sept étoiles, celles du registre',
-    capsD.length === 7 && dragonsAttendus.length === 7
+  // SEPT depuis le 04/10/2026 (ZOH SHIA), HUIT depuis le 18/10/2026 (AMATSU, le dragon de l'air).
+  verifier('DRAGONS (par l\'adresse) : huit étoiles, celles du registre',
+    capsD.length === 8 && dragonsAttendus.length === 8
     && JSON.stringify(capsD.map((c) => c.id).sort()) === JSON.stringify([...dragonsAttendus].sort()),
     capsD.map((c) => c.id).join(','));
-  verifier('DRAGONS : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM et ZOH SHIA sont là, par leur nom',
+  verifier('DRAGONS : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA et AMATSU sont là, par leur nom',
     JSON.stringify(capsD.map((c) => c.nom).sort())
-      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
+      === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     capsD.map((c) => c.nom).join(','));
   // L'ABSENCE, sous le verrou ci-dessus (six étoiles peintes) : ni les frères de la
   // constellation, ni ce qui vit ailleurs sous IMLADRIK, ni le foyer lui-même, ni
@@ -313,11 +319,15 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
   // maintenant l'une des six étoiles, exigée PRÉSENTE ci-dessus et par son nom.
   for (const id of ['constellation-dragons', 'constellation-armes', 'ifulvin', 'tao']) {
     verifier(`DRAGONS isolée : ${id} n'est pas peint`,
-      capsD.length === 7
+      capsD.length === 8
       && (await page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`).count()) === 0);
   }
-  verifier('DRAGONS : aucune étoile inerte — les sept ont leur page (ZOH SHIA depuis le 04/10/2026)',
-    capsD.length === 7 && capsD.filter((c) => c.avenir).length === 0);
+  // RETRANSPOSÉ (19/10/2026) : AMATSU, inerte du 18 au 19/10, a sa page. « Aucune
+  // inerte » ne vaut que sous verrou : huit étoiles lues, AMATSU présente ET active
+  // — retirer l'étoile ferait rougir la ligne au lieu de la verdir.
+  verifier('DRAGONS : aucune étoile inerte — les huit ont leur page, AMATSU comprise (19/10/2026)',
+    capsD.length === 8 && capsD.filter((c) => c.avenir).length === 0
+    && capsD.some((c) => c.id === 'amatsu' && !c.avenir));
   verifier('DRAGONS : le fil nomme le foyer (IMLADRIK › DRAGONS)',
     ((await page.locator('.ciel-fil-ici').textContent()) || '').trim() === 'DRAGONS');
   verifier('DRAGONS : retour vers omega.html toujours présent',
@@ -434,13 +444,13 @@ for (const largeur of [1280, 390]) {
   const f = await lireFigure(page);
   const cle = `DRAGONS@${largeur}`;
 
-  verifier(`${cle} : sept étoiles, celles du registre`,
-    f.etoiles.length === 7
+  verifier(`${cle} : huit étoiles, celles du registre`,
+    f.etoiles.length === 8
     && JSON.stringify([...f.etoiles].sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
     f.etoiles.join(','));
   // L'ABSENCE, sous le verrou des six étoiles peintes.
   verifier(`${cle} : ZÉRO .ciel-trait-figure, et pas même le groupe de la figure`,
-    f.etoiles.length === 7 && f.traitsFigure === 0 && f.groupeFigure === false,
+    f.etoiles.length === 8 && f.traitsFigure === 0 && f.groupeFigure === false,
     `${f.traitsFigure} trait(s), groupe ${f.groupeFigure}`);
   // La passerelle : UNE ligne, RESHIRAM → ZEKROM, en pointillés (le motif dit le type).
   verifier(`${cle} : exactement une ligne .ciel-liens line, data-a=reshiram data-b=zekrom`,
@@ -537,8 +547,8 @@ console.log('— A4. DRAGONS : la parole, les portes, le bandeau, les contrastes
   const legende = (await page.locator('.ciel-legende').textContent())?.trim();
   verifier('DRAGONS : légende gravée = celle du registre (Kalamn-talaen)',
     legende === NOEUDS.imladrik.legende, `lu: ${legende}`);
-  verifier('DRAGONS : une étoile par cap (ce que les aiguilles approchaient) — sept',
-    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 7);
+  verifier('DRAGONS : une étoile par cap (ce que les aiguilles approchaient) — huit',
+    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 8);
   // Retour vers OMEGA, et plus AUCUN lien vers une page disparue (TAO, NAGA, GRIMA, ULTIMA).
   verifier('DRAGONS : retour « ↞ OMEGA » vers omega.html, aucun lien vers tao / naga / grima / ultima',
     (await page.locator('.console-retour a[href="omega.html"]').count()) === 1
@@ -583,8 +593,8 @@ console.log('— A4. DRAGONS : la parole, les portes, le bandeau, les contrastes
     };
   });
   const rNoms = styles.noms.map((c) => ratio(c, styles.nuit));
-  verifier('Contraste des sept noms d\'étoile sur la nuit ≥ 4,5:1',
-    rNoms.length === 7 && Math.min(...rNoms) >= 4.5, `${Math.min(...rNoms).toFixed(2)}:1 (${rNoms.length} noms)`);
+  verifier('Contraste des huit noms d\'étoile sur la nuit ≥ 4,5:1',
+    rNoms.length === 8 && Math.min(...rNoms) >= 4.5, `${Math.min(...rNoms).toFixed(2)}:1 (${rNoms.length} noms)`);
   const rLien = ratio(versHex(styles.lien), styles.nuit);
   verifier('Contraste nom de passerelle sur la nuit ≥ 4,5:1', rLien >= 4.5, `${rLien.toFixed(2)}:1`);
   const rTitre = ratio(versHex(styles.titre), versHex(styles.voile));
@@ -779,13 +789,15 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       new URL(page.url()).hash === '#constellation-dragons', page.url());
     const dragons = await lireCaps(page);
     surLesTroisEcrans.dragons = dragons;
-    verifier('… et sept étoiles paraissent : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA',
-      dragons.length === 7
+    verifier('… et huit étoiles paraissent : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA, AMATSU',
+      dragons.length === 8
       && JSON.stringify(dragons.map((c) => c.id).sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
       dragons.map((c) => c.id).join(','));
-    // ZOH SHIA a sa page depuis le 04/10/2026 : plus aucune étoile inerte sous DRAGONS.
-    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucune inerte)',
-      reglesTenues(dragons) && dragons.filter((c) => c.avenir).length === 0);
+    // ZOH SHIA a sa page depuis le 04/10/2026, AMATSU depuis le 19/10/2026 :
+    // AUCUNE inerte sous DRAGONS, sous verrou d'AMATSU lue et active.
+    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucune, AMATSU active)',
+      reglesTenues(dragons) && dragons.filter((c) => c.avenir).length === 0
+      && dragons.some((c) => c.id === 'amatsu' && !c.avenir));
 
     // Zéro requête externe / zéro erreur : mesurés AVANT de quitter imladrik.html —
     // la page de destination du témoin (ci-dessous) n'est pas le sujet de cette
@@ -860,11 +872,12 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
   {
     const vus = ['premier', 'dragons', 'armes'].flatMap((k) => surLesTroisEcrans[k] || []);
     const avenirsVus = vus.filter((c) => c.avenir).map((c) => c.id);
-    // Verrou de non-vacuité : les trois écrans ont bien été lus (2 + 7 + 1 étoiles).
-    verifier('Verrou : les trois écrans ont été lus (2 + 7 + 1 étoiles)',
-      (surLesTroisEcrans.premier || []).length === 2 && (surLesTroisEcrans.dragons || []).length === 7
+    // Verrou de non-vacuité : les trois écrans ont bien été lus (2 + 8 + 1 étoiles).
+    verifier('Verrou : les trois écrans ont été lus (2 + 8 + 1 étoiles)',
+      (surLesTroisEcrans.premier || []).length === 2 && (surLesTroisEcrans.dragons || []).length === 8
       && (surLesTroisEcrans.armes || []).length === 1);
-    // UN depuis que ZOH SHIA a sa page (04/10/2026) : IFULVIN (ARMES).
+    // UN depuis que ZOH SHIA a sa page (04/10/2026) : IFULVIN (ARMES). Deux du 18 au
+    // 19/10/2026 (AMATSU attendait la sienne), de nouveau UN depuis la 2b-β.
     verifier('Exactement UN cap à venir sur les trois écrans : IFULVIN',
       [...avenirsVus].sort().join() === 'ifulvin', avenirsVus.join(','));
     // La même chose lue dans le REGISTRE, par la même descente (constellations seules).
@@ -875,7 +888,7 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
     });
     descendre('imladrik');
     verifier('Le registre dit la même chose : un seul cap sans page sous les constellations, IFULVIN',
-      feuillesSansPage.join() === 'ifulvin', feuillesSansPage.join(','));
+      [...feuillesSansPage].sort().join() === 'ifulvin', feuillesSansPage.join(','));
   }
 }
 

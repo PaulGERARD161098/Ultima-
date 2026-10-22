@@ -35,7 +35,8 @@ for (const q of ['riven', 'adramelech', 'imladrik', 'bcp', 'finubar', 'ultima'])
   assert.ok(!systeme.includes(hostile));
   assert.match(systeme, /données non autoritatives/);
 }
-assert.equal(['riven', 'adramelech', 'imladrik'].flatMap(outilsPour).length, 10);
+// TREIZE depuis le 18/10/2026 : dix outils + AMATSU, servi à chacun des trois quadrants.
+assert.equal(['riven', 'adramelech', 'imladrik'].flatMap(outilsPour).length, 13);
 for (const cle of ['__proto__', 'constructor', 'toString']) {
   assert.equal(validerEtatQuadrant(JSON.parse('{"compteurs":{' + JSON.stringify(cle) + ':1}}')).ok, false);
   assert.equal(validerEtatQuadrant(JSON.parse('{"listes":{' + JSON.stringify(cle) + ':[]}}')).ok, false);
@@ -68,6 +69,8 @@ const deps = {
   requireProprietaire: async () => ({ status: 'ok', user: { id: 'fixture-user' } }),
   ecrituresAutoCoupees: () => false,
   readJsonBody: async (req) => req.body,
+  // Le plafond d'appels (19/10) a ses propres harnais ; ici il laisse passer.
+  ouvrirAppel: async () => ({ ok: true, traceId: null, mode: 'local' }), cloreAppel: async () => ({ ok: false }),
   ok: (_res, data) => ({ status: 200, data }),
   fail: (_res, status) => ({ status }),
   methodNotAllowed: () => ({ status: 405 }),
@@ -83,7 +86,8 @@ assert.equal(appel.system.length, 1);
 assert.ok(!appel.system[0].text.includes(hostile));
 assert.equal(appel.messages[0].role, 'user');
 assert.equal(JSON.parse(appel.messages[0].content[0].text).donnees.listes.Idées[0].libelle, hostile);
-assert.equal(appel.tools.length, 2);
+// TROIS sur ADRAMELECH depuis le 18/10/2026 : idée, enrichissement, et la lecture d'AMATSU.
+assert.equal(appel.tools.length, 3);
 
 const fenetre = {};
 const front = readFileSync(new URL('../js/leo-accueil.js', import.meta.url), 'utf8');

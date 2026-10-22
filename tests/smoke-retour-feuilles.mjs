@@ -156,14 +156,22 @@ const DRAGONS = [
   // ZOH SHIA a sa page depuis le 04/10/2026 (un badge par techno) : il revient
   // à sa constellation comme les six autres.
   ['zohshia', 'zohshia.html'],
+  // AMATSU a sa page depuis le 19/10/2026 (la rose des vents des lectures) : il
+  // revient à sa constellation comme les sept autres.
+  ['amatsu', 'amatsu.html'],
 ];
 const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom', 'zohshia'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-// Depuis le 04/10/2026, les SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
-verifier('Verrou : les sept pages sont exactement les enfants de la constellation DRAGONS, toutes à page',
+// Depuis le 04/10/2026, SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
+// AMATSU, étoile d'attente du 18 au 19/10/2026, a la sienne depuis la 2b-β : les
+// HUIT enfants ont leur page, et la liste éprouvée ici est EXACTEMENT la leur —
+// un dragon ajouté sans page, ou une page oubliée ici, ferait rougir cette ligne.
+verifier('Verrou : les huit pages sont exactement les enfants de DRAGONS, aucun n’attend',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
     === JSON.stringify(DRAGONS.map((d) => d[0]))
-  && NOEUDS['constellation-dragons'].enfants.every((id) => NOEUDS[id].cible));
+  && NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible).length === 0
+  && NOEUDS['constellation-dragons'].enfants.length === 8
+  && NOEUDS.amatsu.etat === 'Ouvert');
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
 async function etoilesApresLeRetour(idDragon, fichier) {
@@ -215,10 +223,11 @@ for (const [id, fichier] of DRAGONS) {
   verifier(`${fichier} : le suivre est possible (lien cliquable au doigt)`, r.suivi, r.raison);
   verifier(`${fichier} : le retour arrive sur ${RETOUR_DRAGONS}`,
     r.arrivee.endsWith('/' + RETOUR_DRAGONS), r.arrivee);
-  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les sept étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM et ZOH SHIA`,
-    r.etoiles.length === 7
+  // HUIT depuis le 18/10/2026 : AMATSU, étoile d'attente, paraît au retour comme les autres.
+  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les huit étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA et AMATSU`,
+    r.etoiles.length === 8
     && JSON.stringify(r.etoiles.map((e) => e.nom).sort())
-      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
+      === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
 // LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui
