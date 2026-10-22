@@ -247,7 +247,7 @@ chaînes déjà en service — la 3D, plus incertaine, passe après.
 | D0 | Test sans code : une vraie pièce, deux applis gratuites (protocole au cadrage §3.2) | M3 | aucun (geste de Paul) | ⬜ **geste de Paul, hors de la règle 5** : il se fait à la première visite qui s'y prête, sans ouvrir de boucle (cadrage §3.2) | la pièce est reconnaissable et une cote tient à ±10 %, ou non |
 | D1 | Famille 1 : poser le produit dans la pièce, en réalité augmentée | M3 | RenoDevis (relevé, catalogue), **à confirmer à l'ouverture** | ⬜ après D0 | à fixer à l'ouverture ; il faut un modèle 3D de chaque produit |
 | D2 | Famille 2 : reconstruire la pièce | M3 | RenoDevis (relevé), **à confirmer à l'ouverture** | ⬜ **seulement si D0 dit oui** | à fixer à l'ouverture |
-| D3 | VITRUVE v4 : la maison en 3D par pièce | M3 | mon-dpe.fr | 🔵 **3D Avant/Après des travaux fusionnée le 13/10 avec la prescription, sur décision de Paul** (même boucle que C3 v3, mon-dpe.fr #245 `59003ee` ; cadrage `mon-dpe.fr/CADRAGE-2026-10-13-simulation-3d.md`). ⚠️ Ouverte en écart à la règle 5 du §3 (voir la note sous la règle). Rendu photoréaliste ChatGPT : prise cadrée, non posée (payant, gate) | **fixée le 13/10 (revue Codex #389)** : sur `/pro/zone` d'un chantier SOLA réel en maison, DPE retenu à adresse unique, la maquette montre Avant/Après avec la proposition de l'automate, la classe « avant → après » et aucun travail refusé par le simulateur ; Paul la juge lisible devant l'artisan |
+| D3 | VITRUVE v4 : la maison en 3D par pièce | M3 | mon-dpe.fr | 🔵 **3D Avant/Après des travaux fusionnée le 13/10 avec la prescription, sur décision de Paul** (même boucle que C3 v3, mon-dpe.fr #245 `59003ee` ; cadrage `mon-dpe.fr/CADRAGE-2026-10-13-simulation-3d.md`). ⚠️ Ouverte en écart à la règle 5 du §3 (voir la note sous la règle). Rendu photoréaliste ChatGPT : prise cadrée, non posée (payant, gate) · **seconde exception de Paul, 14/10** : la 3D propose la PAC du devis (`pac=air_air` ou `air_eau`) — RenoDevis `8651f98` **fusionnée le 22/10 avec #372** (`c139e64`) ; mon-dpe.fr `1b570ee` dans #250, **non fusionnée** (dépôt non attaché à la séance du 22/10) — revue Codex de #394, 22/10 | **fixée le 13/10 (revue Codex #389)** : sur `/pro/zone` d'un chantier SOLA réel en maison, DPE retenu à adresse unique, la maquette montre Avant/Après avec la proposition de l'automate, la classe « avant → après » et aucun travail refusé par le simulateur ; Paul la juge lisible devant l'artisan |
 
 ### Famille E — les idées en réserve
 
@@ -303,7 +303,10 @@ sans décision de Paul.
    la PAC du devis — air/air pour un RR, air/eau pour un RO — au lieu d'une
    « PAC air/eau qui remplace la chaudière » sur une maison à convecteurs.
    mon-dpe.fr `1b570ee` · RenoDevis `8651f98` (branche de séance). Rien d'autre
-   ne se dégèle.
+   ne se dégèle. ⚠️ Cette seconde exception corrige le **même chemin RR/RO** que
+   C1 (le lien 3D du devis) : elle vaut **exception explicite à la règle 3** (une boucle de
+   code à la fois), C1 et D3 avançant dans la même PR RenoDevis (#372) et la même PR
+   mon-dpe.fr (#250). Relevé par la revue Codex de #394 (22/10).
 6. **Ce qui se voit se montre avant d'être codé** : la maquette d'abord, l'URL
    de prévisualisation avant et après.
 
