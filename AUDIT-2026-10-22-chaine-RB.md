@@ -318,14 +318,21 @@ sera celui de l'étape 4.
    périmées et solde-t-on les 12 contradictions du cadrage §7 avant d'ouvrir quoi
    que ce soit en C ?**
 
-## 10. Décisions attendues de Paul, et la prochaine action unique
+## 10. Décisions rendues par Paul le 22/10 (panneaux), et la prochaine action unique
 
-**Décisions** (panneaux à la prochaine séance) :
-1. Fusionner Ultima #394 et RenoDevis #372 maintenant, ou après la recette unique.
-2. La V2 RenoDevis (#413 → #419) : rattacher à la route avec sa ligne, ou geler.
-3. Relances automatiques : rouvrir après relecture de la file, ou garder fermé
-   jusqu'au premier devis chiffré.
-4. Fermer les PR périmées (#390, les trois « leçons v94 », #602).
+| # | Question | Décision de Paul | Effet |
+|---|---|---|---|
+| 1 | Fusionner Ultima #394 et RenoDevis #372 | **maintenant** | `main` fusionné dans les deux branches (Ultima : conflits PLAN et sceau LECONS résolus, re-scellé v104, 70/70 ; RenoDevis : fusion propre, 2 021 tests, 0 échec). **La fusion elle-même attend le go de Paul sur les nouveaux SHA**, avec la CI verte sur ces têtes (gate fusion, contrat LV1). mon-dpe.fr #250 (le `pac=` du lien 3D) n'est pas attaché : à fusionner par Paul |
+| 2 | La V2 RenoDevis (#413 → #419) | **gelée** | les cinq PR restent en brouillon, aucune revue ; elles se rouvrent avec une ligne au §2 du plan, après J1 |
+| 3 | Relances automatiques | **fermées jusqu'à A3** | réouverture après le premier devis chiffré dans l'application et une relecture de la file avec Paul |
+| 4 | PR périmées | **fermées** | RenoDevis #390 et #387, RenoBoost #606 et #602, Ultima #396 : fermées le 22/10 avec un commentaire d'une ligne ; les branches restent |
+
+⚠️ **Trouvé en préparant la fusion de #372** : `npx tsc --noEmit` est **rouge sur
+`main` de RenoDevis** (`lib/whatsappAgent.test.ts:1702`, `version_calcul_sola` typé
+`string` contre un littéral), alors que la CI de `main` est verte. La porte de
+qualité « typage strict » du `CLAUDE.md` de RenoDevis ne mord donc pas dans la CI
+sur les fichiers de test. Dette à solder dans la prochaine séance RenoDevis, pas
+ici (#372 ne touche pas ce fichier).
 
 **Prochaine action unique** : **A6a** — poser la clé Stripe live et la destination
 de webhook « comptes connectés » sur `reno-devis-final`, puis lire le battement
