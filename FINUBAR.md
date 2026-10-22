@@ -31,9 +31,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-21",
-    "commit": "37e439212c4cbfdf2a69961f4fb4f7c8691def9b",
-    "quoi": "21/10 : grain remis à l'heure — AMATSU 2b fusionnée le 19/10 (#403, d4ff809) ; boucle coûts : RenoBoost#611 fusionnée le 21/10 (2015249, conflit FINUBAR résolu par fusion de main, CI verte sur daa5c84), production lue : /CLAUDE.md et /FINUBAR.md en 404, accueil en 200."
+    "le": "2026-10-22",
+    "commit": "b0fa80c4e591ed4fd562b819f7fc532db481c070",
+    "quoi": "22/10 : audit complet de la chaîne RB (AUDIT-2026-10-22-chaine-RB.md) — base, GitHub et Vercel relus, §2 du plan A→Z remesuré (J1 = 0 paiement ; A3 = 1 devis chiffré et émis sur 33 ; Stripe en test, 0/2 comptes ouverts ; relances bloquées à dessein). 24 PR ouvertes sur les 3 dépôts, dont 2 portent l'état de la chaîne sans être fusionnées (Ultima #394, RenoDevis #372)."
   },
   "prochaine_action": "Paul tranche la suite d'AMATSU : γ (le regard d'après) ou 2c (la passerelle vers l'objet jugé) — puis cadrage EL de la boucle retenue (CADRAGE-IMLADRIK.md §12).",
   "bloque_par": [
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Chaîne RB — audit du 22/10 (AUDIT-2026-10-22-chaine-RB.md §5) : le chemin vers J1 tient en 5 gestes, tous à Paul ou à SOLA (fusionner #394 et RenoDevis #372 ; A6a clé Stripe live + webhook comptes connectés ; A6b KYC SOLA ; A3+A4 un devis chiffré et émis depuis l'app ; l'acompte). Décisions attendues : V2 RenoDevis (#413→#419, hors route) rattacher ou geler ; réouverture des relances après relecture de la file ; fermer les PR périmées (#390, leçons v94, #602). Prochaine action unique : A6a.",
+      "depuis": "2026-10-22"
+    },
     {
       "quoi": "AMATSU : boucles 1 (l'étoile), 2a (la voix de Léo), 2b-α (maquette) et 2b-β (la page de la rose des vents) FERMÉES — 2b fusionnée le 19/10 (#403, d4ff809 ; amatsu.html en production). Restent : γ (le regard d'après) et 2c (la passerelle vers l'objet jugé), à trancher par Paul ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché (piste non vérifiée : « Separate Production Secret Values »). Leçon payée à écrire dans memoire/LECONS.md : une mesure en unités viewBox ne dit rien de la lisibilité, mesurer la taille rendue. CADRAGE-IMLADRIK.md §12.6.",
       "depuis": "2026-10-18"
@@ -180,7 +184,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-21"
+  "maj": "2026-10-22"
 }
 ```
 

@@ -164,6 +164,26 @@ de la synchro e-mail : 47 devis `source = email` (35 `Envoyé` créés du 10 au
 Q10 : 0 pose rattachée · J1 : 0 paiement. Non mesurés d'ici : A2 (Drive), A10,
 A12. B4 non remesuré.
 
+🔁 **Remesuré le 22/10 entre 19:38 et 19:45 UTC** — audit complet dans
+`AUDIT-2026-10-22-chaine-RB.md` (mêmes requêtes, base `mwaryfscxgrulauwwque` en
+lecture seule). A3 : **1** chiffré et émis, **sur 33 devis** (53 le 12/10 : les
+dossiers e-mail factices ont été supprimés les 20–21/10, RenoDevis #400 ; restent
+12 devis `source = email`, tous Signé ou Perdu) — les 4 devis `Envoyé` portent
+**0 ligne** · A6a : `test = true` (battement 06:30) · A6b : `ouverts = 0` sur 2,
+`charges_enabled` faux pour les deux · A7 : **20** sans sort, sur **31** · A13 :
+`actif = true`, 43 lignes `gmail:` sur les fiches RB · J1 : **0** paiement · Q10 :
+`email_renopredict` nul pour les 2 artisans, 0 pose · 0 devis avec `extra.releve`,
+0 `extra.audit_pac` (B1, C3 sans preuve réelle) · relances automatiques **bloquées**
+depuis le 21/10 (battement `bloque: true`, 16 échéances en attente à partir du 23/10,
+0 échue). Non mesurés d'ici : A2 (Drive), A9 et les contrats (base RenoPredict),
+A10, A12. ⛔ **Ce tableau est en retard sur une décision** : la levée du gel pour C1
+(exception de Paul, 14/10) et les fiches A4/A5/A6a vivent dans Ultima #394 et
+RenoDevis #372, **non fusionnées** — tant qu'elles ne le sont pas, la ligne C1
+ci-dessous (⬜) est fausse. ⚠️ **B3 a changé de forme le 20/10** (RenoDevis
+`CADRAGE-2026-10-20-sync-email-vers-rb.md`) : un mail-devis devient une ligne de
+journal sur la fiche RB, plus un dossier ; l'écran `/devis/email` est retiré. Sa
+ligne est à réécrire (fermée par changement de forme), pas à recetter.
+
 ⚠️ **La consigne de paiement a changé le 11/10** (RenoDevis `CLAUDE.md`,
 « Paiement en ligne », source canonique : `docs/STRIPE-CONNECT.md`) : Checkout
 sur le compte Stripe connecté de l'artisan (direct charge), commission
