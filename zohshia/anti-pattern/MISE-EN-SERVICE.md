@@ -3,7 +3,7 @@
 ## 1. Avant livraison
 
 - Nommer résultat, preuve de réussite, périmètre et données nécessaires.
-- Vérifier deux approches différentes et documenter les dépendances communes.
+- Qualifier le sujet et vérifier le minimum : 2 points de vue pour tout sujet, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning. Appliquer le seuil le plus élevé et documenter les dépendances communes.
 - Définir unités, conventions et tolérance avant comparaison.
 - Conserver au moins une observation sourcée par approche ; qualifier mesuré, déclaré, inféré et non vérifié.
 - Expliquer l'écart et suspendre la conclusion dépendante tant qu'il reste non résolu.
