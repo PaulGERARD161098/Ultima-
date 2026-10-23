@@ -338,3 +338,44 @@ local avant.
 **Décision attendue de Paul** : go sur ce cadrage (vert ou orange ; `type`
 requis), le POV à creuser, et le moment — maintenant (la chaîne RB attend le
 battement du 24/10 06:30 UTC, rien n'est à faire avant) ou après A6b.
+
+### L'exécution — 23/10, le soir même
+
+**Décision de Paul (23/10, 18 h 50 UTC) : « go, vert, type requis, construis
+maintenant ».** Les trois POV n'ont pas été creusés : le cadrage les laisse
+ouverts pour une séance ultérieure (l'adversaire — les `notes` relues par Léo —
+reste la question à instruire avant tout élargissement).
+
+Ce qui est posé, sans migration ni route nouvelle :
+- `api/_lib/leo.js` — l'outil `proposer_contact` (RIVEN, vert, `type` requis et
+  borné à `artisan | partenaire | lead`, bornes de `validateNode`), sa main
+  (« ajoute / crée / enregistre un contact | un artisan | un partenaire | un
+  lead | une fiche … », et la forme dictée le 23/10 : « ajoute X à RIVEN »), la
+  reformulation déterministe, la règle du prompt (type manquant → demandé en un
+  mot ; ni numéro ni mail inventés ; l'apporteur n'est pas une fiche à créer).
+- `api/_lib/leo-execution.js` — `DEFAIRES.proposer_contact` (`network_nodes`,
+  retouche vraie, libellé `nom`), `DEPENDANCES.network_nodes` (sept clés) et le
+  verbe d'écran « A ajouté un contact ».
+- `js/leo-accueil.js` — le gabarit (`POST /api/reseau/nodes`, statut `prospect`
+  posé, provenance composée dans `notes`), le refus `doublon` (nom déjà porté
+  par une cible chargée, règle de `resoudreRef`) et son message, la fiche née
+  ajoutée à `candidats.cibles` (retirée au défaire).
+- `supabase/releves/20261002_leo_defaire_dependances.RELEVE.sql` — les sept
+  clés de `network_nodes`, **relevées dans les migrations, pas en base** (la
+  séance n'avait pas d'accès au projet Ultima) ; la requête du relevé, rejouée
+  avec `network_nodes`, doit rendre exactement ces sept lignes.
+- Harnais : verrous refixés (**12 outils, 11 verts nommés, 14 mains, 11
+  défaires joués**) ; `unit-leo-mains` (quadrant, type, bornes, reformulation,
+  plan exact, doublon) ; `unit-leo-execution` (vert mot pour mot, numéro réécrit
+  → orange, type non dit → orange, question ou négation → orange) ;
+  `smoke-leo-accueil` §C7-bis (carte au texte serveur → rien avant le clic → un
+  POST au corps exact avec le Bearer → la fiche née est la cible de la relance
+  du tour suivant → doublon bloqué).
+- Sabotages joués, tous rouges : une clé retirée de `DEPENDANCES` ; le refus
+  `doublon` retiré ; la forme « à riven » retirée de la main ; l'outil passé
+  orange.
+
+**Reste à prouver (④ 5)** : la preuve réelle en production, après fusion — un
+contact dicté par Paul, lu dans RIVEN et dans `leo_ecritures`, puis une relance
+posée dessus au tour suivant.
+

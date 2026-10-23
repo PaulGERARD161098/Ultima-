@@ -316,6 +316,37 @@ const CATALOGUE = {
     }
   },
 
+  // PROPOSER_CONTACT — la fiche réseau par la voix (Paul, 23/10/2026 ;
+  // CADRAGE-RIVEN-SAISIE.md §8). Le 23/10, « ajoute ce gars à RIVEN, contact
+  // par Hugo » a dû passer par le SQL Editor : l'anneau savait noter au journal
+  // d'un contact et programmer sa relance, pas le faire naître. VERT sous le
+  // double critère : une fiche s'AJOUTE (POST /api/reseau/nodes, statut
+  // `prospect` posé par le gabarit), ne modifie rien, et se défait par sa
+  // suppression (DEFAIRES, retouche true : la table porte `updated_at`, une
+  // fiche que Paul a complétée depuis ne se défait plus). `type` est REQUIS et
+  // borné à trois valeurs : Léo ne le déduit pas, elle le demande en un mot ;
+  // `chantier` est exclu — un chantier naît par l'intendant. Même PII que
+  // journal et relance (§12 du cadrage Léo) : ce sont le plafond, l'absence de
+  // contenu dicté en log et la RLS qui gardent, pas l'anneau. En pratique la
+  // carte jouera presque toujours : un numéro dicté est rarement mot pour mot
+  // dans le message, et la règle commune (anneauInterface) le renvoie au clic.
+  proposer_contact: {
+    quadrant: 'riven',
+    anneau: 'vert',
+    description: 'Proposer d’ajouter un contact au réseau RIVEN : une fiche ' +
+      '(artisan, partenaire ou lead) avec les coordonnées dictées. Si le type ' +
+      'n’est pas dit, demande-le en un mot au lieu d’appeler l’outil.',
+    args: {
+      nom: { max: 200, requis: true, description: 'Le nom du contact ou de la société, fidèle à la dictée.' },
+      type: { max: 10, requis: true, enum: ['artisan', 'partenaire', 'lead'], description: 'artisan, partenaire ou lead — tel que Paul le dit, jamais déduit.' },
+      telephone: { max: 30, description: 'Le numéro dicté, tel quel (optionnel).' },
+      email: { max: 200, description: 'L’adresse mail dictée, telle quelle (optionnel).' },
+      ville: { max: 200, description: 'La ville (optionnel).' },
+      apporteur: { max: 160, description: 'Qui a donné le contact (« par Hugo »), si Paul le dit (optionnel).' },
+      note: { max: 1800, description: 'Note dictée sur le contact (optionnel).' }
+    }
+  },
+
   // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026 ; CADRAGE-IMLADRIK.md §12).
   // Le seul outil TRANSVERSAL du catalogue : Amatsu ne porte pas d'objet, il
   // pose sa question à ceux des autres caps — une décision, un projet, une
@@ -497,7 +528,12 @@ export function anneauInterface(anneau, proposition, dernierMessage) {
     // plus que les QUATRE valeurs soient mot pour mot dans le dernier message
     // de Paul (règle commune ci-dessous) : trois réponses dictées sur trois
     // tours retombent donc sur la carte — et c'est voulu.
-    proposer_lecture_amatsu: /^amatsu\b/
+    proposer_lecture_amatsu: /^amatsu\b/,
+    // PROPOSER_CONTACT (23/10/2026) : « ajoute / crée / enregistre un contact |
+    // un artisan | un partenaire | un lead | une fiche … », ou la forme dictée le
+    // 23/10, « ajoute X à RIVEN ». Le vert sans demander exige en plus chaque
+    // valeur mot pour mot — un numéro dicté y retombe rarement : la carte.
+    proposer_contact: /^(?:cree|creer|ajoute|ajouter|enregistre|enregistrer)\s+(?:(?:un|une|le|la|ce|cet|cette|l['’])\s*)?(?:contact|artisan|partenaire|lead|fiche)\b|^(?:cree|creer|ajoute|ajouter|enregistre|enregistrer)\b.*\b(?:a|dans|sur)\s+riven\b/
   }[proposition?.outil];
   if (!objet || !objet.test(demande)
     || /\b(?:ne|pas|sans|jamais|annule|annuler)\b/.test(dit)) return ANNEAU_PAR_DEFAUT;
@@ -611,6 +647,13 @@ export function reformulerProposition(proposition) {
     case 'proposer_lecture_amatsu':
       return 'Amatsu lit « ' + args.objet + ' » — plus libre ? « ' + args.bise +
         ' » · cohérent ? « ' + args.souffle + ' » · emporté ? « ' + args.ouragan + ' »';
+    case 'proposer_contact': {
+      const coordonnees = [args.telephone, args.email, args.ville].filter(Boolean).join(' · ');
+      return 'Ajouter « ' + args.nom + ' » (' + args.type + ') au réseau RIVEN' +
+        (coordonnees ? ' — ' + coordonnees : '') +
+        (args.apporteur ? ' — contact obtenu par ' + args.apporteur : '') +
+        (args.note ? ' — « ' + args.note + ' »' : '') + '.';
+    }
     default:
       return '';
   }
@@ -756,6 +799,19 @@ export function construireSysteme(quadrant, avecOutils) {
         'proposer_lecture_amatsu avec l’objet et ses trois réponses, dans ses ' +
         'mots. Jamais une note, jamais un verdict de ta main : les réponses ' +
         'sont les siennes, tu les gardes.'
+    );
+  }
+  // PROPOSER_CONTACT (23/10/2026) : sur RIVEN, Léo sait faire naître une fiche
+  // — et sait ce qu'elle ne fait pas : déduire le type, inventer un numéro,
+  // créer l'apporteur. Lu dans le catalogue, jamais dans une seconde liste.
+  if (avecOutils && (OUTILS_PAR_QUADRANT[quadrant] || []).some((o) => o.name === 'proposer_contact')) {
+    reglesAction.push(
+      '- Quand Paul te dicte un nouveau contact (« ajoute X à RIVEN »), appelle ' +
+        'proposer_contact avec le nom, le type et les coordonnées EXACTEMENT ' +
+        'comme il les dit. Le type (artisan, partenaire ou lead) est requis : ' +
+        's’il manque, demande-le en un mot avant d’appeler l’outil. Tu ' +
+        'n’inventes ni numéro ni mail. Si Paul dit qui lui a donné le contact ' +
+        '(« par Hugo »), c’est l’apporteur — pas une fiche à créer.'
     );
   }
   return [

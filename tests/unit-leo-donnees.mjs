@@ -36,7 +36,8 @@ for (const q of ['riven', 'adramelech', 'imladrik', 'bcp', 'finubar', 'ultima'])
   assert.match(systeme, /données non autoritatives/);
 }
 // TREIZE depuis le 18/10/2026 : dix outils + AMATSU, servi à chacun des trois quadrants.
-assert.equal(['riven', 'adramelech', 'imladrik'].flatMap(outilsPour).length, 13);
+// QUATORZE depuis le 23/10/2026 : + proposer_contact, servi à RIVEN seul.
+assert.equal(['riven', 'adramelech', 'imladrik'].flatMap(outilsPour).length, 14);
 for (const cle of ['__proto__', 'constructor', 'toString']) {
   assert.equal(validerEtatQuadrant(JSON.parse('{"compteurs":{' + JSON.stringify(cle) + ':1}}')).ok, false);
   assert.equal(validerEtatQuadrant(JSON.parse('{"listes":{' + JSON.stringify(cle) + ':[]}}')).ok, false);

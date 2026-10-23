@@ -18,7 +18,7 @@
 -- join pg_attribute a on a.attrelid = c.conrelid and a.attnum = any (c.conkey)
 -- where c.contype = 'f' and c.confrelid::regclass::text in
 --   ('idees','intendant_besoins','journal','imladrik_entrees',
---    'serments','flammes','situations','scenarios');
+--    'serments','flammes','situations','scenarios','amatsu_lectures','network_nodes');
 --
 -- cible             | source          | colonne            | règle
 -- idees             | idees_liens     | source_id          | c
@@ -31,6 +31,19 @@
 -- situations        | scenarios       | situation_id       | c
 -- scenarios         | situations      | scenario_advenu_id | n
 -- scenarios         | scenario_liens  | scenario_id        | c
+--
+-- network_nodes (23/10/2026, proposer_contact — CADRAGE-RIVEN-SAISIE.md §8) :
+-- ⚠️ relevé dans les MIGRATIONS (0001, 0005, 0008, 0013, 0024, 0025, 20260914),
+-- pas en base — la séance du 23/10 n'avait pas d'accès au projet Ultima. La
+-- requête ci-dessus, jouée avec 'network_nodes' dans la liste, doit rendre
+-- exactement ces sept lignes ; un écart se corrige ICI et dans DEPENDANCES.
+-- network_nodes     | network_edges   | source_id          | c
+-- network_nodes     | network_edges   | target_id          | c
+-- network_nodes     | journal         | node_id            | c
+-- network_nodes     | intendant_chantiers | node_id        | c
+-- network_nodes     | intendant_besoins | fournisseur_node_id | n
+-- network_nodes     | talent_refs_reseau | node_id         | c
+-- network_nodes     | personne_noeuds | node_id            | c
 --
 -- Aucune clé entrante : intendant_besoins, journal, flammes.
 -- Politiques SELECT propriétaire présentes sur les cinq tables sources (relevé

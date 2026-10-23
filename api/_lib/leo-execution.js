@@ -260,7 +260,11 @@ export const DEFAIRES = Object.freeze({
     libelle: { via: 'situation_id', table: 'situations', colonne: 'intitule' } },
   // AMATSU (18/10/2026) : une lecture se défait par sa suppression ; sans
   // `updated_at` ni policy UPDATE, rien ne peut avoir été retouché dessus.
-  proposer_lecture_amatsu: { table: 'amatsu_lectures', retouche: false, libelle: { colonne: 'objet' } }
+  proposer_lecture_amatsu: { table: 'amatsu_lectures', retouche: false, libelle: { colonne: 'objet' } },
+  // PROPOSER_CONTACT (23/10/2026) : une fiche réseau se défait par sa
+  // suppression ; `updated_at` existe depuis 0001 → retouche vraie : une fiche
+  // que Paul a complétée depuis ne se défait plus (son travail serait perdu).
+  proposer_contact: { table: 'network_nodes', retouche: true, libelle: { colonne: 'nom' } }
 });
 
 // LE RELEVÉ DES DÉPENDANCES — toutes les clés étrangères qui pointent une table
@@ -297,7 +301,21 @@ export const DEPENDANCES = Object.freeze({
   ],
   // Rien ne naît encore sur une lecture d'AMATSU (la passerelle est la 2b) :
   // le relevé des migrations l'exigera le jour où une clé la visera.
-  amatsu_lectures: []
+  amatsu_lectures: [],
+  // network_nodes (23/10/2026, proposer_contact) : la table la plus visée du
+  // dépôt — sept clés, relues dans les migrations par le harnais (0001, 0005,
+  // 0008, 0013, 0024, 0025, 20260914). Une relance posée sur une fiche née de
+  // Léo la rend « liée » : elle se retire alors par RIVEN, pas par le défaire
+  // (voulu : CADRAGE-RIVEN-SAISIE.md §8 ⑥ e).
+  network_nodes: [
+    { table: 'network_edges', colonne: 'source_id' },
+    { table: 'network_edges', colonne: 'target_id' },
+    { table: 'journal', colonne: 'node_id' },
+    { table: 'intendant_chantiers', colonne: 'node_id' },
+    { table: 'intendant_besoins', colonne: 'fournisseur_node_id' },
+    { table: 'talent_refs_reseau', colonne: 'node_id' },
+    { table: 'personne_noeuds', colonne: 'node_id' }
+  ]
 });
 
 const CLES_DEFAIRE = ['etape', 'traceId'];
@@ -490,7 +508,8 @@ const VERBES = Object.freeze({
   proposer_serment: ['A scellé un serment', 'sceller un serment'],
   proposer_flamme: ['A allumé une flamme', 'allumer une flamme'],
   proposer_situation: ['A posé une situation', 'poser une situation'],
-  proposer_scenario: ['A imaginé un scénario', 'imaginer un scénario']
+  proposer_scenario: ['A imaginé un scénario', 'imaginer un scénario'],
+  proposer_contact: ['A ajouté un contact', 'ajouter un contact']
 });
 export function phraseGeste(outil, etat) {
   const v = Object.prototype.hasOwnProperty.call(VERBES, outil) ? VERBES[outil] : ['A agi', 'agir'];

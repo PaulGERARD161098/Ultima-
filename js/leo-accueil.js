@@ -358,7 +358,7 @@
   // candidats = { cibles?, chantiers?, idees?, prochainAdrNum? } fournis par
   // le quadrant appelant (données déjà chargées — jamais refetchées).
   // → { ok:true, url, methode, corps } | { ok:false, raison } (raison
-  //   générique : 'introuvable' | 'ambigu' | 'invalide' — jamais de détail).
+  //   générique : 'introuvable' | 'ambigu' | 'invalide' | 'doublon' — jamais de détail).
   function construirePlanExecution(proposition, candidats) {
     candidats = candidats || {};
     var args = (proposition && proposition.args) || {};
@@ -456,6 +456,45 @@
         },
         cible: cible.candidat.libelle
       };
+    }
+
+    // ---- PROPOSER_CONTACT (2026-10-23, CADRAGE-RIVEN-SAISIE.md §8) : la fiche
+    // réseau par la voix. Aucune *_ref à résoudre — mais un DOUBLON se refuse
+    // ici : un nom déjà porté par une cible chargée (égalité, ou inclusion
+    // unique — la règle de resoudreRef) ne fait pas naître une seconde fiche.
+    // Bornes = validateNode (nom 200 · tél 30 · mail 200 · ville 200 · notes
+    // 2000 : apporteur 160 + note 1800 tiennent dedans) — refus, jamais de
+    // troncature. `statut` est posé ici : prospect. Pas de `cible` : la fiche
+    // n'existe pas encore, la reformulation porte déjà son nom.
+    if (outil === 'proposer_contact') {
+      var TYPES_CONTACT = ['artisan', 'partenaire', 'lead'];
+      if (typeof args.nom !== 'string' || !args.nom || args.nom.length > 200 ||
+          typeof args.type !== 'string' || TYPES_CONTACT.indexOf(args.type) === -1) {
+        return { ok: false, raison: 'invalide' };
+      }
+      // Un nom qui se résout (égalité ou inclusion unique) OU qui hésite entre
+      // plusieurs fiches est un doublon : deux « Martin » déjà là, et un
+      // troisième ne naît pas sur un nom nu (relecture adversariale du 23/10).
+      var existant = resoudreRef(args.nom, candidats.cibles);
+      if (existant.ok || existant.raison === 'ambigu') { return { ok: false, raison: 'doublon' }; }
+      var bornesContact = { telephone: 30, email: 200, ville: 200, apporteur: 160, note: 1800 };
+      var clesContact = Object.keys(bornesContact);
+      for (var ci = 0; ci < clesContact.length; ci++) {
+        var valeurContact = args[clesContact[ci]];
+        if (valeurContact !== undefined &&
+            (typeof valeurContact !== 'string' || valeurContact.length > bornesContact[clesContact[ci]])) {
+          return { ok: false, raison: 'invalide' };
+        }
+      }
+      var corpsContact = { type: args.type, nom: args.nom, statut: 'prospect' };
+      if (args.telephone) { corpsContact.telephone = args.telephone; }
+      if (args.email) { corpsContact.email = args.email; }
+      if (args.ville) { corpsContact.ville = args.ville; }
+      var notesContact = [];
+      if (args.apporteur) { notesContact.push('Contact obtenu par ' + args.apporteur + '.'); }
+      if (args.note) { notesContact.push(args.note); }
+      if (notesContact.length) { corpsContact.notes = notesContact.join(' '); }
+      return { ok: true, url: '/api/reseau/nodes', methode: 'POST', corps: corpsContact };
     }
 
     // ---- IMLADRIK (boucle ④, 2026-07-30) : les 3 caps. Mêmes règles que
@@ -962,7 +1001,9 @@
             ? 'Cible ambiguë — précisez le nom, puis redictez l’action.'
             : plan.raison === 'introuvable'
               ? 'Cible introuvable — vérifiez le nom, puis redictez l’action.'
-              : 'Action impossible en l’état — reformulez-la.'));
+              : plan.raison === 'doublon'
+                ? 'Ce contact existe déjà dans RIVEN — dictez plutôt une note à son journal.'
+                : 'Action impossible en l’état — reformulez-la.'));
       }
 
       var boutons = el('div', 'leo-carte-boutons');
@@ -1049,7 +1090,7 @@
       }
       // La création confirmée peut servir de cible au tour suivant.
       if (plan.methode !== 'POST' || !data || !UUID_MOTIF.test(data.id)) { return; }
-      var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations' }[proposition.outil];
+      var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations', proposer_contact: 'cibles' }[proposition.outil];
       if (!liste) { return; }
       if (!Array.isArray(c[liste])) { c[liste] = []; }
       if (c[liste].some(function (item) { return item.id === data.id; })) { return; }
@@ -1064,7 +1105,7 @@
     function apresDefaire(proposition, cibleId) {
       var c = voix.candidats;
       if (!c || typeof c !== 'object') { return; }
-      var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations' }[proposition.outil];
+      var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations', proposer_contact: 'cibles' }[proposition.outil];
       if (liste && Array.isArray(c[liste])) {
         c[liste] = c[liste].filter(function (item) { return !item || item.id !== cibleId; });
       }

@@ -251,6 +251,21 @@ const verdicts = {};
   verdicts.creationSansCibleVert =
     anneauInterface('vert', { outil: 'proposer_idee', args: { titre: 'Atelier bois' } }, 'capture une idée Atelier bois') === 'vert';
   verdicts.lectureSansCreation = anneauInterface('vert', { outil: 'proposer_idee', args: { titre: 'Atelier bois' } }, 'où en est Atelier bois ?') === 'orange';
+  // PROPOSER_CONTACT (23/10/2026) : vert sans demander SEULEMENT si chaque
+  // valeur est mot pour mot dans le message — un numéro réécrit par le modèle
+  // (espaces retirés) retombe sur la carte ; « ajoute X à RIVEN » est une main.
+  const contact = { outil: 'proposer_contact', args: { nom: 'Brice Papon', type: 'partenaire', telephone: '06 72 15 77 51' } };
+  verdicts.contactDicteVert =
+    anneauInterface('vert', contact, 'Ajoute un partenaire Brice Papon, 06 72 15 77 51') === 'vert' &&
+    anneauInterface('vert', contact, 'ajoute Brice Papon à Riven, partenaire, 06 72 15 77 51') === 'vert' &&
+    anneauInterface('vert', contact, 'Léo, enregistre le contact Brice Papon (partenaire) : 06 72 15 77 51') === 'vert';
+  verdicts.contactNumeroReecritOrange =
+    anneauInterface('vert', contact, 'ajoute un partenaire Brice Papon, 0672157751') === 'orange';
+  verdicts.contactTypeNonDitOrange =
+    anneauInterface('vert', contact, 'ajoute Brice Papon à Riven, 06 72 15 77 51') === 'orange';
+  verdicts.contactQuestionOrange =
+    anneauInterface('vert', contact, 'Brice Papon partenaire 06 72 15 77 51 est-il déjà dans Riven ?') === 'orange' &&
+    anneauInterface('vert', contact, 'n’ajoute pas Brice Papon partenaire 06 72 15 77 51') === 'orange';
   verdicts.negationRefusee = anneauInterface('vert', note, 'Ne note pas au journal de Sophie Durand : devis validé.') === 'orange';
   verdicts.creationInventeeOrange = anneauInterface('vert', { outil: 'proposer_idee', args: { titre: 'Atelier bois' } }, 'capture une idée') === 'orange';
   verdicts.typeObjetRespecte = anneauInterface('vert', { outil: 'proposer_serment', args: { intitule: 'Atelier bois' } }, 'Crée une situation Atelier bois') === 'orange' &&

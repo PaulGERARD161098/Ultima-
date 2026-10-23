@@ -738,6 +738,90 @@ verifier('Proposition malformée : aucune carte, seule la bulle texte',
 verifier('Proposition malformée : la saisie reste utilisable',
   await pageV.locator('.leo-voix-champ').isEnabled());
 
+// ===================== C7-bis. PROPOSER_CONTACT — la fiche réseau par la voix (23/10/2026) =====================
+// CADRAGE-RIVEN-SAISIE.md §8 (décision de Paul : vert, type requis). Prouve :
+// la carte porte la reformulation SERVEUR ; rien n'est écrit avant le clic ;
+// Confirmer → UN POST /api/reseau/nodes au corps EXACT (statut prospect posé,
+// provenance dans `notes`), avec le Bearer ; la fiche née sert de CIBLE au tour
+// suivant sans recharger (apresEcriture → candidats.cibles) ; redicter le même
+// nom est un DOUBLON : carte bloquée, message nommé, zéro POST.
+{
+  const CONTACT = { nom: 'Brice Papon', type: 'partenaire', telephone: '06 72 15 77 51', apporteur: 'Hugo' };
+  const REFORMULATION_CONTACT = 'Ajouter « Brice Papon » (partenaire) au réseau RIVEN — 06 72 15 77 51 — contact obtenu par Hugo.';
+  const NOUVEAU = 'aaaaaaaa-0000-0000-0000-00000000c0c0';
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition({ outil: 'proposer_contact', args: CONTACT, reformulation: REFORMULATION_CONTACT });
+  const requetesNoeuds = [];
+  await pageV.route('**/api/reseau/nodes', (route) => {
+    requetesNoeuds.push({
+      methode: route.request().method(),
+      autorisation: route.request().headers()['authorization'] || '',
+      corps: route.request().postDataJSON()
+    });
+    return route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: { id: NOUVEAU, nom: 'Brice Papon' } }) });
+  });
+  await ouvrirCartoucheVoix('contact-ok', CANDIDATS_TEST);
+  await pageV.locator('.leo-voix-champ').fill('Ajoute Brice Papon à Riven, partenaire, 06 72 15 77 51, contact par Hugo.');
+  await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
+  verifier('CONTACT : la carte porte la reformulation SERVEUR',
+    ((await pageV.locator('.leo-carte-texte').textContent()) || '').trim() === REFORMULATION_CONTACT);
+  verifier('CONTACT : aucune écriture avant confirmation (verrou : la carte est là)',
+    await pageV.locator('.leo-carte-action').count() === 1 && requetesNoeuds.length === 0);
+  await pageV.locator('.leo-carte-confirmer').click();
+  await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+  verifier('CONTACT : Confirmer → UN POST /api/reseau/nodes, avec le Bearer',
+    requetesNoeuds.length === 1 && requetesNoeuds[0].methode === 'POST' &&
+    requetesNoeuds[0].autorisation === 'Bearer jeton-de-test', JSON.stringify(requetesNoeuds.map((r) => r.methode)));
+  verifier('CONTACT : corps EXACT (statut prospect posé, provenance en notes, rien de plus)',
+    JSON.stringify(requetesNoeuds[0]?.corps) === JSON.stringify({ type: 'partenaire', nom: 'Brice Papon',
+      statut: 'prospect', telephone: '06 72 15 77 51', notes: 'Contact obtenu par Hugo.' }),
+    JSON.stringify(requetesNoeuds[0]?.corps));
+  verifier("CONTACT : message d'issue « Action exécutée »",
+    ((await pageV.locator('.leo-bulle-issue').last().textContent()) || '') === '[Action exécutée : ' + REFORMULATION_CONTACT + ']');
+
+  // Tour suivant : « rappelle-le lundi » — la fiche née est une cible résolue
+  // localement, par son identifiant rendu par l'API, sans recharger la page.
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition({ outil: 'proposer_relance',
+    args: { cible_ref: 'Brice Papon', echeance: '2026-10-26' },
+    reformulation: 'Programmer une relance de « Brice Papon » pour le 26/10/2026.' });
+  const requetesRelance = [];
+  await pageV.unroute('**/api/reseau/journal');
+  await pageV.route('**/api/reseau/journal', (route) => {
+    requetesRelance.push(route.request().postDataJSON());
+    return route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: { id: 'j-contact' } }) });
+  });
+  await pageV.locator('.leo-voix-champ').fill('Rappelle-le lundi.');
+  await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
+  verifier('CONTACT : la fiche née est une cible au tour suivant (sans recharger)',
+    ((await pageV.locator('.leo-carte-cible').textContent()) || '').includes('Brice Papon') &&
+    await pageV.locator('.leo-carte-confirmer').count() === 1);
+  await pageV.locator('.leo-carte-confirmer').click();
+  for (let i = 0; i < 50 && requetesRelance.length < 1; i++) await pageV.waitForTimeout(50);
+  verifier('CONTACT : la relance vise l’identifiant rendu par l’API à la création',
+    requetesRelance.length === 1 && requetesRelance[0].node_id === NOUVEAU && requetesRelance[0].relance_at === '2026-10-26',
+    JSON.stringify(requetesRelance[0]));
+
+  // Doublon : le même nom redicté ne fait pas naître une seconde fiche.
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition({ outil: 'proposer_contact', args: CONTACT, reformulation: REFORMULATION_CONTACT });
+  const postsAvantDoublon = requetesNoeuds.length;
+  await pageV.locator('.leo-voix-champ').fill('Ajoute Brice Papon à Riven, partenaire.');
+  await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.waitForSelector('.leo-carte-blocage', { timeout: 5000 });
+  verifier('CONTACT : doublon → carte bloquée, message nommé, pas de Confirmer, zéro POST',
+    ((await pageV.locator('.leo-carte-blocage').textContent()) || '').includes('existe déjà') &&
+    await pageV.locator('.leo-carte-confirmer').count() === 0 &&
+    requetesNoeuds.length === postsAvantDoublon);
+  await pageV.locator('.leo-carte-annuler').click();
+  await pageV.waitForTimeout(200);
+  await pageV.unroute('**/api/reseau/nodes');
+}
+
 // ===================== C8-C12. B1 ④ — l'anneau vert agit (cadrage §13) =====================
 // Une proposition VERTE s'exécute sans clic, mais seulement DERRIÈRE une trace
 // posée par le serveur : ouvrir → acte → clore, dans cet ordre. Tout refus du
