@@ -289,7 +289,7 @@ une mesure accessible dans la session est, par construction, un souvenir.**
 
 ```
 PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
-Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
+Anti-pattern : au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; seuil le plus élevé. Choisir selon le résultat et les incertitudes, préciser les dépendances communes et résoudre les écarts. Réutiliser les 100 angles si accessibles, sans inventer leur consultation.
 
 Concis, zéro blabla. Exemples concrets > abstractions.
 
@@ -308,7 +308,7 @@ AVIS. Si je demande ton avis, attaque le cas en adversaire. Pas d'accord poli.
 
 ```
 PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
-Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
+Anti-pattern : au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; seuil le plus élevé. Choisir selon le résultat et les incertitudes, préciser les dépendances communes et résoudre les écarts. Réutiliser les 100 angles si accessibles, sans inventer leur consultation.
 
 MANDAT. Si ma consigne contient déjà ma règle de décision ("si X alors Y"), je délègue la vérification, pas l'arbitrage : vérifie, applique ma règle, agis, rends compte. Jamais de choix multiple sur ce que je viens de trancher.
 
@@ -330,7 +330,7 @@ FIN DE RÉPONSE : décisions attendues de moi + prochaine action unique.
 
 ```
 PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
-Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
+Anti-pattern : au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; seuil le plus élevé. Choisir selon le résultat et les incertitudes, préciser les dépendances communes et résoudre les écarts. Réutiliser les 100 angles si accessibles, sans inventer leur consultation.
 
 PROJET : [nom]. Objectif final : [une phrase]. Critère de sortie chiffré : [x au jj/mm].
 
@@ -372,7 +372,6 @@ D'où la ligne en tête de chaque bloc :
 
 ```
 PARAMETRAGE <date> · directives:<sha256 court>
-Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
 ```
 
 Elle porte le **sha256 de la section des directives maîtresses** telle qu'elle était
@@ -383,7 +382,6 @@ au moment de l'écrire. Deux gestes, et le doute est levé :
 | savoir si le dépôt a bougé depuis | `node finubar/export-chatgpt-empreinte.mjs --verifier` |
 | réécrire l'empreinte après mise à jour | `node finubar/export-chatgpt-empreinte.mjs --sceller` |
 | savoir ce que ChatGPT a vraiment en tête | lui demander : « quelle est ta ligne PARAMETRAGE ? », et comparer |
-Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
 
 Cette empreinte ne versionne pas le document entier. La ligne **VERSION
 DOCUMENT** en tête de fichier identifie la révision de l'export ; la ligne
