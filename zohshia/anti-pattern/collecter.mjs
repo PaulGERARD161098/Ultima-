@@ -10,7 +10,9 @@ export function controler(d) {
     if (!rempli(d[champ])) erreurs.push(`${champ} absent`);
   }
   const approches = Array.isArray(d.approches) ? d.approches : [];
-  if (approches.length < 2) erreurs.push('deux approches au minimum');
+  if (!['tache', 'plan', 'retroplanning'].includes(d.typeSujet) || typeof d.complexe !== 'boolean') erreurs.push('typeSujet et complexe requis');
+  const minimum = ['plan', 'retroplanning'].includes(d.typeSujet) ? 4 : d.complexe === true ? 3 : 2;
+  if (approches.length < minimum) erreurs.push(minimum + ' points de vue au minimum');
   const methodes = new Set();
   for (const a of approches) {
     if (!rempli(a?.methode) || !rempli(a?.differenceUtile)) erreurs.push('méthode ou différence utile absente');
