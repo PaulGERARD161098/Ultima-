@@ -6824,6 +6824,42 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Bibliothèque de 100 points de vue",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La bibliothèque points-de-vue.json contient 100 fiches identifiées de PDV-001 à PDV-100, avec alias, question directrice, preuve à chercher et limite. Dix familles : usagers, commerce, économie, preuves, causalité, systèmes, calendrier, risques, décisions et collectif. L'index BIBLIOTHEQUE.md sert à choisir sans charger les cent fiches.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Invoquer un identifiant ou alias avec bibliotheque.py --id PDV-021 ; rechercher avec --search calendrier ; sélectionner avec --pack plan ou --pack retroplanning. Les packs fournissent des points de départ conformes aux minima 2/3/4, à adapter au sujet. Une sélection ne constitue pas une analyse exécutée. Les cent fiches sont des guides, sans expertise autonome ni certitude garantie.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La recherche publique et les rapprochements conceptuels sont documentés dans sources-pdv.md. Les fiches françaises sont une synthèse originale : aucun installateur ni code tiers n'est exécuté ou embarqué. La copie distribuée dans la compétence de travail conserve exactement le même catalogue JSON ; comparer les empreintes lors d'une mise à jour. Les sources et le catalogue restent exclus du déploiement statique par le dossier privé existant.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -6887,6 +6923,23 @@ export default {
        "r": [
         [
          "Une seconde approche inaccessible rend la vérification partielle. Des résultats convergents avec une hypothèse commune fragile restent limités par celle-ci. Ne jamais annoncer une confiance chiffrée sans mesure justifiée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Vérifier la bibliothèque avec ",
+         ""
+        ],
+        [
+         "python bibliotheque.py --validate",
+         "c"
+        ],
+        [
+         " : cent identifiants, alias et noms résolus, dix familles et packs valides. Éprouver aussi un identifiant inconnu, un angle répété et une sélection sous le seuil requis. La diversité sémantique reste à examiner sur le sujet réel.",
          ""
         ]
        ]
@@ -6958,8 +7011,8 @@ export default {
  ],
  "sources": {
   "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "4c7514b96a46922a695b955152ad0fff83a1b3f2d5f6b88e6e64409479e6dac7",
-  "anti-pattern/MISE-EN-SERVICE.md": "8e85695f9a2a46491083afdd9fed8052908a1bc7ad1c2047e242ac2484b9915f",
+  "anti-pattern/TECHNO.md": "8f63d99addcab25cf41957455a31ec4111d0cc45dfc0050669e135a7b852e1c3",
+  "anti-pattern/MISE-EN-SERVICE.md": "d6ec1f9ab425051b41419ad0611acf2f243c5d7ba9089819172bcccd9314b59f",
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
