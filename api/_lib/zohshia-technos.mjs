@@ -6730,7 +6730,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "Toujours aborder un même sujet par au moins deux approches réellement différentes. Partir du résultat utile attendu, définir sa preuve de réussite, puis remonter aux données, hypothèses et étapes nécessaires. Chercher ce qui pourrait invalider la conclusion. Garder deux angles brefs pour une petite tâche ; approfondir selon le risque.",
+         "Toujours aborder un même sujet par au moins deux approches réellement différentes. Partir du résultat utile attendu, définir sa preuve de réussite, puis remonter aux données, hypothèses et étapes nécessaires. Chercher ce qui pourrait invalider la conclusion. Appliquer au minimum 2 points de vue pour tout sujet, 3 pour une tâche complexe et 4 pour un plan ou rétroplanning. Le seuil le plus élevé s'applique si les catégories se cumulent. Une tâche à dépendances multiples, forte incertitude, plusieurs composants ou conséquences matérielles est complexe. Garder les angles brefs pour une petite tâche.",
          ""
         ]
        ]
@@ -6766,7 +6766,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "Préciser ce qui change entre les approches : raisonnement, source ou observation. Une reformulation, un autre outil ou un autre modèle exécutant la même méthode ne suffit pas. Nommer les hypothèses communes : un contrôle inverse ne prouve ni le bon tarif ni la bonne convention métier. Ajouter un troisième angle pour un enjeu matériel.",
+         "Préciser ce qui change entre les approches : raisonnement, source ou observation. Une reformulation, un autre outil ou un autre modèle exécutant la même méthode ne suffit pas. Nommer les hypothèses communes : un contrôle inverse ne prouve ni le bon tarif ni la bonne convention métier. Pour un plan ou rétroplanning, examiner quatre angles par défaut : résultat et utilisateur ; exécution et moyens ; calendrier et dépendances ; risques, échecs et marges de manœuvre. Adapter les angles sans réduire le minimum.",
          ""
         ]
        ]
@@ -6811,7 +6811,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "Le dossier de preuve décrit le résultat, le critère, les approches, leurs dépendances communes, les observations sourcées, l'écart, sa résolution et les limites. Le collecteur collecter.mjs vérifie seulement sa structure et ses déclarations ; il ne vérifie pas la vérité des sources, l'indépendance réelle du raisonnement ou la justesse métier. Un résultat structurel favorable ne constitue pas une validation du calcul ou du produit.",
+         "Le dossier de preuve précise typeSujet (tache, plan ou retroplanning) et complexe (booléen), puis décrit le résultat, le critère, les approches, leurs dépendances communes, les observations sourcées, l'écart, sa résolution et les limites. Le collecteur collecter.mjs vérifie seulement sa structure et ses déclarations ; il ne vérifie pas la vérité des sources, l'indépendance réelle du raisonnement ou la justesse métier. Un résultat structurel favorable ne constitue pas une validation du calcul ou du produit.",
          ""
         ]
        ]
@@ -6852,7 +6852,7 @@ export default {
         ],
         [
          [
-          "Vérifier deux approches différentes et documenter les dépendances communes.",
+          "Qualifier le sujet et vérifier le minimum : 2 points de vue pour tout sujet, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning. Appliquer le seuil le plus élevé et documenter les dépendances communes.",
           ""
          ]
         ],
@@ -6958,8 +6958,8 @@ export default {
  ],
  "sources": {
   "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "a32595080024c2131391603bfa97cab6c4c2091f9bae1f9a099e49367a6edb2f",
-  "anti-pattern/MISE-EN-SERVICE.md": "2dc49b76a6400b67265aba736f3b71af234cdbde583b7d7a919440794840cc8f",
+  "anti-pattern/TECHNO.md": "4c7514b96a46922a695b955152ad0fff83a1b3f2d5f6b88e6e64409479e6dac7",
+  "anti-pattern/MISE-EN-SERVICE.md": "8e85695f9a2a46491083afdd9fed8052908a1bc7ad1c2047e242ac2484b9915f",
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
