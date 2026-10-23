@@ -28,7 +28,7 @@ verdicts.frontExpose = typeof resoudreRef === 'function' &&
 // ---------- 1. Catalogue par quadrant ----------
 verdicts.catalogueRiven = Array.isArray(outilsPour('riven')) &&
   outilsPour('riven').map((o) => o.name).sort().join(',') ===
-  'proposer_besoin,proposer_journal,proposer_lecture_amatsu,proposer_relance';
+  'proposer_besoin,proposer_contact,proposer_journal,proposer_lecture_amatsu,proposer_relance';
 verdicts.catalogueAdramelech = Array.isArray(outilsPour('adramelech')) &&
   outilsPour('adramelech').map((o) => o.name).sort().join(',') ===
   'proposer_enrichissement_idee,proposer_idee,proposer_lecture_amatsu';
@@ -427,6 +427,77 @@ verdicts.amatsuPlan = (() => {
   return plan.ok === true && plan.url === '/api/amatsu-lectures' && plan.methode === 'POST' &&
     JSON.stringify(plan.corps) === JSON.stringify(LECTURE) && plan.cible === undefined &&
     tropLong.ok === false && manque.ok === false;
+})();
+
+// ---------- PROPOSER_CONTACT — la fiche réseau par la voix (2026-10-23) ----------
+// CADRAGE-RIVEN-SAISIE.md §8, décision de Paul : vert, `type` requis. Prouve :
+// la main n'est servie qu'à RIVEN ; le type est requis ET borné (artisan |
+// partenaire | lead — `chantier` et toute autre valeur refusés, jamais corrigés) ;
+// les bornes sont celles de validateNode ; la reformulation est déterministe ;
+// le gabarit POSTe le corps EXACT de /api/reseau/nodes (statut prospect posé,
+// provenance composée dans `notes`) ; un nom déjà en cible est un DOUBLON.
+const CONTACT = { nom: 'Brice Papon', type: 'partenaire', telephone: '06 72 15 77 51',
+  email: 'brice@soli-energie.com', apporteur: 'Hugo' };
+verdicts.contactRivenSeul = validerProposition('proposer_contact', CONTACT, 'riven').ok === true &&
+  ['adramelech', 'imladrik', 'bcp', 'inconnu'].every((q) =>
+    validerProposition('proposer_contact', CONTACT, q).ok === false);
+verdicts.contactTypeRequis =
+  validerProposition('proposer_contact', { nom: 'Brice Papon' }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { nom: 'Brice Papon', type: '  ' }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { type: 'lead' }, 'riven').ok === false;
+verdicts.contactTypeBorne = ['chantier', 'client', 'Partenaire', 'PARTENAIRE', 'fournisseur'].every((t) =>
+  validerProposition('proposer_contact', { nom: 'X', type: t }, 'riven').ok === false) &&
+  ['artisan', 'partenaire', 'lead'].every((t) =>
+    validerProposition('proposer_contact', { nom: 'X', type: t }, 'riven').ok === true);
+verdicts.contactBornes =
+  validerProposition('proposer_contact', { ...CONTACT, nom: 'x'.repeat(201) }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, telephone: '0'.repeat(31) }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, email: 'x'.repeat(201) }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, note: 'x'.repeat(1801) }, 'riven').ok === false &&
+  // Le mail a la forme de la route : une dictée « brice arobase soli » est refusée.
+  validerProposition('proposer_contact', { ...CONTACT, email: 'brice arobase soli' }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, email: 'brice@soli' }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, statut: 'actif' }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, node_id: 'u' }, 'riven').ok === false;
+verdicts.contactReformule = reformulerProposition({ outil: 'proposer_contact', args: CONTACT }) ===
+  'Ajouter « Brice Papon » (partenaire) au réseau RIVEN — 06 72 15 77 51 · brice@soli-energie.com — contact obtenu par Hugo.' &&
+  reformulerProposition({ outil: 'proposer_contact', args: { nom: 'Soli', type: 'lead' } }) ===
+  'Ajouter « Soli » (lead) au réseau RIVEN.';
+verdicts.contactPlan = (() => {
+  const C = { cibles: [{ id: 'aaaaaaaa-0000-0000-0000-000000000001', libelle: 'M. Lambert' }] };
+  const plan = construirePlanExecution({ outil: 'proposer_contact', args: CONTACT }, C);
+  const minimal = construirePlanExecution({ outil: 'proposer_contact', args: { nom: 'Soli', type: 'lead' } }, C);
+  const avecNote = construirePlanExecution({ outil: 'proposer_contact',
+    args: { nom: 'Soli', type: 'lead', apporteur: 'Hugo', note: 'À rappeler lundi.' } }, C);
+  const sansCibles = construirePlanExecution({ outil: 'proposer_contact', args: CONTACT }, {});
+  return plan.ok === true && plan.url === '/api/reseau/nodes' && plan.methode === 'POST' &&
+    plan.cible === undefined &&
+    JSON.stringify(plan.corps) === JSON.stringify({ type: 'partenaire', nom: 'Brice Papon', statut: 'prospect',
+      telephone: '06 72 15 77 51', email: 'brice@soli-energie.com', notes: 'Contact obtenu par Hugo.' }) &&
+    JSON.stringify(minimal.corps) === JSON.stringify({ type: 'lead', nom: 'Soli', statut: 'prospect' }) &&
+    avecNote.corps.notes === 'Contact obtenu par Hugo. À rappeler lundi.' &&
+    sansCibles.ok === true;
+})();
+verdicts.contactPlanRefus = (() => {
+  const C = { cibles: [{ id: 'aaaaaaaa-0000-0000-0000-000000000001', libelle: 'M. Lambert' },
+    { id: 'aaaaaaaa-0000-0000-0000-000000000002', libelle: 'Brice Papon' }] };
+  const doublonExact = construirePlanExecution({ outil: 'proposer_contact', args: CONTACT }, C);
+  const doublonInclus = construirePlanExecution({ outil: 'proposer_contact', args: { nom: 'Lambert', type: 'lead' } }, C);
+  // Deux fiches portent déjà ce nom : le nom nu n'en fait pas naître une troisième.
+  const doublonAmbigu = construirePlanExecution({ outil: 'proposer_contact', args: { nom: 'M', type: 'lead' } }, C);
+  const typeAbsent = construirePlanExecution({ outil: 'proposer_contact', args: { nom: 'Soli' } }, C);
+  const typeHorsListe = construirePlanExecution({ outil: 'proposer_contact', args: { nom: 'Soli', type: 'chantier' } }, C);
+  const telTropLong = construirePlanExecution({ outil: 'proposer_contact',
+    args: { nom: 'Soli', type: 'lead', telephone: '0'.repeat(31) } }, C);
+  const mailDicte = construirePlanExecution({ outil: 'proposer_contact',
+    args: { nom: 'Soli', type: 'lead', email: 'brice arobase soli' } }, C);
+  return doublonExact.ok === false && doublonExact.raison === 'doublon' &&
+    doublonInclus.ok === false && doublonInclus.raison === 'doublon' &&
+    doublonAmbigu.ok === false && doublonAmbigu.raison === 'doublon' &&
+    typeAbsent.ok === false && typeAbsent.raison === 'invalide' &&
+    typeHorsListe.ok === false && typeHorsListe.raison === 'invalide' &&
+    telTropLong.ok === false && telTropLong.raison === 'invalide' &&
+    mailDicte.ok === false && mailDicte.raison === 'invalide';
 })();
 
 // ---------- N. Alias de quadrant : 'traveler' → 'riven' (renommage 2026-08-11) ----------

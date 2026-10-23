@@ -18,7 +18,7 @@
 -- join pg_attribute a on a.attrelid = c.conrelid and a.attnum = any (c.conkey)
 -- where c.contype = 'f' and c.confrelid::regclass::text in
 --   ('idees','intendant_besoins','journal','imladrik_entrees',
---    'serments','flammes','situations','scenarios');
+--    'serments','flammes','situations','scenarios','amatsu_lectures','network_nodes');
 --
 -- cible             | source          | colonne            | règle
 -- idees             | idees_liens     | source_id          | c
@@ -31,6 +31,34 @@
 -- situations        | scenarios       | situation_id       | c
 -- scenarios         | situations      | scenario_advenu_id | n
 -- scenarios         | scenario_liens  | scenario_id        | c
+--
+-- network_nodes (23/10/2026, proposer_contact — CADRAGE-RIVEN-SAISIE.md §8) :
+-- relevé sur un PostgreSQL isolé (PGlite, migrations rejouées — c'est ce que
+-- `tests/unit-audit-database.mjs` joue à chaque passage), pas sur le projet
+-- Ultima : la séance du 23/10 n'y avait pas accès. ⚠️ La requête ci-dessus
+-- rend UNE ligne par colonne de clé (owner_id compris pour les clés scellées)
+-- et une par contrainte (simple ET scellée) : elle ne rend pas « sept lignes ».
+-- La requête qui le fait — apparier conkey/confkey par rang, ne garder que la
+-- colonne appariée à `id`, dédoublonner — est celle du harnais :
+--
+-- select distinct c.confrelid::regclass cible, c.conrelid::regclass source,
+--        a.attname colonne, c.confdeltype regle
+-- from pg_constraint c
+-- join unnest(c.conkey, c.confkey) with ordinality as k(att, fatt, ord) on true
+-- join pg_attribute a  on a.attrelid  = c.conrelid  and a.attnum  = k.att
+-- join pg_attribute fa on fa.attrelid = c.confrelid and fa.attnum = k.fatt
+-- where c.contype = 'f' and fa.attname = 'id'
+--   and c.confrelid::regclass::text = 'network_nodes';
+--
+-- Sur PGlite le 23/10 : exactement ces sept lignes (et 17 pour l'ensemble du
+-- relevé, 0 manque, 0 fantôme). À rejouer sur le projet Ultima à l'occasion.
+-- network_nodes     | network_edges   | source_id          | c
+-- network_nodes     | network_edges   | target_id          | c
+-- network_nodes     | journal         | node_id            | c
+-- network_nodes     | intendant_chantiers | node_id        | c
+-- network_nodes     | intendant_besoins | fournisseur_node_id | n
+-- network_nodes     | talent_refs_reseau | node_id         | c
+-- network_nodes     | personne_noeuds | node_id            | c
 --
 -- Aucune clé entrante : intendant_besoins, journal, flammes.
 -- Politiques SELECT propriétaire présentes sur les cinq tables sources (relevé

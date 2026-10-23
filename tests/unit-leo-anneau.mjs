@@ -29,7 +29,8 @@ const source = readFileSync(new URL('../api/_lib/leo.js', import.meta.url), 'utf
 // Dédoublonné : AMATSU (18/10/2026) est servi à TROIS quadrants, c'est UN outil.
 const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name))];
 // ONZE depuis le 18/10 : dix + AMATSU, le dragon de l'air.
-verdicts.nonVacuite = tousLesOutils.length === 11 &&
+// DOUZE depuis le 23/10 : + proposer_contact, la fiche réseau par la voix.
+verdicts.nonVacuite = tousLesOutils.length === 12 &&
   Object.keys(OUTILS_PAR_QUADRANT).length === 4;
 
 // ---------- 1. Chaque outil porte un anneau EXPLICITE et reconnu ----------
@@ -51,8 +52,11 @@ const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
 // ⛔ DIX depuis le 18/10 : AMATSU, le dragon de l'air — une lecture s'ajoute et
 // se défait par sa suppression (CADRAGE-IMLADRIK.md §12 ; décision de Paul :
 // forme C, la voix de Léo d'abord). C'est ici, nom par nom, qu'elle entre.
-verdicts.lesDixVerts = verts.join(',') === [
-  'proposer_besoin', 'proposer_flamme',
+// ⛔ ONZE depuis le 23/10 : proposer_contact — une fiche réseau s'ajoute (statut
+// prospect) et se défait par sa suppression tant que Paul ne l'a pas retouchée
+// (CADRAGE-RIVEN-SAISIE.md §8 ; décision de Paul : vert, type requis).
+verdicts.lesOnzeVerts = verts.join(',') === [
+  'proposer_besoin', 'proposer_contact', 'proposer_flamme',
   'proposer_idee', 'proposer_journal', 'proposer_lecture_amatsu',
   'proposer_page_journal', 'proposer_relance', 'proposer_scenario',
   'proposer_serment', 'proposer_situation'

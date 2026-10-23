@@ -101,7 +101,8 @@ const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map(
 const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
 // Non-vacuité : le catalogue n'est pas vide, et il compte bien dix verts
 // (onze outils : neuf + l'enrichissement orange + AMATSU, 18/10/2026).
-verdicts.nonVacuiteCatalogue = tousLesOutils.length === 11 && verts.length === 10;
+// DOUZE / ONZE depuis le 23/10/2026 : proposer_contact (vert, défaire par suppression).
+verdicts.nonVacuiteCatalogue = tousLesOutils.length === 12 && verts.length === 11;
 verdicts.chaqueVertASonDefaire = verts.join(',') === Object.keys(DEFAIRES).sort().join(',');
 verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRES) &&
   anneauDe('proposer_enrichissement_idee') === 'orange';
@@ -131,7 +132,8 @@ verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRE
     proposer_flamme: { serment_ref: 'Courir', texte: 'x' },
     proposer_situation: { intitule: 'x' },
     proposer_scenario: { situation_ref: 'Rachat', deroule: 'x' },
-    proposer_lecture_amatsu: { objet: 'x', bise: 'y', souffle: 'z', ouragan: 'w' }
+    proposer_lecture_amatsu: { objet: 'x', bise: 'y', souffle: 'z', ouragan: 'w' },
+    proposer_contact: { nom: 'Soli', type: 'partenaire' }
   };
   const ecarts = [];
   for (const outil of verts) {
@@ -240,7 +242,8 @@ function clesEtrangeres(sqlBrut, cibles) {
     if (!(re.status === 409 && re.message === REFUS_DEFAIRE.deja && base.inserts.length === avant)) echecs.push(outil + ':re');
   }
   // DIX depuis le 18/10/2026 : la lecture d'AMATSU se défait comme les autres.
-  verdicts.dixDefairesJoues = n === 10 && echecs.length === 0;
+  // ONZE depuis le 23/10/2026 : la fiche réseau de proposer_contact aussi.
+  verdicts.onzeDefairesJoues = n === 11 && echecs.length === 0;
   if (echecs.length) console.error('défaires en échec :', echecs);
 }
 
