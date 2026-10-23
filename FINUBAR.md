@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-23",
-    "commit": "8d0e295079e273e555656b585db8796b377a4266",
-    "quoi": "22–23/10 : audit de la chaîne RB (AUDIT-2026-10-22-chaine-RB.md) fusionné (#410, 594175c), avec #394 (fc24de7) et RenoDevis #372 (c139e64), chacune sur go SHA de Paul ; 5 PR périmées fermées ; V2 RenoDevis gelée le 22/10 puis publiée le 23/10 sur demande de Paul (RenoDevis #419) ; relances fermées. A6a : Paul a posé la clé live et les webhooks réels le 22/10 au soir ; production de reno-devis-final redéployée le 23/10 10:09 UTC (dpl_Dd48n5HoKLKg3syWw7q4TTXEHp4h) ; preuve attendue au battement du 24/10 06:30 UTC. Leçon v106 (vérifier un redéploiement sur sa cible). Après-midi : Ultima #413 et RenoDevis #422 fusionnées (5271217, 4939819) ; mon-dpe.fr #250 « la PAC du devis » fusionnée en squash 85998b0 après intégration de main et correction de deux défauts relevés par Codex, production READY ; plan C1/D3 mis à jour ; leçon v109 (une branche ancienne se relit par ses appelants) ; sa propagation aux neuf autres dépôts reste à faire — mon-dpe.fr attend qu'une autre séance en vol (#259, #257, #262 fusionnées cet après-midi) ait posé son grain."
+    "commit": "0d1044165433926de20221af361fce0f4fd93cc7",
+    "quoi": "22–23/10 : audit de la chaîne RB (AUDIT-2026-10-22-chaine-RB.md) fusionné (#410, 594175c), avec #394 (fc24de7) et RenoDevis #372 (c139e64), chacune sur go SHA de Paul ; 5 PR périmées fermées ; V2 RenoDevis gelée le 22/10 puis publiée le 23/10 sur demande de Paul (RenoDevis #419) ; relances fermées. A6a : Paul a posé la clé live et les webhooks réels le 22/10 au soir ; production de reno-devis-final redéployée le 23/10 10:09 UTC (dpl_Dd48n5HoKLKg3syWw7q4TTXEHp4h) ; preuve attendue au battement du 24/10 06:30 UTC. Leçon v106 (vérifier un redéploiement sur sa cible). Après-midi : Ultima #413 et RenoDevis #422 fusionnées (5271217, 4939819) ; mon-dpe.fr #250 « la PAC du devis » fusionnée en squash 85998b0 après intégration de main et correction de deux défauts relevés par Codex, production READY ; plan C1/D3 mis à jour ; leçon v109 (une branche ancienne se relit par ses appelants) ; sa propagation aux neuf autres dépôts reste à faire — mon-dpe.fr attend qu'une autre séance en vol (#259, #257, #262 fusionnées cet après-midi) ait posé son grain. Soir : contact Brice Papon (Soli, partenaire, apporté par Hugo de Symphonics) posé dans RIVEN par le SQL Editor — preuve lue : fiche + personne rattachée, apports 0 — et rappel du 26/10 09:30 posé dans Google Calendar par la séance ; Léo n'a pas de main pour créer une fiche réseau → cadrage `proposer_contact` déposé (CADRAGE-RIVEN-SAISIE.md §8), à valider par Paul."
   },
   "prochaine_action": "Chaîne RB : lire battement:rr-stripe-embarquement après le 24/10 06:30 UTC (attendu test=false), puis vérifier en base que SOLA et DOKLES ont chacun un stripe_account_id non nul et différent de leur ancien compte de test (`remplaces` compte aussi un remplacement suivi d'une erreur) ; si oui, A6b — Matthieu termine son dossier Stripe (identité, IBAN). Puis finir les boucles ouvertes dans l'ordre de AUDIT-2026-10-22-chaine-RB.md §5.",
   "bloque_par": [
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "proposer_contact — douzième outil de Léo (RIVEN, vert sous le double critère) : cadrage déposé le 23/10 dans CADRAGE-RIVEN-SAISIE.md §8, aucune migration ni route nouvelle ; exécution après le go de Paul (vert ou orange, type requis, POV à creuser). Déclencheur : le 23/10, la fiche Brice Papon a dû passer par le SQL Editor.",
+      "depuis": "2026-10-23"
+    },
     {
       "quoi": "Chaîne RB — audit du 22/10 (AUDIT-2026-10-22-chaine-RB.md §5) : #394 et RenoDevis #372 fusionnées (étape 1 ✅) ; A6a geste fait, preuve au battement du 24/10 06:30 UTC ; restent A6b (KYC de Matthieu), A3+A4 (un devis chiffré et émis depuis l'app), l'acompte = J1. Puis phase 2 (recette B1+C1, relecture de la file avant réouverture des relances, B3 à réécrire, B4) et phase 3 (issue des RDV, rail mail, leads auto, A5, WhatsApp, A9/Q10, A10, facturation SPC). LECONS v109 à propager aux 9 autres dépôts (mon-dpe.fr : après la séance en vol de l'après-midi du 23/10).",
       "depuis": "2026-10-22"

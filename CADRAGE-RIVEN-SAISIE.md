@@ -184,3 +184,157 @@ FICHE « Plomberie Roux & Fils »
 
 Registre **vide** : le select ne contient que « ➕ Créer une nouvelle
 personne », déjà sélectionné, pli **ouvert**. Le cul-de-sac n'existe plus.
+
+---
+
+## 8. La saisie par la voix de Léo — `proposer_contact` (cadré le 2026-10-23, à valider par Paul)
+
+**L'incident qui l'ouvre.** Le 23/10, Paul dicte : *« ajoute ce gars à RIVEN,
+contact obtenu par Hugo, rappel lundi »*. Léo n'a pas de main pour créer une
+fiche réseau — l'anneau vert (§12 de `CADRAGE-2026-09-22-leo-pilote-tout.md`)
+sait noter au journal d'un contact et programmer une relance, pas faire naître
+le contact. La fiche (Soli / Brice Papon) est passée par le **SQL Editor**, preuve
+lue dans le résultat ; le rappel par Google Calendar, posé par la séance et non par
+Léo. C'est le chemin de 2010 (Directive ZS). Cette extension le ferme.
+
+### ① Le but — ce qui sera vrai à la fin
+
+Depuis RIVEN, Paul dicte *« ajoute Brice Papon, partenaire, 06 72 15 77 51,
+brice@soli-energie.com, contact obtenu par Hugo »* → Léo propose la fiche, dans
+une reformulation **déterministe** (ce que Paul lit est ce qui sera écrit) ; la
+fiche naît par la route existante, **journalisée avant l'acte, défaisable d'un
+clic** ; au tour suivant, *« rappelle-le lundi »* vise cette fiche par
+`proposer_relance`, sans recharger la page.
+
+*Ligne MS.* Chaque contact dicté est un prochain client ou partenaire saisi
+**dans l'instant où il arrive**, là où il arrive (en voiture, après un échange).
+Cas réel du jour : Brice Papon, directeur commercial de Soli, apporté par Hugo
+(Symphonics). Indicateur, lu à sa source : les lignes de `leo_ecritures` dont
+l'outil est `proposer_contact`, et les relances posées sur ces fiches. Première
+cible : **le prochain contact reçu entre dans RIVEN par la voix, sans SQL.**
+
+### ② Les étapes
+
+a) **Le catalogue** (`api/_lib/leo.js`) : l'outil, sa main (regex
+   « ajoute/crée/enregistre un contact|un artisan|un partenaire|un lead »), sa
+   reformulation, et `validerProposition` **miroir de `validateNode`** (bornes
+   lues dans `api/_lib/validate.js`, jamais recopiées de mémoire).
+b) **Le défaire** (`api/_lib/leo-execution.js`) : `DEFAIRES.proposer_contact`
+   → table `network_nodes`, `retouche: true` (la table a `updated_at` : une fiche
+   retouchée par Paul ne se défait plus), libellé `nom` ; `DEPENDANCES.network_nodes`
+   → **toutes** les clés étrangères qui la visent, telles que le harnais les relit
+   dans les migrations (relevé du 23/10 : `network_edges.source_id`,
+   `network_edges.target_id`, `journal.node_id`, `intendant_chantiers.node_id`,
+   `intendant_besoins.fournisseur_node_id`, `talent_refs_reseau.node_id`,
+   `personne_noeuds.node_id` — le harnais est juge, pas cette liste).
+c) **Le gabarit front** (`js/leo-accueil.js`) : `POST /api/reseau/nodes`, corps
+   exact `{ type, nom, statut: 'prospect', telephone?, email?, ville?, notes }` ;
+   `apresEcriture` ajoute `{ id, libelle: nom }` à `candidats.cibles`,
+   `apresDefaire` l'en retire — c'est ce qui rend la relance possible au tour
+   suivant.
+d) **Le prompt** : type manquant → Léo le demande **en un mot** (artisan,
+   partenaire ou lead) ; jamais un numéro ni un mail qui ne soit pas dans le
+   message de Paul ; nom déjà dans `candidats.cibles` → pas de fiche, Léo propose
+   `proposer_journal` sur l'existante.
+e) **Les harnais** : verrous **refixés à la main** (douze outils, onze verts,
+   quatorze mains — RIVEN en sert cinq —, onze défaires joués) ; exhaustivité de
+   `DEPENDANCES.network_nodes` ; chaîne navigateur (proposition → carte au texte
+   serveur → rien d'écrit avant le clic → un POST au corps exact, avec le Bearer →
+   défaire → la fiche disparaît, la trace est `defaite`).
+f) **La preuve réelle**, après fusion sur le go de Paul : un contact dicté par
+   lui, visible dans RIVEN, puis une relance posée dessus au tour suivant.
+
+**Aucune migration, aucune route nouvelle** : la table et `POST /api/reseau/nodes`
+existent et sont validées côté serveur depuis `0001`.
+
+### ③ Les moyens — ligne ZS
+
+Trois voies pour faire naître un contact, comparées le 23/10 sur ce qui existe :
+
+| Voie | Simplicité | Mise en place | Coût | Verdict |
+|---|---|---|---|---|
+| Formulaire RIVEN (§1–7 de ce cadrage) | 2 écrans, clavier | déjà là | 0 | reste la voie de la fiche complète |
+| SQL Editor (chemin du 23/10) | un bloc à coller, hors séance | 0 | 0 | so 2010 ; injoignable par Léo |
+| **La voix à Léo — retenue** | une phrase | ½ journée | 0 ressource ; **une PR de code ≈ 29 min de CI** | tool-use déjà en service, zéro table, zéro route |
+
+Fichiers touchés : `api/_lib/leo.js` · `api/_lib/leo-execution.js` ·
+`js/leo-accueil.js` · `tests/unit-leo-anneau.mjs` · `tests/unit-leo-mains.mjs` ·
+`tests/unit-leo-defaire.mjs` · un `§` de `tests/smoke-ecrire.mjs`. Sources : le
+catalogue, la route et le validateur **lus dans le dépôt le 23/10**.
+
+**Les arguments** (bornes = `validateNode`) : `nom` requis (≤ 200) · `type`
+requis, **artisan | partenaire | lead** (`chantier` exclu : un chantier naît par
+l'intendant) · `telephone` (≤ 30) · `email` (≤ 200) · `ville` · `apporteur`
+(≤ 160, « par Hugo » → `notes` = « Contact obtenu par Hugo. ») · `note` (≤ 2000,
+provenance comprise). Le statut est posé par le gabarit : `prospect`.
+
+**L'anneau : vert, sous le double critère** (réversible : une fiche neuve se
+supprime sans cascade ; visible : journal + bulle « Fait sans demander »). Même
+régime que `proposer_journal` et `proposer_relance`, qui écrivent déjà de la PII
+dans le réseau (§12, « la PII entre dans l'anneau vert »). ⚠️ **En pratique la carte
+jouera presque toujours** : le vert « sans demander » exige chaque valeur mot pour
+mot dans le dernier message de Paul, et un numéro dicté sort rarement tel quel —
+alors la fiche s'écrit **sur son clic**, avec le numéro tel qu'il sera stocké.
+*Alternative nommée et écartée* : l'orange, qui donnerait au mécanisme « demander
+puis agir » son premier outil (FINUBAR : non prouvé) — mais la carte tient déjà ce
+rôle ici ; Paul tranche.
+
+### ④ Les critères de réussite — vérifiables
+
+1. `npm test` vert avec les verrous **refixés** (12 / 11 / 14 / 11) — un treizième
+   outil entré en silence fait rougir `unit-leo-anneau`.
+2. `unit-leo-defaire` prouve que `DEPENDANCES.network_nodes` couvre **chaque** clé
+   étrangère des migrations ; sabotage joué : une clé retirée du relevé → rouge.
+3. `unit-leo-mains` : « ajoute Brice Papon, partenaire, 06 72 15 77 51 » → une
+   proposition `proposer_contact` au corps exact ; « ajoute Brice » (type absent)
+   → refus, pas d'invention ; nom déjà en cible → refus `doublon`.
+4. Chaîne navigateur : **rien d'écrit avant le clic** (verrou de non-vacuité :
+   le POST est compté), corps exact, Bearer présent ; défaire → trace `defaite`,
+   fiche absente ; relance au tour suivant sur la fiche née au tour précédent.
+5. Preuve réelle en production, lue dans RIVEN et dans `leo_ecritures`.
+
+### ⑤ Ce qu'on ne fait PAS dans cette boucle
+
+- La **personne** et son **rattachement** (trois lignes, §1–7) : v2,
+  `proposer_interlocuteur`, quand la fiche société existe.
+- La **relation** « apport d'affaires » (arête) : v2, `proposer_relation` ; la
+  provenance vit dans `notes`.
+- **Google Calendar** : hors Ultima (JL). La relance est le rappel natif, vue au
+  cockpit.
+- Lire une **capture d'écran** : Léo du site ne reçoit que du texte.
+- Modifier ou supprimer une fiche (orange / rouge), NICOL BOLAS, l'import en
+  masse (`CADRAGE-RIVEN-IMPORT.md`).
+
+### ⑥ Pre-mortem — « la boucle a échoué : pourquoi ? »
+
+(a) *Un numéro mal transcrit par la dictée est écrit tel quel* ⇒ la règle mot
+pour mot le renvoie à la carte, qui affiche le numéro **tel qu'il sera stocké** ;
+(b) *doublon : « ajoute Brice » alors que Brice est déjà là* ⇒ résolution locale
+sur `candidats.cibles`, refus `doublon`, Léo propose le journal ; (c) *Léo invente
+le type* ⇒ requis côté schéma ET validation, le prompt dit « demande en un mot » ;
+(d) *l'anneau vert s'élargit sans verrou* ⇒ les comptes sont nommés à la main dans
+trois harnais ; (e) *le défaire efface la relance posée depuis* ⇒ `journal.node_id`
+est au relevé → refus « Lié : … », la fiche se retire alors par RIVEN ; (f) *la
+relance du tour suivant ne trouve pas la fiche* ⇒ `apresEcriture` l'ajoute aux
+cibles, et la chaîne navigateur le prouve ; (g) *une valeur dictée finit en log* ⇒
+règle existante (jamais de contenu dicté en log), relue sur la route ; (h) *la PR
+coûte 29 min de CI à chaque poussée* ⇒ une seule PR, en fin de séance, tests en
+local avant.
+
+### Trois points de vue à arbitrer avant d'exécuter
+
+- **L'adversaire** — *la dictée empoisonnée* : une `note` dictée qui contient une
+  consigne, stockée puis relue par Léo. Question : les `notes` des fiches
+  remontent-elles au modèle ? (`validerEtatQuadrant` ne reçoit que des libellés
+  bornés à 120 — à vérifier sur ce que RIVEN envoie.) Et l'inondation : cent
+  fiches en un jour = le plafond de `leo_appels`, pas une garde de plus.
+- **Le mainteneur futur** — douzième outil, cinq fichiers par outil. Le catalogue
+  mérite-t-il un gabarit « une ligne dans une table » ? Question à poser, pas une
+  refonte (ZS n'autorise pas de réécrire ce qui marche).
+- **Paul au volant** — un numéro arrive en chiffres séparés, un mail épelé. Un
+  seul champ `coordonnees` vaudrait-il mieux que `telephone` + `email` ? Et « pas
+  Hugo » : la consigne négative doit rester lisible dans la reformulation.
+
+**Décision attendue de Paul** : go sur ce cadrage (vert ou orange ; `type`
+requis), le POV à creuser, et le moment — maintenant (la chaîne RB attend le
+battement du 24/10 06:30 UTC, rien n'est à faire avant) ou après A6b.
