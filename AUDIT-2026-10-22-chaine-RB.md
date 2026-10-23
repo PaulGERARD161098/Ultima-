@@ -327,12 +327,12 @@ sera celui de l'étape 4.
 | 3 | Relances automatiques | **fermées jusqu'à A3** | réouverture après le premier devis chiffré dans l'application et une relecture de la file avec Paul |
 | 4 | PR périmées | **fermées** | RenoDevis #390 et #387, RenoBoost #606 et #602, Ultima #396 : fermées le 22/10 avec un commentaire d'une ligne ; les branches restent |
 
-⚠️ **Trouvé en préparant la fusion de #372** : `npx tsc --noEmit` est **rouge sur
-`main` de RenoDevis** (`lib/whatsappAgent.test.ts:1702`, `version_calcul_sola` typé
-`string` contre un littéral), alors que la CI de `main` est verte. La porte de
-qualité « typage strict » du `CLAUDE.md` de RenoDevis ne mord donc pas dans la CI
-sur les fichiers de test. Dette à solder dans la prochaine séance RenoDevis, pas
-ici (#372 ne touche pas ce fichier).
+⚠️ **Trouvé en préparant la fusion de #372** : `npx tsc --noEmit` était **rouge sur `main` de
+RenoDevis** (`a5b21be`, `lib/whatsappAgent.test.ts:1702`), alors que la CI du même code (`7c63bb5`,
+exécution 1786, `npm run build` compris) était verte. **Cause non établie** : la phrase d'origine,
+« la porte de typage ne mord pas sur les fichiers de test », était une hypothèse présentée comme un
+fait (relevé par la revue Codex de RenoDevis #422, le 23/10). ✅ Le 23/10, `npx tsc --noEmit` est
+**vert** sur `main` `7959e11`, après la V2 (#419).
 
 **Prochaine action unique** : **A6a** — poser la clé Stripe live et la destination
 de webhook « comptes connectés » sur `reno-devis-final`, puis lire le battement
