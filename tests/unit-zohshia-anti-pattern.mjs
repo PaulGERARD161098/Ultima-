@@ -34,6 +34,12 @@ verifier({ ...dossier, typeSujet: 'retroplanning', complexe: true, approches: ap
 verifier({ ...dossier, typeSujet: 'retroplanning', complexe: true, approches }, true);
 verifier({ ...dossier, typeSujet: 'inconnu', approches }, false);
 verifier({ ...dossier, complexe: undefined }, false);
+const catalogue = JSON.parse((await import('node:fs')).readFileSync(new URL('../zohshia/anti-pattern/points-de-vue.json', import.meta.url), 'utf8'));
+assert.equal(catalogue.points_de_vue.length, 100);
+for (const champ of ['id', 'alias', 'nom', 'question']) assert.equal(new Set(catalogue.points_de_vue.map(p => p[champ])).size, 100);
+assert.equal(new Set(catalogue.points_de_vue.map(p => p.famille)).size, 10);
+for (const point of catalogue.points_de_vue) for (const champ of ['id', 'alias', 'nom', 'question', 'preuve', 'limite']) assert.ok(point[champ]?.trim());
+console.log('Catalogue : 100 fiches non vides, identifiants et alias uniques, 10 familles.');
 const fiche = construire().technos.find(t => t.id === 'anti-pattern');
 assert.ok(fiche); assert.equal(fiche.onglets.length, 3); assert.ok(fiche.onglets.every(o => o.blocs.length >= 3));
 console.log(`${n} cas structurels et 3 onglets non vides vérifiés ; aucune certification métier.`);
