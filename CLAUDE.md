@@ -36,6 +36,10 @@ les contrôles effectifs, droits, budget, anneaux et gates restent applicables.
 Ne pas modifier son propre contrôle par apprentissage, ni ouvrir le contrôle
 privé R21 depuis Work. Toute activation produit reste à prouver séparément.
 
+### Approches croisées — règle du 23/10/2026
+
+Toujours aborder un même sujet par au moins deux approches réellement différentes, y compris pour les calculs et les méthodes de travail. Charger `.claude/skills/anti-pattern/SKILL.md` : rétrocadrer depuis le résultat et sa preuve, comparer les voies, expliciter les dépendances communes et résoudre les écarts avant de conclure. Proportionner la profondeur à l'enjeu. Le contrat réutilisable est dans `zohshia/anti-pattern/TECHNO.md` ; aucune nouvelle autorisation n'en découle.
+
 ### 🔒 Directive EL (Edouard Lebrun) — dictée par Paul le 2026-08-01
 
 Aussi puissante qu'EB et JL. Quatre principes :
