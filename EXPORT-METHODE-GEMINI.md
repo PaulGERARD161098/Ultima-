@@ -43,7 +43,8 @@ connaissance** — jusqu'à 10 par Gem. Elle change la manière de faire, voir �
 > ⚠️ La ligne `PARAMETRAGE` n'est pas décorative — voir §6.
 
 ```
-PARAMETRAGE 2026-10-13 · directives:6c46c93dd74b
+PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
+Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
 
 Je m'appelle Paul. Je construis et j'exploite plusieurs produits pour les
 artisans de la rénovation énergétique, et un outil personnel unique qui doit
@@ -67,7 +68,8 @@ signale.
 ## 3. Bloc à coller — *Custom instructions*
 
 ```
-PARAMETRAGE 2026-10-13 · directives:6c46c93dd74b
+PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
+Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
 
 Réponses concises, sans préambule ni conclusion creuse. Exemples concrets
 plutôt qu'abstractions.
@@ -106,7 +108,8 @@ NE JUGE PAS LE CODE QUE TU VIENS D'ÉCRIRE DANS LE MÊME TOUR. Génération et
 **Description** : `Travaille selon mes six directives : cap, destination, chemin, preuve, époque, vente.`
 
 ```
-PARAMETRAGE 2026-10-13 · directives:6c46c93dd74b
+PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
+Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
 
 Tu travailles selon six directives. Aucune ne prime sur les autres.
 
@@ -248,26 +251,8 @@ Ce qui est propre à ce document, ce sont les deux commandes :
 | vérifier que ce doc-ci n'a pas périmé | `node finubar/export-chatgpt-empreinte.mjs --verifier CLAUDE.md EXPORT-METHODE-GEMINI.md` |
 | le re-sceller après une mise à jour des directives | `node finubar/export-chatgpt-empreinte.mjs --sceller CLAUDE.md EXPORT-METHODE-GEMINI.md` |
 | savoir ce que Gemini a vraiment en tête | lui demander « quelle est ta ligne PARAMETRAGE ? » et comparer |
+Anti-pattern : croiser au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; appliquer le seuil le plus élevé. Choisir les angles selon le résultat et les incertitudes, expliciter leurs dépendances communes et résoudre les écarts avant de conclure. Réutiliser la bibliothèque de 100 angles si accessible, sans prétendre avoir lu une fiche absente.
 
 ⛔ **ET LE HARNAIS LE CONTRÔLE, sinon la ligne serait décorative.**
 `tests/unit-export-chatgpt.mjs` vérifie l'accord des **deux** exports, pas du
-seul ChatGPT. Sans ce contrôle-là, ce fichier pourrait porter une empreinte
-périmée indéfiniment en ayant l'air réglé — c'est très exactement le mode de
-panne que le §10 décrit.
-
-## 7. Ce que ce document ne fait pas
-
-- Il **ne remplace pas** `EXPORT-METHODE-CHATGPT.md` : il en dépend pour §1 à §6.
-- Il ne prouve pas que la **traduction** est fidèle — seulement que la source
-  n'a pas bougé. La fidélité se relit, aucune machine ne la vérifie.
-- Il ne prouve pas que Gemini **applique** ce qu'on lui a collé : ça, seul Paul
-  le constate à l'usage.
-- Il ne configure rien tout seul : les trois blocs se collent à la main, dans
-  trois endroits différents.
-
----
-
-**Sources du §1** (relevées le 2026-09-28) : gemini.google/overview/gems ·
-support.google.com/gemini/answer/15235603 · gemini.google.com/saved-info
-
-
+seul ChatGPT. Sans ce contrôle-là, ce fichier po
