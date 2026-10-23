@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v109 2026-10-23 sha256:2ddb13ec1746 -->
+<!-- lecons:empreinte v110 2026-10-23 sha256:97749f2fc87a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -691,6 +691,24 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE REQUÊTE CITÉE COMME PREUVE SE JOUE AVANT D'ÊTRE ÉCRITE** *(2026-10-23,
+Ultima #415)*. Le relevé des dépendances du défaire
+(`Ultima-/supabase/releves/20261002_leo_defaire_dependances.RELEVE.sql`) a reçu
+les sept clés de `network_nodes` relevées dans les migrations, avec la phrase
+« la requête ci-dessus, jouée avec network_nodes, doit rendre exactement ces sept
+lignes ». Faux : cette requête (`a.attnum = any(c.conkey)`) rend une ligne par
+colonne de clé — `owner_id` compris pour les clés scellées — et une par
+contrainte, simple ET scellée : elle n'aurait jamais rendu sept lignes. Le harnais
+regex (`Ultima-/tests/unit-leo-defaire.mjs`) était vert, PGlite dormait dans
+`node_modules` depuis des semaines, et c'est la relecture Codex qui l'a vu — un
+tour de correction, sur une PR déjà verte. ⛔ **La règle** : une requête donnée
+comme critère d'acceptation se JOUE sur un moteur réel avant d'être écrite — sur
+PGlite, migrations rejouées, quand la base n'est pas atteignable — et son verdict
+entre dans un harnais (`Ultima-/tests/unit-audit-database.mjs` mesure désormais
+`DEPENDANCES` contre `pg_constraint` : 17 clés, 0 écart, sabotage rouge). Une
+« preuve à rejouer plus tard » que personne n'a jouée est un souvenir qui a
+l'air d'une mesure.
 
 **UNE INTERFACE QUI CALCULE NE FAIT PAS DU NAVIGATEUR UNE SOURCE DE CONFIANCE**
 *(2026-10-23, mon-dpe.fr).* Le PUT du projet acceptait des résultats calculés et des
