@@ -2586,6 +2586,290 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "9. Agent de devis neutre — cible pré-opérationnelle (23/10/2026)",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Mandat confirmé :",
+         "b"
+        ],
+        [
+         " produire depuis une description vocale un brouillon précis, avec produits et prestations, en moins de dix minutes. Le logiciel est préparé avant l'arrivée du professionnel ; son intégration apporte ses données et sa configuration, sans réécriture du moteur. Ce paragraphe fixe une cible, pas une réception acquise ni une actualisation de l'inventaire du §4.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Séparation des responsabilités",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Le modèle comprend, rapproche les besoins et pose les questions groupées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Les outils contrôlés recherchent les références, valident les corrections, calculent, enregistrent et génèrent le document depuis l'état enregistré.",
+          ""
+         ]
+        ],
+        [
+         [
+          "La configuration versionnée fournit identité, catalogues produits et prestations, prix, paramètres commerciaux et présentation propres au pro.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le canal reçoit le vocal et remet le brouillon au professionnel authentifié. L'environnement de développement, l'hébergement du modèle, le serveur de l'application et le stockage sont identifiés séparément.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Critère de livraison avant les données réelles",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Capacité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve requise avec une configuration fictive",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Configuration",
+           ""
+          ]
+         ],
+         [
+          [
+           "Import, validation, version et diagnostic des champs manquants ; aucun prix ou règle professionnelle codé en dur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Voix et compréhension",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vocal réel traité ; produits, prestations, quantités et contraintes retrouvés ; consignes jamais facturées",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Catalogue",
+           ""
+          ]
+         ],
+         [
+          [
+           "Références et prix sourcés ; écarts de puissance explicités ; absence ou ambiguïté jamais masquée par une substitution",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Corrections",
+           ""
+          ]
+         ],
+         [
+          [
+           "Cible stable, état conservé, invalidation des prix et dépendances concernés ; impacts visibles",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "État durable",
+           ""
+          ]
+         ],
+         [
+          [
+           "Réouverture après nouvelle session ou redémarrage ; écriture atomique sous révision ; rejeu sans doublon et conflit de contenu refusé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Cloisonnement",
+           ""
+          ]
+         ],
+         [
+          [
+           "Identité résolue par l'application ; lectures et écritures entre deux professionnels fictifs refusées côté serveur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Calcul et document",
+           ""
+          ]
+         ],
+         [
+          [
+           "Calcul déterministe au centime avec paramètres fournis ; inconnu distinct de zéro ; totaux partiels explicités ; aucune TVA ou TTC complet sans règles disponibles ; PDF relu en texte et en image",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Exploitation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Erreurs actionnables, limites d'appels et coût observables, arrêt et reprise éprouvés ; brouillon marqué, aucun envoi au client automatique",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "État du prototype local communiqué et vérifié le 23/10 :",
+         "b"
+        ],
+        [
+         " bibliothèque d'état et génération PDF, quarante tests réussis sur l'archive identifiée dans la transmission. Cela ne prouve ni raccordement du catalogue, ni transcription, ni stockage externe concurrent, ni isolation applicative, ni livraison en ligne. Un dossier réservé à la configuration ne constitue pas son implémentation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Deux prototypes qui s'améliorent mutuellement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Répertorier les outils déjà présents avant tout remplacement. Conserver une seule vérité de chantier et un seul contrat de calcul, indépendants du modèle.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Raccorder le prototype neutre aux contrats nécessaires en environnement d'essai ; adapter les outils existants quand ils répondent au contrat.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Comparer les deux orchestrations avec les mêmes transcriptions, données fictives et résultats attendus : cas normal, répétition, correction ciblée, référence absente, prix inconnu, dépendance invalidée, rejeu et concurrence.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Mesurer ensuite le parcours vocal réel jusqu'au PDF : temps écoulé depuis le premier vocal, temps de traitement séparé de l'attente humaine, questions, exactitude des produits et prestations, corrections manuelles et coût par brouillon conforme. Conserver versions du code, prompts, modèles et données ; distinguer comparaison des systèmes complets et comparaison à modèle égal.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Transformer chaque défaut reproduit en cas partagé. Réutiliser le composant gagnant ; deux moteurs commerciaux divergents ne sont pas une cible.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les leçons de méthode restent dans ",
+         ""
+        ],
+        [
+         "Ultima-/memoire/LECONS.md",
+         "c"
+        ],
+        [
+         ", entrée « Un prototype d'agent ne prouve que la couche réellement éprouvée ». Le contrôle d'exploitation suit ",
+         ""
+        ],
+        [
+         "../pilotage-back-office/TECHNO.md",
+         "c"
+        ],
+        [
+         " : chaque outil a son cockpit local ; un écran central ne remplace pas ses contrôles.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -7324,7 +7608,7 @@ export default {
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
+  "renodevis/TECHNO.md": "9e0dfa1eb8a2494d06a23ba4a5a913664604bd5fb206b313dfba87131de3acfc",
   "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
  }
 };
