@@ -48,7 +48,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Chaîne RB — audit du 22/10 (AUDIT-2026-10-22-chaine-RB.md §5) : #394 et RenoDevis #372 fusionnées (étape 1 ✅) ; A6a geste fait, preuve au battement du 24/10 06:30 UTC ; restent A6b (KYC de Matthieu), A3+A4 (un devis chiffré et émis depuis l'app), l'acompte = J1. Puis phase 2 (recette B1+C1, relecture de la file avant réouverture des relances, B3 à réécrire, B4) et phase 3 (issue des RDV, rail mail, leads auto, A5, WhatsApp, A9/Q10, A10, facturation SPC). mon-dpe.fr #250 à fusionner par Paul ; LECONS v106 à propager aux 9 dépôts.",
+      "quoi": "Chaîne RB — audit du 22/10 (AUDIT-2026-10-22-chaine-RB.md §5) : #394 et RenoDevis #372 fusionnées (étape 1 ✅) ; A6a geste fait, preuve au battement du 24/10 06:30 UTC ; restent A6b (KYC de Matthieu), A3+A4 (un devis chiffré et émis depuis l'app), l'acompte = J1. Puis phase 2 (recette B1+C1, relecture de la file avant réouverture des relances, B3 à réécrire, B4) et phase 3 (issue des RDV, rail mail, leads auto, A5, WhatsApp, A9/Q10, A10, facturation SPC). LECONS v109 à propager aux 9 autres dépôts (mon-dpe.fr : après la séance en vol de l'après-midi du 23/10).",
       "depuis": "2026-10-22"
     },
     {
