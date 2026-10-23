@@ -7086,6 +7086,72 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "9. Livrer avec une vérification proportionnée",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le résultat utile comprend le délai et la fiabilité. Croiser le parcours de l'utilisateur, la provenance des données et le cas défavorable ; les minima de points de vue ne multiplient pas automatiquement les campagnes complètes de tests.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Avant le code, relire la maquette validée, les composants existants et les contrats de style, de données et de publication. Réutiliser leurs classes et leurs jetons ; prévoir le survol, le clavier, le toucher et les données absentes dès le premier lot.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Définir les preuves nécessaires selon le risque et distinguer contrôles obligatoires, contrôles ciblés et approfondissements facultatifs. Conserver tous les contrôles obligatoires. Un changement de présentation appelle d'abord une recette du composant et un cas défavorable pertinent ; un changement de calcul, de droits ou d'envoi exige les contre-épreuves correspondantes.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Regrouper le changement cohérent, ses limites connues et ses vérifications dans un lot avant publication. Exécuter les contrôles ciblés avant de déclencher la campagne complète ; intégrer la recette au mécanisme déjà exécuté. Une nouvelle campagne demande un changement pertinent, un échec ou une incertitude nommée.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Lire chaque preuve avec sa version. Réutiliser une preuve seulement si le diff démontre que son périmètre est inchangé ; tester séparément le nouveau périmètre. Une réussite sur la version précédente ne devient jamais une réussite de la version finale. Aucun contrôle requis encore en attente ou en échec n'est levé par cette règle.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Fixer un budget d'attente des outils externes selon l'enjeu. Au dépassement, diagnostiquer la dépendance et changer de moyen si une voie autorisée existe. Deux observations identiques sans progression déclenchent ce diagnostic, pas une nouvelle série de relances. Distinguer défaut produit, outil indisponible et résultat non vérifié ; ne pas modifier les critères de réussite pour obtenir du vert.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Après un refus d'accès, poursuivre les tâches indépendantes autorisées, utiliser si utile le schéma et des données fictives, puis déclarer la couverture manquante. Ne pas contourner le refus par un autre canal ni annoncer une vérification réelle à partir d'un essai fictif.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Montrer le résultat livré avec son lien ou une capture identifiée, puis donner fait, restant et bloqué. Une préversion, une capture de recette et une publication effective sont nommées séparément. Clore la boucle utile quand les preuves requises sont réunies ; ne pas rouvrir une recette verte sans changement ou risque nouveau.",
+          ""
+         ]
+        ]
+       ]
       }
      ]
     },
@@ -7139,6 +7205,12 @@ export default {
         [
          [
           "Vérifier un cas limite ou défavorable pertinent et les limites restantes.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Pour une livraison, appliquer TECHNO.md §9 : maquette et contrats relus, contrôles ciblés avant campagne complète, lot regroupé, version des preuves et budget d'attente annoncés. Une preuve antérieure ne couvre que le périmètre démontré inchangé ; les contrôles obligatoires restent requis.",
           ""
          ]
         ]
@@ -7229,6 +7301,15 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Si un outil externe cesse de progresser, diagnostiquer au dépassement du budget d'attente et après deux observations identiques ; poursuivre le travail indépendant, sans répéter des campagnes complètes inchangées. Le compte rendu distingue blocage d'outil, défaut produit et couverture non vérifiée. Montrer le résultat et clore la boucle une fois les preuves requises réunies.",
+         ""
+        ]
+       ]
       }
      ]
     }
@@ -7237,8 +7318,8 @@ export default {
  ],
  "sources": {
   "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "0ebb8695bf6749e87de7e55d6415fdfc4d42ceea5c472ae3de0bd0213d3e44c7",
-  "anti-pattern/MISE-EN-SERVICE.md": "d6ec1f9ab425051b41419ad0611acf2f243c5d7ba9089819172bcccd9314b59f",
+  "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
+  "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",

@@ -59,3 +59,15 @@ Avant de compiler, identifier les sorties réseau des extensions de construction
 
 À l'arrêt demandé, clôturer le périmètre réellement prouvé et reporter nommément les validations restantes. Ne pas transformer une correction terminée en produit entièrement validé. Les incidents et leurs preuves restent dans le fichier canonique des leçons, hors de la technologie neutre ; cette grille n'active aucun contrôle permanent et n'élargit aucun droit.
 
+## 9. Livrer avec une vérification proportionnée
+
+Le résultat utile comprend le délai et la fiabilité. Croiser le parcours de l'utilisateur, la provenance des données et le cas défavorable ; les minima de points de vue ne multiplient pas automatiquement les campagnes complètes de tests.
+
+1. Avant le code, relire la maquette validée, les composants existants et les contrats de style, de données et de publication. Réutiliser leurs classes et leurs jetons ; prévoir le survol, le clavier, le toucher et les données absentes dès le premier lot.
+2. Définir les preuves nécessaires selon le risque et distinguer contrôles obligatoires, contrôles ciblés et approfondissements facultatifs. Conserver tous les contrôles obligatoires. Un changement de présentation appelle d'abord une recette du composant et un cas défavorable pertinent ; un changement de calcul, de droits ou d'envoi exige les contre-épreuves correspondantes.
+3. Regrouper le changement cohérent, ses limites connues et ses vérifications dans un lot avant publication. Exécuter les contrôles ciblés avant de déclencher la campagne complète ; intégrer la recette au mécanisme déjà exécuté. Une nouvelle campagne demande un changement pertinent, un échec ou une incertitude nommée.
+4. Lire chaque preuve avec sa version. Réutiliser une preuve seulement si le diff démontre que son périmètre est inchangé ; tester séparément le nouveau périmètre. Une réussite sur la version précédente ne devient jamais une réussite de la version finale. Aucun contrôle requis encore en attente ou en échec n'est levé par cette règle.
+5. Fixer un budget d'attente des outils externes selon l'enjeu. Au dépassement, diagnostiquer la dépendance et changer de moyen si une voie autorisée existe. Deux observations identiques sans progression déclenchent ce diagnostic, pas une nouvelle série de relances. Distinguer défaut produit, outil indisponible et résultat non vérifié ; ne pas modifier les critères de réussite pour obtenir du vert.
+6. Après un refus d'accès, poursuivre les tâches indépendantes autorisées, utiliser si utile le schéma et des données fictives, puis déclarer la couverture manquante. Ne pas contourner le refus par un autre canal ni annoncer une vérification réelle à partir d'un essai fictif.
+7. Montrer le résultat livré avec son lien ou une capture identifiée, puis donner fait, restant et bloqué. Une préversion, une capture de recette et une publication effective sont nommées séparément. Clore la boucle utile quand les preuves requises sont réunies ; ne pas rouvrir une recette verte sans changement ou risque nouveau.
+
