@@ -37,3 +37,25 @@ La recherche publique et les rapprochements conceptuels sont documentés dans so
 L'interlocutrice choisit les angles selon le résultat recherché, les contraintes et les incertitudes, puis applique leurs questions et confronte les constats. Les angles demandés sont respectés ; une analyse globale est complétée jusqu'au minimum 2/3/4. Une invocation isolée reste possible sans prétendre couvrir toute la méthode. Les packs sont adaptés à l'idée ou au plan, sans sélection aveugle par mots-clés.
 
 Le lecteur local donne les fiches détaillées dans un environnement autorisé. Pour une conversation qui ne peut pas lire le dépôt, publier-leo.mjs génère un index compact de 100 IDs, alias et questions pour le prompt serveur. Ce module est une projection du même catalogue, liée par empreinte ; le contrôle --verifier refuse une version périmée. Mettre à jour cette projection lors d'un changement du catalogue. Elle ne crée aucun outil, accès externe ou exécution autonome ; une preuve absente reste non vérifiée.
+
+## 7. Grille de contre-épreuve d'un projet calculé et sauvegardé
+
+Réutiliser trois angles : utilisateur qui édite pendant une requête ; serveur confronté à une entrée forgée ; calcul contrôlé par ses dépendances et sa décomposition. Adapter les cas au risque. Cette grille guide une recette ; sa présence ne prouve pas son exécution.
+
+| Risque | Contre-épreuve | Preuve attendue |
+|---|---|---|
+| Résultat ou champ protégé fourni par le client | Modifier directement la requête, sans passer par l'interface | Refus avant écriture ou reconstruction serveur ; identité et révision contrôlées séparément |
+| Saisie perdue pendant une sauvegarde ou un calcul | Retarder la réponse, éditer à nouveau, puis laisser arriver la réponse ancienne | Dernière saisie conservée, révision de base actualisée et état encore modifié si nécessaire |
+| Diagnostic ou export périmé | Modifier séparément chaque entrée thermique, sa provenance, puis besoins et montants | Empreinte couvrant les dépendances effectives ; résultat périmé ou appréciation reconstruite selon son contrat ; version du moteur identifiable |
+| Valeur absente assimilée à zéro | Comparer absent, inconnu et zéro explicite | Calcul partiel et donnée manquante visibles ; total complet seulement quand les entrées nécessaires sont connues |
+| Poste énergétique compté deux fois | Décomposer l'existant et la cible par usage avant de totaliser | Chaque consommation comptée une seule fois ; hypothèses d'eau chaude et de chauffage explicites |
+| Tests verts trop faibles | Exécuter la régression sur l'ancienne version dans une copie isolée | Échec pour le défaut visé, puis réussite sur le correctif ; un échec d'environnement ne vaut pas détection du défaut |
+
+## 8. Portée des preuves et arrêt de séance
+
+Une preuve porte date, version et environnement. Distinguer code préparé, tests locaux, contrôle continu, préversion disponible, recette utilisateur et publication effective. Pour une évolution de base : migration préparée, simulation exécutée, simulation réussie et application effective sont quatre états distincts. Une base simulée ne valide pas une base réelle ; un contrôle continu vert ne prouve ni une migration appliquée ni un parcours utilisateur validé. Qualifier aussi la relecture : une passe du même auteur n'est pas une revue indépendante.
+
+Avant de compiler, identifier les sorties réseau des extensions de construction, même si la télémétrie du framework est désactivée. L'absence de configuration d'exécution ne prouve pas l'absence de télémétrie de compilation. Un refus de la plateforme arrête l'action concernée : ne pas contourner, poursuivre les vérifications indépendantes autorisées et nommer la couverture manquante.
+
+À l'arrêt demandé, clôturer le périmètre réellement prouvé et reporter nommément les validations restantes. Ne pas transformer une correction terminée en produit entièrement validé. Les incidents et leurs preuves restent dans le fichier canonique des leçons, hors de la technologie neutre ; cette grille n'active aucun contrôle permanent et n'élargit aucun droit.
+

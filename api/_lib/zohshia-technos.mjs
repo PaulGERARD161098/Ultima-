@@ -6887,6 +6887,205 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "7. Grille de contre-épreuve d'un projet calculé et sauvegardé",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Réutiliser trois angles : utilisateur qui édite pendant une requête ; serveur confronté à une entrée forgée ; calcul contrôlé par ses dépendances et sa décomposition. Adapter les cas au risque. Cette grille guide une recette ; sa présence ne prouve pas son exécution.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Risque",
+          ""
+         ]
+        ],
+        [
+         [
+          "Contre-épreuve",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve attendue",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Résultat ou champ protégé fourni par le client",
+           ""
+          ]
+         ],
+         [
+          [
+           "Modifier directement la requête, sans passer par l'interface",
+           ""
+          ]
+         ],
+         [
+          [
+           "Refus avant écriture ou reconstruction serveur ; identité et révision contrôlées séparément",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Saisie perdue pendant une sauvegarde ou un calcul",
+           ""
+          ]
+         ],
+         [
+          [
+           "Retarder la réponse, éditer à nouveau, puis laisser arriver la réponse ancienne",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dernière saisie conservée, révision de base actualisée et état encore modifié si nécessaire",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Diagnostic ou export périmé",
+           ""
+          ]
+         ],
+         [
+          [
+           "Modifier séparément chaque entrée thermique, sa provenance, puis besoins et montants",
+           ""
+          ]
+         ],
+         [
+          [
+           "Empreinte couvrant les dépendances effectives ; résultat périmé ou appréciation reconstruite selon son contrat ; version du moteur identifiable",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Valeur absente assimilée à zéro",
+           ""
+          ]
+         ],
+         [
+          [
+           "Comparer absent, inconnu et zéro explicite",
+           ""
+          ]
+         ],
+         [
+          [
+           "Calcul partiel et donnée manquante visibles ; total complet seulement quand les entrées nécessaires sont connues",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Poste énergétique compté deux fois",
+           ""
+          ]
+         ],
+         [
+          [
+           "Décomposer l'existant et la cible par usage avant de totaliser",
+           ""
+          ]
+         ],
+         [
+          [
+           "Chaque consommation comptée une seule fois ; hypothèses d'eau chaude et de chauffage explicites",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Tests verts trop faibles",
+           ""
+          ]
+         ],
+         [
+          [
+           "Exécuter la régression sur l'ancienne version dans une copie isolée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Échec pour le défaut visé, puis réussite sur le correctif ; un échec d'environnement ne vaut pas détection du défaut",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "8. Portée des preuves et arrêt de séance",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une preuve porte date, version et environnement. Distinguer code préparé, tests locaux, contrôle continu, préversion disponible, recette utilisateur et publication effective. Pour une évolution de base : migration préparée, simulation exécutée, simulation réussie et application effective sont quatre états distincts. Une base simulée ne valide pas une base réelle ; un contrôle continu vert ne prouve ni une migration appliquée ni un parcours utilisateur validé. Qualifier aussi la relecture : une passe du même auteur n'est pas une revue indépendante.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant de compiler, identifier les sorties réseau des extensions de construction, même si la télémétrie du framework est désactivée. L'absence de configuration d'exécution ne prouve pas l'absence de télémétrie de compilation. Un refus de la plateforme arrête l'action concernée : ne pas contourner, poursuivre les vérifications indépendantes autorisées et nommer la couverture manquante.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "À l'arrêt demandé, clôturer le périmètre réellement prouvé et reporter nommément les validations restantes. Ne pas transformer une correction terminée en produit entièrement validé. Les incidents et leurs preuves restent dans le fichier canonique des leçons, hors de la technologie neutre ; cette grille n'active aucun contrôle permanent et n'élargit aucun droit.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -7037,14 +7236,14 @@ export default {
   }
  ],
  "sources": {
-  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "0b75676af154b41f034a55f9a122f9d2aa37e22b8920b0877867cfe4a953e299",
-  "anti-pattern/MISE-EN-SERVICE.md": "d6ec1f9ab425051b41419ad0611acf2f243c5d7ba9089819172bcccd9314b59f",
-  "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
-  "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
-  "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
+  "anti-pattern/TECHNO.md": "0ebb8695bf6749e87de7e55d6415fdfc4d42ceea5c472ae3de0bd0213d3e44c7",
+  "anti-pattern/MISE-EN-SERVICE.md": "4392446fad4e37d8420f5d42fa0798a4c2c5e0b6e79d90136ff85c51d6614de0",
+  "pilotage-back-office/badge.json": "c4a597d5042090c31bf4cd4d84fb9c34d331a171c85d203161b33b1f682fa0da",
+  "pilotage-back-office/TECHNO.md": "16f422a86faf885ff740c5a8e1d850a26327047315248f1db2604a06b33e41ae",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "7a30e8408f654340b42f0e5b45262abcbd7d4a50627ed649dbcac75e63ffd4e1",
+  "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
+  "renodevis/TECHNO.md": "10ef808c4ca50e7cf74ed23dbdb23f4d77719cd93643d1583ea642bf14e9b419",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "30eb3d01bbb91734184b314c44aa4eefc183c1419f7ce489196d649991c72df9"
  }
 };
