@@ -65,7 +65,7 @@ const JOURNAL_UPDATE_FIELDS = ['note', 'prochaine_etape', 'relance_at', 'relance
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function isUuid(value) {
   return typeof value === 'string' && UUID_RE.test(value);

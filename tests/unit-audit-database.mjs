@@ -2,6 +2,7 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync, readdirSync } from 'node:fs';
 import assert from 'node:assert/strict';
+import { DEPENDANCES } from '../api/_lib/leo-execution.js';
 
 const db=new PGlite();
 const uuid=(n)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
@@ -19,6 +20,26 @@ try {
     // PGlite ne fournit pas le paquet pgcrypto, inutilisé par les migrations.
     const sql=readFileSync(new URL(file,dir),'utf8').replace('create extension if not exists pgcrypto;','');
     await db.exec(sql);
+  }
+  // Le relevé des dépendances du défaire (DEPENDANCES, leo-execution.js) est
+  // MESURÉ sur le moteur, pas seulement relu dans les migrations par regex
+  // (unit-leo-defaire) : chaque clé étrangère qui vise une table que Léo peut
+  // supprimer, appariée par rang conkey/confkey, colonne appariée à `id`
+  // seulement (owner_id des clés scellées écarté), dédoublonnée. Posé le
+  // 23/10/2026 avec network_nodes (proposer_contact) : 17 clés, 0 écart.
+  {
+    const cibles = Object.keys(DEPENDANCES);
+    const { rows } = await db.query(`
+      select distinct c.confrelid::regclass::text as cible, c.conrelid::regclass::text as source, a.attname as colonne
+        from pg_constraint c
+        join unnest(c.conkey, c.confkey) with ordinality as k(att, fatt, ord) on true
+        join pg_attribute a  on a.attrelid  = c.conrelid  and a.attnum  = k.att
+        join pg_attribute fa on fa.attrelid = c.confrelid and fa.attnum = k.fatt
+       where c.contype = 'f' and fa.attname = 'id' and c.confrelid::regclass::text = any($1)`, [cibles]);
+    const mesure = rows.map((r) => `${r.cible}<-${r.source}.${r.colonne}`).sort();
+    const releve = Object.entries(DEPENDANCES).flatMap(([c, d]) => d.map((x) => `${c}<-${x.table}.${x.colonne}`)).sort();
+    assert.ok(mesure.length >= 17, 'non-vacuité : le moteur voit les clés étrangères');
+    assert.deepEqual(mesure, releve, 'DEPENDANCES = pg_constraint sur les migrations rejouées');
   }
   await db.exec(`grant usage on schema public to authenticated, anon;
     grant select,insert,update,delete on all tables in schema public to authenticated, anon;
@@ -77,5 +98,5 @@ try {
   const reopened=(await db.query(`select id,owner_id,scenario_advenu_id,advenu_le from public.situations where id='${S}'`)).rows[0];
   assert.equal(reopened.id,S);assert.equal(reopened.owner_id,A);
   assert.equal(reopened.scenario_advenu_id,null);assert.equal(reopened.advenu_le,null);
-  console.log('DATABASE audit OK : migrations, RLS de deux comptes, références, suppressions et rollback du dénouement');
+  console.log('DATABASE audit OK : migrations, dépendances du défaire mesurées (pg_constraint), RLS de deux comptes, références, suppressions et rollback du dénouement');
 } finally {await db.close();}

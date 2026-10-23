@@ -1,4 +1,5 @@
 import { INDEX_POINTS_DE_VUE } from './leo-points-de-vue.mjs';
+import { EMAIL_RE } from './validate.js';
 
 // Voix de Léo (boucle L2) — briques PURES : bornes de la conversation,
 // prompt système Jarvis par quadrant, validation d'entrée, extraction de la
@@ -340,7 +341,7 @@ const CATALOGUE = {
       nom: { max: 200, requis: true, description: 'Le nom du contact ou de la société, fidèle à la dictée.' },
       type: { max: 10, requis: true, enum: ['artisan', 'partenaire', 'lead'], description: 'artisan, partenaire ou lead — tel que Paul le dit, jamais déduit.' },
       telephone: { max: 30, description: 'Le numéro dicté, tel quel (optionnel).' },
-      email: { max: 200, description: 'L’adresse mail dictée, telle quelle (optionnel).' },
+      email: { max: 200, email: true, description: 'L’adresse mail dictée, telle quelle (optionnel).' },
       ville: { max: 200, description: 'La ville (optionnel).' },
       apporteur: { max: 160, description: 'Qui a donné le contact (« par Hugo »), si Paul le dit (optionnel).' },
       note: { max: 1800, description: 'Note dictée sur le contact (optionnel).' }
@@ -574,6 +575,10 @@ export function validerProposition(nomOutil, args, quadrant) {
     const nette = valeur.trim();
     if (!nette) continue; // optionnel vide : ignoré (le requis vide est rattrapé plus bas)
     if (attendu.date && !dateReelle(nette)) return { ok: false };
+    // Mail : la même forme que la route (validateNode, EMAIL_RE) — une dictée
+    // « brice arobase soli » est refusée ICI, pas découverte en 400 au POST
+    // (relecture Codex du 23/10 sur proposer_contact).
+    if (attendu.email && !EMAIL_RE.test(nette)) return { ok: false };
     // Enum : une valeur hors liste est un outil qui invente — rejet total,
     // jamais une correction silencieuse (même règle que les surnuméraires).
     if (attendu.enum && !attendu.enum.includes(nette)) return { ok: false };

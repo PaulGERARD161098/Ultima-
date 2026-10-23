@@ -326,7 +326,14 @@
     serment_liens: 'une passerelle y a été posée',
     scenario_liens: 'une passerelle y a été posée',
     scenarios: 'un scénario y est né',
-    situations: 'il a été marqué « advenu »'
+    situations: 'il a été marqué « advenu »',
+    // network_nodes (23/10/2026, proposer_contact) : ce qui retient une fiche.
+    journal: 'une note ou une relance y a été posée depuis',
+    network_edges: 'une relation y a été tissée',
+    intendant_chantiers: 'un chantier de l’intendant s’y rattache',
+    intendant_besoins: 'un besoin le nomme fournisseur',
+    talent_refs_reseau: 'une référence de talent le vise',
+    personne_noeuds: 'une personne y a été rattachée'
   };
   function messageRefusDefaire(resultat) {
     var erreur = resultat && resultat.corps && typeof resultat.corps.error === 'string'
@@ -334,7 +341,10 @@
     var propre = function (table, cle) { return Object.prototype.hasOwnProperty.call(table, cle); };
     if (erreur.indexOf('Lié : ') === 0 && propre(NE_SUR_LA_CIBLE, erreur.slice(6))) {
       return 'Je ne peux pas le défaire : ' + NE_SUR_LA_CIBLE[erreur.slice(6)] +
-        '. Le défaire l’effacerait avec. Rien n’a été retiré.';
+        '. Le défaire l’effacerait avec. Rien n’a été retiré.' +
+        (resultat.corps.error === 'Lié : journal' || resultat.corps.error === 'Lié : network_edges' ||
+         resultat.corps.error === 'Lié : personne_noeuds'
+          ? ' Pour retirer la fiche, passe par RIVEN.' : '');
     }
     var connus = {
       'Retouchée depuis': 'Je ne peux pas le défaire : tu l’as retouché depuis, et le défaire effacerait ta retouche. Rien n’a été retiré.',
@@ -477,6 +487,11 @@
       // troisième ne naît pas sur un nom nu (relecture adversariale du 23/10).
       var existant = resoudreRef(args.nom, candidats.cibles);
       if (existant.ok || existant.raison === 'ambigu') { return { ok: false, raison: 'doublon' }; }
+      // Le mail a la forme de la route (validateNode, EMAIL_RE) : refusé ici
+      // plutôt que découvert en 400 après le clic.
+      if (args.email !== undefined && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(args.email))) {
+        return { ok: false, raison: 'invalide' };
+      }
       var bornesContact = { telephone: 30, email: 200, ville: 200, apporteur: 160, note: 1800 };
       var clesContact = Object.keys(bornesContact);
       for (var ci = 0; ci < clesContact.length; ci++) {
@@ -1078,6 +1093,12 @@
     // l'essence d'avant le premier — et l'effacerait sans bruit ; une seconde
     // idée reprendrait le même numéro ADR (409). Appelée sur les deux chemins.
     function apresEcriture(proposition, plan, data) {
+      // L'hôte (app.js pour RIVEN) peut recharger son état : la fiche née par
+      // la voix paraît dans la liste et sur le ciel sans recharger la page.
+      // Optionnel, jamais bloquant : une erreur de l'hôte ne touche pas la bulle.
+      if (typeof voix.surEcriture === 'function') {
+        try { voix.surEcriture(proposition.outil, plan, data); } catch (e) { /* hôte */ }
+      }
       var c = voix.candidats;
       if (!c || typeof c !== 'object') { return; }
       if (plan.methode === 'PATCH' && plan.corps && Array.isArray(c.idees)) {
@@ -1103,6 +1124,9 @@
     // la mémoire de la page ce que `apresEcriture` y avait ajouté — sans quoi
     // le tour suivant viserait une cible qui n'existe plus.
     function apresDefaire(proposition, cibleId) {
+      if (typeof voix.surDefaire === 'function') {
+        try { voix.surDefaire(proposition.outil, cibleId); } catch (e) { /* hôte */ }
+      }
       var c = voix.candidats;
       if (!c || typeof c !== 'object') { return; }
       var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations', proposer_contact: 'cibles' }[proposition.outil];

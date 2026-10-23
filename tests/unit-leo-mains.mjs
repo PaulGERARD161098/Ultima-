@@ -454,6 +454,9 @@ verdicts.contactBornes =
   validerProposition('proposer_contact', { ...CONTACT, telephone: '0'.repeat(31) }, 'riven').ok === false &&
   validerProposition('proposer_contact', { ...CONTACT, email: 'x'.repeat(201) }, 'riven').ok === false &&
   validerProposition('proposer_contact', { ...CONTACT, note: 'x'.repeat(1801) }, 'riven').ok === false &&
+  // Le mail a la forme de la route : une dictée « brice arobase soli » est refusée.
+  validerProposition('proposer_contact', { ...CONTACT, email: 'brice arobase soli' }, 'riven').ok === false &&
+  validerProposition('proposer_contact', { ...CONTACT, email: 'brice@soli' }, 'riven').ok === false &&
   validerProposition('proposer_contact', { ...CONTACT, statut: 'actif' }, 'riven').ok === false &&
   validerProposition('proposer_contact', { ...CONTACT, node_id: 'u' }, 'riven').ok === false;
 verdicts.contactReformule = reformulerProposition({ outil: 'proposer_contact', args: CONTACT }) ===
@@ -486,12 +489,15 @@ verdicts.contactPlanRefus = (() => {
   const typeHorsListe = construirePlanExecution({ outil: 'proposer_contact', args: { nom: 'Soli', type: 'chantier' } }, C);
   const telTropLong = construirePlanExecution({ outil: 'proposer_contact',
     args: { nom: 'Soli', type: 'lead', telephone: '0'.repeat(31) } }, C);
+  const mailDicte = construirePlanExecution({ outil: 'proposer_contact',
+    args: { nom: 'Soli', type: 'lead', email: 'brice arobase soli' } }, C);
   return doublonExact.ok === false && doublonExact.raison === 'doublon' &&
     doublonInclus.ok === false && doublonInclus.raison === 'doublon' &&
     doublonAmbigu.ok === false && doublonAmbigu.raison === 'doublon' &&
     typeAbsent.ok === false && typeAbsent.raison === 'invalide' &&
     typeHorsListe.ok === false && typeHorsListe.raison === 'invalide' &&
-    telTropLong.ok === false && telTropLong.raison === 'invalide';
+    telTropLong.ok === false && telTropLong.raison === 'invalide' &&
+    mailDicte.ok === false && mailDicte.raison === 'invalide';
 })();
 
 // ---------- N. Alias de quadrant : 'traveler' → 'riven' (renommage 2026-08-11) ----------

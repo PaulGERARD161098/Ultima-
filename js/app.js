@@ -346,6 +346,18 @@
               })
             },
             notifier: function (message) { toast(message, 'succes'); },
+            // proposer_contact (23/10/2026) : une fiche née par la voix, ou
+            // défaite, recharge l'état comme le formulaire le fait — la liste et
+            // le ciel la montrent sans recharger la page. Même chemin que
+            // sauverNoeud : chargerDonnees puis rafraichir, rien de neuf.
+            surEcriture: function (outil) {
+              if (outil !== 'proposer_contact') { return; }
+              chargerDonnees().then(rafraichir).catch(function () { /* la bulle l'a déjà dit */ });
+            },
+            surDefaire: function (outil) {
+              if (outil !== 'proposer_contact') { return; }
+              chargerDonnees().then(rafraichir).catch(function () { /* idem */ });
+            },
             // Les YEUX de Léo sur RIVEN (boucle ①, 2026-08-01) : l'état borné
             // du quadrant, calculé sur les données DÉJÀ chargées par la page.
             etat: etatRiven()

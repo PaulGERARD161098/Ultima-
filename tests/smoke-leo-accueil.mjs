@@ -398,18 +398,26 @@ await pageV.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
 
 // Ouvre un cartouche AVEC voix (jeton de test — aucune vraie session requise).
 // `candidats` optionnel (L2b) : résolution locale des cibles dictées.
-async function ouvrirCartoucheVoix(cle, candidats) {
+async function ouvrirCartoucheVoix(cle, candidats, avecHote) {
   await pageV.evaluate((params) => {
     document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
     window.sessionStorage.clear();
+    const voix = { quadrant: 'riven', jeton: 'jeton-de-test', candidats: params.candidats };
+    // proposer_contact (23/10/2026) : l'hôte du quadrant est prévenu d'une
+    // création et d'un défaire — ici tracés, pour prouver l'appel et ses arguments.
+    if (params.avecHote) {
+      window.__hote = { ecritures: [], defaires: [] };
+      voix.surEcriture = (outil, plan, data) => window.__hote.ecritures.push({ outil, url: plan && plan.url, id: data && data.id });
+      voix.surDefaire = (outil, cibleId) => window.__hote.defaires.push({ outil, cibleId });
+    }
     window.UltimaLeo.accueillirQuadrant({
       quadrant: params.cle,
       blason: 'boussole',
       salutation: 'Scénario voix.',
       sections: [{ titre: 'Où on en est', lignes: ['—'] }],
-      voix: { quadrant: 'riven', jeton: 'jeton-de-test', candidats: params.candidats }
+      voix
     });
-  }, { cle, candidats });
+  }, { cle, candidats, avecHote: Boolean(avecHote) });
 }
 
 // C1. Réponse OK : Bearer + corps conformes, bulles Paul puis Léo.
@@ -761,7 +769,7 @@ verifier('Proposition malformée : la saisie reste utilisable',
     return route.fulfill({ status: 200, contentType: 'application/json',
       body: JSON.stringify({ ok: true, data: { id: NOUVEAU, nom: 'Brice Papon' } }) });
   });
-  await ouvrirCartoucheVoix('contact-ok', CANDIDATS_TEST);
+  await ouvrirCartoucheVoix('contact-ok', CANDIDATS_TEST, true);
   await pageV.locator('.leo-voix-champ').fill('Ajoute Brice Papon à Riven, partenaire, 06 72 15 77 51, contact par Hugo.');
   await pageV.locator('.leo-voix-envoyer').click();
   await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
@@ -780,6 +788,9 @@ verifier('Proposition malformée : la saisie reste utilisable',
     JSON.stringify(requetesNoeuds[0]?.corps));
   verifier("CONTACT : message d'issue « Action exécutée »",
     ((await pageV.locator('.leo-bulle-issue').last().textContent()) || '') === '[Action exécutée : ' + REFORMULATION_CONTACT + ']');
+  verifier('CONTACT : l’hôte du quadrant est prévenu de la création (outil, route, identifiant)',
+    JSON.stringify(await pageV.evaluate(() => window.__hote.ecritures)) ===
+    JSON.stringify([{ outil: 'proposer_contact', url: '/api/reseau/nodes', id: NOUVEAU }]));
 
   // Tour suivant : « rappelle-le lundi » — la fiche née est une cible résolue
   // localement, par son identifiant rendu par l'API, sans recharger la page.
@@ -1166,6 +1177,9 @@ verifier('B1 ⑤ — le défaire part APRÈS la réponse de la clôture',
 for (const [nom, defaire, attendu] of [
   ['lié', (route) => route.fulfill({ status: 409, contentType: 'application/json',
     body: JSON.stringify({ ok: false, error: 'Lié : flammes' }) }), 'une flamme y est née depuis'],
+  // network_nodes (23/10/2026) : une fiche retenue par une relance le dit, et renvoie à RIVEN.
+  ['lié-journal', (route) => route.fulfill({ status: 409, contentType: 'application/json',
+    body: JSON.stringify({ ok: false, error: 'Lié : journal' }) }), 'une note ou une relance y a été posée depuis. Le défaire l’effacerait avec. Rien n’a été retiré. Pour retirer la fiche, passe par RIVEN.'],
   ['retouché', (route) => route.fulfill({ status: 409, contentType: 'application/json',
     body: JSON.stringify({ ok: false, error: 'Retouchée depuis' }) }), 'tu l’as retouché depuis'],
   ['perdu', (route) => route.abort('failed'), 'Je ne sais pas si c’est défait'],

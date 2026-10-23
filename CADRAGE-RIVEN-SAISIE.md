@@ -379,3 +379,28 @@ Ce qui est posé, sans migration ni route nouvelle :
 contact dicté par Paul, lu dans RIVEN et dans `leo_ecritures`, puis une relance
 posée dessus au tour suivant.
 
+**Relecture Codex du 23/10 (six constats, `bf0703a`) et ce qu'il en est fait :**
+- *P1 — « garder la création de contact en orange »* : la ligne Orange du §11
+  (« changement touchant un client, un euro ou un état métier réel ») et le §12
+  (« la PII entre dans l'anneau vert » : journal et relance écrivent déjà dans
+  le réseau commercial, sous le double critère réversible + visible) se lisent
+  ensemble. Une fiche `prospect` née par la voix est réversible (suppression
+  sans cascade tant qu'elle est neuve) et visible (journal + bulle + défaire) :
+  elle relève du §12, comme la relance. **La couleur est la décision de Paul du
+  23/10 (« go, vert »), prise avec l'alternative orange nommée.** Ce paragraphe
+  est la réconciliation écrite que le contrat exige ; le fil Codex reste ouvert
+  tant que Paul ne l'a pas lu.
+- *P2 — mail malformé accepté puis refusé en 400* : corrigé, `EMAIL_RE` de la
+  route appliqué dans `validerProposition` et dans le gabarit.
+- *P2 — la requête du relevé ne rend pas « sept lignes »* : exact ; la requête
+  juste (appariement par rang, colonne `id`, distinct) est dans le relevé, et
+  `unit-audit-database` la joue désormais sur PGlite contre `DEPENDANCES`.
+- *P2 — doublon jugé sur l'instantané chargé* : non corrigé. Le même instantané
+  sert déjà toutes les `*_ref` ; une fiche doublée par un autre onglet est
+  visible et se retire dans RIVEN ; une unicité serveur changerait le contrat
+  du formulaire RIVEN, hors de cette boucle. À trancher par Paul.
+- *P2 — la fiche née n'apparaît pas dans RIVEN avant rechargement* : corrigé,
+  l'hôte reçoit `surEcriture` / `surDefaire` et recharge comme le formulaire.
+- *P2 — « Lié : journal » sans phrase* : corrigé, les sept dépendances de
+  `network_nodes` ont leur phrase, avec le renvoi vers RIVEN.
+
