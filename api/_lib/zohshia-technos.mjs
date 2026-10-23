@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-13",
+ "publie_le": "2026-10-23",
  "technos": [
   {
    "id": "renodevis",
@@ -6705,9 +6705,261 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "anti-pattern",
+   "ordre": 3,
+   "badge": "Anti-pattern — approches croisées",
+   "etat": "Méthode documentée · application à éprouver par sujet",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Résultat et rétrocadrage",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Toujours aborder un même sujet par au moins deux approches réellement différentes. Partir du résultat utile attendu, définir sa preuve de réussite, puis remonter aux données, hypothèses et étapes nécessaires. Chercher ce qui pourrait invalider la conclusion. Garder deux angles brefs pour une petite tâche ; approfondir selon le risque.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La méthode s'applique aux calculs, diagnostics, décisions et méthodes de travail. Elle prévient les automatismes, les erreurs de dénominateur, les validations circulaires et les tentatives répétées sans information nouvelle. Elle ne remplace pas les règles métier.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Deux approches et leurs dépendances",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Calcul : détail depuis les entrées puis contrôle inverse, conservation, ordre de grandeur ou rapprochement à une référence distincte. Travail : chemin depuis les moyens puis chemin remonté depuis la preuve attendue. Diagnostic : hypothèse principale puis cause concurrente et observation qui les départage. Livraison : parcours normal puis échec ou limite pertinente en environnement isolé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préciser ce qui change entre les approches : raisonnement, source ou observation. Une reformulation, un autre outil ou un autre modèle exécutant la même méthode ne suffit pas. Nommer les hypothèses communes : un contrôle inverse ne prouve ni le bon tarif ni la bonne convention métier. Ajouter un troisième angle pour un enjeu matériel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Calculs et écarts",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Définir grandeur, dénominateur, unités, période, base hors taxes ou toutes taxes comprises, formule autorisée, provenance et arrondis avant calcul. Définir la tolérance avant comparaison, la justifier et ne pas la desserrer après résultat. Ne stocker ici aucune formule ou valeur propre à un professionnel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Comparer les résultats et leurs hypothèses. Ne pas moyenner des réponses incompatibles ni faire voter les outils. Résoudre la cause de l'écart puis refaire les contrôles affectés. Suspendre seulement la conclusion ou l'action dépendante ; poursuivre le travail indépendant autorisé. Une deuxième tentative sans information nouvelle exige un changement d'hypothèse ou de méthode.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Contrat réutilisable et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le dossier de preuve décrit le résultat, le critère, les approches, leurs dépendances communes, les observations sourcées, l'écart, sa résolution et les limites. Le collecteur collecter.mjs vérifie seulement sa structure et ses déclarations ; il ne vérifie pas la vérité des sources, l'indépendance réelle du raisonnement ou la justesse métier. Un résultat structurel favorable ne constitue pas une validation du calcul ou du produit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La fiche et son badge utilisent le mécanisme de publication existant. Aucun moteur métier, service, base, compte ou dépense supplémentaire. Les preuves propres à une instance restent dans son dossier privé, hors de cette technologie neutre. La compétence de travail applique le protocole ; le présent contrat décrit sa version réutilisable sans donnée client.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "checklist",
+     "titre": "Avant livraison",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Avant livraison",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Nommer résultat, preuve de réussite, périmètre et données nécessaires.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Vérifier deux approches différentes et documenter les dépendances communes.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Définir unités, conventions et tolérance avant comparaison.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Conserver au moins une observation sourcée par approche ; qualifier mesuré, déclaré, inféré et non vérifié.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Expliquer l'écart et suspendre la conclusion dépendante tant qu'il reste non résolu.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Vérifier un cas limite ou défavorable pertinent et les limites restantes.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une seconde approche inaccessible rend la vérification partielle. Des résultats convergents avec une hypothèse commune fragile restent limités par celle-ci. Ne jamais annoncer une confiance chiffrée sans mesure justifiée.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Mise en service",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Mise en service",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Charger la compétence de travail anti-pattern dans le contexte autorisé. Appliquer le protocole au sujet existant, sans lancer un nouveau projet. Conserver la preuve avec sa version et les sources propres à l'instance. Utiliser collecter.mjs sur un dossier privé seulement pour vérifier les champs requis ; le contrôle reste déclaratif et sans appel externe.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rééprouver sur des données fictives : ambiguïté de convention, pourcentage pondéré, source vide et deux approches identiques présentées comme différentes. Vérifier qu'un écart non résolu interdit le verdict structurel favorable. Conserver une preuve de bon fonctionnement et une preuve de refus.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Livraison et maintien",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Distinguer compétence enregistrée, fichiers poussés, publication générée et affichage réel. Une préparation sur branche ne prouve pas la mise en ligne. La présence de la règle ne constitue pas une surveillance permanente ni un verrou externe effectif.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Mettre à jour les preuves affectées quand les méthodes, données ou conventions changent. Arrêter la vérification lorsque les critères sont éprouvés et les écarts résolus ou explicitement qualifiés. Dépense, opération destructive, migration réelle et envoi suivent les autorisations existantes ; la méthode n'ajoute aucun droit.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
+  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
+  "anti-pattern/TECHNO.md": "a32595080024c2131391603bfa97cab6c4c2091f9bae1f9a099e49367a6edb2f",
+  "anti-pattern/MISE-EN-SERVICE.md": "2dc49b76a6400b67265aba736f3b71af234cdbde583b7d7a919440794840cc8f",
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
