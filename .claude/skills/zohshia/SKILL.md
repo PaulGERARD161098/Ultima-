@@ -62,6 +62,10 @@ d'artisan, de client, de fournisseur ni de marque, et sans aucune valeur propre
 - ⛔ **Croire le plan sans le remesurer** : un plan d'hier se lit exactement
   comme un plan juste.
 
+## Approches croisées
+
+Le dossier `zohshia/anti-pattern/` porte une méthode transversale, sans base ni moteur métier : `TECHNO.md`, `MISE-EN-SERVICE.md`, `collecter.mjs` et un badge. Charger `.claude/skills/anti-pattern/SKILL.md` pour l'appliquer. Le collecteur vérifie la structure des déclarations, sans certifier leur vérité ; ne pas présenter son résultat comme une preuve métier.
+
 ## Ajouter un élément à ZOH SHIA
 
 Une technologie nouvelle entre sous `zohshia/<nom>/` avec la même forme : une

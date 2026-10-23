@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v106 2026-10-23 sha256:9ad3f3507442 -->
+<!-- lecons:empreinte v108 2026-10-23 sha256:9cd9f294e6f8 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,21 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UN RÉSULTAT COURANT EXIGE TOUTES SES DÉPENDANCES, PAS SEULEMENT SES CHIFFRES**
+*(2026-10-23, mon-dpe.fr, audit KELVIN).* L'empreinte ne couvrait pas toutes les
+entrées et provenances utilisées par les réserves ; l'export gardait une appréciation
+issue d'anciens besoins ou montants. Des frais de prêt absents étaient traités comme
+zéro, et une PAC air/air existante échappait à la déduction du cumulus lors du passage
+à une PAC assurant l'eau chaude. Conséquence constatée dans l'audit : résultats et
+exports susceptibles d'être présentés comme actuels ou complets à tort ; aucune perte
+financière réelle établie. Correctifs : version du moteur et empreinte étendues,
+appréciation reconstruite, total incomplet signalé, décomposition des usages corrigée.
+Contre-épreuve : nouveaux tests sur l'ancien code, puis suite corrigée verte.
+Preuve : `mon-dpe.fr` PR #256, code `6f4df327022ca0750e4b74d73998a2a232e121bd`.
+⇒ Avant d'accepter « courant » ou « total », relier chaque conclusion à ses entrées
+effectives et à leur provenance ; absent ne devient pas zéro, un usage ne se compte
+qu'une fois. Grille réutilisable : `Ultima-/zohshia/anti-pattern/TECHNO.md` §7.
 
 **UN DÉPLOIEMENT ABSENT N'EST PAS UN DÉPLOIEMENT IGNORÉ** *(2026-10-21)*. Un
 `ignoreCommand` qui saute un build laisse une trace : le déploiement existe, à l'état
@@ -676,6 +691,20 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE INTERFACE QUI CALCULE NE FAIT PAS DU NAVIGATEUR UNE SOURCE DE CONFIANCE**
+*(2026-10-23, mon-dpe.fr).* Le PUT du projet acceptait des résultats calculés et des
+champs protégés issus du navigateur : une classe fabriquée pouvait être conservée
+comme résultat courant. Une réponse de sauvegarde retardée écrasait aussi la saisie
+arrivée entre-temps et annonçait un faux état enregistré. Conséquence : deux défauts
+d'intégrité reproduits, sans exploitation réelle établie. Correction serveur avant
+écriture et compteur d'édition côté interface, avec régressions de requête forgée et
+réponse retardée. Sept tests de régression échouaient sur l'ancien ensemble de code ;
+les 1 275 tests corrigés passent en local. Source : PR #256, tête `820f064`,
+CI réussie du 23/10/2026 :
+https://github.com/PaulGERARD161098/mon-dpe.fr/actions/runs/39937089776.
+⇒ Éprouver la frontière par la requête directe et l'asynchronisme par une édition
+pendant le vol ; protéger la révision serveur sans écraser le brouillon plus récent.
 
 **UN GARDE-FOU SE MESURE SUR DES DONNÉES DE TAILLE ET DE FORME RÉELLES** *(2026-10-14, RenoDevis + mon-dpe.fr)*.
 Trois garde-fous livrés le même jour passaient leurs tests sans tenir. Une relecture
@@ -1855,6 +1884,20 @@ Production ».
 
 ## 4. Conduire une boucle
 
+**LA COMPILATION PEUT ÉMETTRE MÊME SI L'APPLICATION N'A PAS DE TÉLÉMÉTRIE CONFIGURÉE**
+*(2026-10-23, mon-dpe.fr).* Malgré la télémétrie du framework désactivée et les
+sources non envoyées, l'extension de compilation gardait sa propre télémétrie active.
+La revue automatique a bloqué le suivi du build local, puis l'a refusé à nouveau
+après lecture du code de l'extension et accord général de Paul : destination et
+contenu transmis restaient jugés insuffisamment établis et autorisés. Coût constaté :
+deux suivis bloqués ; compilation locale complète non attestée. Aucun contournement
+après le second refus. La CI GitHub du SHA `820f064` a réussi séparément, préversion
+READY ; recette sur base réelle, 3D et revue indépendante restent non validées.
+⇒ Inventorier les sorties réseau des extensions avant le build. Un accord général
+ne lève pas à lui seul un refus de plateforme ; poursuivre les contrôles indépendants
+autorisés et distinguer la preuve locale, la CI, la préversion et la recette.
+Source : `mon-dpe.fr` PR #256, 23/10/2026 ; aucune migration ni fusion effectuée.
+
 **UNE SESSION LANCÉE SE RELIT À SON PREMIER ÉVÉNEMENT, PAS À SON ANNONCE** *(2026-10-19)*.
 J'ai lancé (`create_session`, 19:09:57) une session « migration `leo_appels` » avec pour source la
 branche `claude/ci-couts-md-seuls` — que Paul avait fusionnée (#400) et dont la branche avait été
@@ -2666,3 +2709,4 @@ paramètre d'outil. L'écrire par un outil d'écriture distante aurait fait
 transiter 22 Ko **sept fois**, pour un fichier qu'aucun de nous n'avait besoin
 de relire. *Un octet qui passe par le fil coûte ; un octet que `git` déplace de
 disque à disque ne coûte rien.*
+

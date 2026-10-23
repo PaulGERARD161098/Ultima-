@@ -473,6 +473,10 @@ route.
 - les **PR périmées sont fermées** : RenoDevis #390 et #387, RenoBoost #606 et #602,
   Ultima #396.
 
+**Rendue par Paul le 23/10** (corps de RenoDevis #419) : la **V2 RenoDevis est publiée**
+(#419 fusionnée le 23/10 à 10:33 UTC, « Paul a demandé explicitement la publication »).
+Elle lève le gel du 22/10 pour la V2 seule ; C, N et D restent gelés (règle 5 du §3).
+
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
 

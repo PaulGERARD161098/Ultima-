@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-23",
-    "commit": "594175cb677962cbd116db52485491f14f0e4c9c",
-    "quoi": "22–23/10 : audit de la chaîne RB (AUDIT-2026-10-22-chaine-RB.md) fusionné (#410, 594175c), avec #394 (fc24de7) et RenoDevis #372 (c139e64), chacune sur go SHA de Paul ; 5 PR périmées fermées ; V2 RenoDevis gelée ; relances fermées jusqu'à A3. A6a : Paul a posé la clé live et les webhooks réels le 22/10 au soir ; production de reno-devis-final redéployée le 23/10 10:09 UTC (dpl_Dd48n5HoKLKg3syWw7q4TTXEHp4h) ; preuve attendue au battement du 24/10 06:30 UTC. Leçon v106 (vérifier un redéploiement sur sa cible)."
+    "commit": "4537e75991942dee44ac6b7fb326e0dfc33bdb54",
+    "quoi": "22–23/10 : audit de la chaîne RB (AUDIT-2026-10-22-chaine-RB.md) fusionné (#410, 594175c), avec #394 (fc24de7) et RenoDevis #372 (c139e64), chacune sur go SHA de Paul ; 5 PR périmées fermées ; V2 RenoDevis gelée le 22/10 puis publiée le 23/10 sur demande de Paul (RenoDevis #419) ; relances fermées. A6a : Paul a posé la clé live et les webhooks réels le 22/10 au soir ; production de reno-devis-final redéployée le 23/10 10:09 UTC (dpl_Dd48n5HoKLKg3syWw7q4TTXEHp4h) ; preuve attendue au battement du 24/10 06:30 UTC. Leçon v106 (vérifier un redéploiement sur sa cible)."
   },
   "prochaine_action": "Chaîne RB : lire battement:rr-stripe-embarquement après le 24/10 06:30 UTC (attendu test=false, remplaces=2) ; si oui, A6b — Matthieu termine son dossier Stripe (identité, IBAN). Puis finir les boucles ouvertes dans l'ordre de AUDIT-2026-10-22-chaine-RB.md §5.",
   "bloque_par": [

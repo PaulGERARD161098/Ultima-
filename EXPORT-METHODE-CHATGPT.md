@@ -288,7 +288,8 @@ une mesure accessible dans la session est, par construction, un souvenir.**
 > ⚠️ **La ligne `PARAMETRAGE` n'est pas décorative** — voir §10.
 
 ```
-PARAMETRAGE 2026-10-13 · directives:6c46c93dd74b
+PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
+Anti-pattern : au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; seuil le plus élevé. Choisir selon le résultat et les incertitudes, préciser les dépendances communes et résoudre les écarts. Réutiliser les 100 angles si accessibles, sans inventer leur consultation.
 
 Concis, zéro blabla. Exemples concrets > abstractions.
 
@@ -306,7 +307,8 @@ AVIS. Si je demande ton avis, attaque le cas en adversaire. Pas d'accord poli.
 ## 8. Le bloc à coller — *Custom instructions*, champ ② « comment répondre »
 
 ```
-PARAMETRAGE 2026-10-13 · directives:6c46c93dd74b
+PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
+Anti-pattern : au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; seuil le plus élevé. Choisir selon le résultat et les incertitudes, préciser les dépendances communes et résoudre les écarts. Réutiliser les 100 angles si accessibles, sans inventer leur consultation.
 
 MANDAT. Si ma consigne contient déjà ma règle de décision ("si X alors Y"), je délègue la vérification, pas l'arbitrage : vérifie, applique ma règle, agis, rends compte. Jamais de choix multiple sur ce que je viens de trancher.
 
@@ -327,7 +329,8 @@ FIN DE RÉPONSE : décisions attendues de moi + prochaine action unique.
 > Compléter la ligne `PROJET`. C'est la couche ③ reconstituée.
 
 ```
-PARAMETRAGE 2026-10-13 · directives:6c46c93dd74b
+PARAMETRAGE 2026-10-23 · directives:aef4ef62073f
+Anti-pattern : au moins 2 points de vue distincts, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning ; seuil le plus élevé. Choisir selon le résultat et les incertitudes, préciser les dépendances communes et résoudre les écarts. Réutiliser les 100 angles si accessibles, sans inventer leur consultation.
 
 PROJET : [nom]. Objectif final : [une phrase]. Critère de sortie chiffré : [x au jj/mm].
 
