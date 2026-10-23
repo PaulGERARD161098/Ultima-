@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v108 2026-10-23 sha256:9cd9f294e6f8 -->
+<!-- lecons:empreinte v109 2026-10-23 sha256:2ddb13ec1746 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2584,6 +2584,22 @@ copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
 jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
 écrite — hors de `Ultima-/finubar/depots.json`, fork partagé avec un tiers.
+
+**UNE BRANCHE ANCIENNE QUI REÇOIT `main` SE RELIT PAR SES APPELANTS, PAS PAR SES CONFLITS**
+*(2026-10-23, mon-dpe.fr #250)*. Ouverte le 14/10, #250 a reçu `main` le 23/10 :
+cinq conflits textuels ont été résolus, puis 1 315 tests et la CI sont passés au vert.
+La revue Codex a pourtant relevé deux défauts P1 que ni les conflits ni les tests
+ne montraient. Vitruve (#256, arrivé entre-temps) appelait `travauxProposables`,
+que #250 avait restreinte à une seule PAC. Et le catalogue changeait sans changer
+de version, alors que #256 s'en servait comme empreinte. Coût : un cycle de
+correction et deux go de fusion de plus. Le go a aussi dû être redemandé parce
+que `main` avait encore bougé entre la question et la réponse, et que la
+question annonçait l'ancienne tête comme cible. Les défauts n'ont pas atteint la
+production.
+⇒ Après avoir fusionné `main` dans une branche ancienne, chercher sur `origin/main`
+les appelants que `main` a AJOUTÉS pour chaque fonction et chaque donnée que la PR
+modifie, et attendre la revue automatique avant de fusionner. Relire la tête de
+`main` au moment de poser la question de fusion, puis juste avant de fusionner.
 
 ## 6. Économie
 
