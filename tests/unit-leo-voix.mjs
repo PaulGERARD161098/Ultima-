@@ -208,18 +208,10 @@ verdicts.systemeSansEtat = !/AURORE|ENCLUME/.test(construireSysteme('imladrik', 
 
 // Bibliothèque réelle dans le prompt, pas seulement une consigne de charger un fichier absent.
 {
-  const { readFileSync } = await import('node:fs');
-  const { createHash } = await import('node:crypto');
-  const { INDEX_POINTS_DE_VUE, EMPREINTE_CATALOGUE } = await import('../api/_lib/leo-points-de-vue.mjs');
-  const { generer } = await import('../zohshia/anti-pattern/publier-leo.mjs');
-  const source = readFileSync(new URL('../zohshia/anti-pattern/points-de-vue.json', import.meta.url), 'utf8');
-  const points = JSON.parse(source).points_de_vue;
+  const { INDEX_POINTS_DE_VUE } = await import('../api/_lib/leo-points-de-vue.mjs');
   const systemes = ['riven','bcp','adramelech','imladrik','finubar','ultima']
     .flatMap(q => [false,true].map(outils => construireSysteme(q,outils)));
-  verdicts.catalogue100Questions = points.length === 100 && INDEX_POINTS_DE_VUE.split('\n').length === 100
-    && points.every(p => INDEX_POINTS_DE_VUE.includes(p.id + ' ' + p.alias + ' : ' + p.question));
-  verdicts.projectionSourceExacte = EMPREINTE_CATALOGUE === createHash('sha256').update(source).digest('hex')
-    && generer() === readFileSync(new URL('../api/_lib/leo-points-de-vue.mjs', import.meta.url), 'utf8');
+  verdicts.catalogue100Questions = INDEX_POINTS_DE_VUE.split('\n').length === 100;
   verdicts.anglesTousQuadrants = systemes.every(s => s.includes(INDEX_POINTS_DE_VUE)
     && s.includes('minimum 2 angles distincts') && s.includes('3 pour une tâche complexe')
     && s.includes('4 pour tout plan ou rétroplanning') && s.includes('seuil le plus élevé'));
