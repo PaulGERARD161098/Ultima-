@@ -227,6 +227,7 @@ verdicts.systemeSansEtat = !/AURORE|ENCLUME/.test(construireSysteme('imladrik', 
     && s.includes('preuve manquante') && s.includes('sans imposer une vente')
     && s.includes('Un angle isolé peut être demandé') && s.includes('pas ici du lecteur Python'));
   verdicts.indexBorne = INDEX_POINTS_DE_VUE.length <= 16000;
+  verdicts.plansCompatiblesFormat = systemes.every(s => s.includes('plan ou un rétroplanning demandé') && s.includes('sans prétendre tout avoir traité'));
 }
 
 // ---------- Bilan ----------
