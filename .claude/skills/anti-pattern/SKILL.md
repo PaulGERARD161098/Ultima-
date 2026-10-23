@@ -5,7 +5,7 @@ description: Toujours croiser plusieurs approches réellement différentes d'un 
 
 # Anti-pattern — approches croisées
 
-Lire `zohshia/anti-pattern/TECHNO.md` pour la méthode neutre, puis `zohshia/anti-pattern/MISE-EN-SERVICE.md` pour les critères de réception. Appliquer toujours au moins deux angles différents, proportionnés à l'enjeu. Réutiliser les six directives et les règles métier ; préciser unités, dénominateurs et conventions avant calcul. Pour une ambiguïté financière, charger la compétence comptable disponible.
+Lire `zohshia/anti-pattern/TECHNO.md` pour la méthode neutre, puis `zohshia/anti-pattern/MISE-EN-SERVICE.md` pour les critères de réception. Appliquer au minimum 2 points de vue pour tout sujet, 3 pour une tâche complexe, 4 pour un plan ou rétroplanning. Retenir le seuil le plus élevé si les catégories se cumulent. Pour planifier, examiner résultat/utilisateur, exécution/moyens, calendrier/dépendances et risques/marges de manœuvre. Réutiliser les six directives et les règles métier ; préciser unités, dénominateurs et conventions avant calcul. Pour une ambiguïté financière, charger la compétence comptable disponible.
 
 Rétrocadrer depuis la preuve attendue, comparer les approches, qualifier les hypothèses communes et traiter les écarts avant la conclusion dépendante. Une reformulation ou un changement d'outil seul ne constitue pas une autre méthode. Un contrôle inverse ne valide pas la source des données. Signaler les contrôles manquants. Le collecteur du dossier reste un contrôle structurel déclaratif, sans valeur de certification métier.
 
