@@ -1,0 +1,1046 @@
+{
+  "version": 1,
+  "date": "2026-10-23",
+  "nature": "100 angles de travail ; ni experts autonomes ni garanties de vérité",
+  "gradation": {
+    "tache": 2,
+    "complexe": 3,
+    "plan": 4,
+    "retroplanning": 4
+  },
+  "points_de_vue": [
+    {
+      "id": "PDV-001",
+      "alias": "utilisateur",
+      "nom": "Utilisateur final",
+      "famille": "usagers",
+      "question": "Quelle tâche veut-il terminer dans sa situation réelle ?",
+      "preuve": "Un parcours observé et son résultat.",
+      "limite": "Ne pas inventer un entretien.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-002",
+      "alias": "debutant",
+      "nom": "Premier usage",
+      "famille": "usagers",
+      "question": "Que peut réussir une personne sans explication préalable ?",
+      "preuve": "Un essai sans aide et les hésitations relevées.",
+      "limite": "Ne pas prendre sa propre expertise pour celle du débutant.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-003",
+      "alias": "expert",
+      "nom": "Usage intensif",
+      "famille": "usagers",
+      "question": "Quelle friction devient coûteuse après cent répétitions ?",
+      "preuve": "Étapes et temps sur une série comparable.",
+      "limite": "Un raccourci expert peut gêner le débutant.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-004",
+      "alias": "terrain",
+      "nom": "Conditions terrain",
+      "famille": "usagers",
+      "question": "Que devient le parcours avec bruit, gants ou réseau faible ?",
+      "preuve": "Un essai dans les contraintes ciblées.",
+      "limite": "Une simulation ne prouve pas tout le terrain.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-005",
+      "alias": "accessibilite",
+      "nom": "Accessibilité",
+      "famille": "usagers",
+      "question": "Qui est empêché de lire, comprendre ou agir ?",
+      "preuve": "Parcours clavier, lecture et contrastes vérifiés selon le besoin.",
+      "limite": "Une vérification partielle ne vaut pas conformité globale.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-006",
+      "alias": "non-utilisateur",
+      "nom": "Non-utilisateur",
+      "famille": "usagers",
+      "question": "Pourquoi la personne visée n'adopte-t-elle pas la solution ?",
+      "preuve": "Motifs recueillis auprès de personnes qui ne l'utilisent pas.",
+      "limite": "Ne pas parler à la place des absents.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-007",
+      "alias": "confiance",
+      "nom": "Confiance perçue",
+      "famille": "usagers",
+      "question": "Quelle information manque pour accepter cette action ?",
+      "preuve": "Objection observée puis vérification de sa levée.",
+      "limite": "Rassurer ne remplace pas la preuve.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-008",
+      "alias": "autonomie",
+      "nom": "Autonomie",
+      "famille": "usagers",
+      "question": "Peut-on corriger une erreur sans appeler le support ?",
+      "preuve": "Parcours de correction et issue observée.",
+      "limite": "L'autonomie ne justifie pas des droits excessifs.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-009",
+      "alias": "parcours",
+      "nom": "Parcours complet",
+      "famille": "usagers",
+      "question": "À quelle transition l'utilisateur abandonne-t-il ?",
+      "preuve": "Étapes traversées et abandons localisés.",
+      "limite": "Une page isolée ne représente pas le parcours.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-010",
+      "alias": "usage-reel",
+      "nom": "Usage réel",
+      "famille": "usagers",
+      "question": "L'usage constaté correspond-il au besoin annoncé ?",
+      "preuve": "Comportements observés comparés aux déclarations.",
+      "limite": "Un comportement isolé ne généralise pas le besoin.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-011",
+      "alias": "payeur",
+      "nom": "Payeur",
+      "famille": "commerce",
+      "question": "Qui accepte de payer pour quel bénéfice vérifiable ?",
+      "preuve": "Décision d'achat ou objection datée.",
+      "limite": "Une intention ne prouve pas un paiement.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-012",
+      "alias": "prescripteur",
+      "nom": "Prescripteur",
+      "famille": "commerce",
+      "question": "Qu'est-ce qui rend la recommandation acceptable pour lui ?",
+      "preuve": "Conditions de recommandation explicites.",
+      "limite": "Recommander et acheter sont deux actes différents.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-013",
+      "alias": "proposition-valeur",
+      "nom": "Proposition de valeur",
+      "famille": "commerce",
+      "question": "Quel résultat utile justifie de changer d'habitude ?",
+      "preuve": "Comparaison concrète avant et après.",
+      "limite": "Une promesse ne prouve pas le gain.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-014",
+      "alias": "alternative-client",
+      "nom": "Alternative du client",
+      "famille": "commerce",
+      "question": "Comment le client se débrouille-t-il aujourd'hui ?",
+      "preuve": "Alternative réellement utilisée et coût de changement.",
+      "limite": "Le concurrent supposé peut être la mauvaise référence.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-015",
+      "alias": "conversion",
+      "nom": "Conversion",
+      "famille": "commerce",
+      "question": "À quelle étape une opportunité qualifiée cesse-t-elle d'avancer ?",
+      "preuve": "Entonnoir avec dénominateurs cohérents.",
+      "limite": "Un taux sans qualité des entrants trompe.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-016",
+      "alias": "retention",
+      "nom": "Rétention",
+      "famille": "commerce",
+      "question": "Pourquoi les utilisateurs reviennent-ils ou cessent-ils de revenir ?",
+      "preuve": "Cohortes comparables et motifs de départ.",
+      "limite": "Ne pas confondre obligation contractuelle et satisfaction.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-017",
+      "alias": "vente-suivante",
+      "nom": "Prochaine vente",
+      "famille": "commerce",
+      "question": "Quelle action rapproche la prochaine décision commerciale ?",
+      "preuve": "Jalon commercial observable et responsable.",
+      "limite": "Ne pas attribuer une vente sans lien établi.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-018",
+      "alias": "positionnement",
+      "nom": "Positionnement",
+      "famille": "commerce",
+      "question": "Pour quel segment est-on un choix clairement pertinent ?",
+      "preuve": "Comparaison des critères du segment.",
+      "limite": "Un slogan ne démontre pas la différenciation.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-019",
+      "alias": "preuve-commerciale",
+      "nom": "Preuve commerciale",
+      "famille": "commerce",
+      "question": "Quel élément rend la promesse crédible pour l'acheteur ?",
+      "preuve": "Démonstration ou résultat vérifiable.",
+      "limite": "Une anecdote heureuse ne prouve pas un résultat habituel.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-020",
+      "alias": "canal",
+      "nom": "Canal d'acquisition",
+      "famille": "commerce",
+      "question": "Quel canal apporte des demandes réellement exploitables ?",
+      "preuve": "Coût et qualité des demandes par canal.",
+      "limite": "Le volume seul ne mesure pas la rentabilité.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-021",
+      "alias": "marge",
+      "nom": "Marge",
+      "famille": "economie",
+      "question": "Quel résultat reste après les coûts définis, sur quel dénominateur ?",
+      "preuve": "Calcul explicite puis contrôle inverse.",
+      "limite": "Clarifier marge, majoration et base de calcul.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-022",
+      "alias": "tresorerie",
+      "nom": "Trésorerie",
+      "famille": "economie",
+      "question": "À quel moment l'argent entre-t-il et sort-il réellement ?",
+      "preuve": "Calendrier des encaissements et décaissements.",
+      "limite": "Le résultat comptable n'est pas le solde bancaire.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-023",
+      "alias": "cout-total",
+      "nom": "Coût total",
+      "famille": "economie",
+      "question": "Quel est le coût sur un horizon identique pour chaque option ?",
+      "preuve": "Construction, exploitation et sortie chiffrées.",
+      "limite": "Ne pas oublier le temps humain.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-024",
+      "alias": "seuil-rentabilite",
+      "nom": "Seuil de rentabilité",
+      "famille": "economie",
+      "question": "Quel volume couvre les charges retenues ?",
+      "preuve": "Charges, contribution unitaire et seuil rapprochés.",
+      "limite": "Un prix moyen masque parfois le mix réel.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-025",
+      "alias": "unite-economique",
+      "nom": "Économie par unité",
+      "famille": "economie",
+      "question": "Chaque unité supplémentaire crée-t-elle du résultat ?",
+      "preuve": "Recette et coûts incrémentaux par unité.",
+      "limite": "Le coût moyen ne décrit pas toujours le coût marginal.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-026",
+      "alias": "cout-opportunite",
+      "nom": "Coût d'opportunité",
+      "famille": "economie",
+      "question": "À quoi renonce-t-on en mobilisant ces moyens ici ?",
+      "preuve": "Meilleure alternative réaliste et moyens immobilisés.",
+      "limite": "Ne pas comparer à une option inaccessible.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-027",
+      "alias": "capacite-financement",
+      "nom": "Capacité de financement",
+      "famille": "economie",
+      "question": "Quelle réserve reste avant un besoin de financement ?",
+      "preuve": "Hypothèses de consommation et horizon de trésorerie.",
+      "limite": "Une projection n'est pas une garantie de fonds.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-028",
+      "alias": "prix-accepte",
+      "nom": "Prix accepté",
+      "famille": "economie",
+      "question": "Quel prix est accepté avec quel périmètre et quelles conditions ?",
+      "preuve": "Achats ou refus documentés sur offres comparables.",
+      "limite": "Le prix déclaré acceptable diffère du prix payé.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-029",
+      "alias": "cout-erreur",
+      "nom": "Coût de l'erreur",
+      "famille": "economie",
+      "question": "Combien coûte une erreur détectée tôt ou tard ?",
+      "preuve": "Reprises, retards et pertes documentés.",
+      "limite": "Ne pas monétiser artificiellement une conséquence inconnue.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-030",
+      "alias": "sensibilite-economique",
+      "nom": "Sensibilité économique",
+      "famille": "economie",
+      "question": "Quelle hypothèse fait basculer le résultat économique ?",
+      "preuve": "Variation d'une hypothèse à la fois et seuil de bascule.",
+      "limite": "Les variations simultanées peuvent modifier la conclusion.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-031",
+      "alias": "source",
+      "nom": "Provenance",
+      "famille": "preuves",
+      "question": "D'où vient chaque donnée qui change la décision ?",
+      "preuve": "Source, date et version retrouvables.",
+      "limite": "Une source citée peut être périmée.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-032",
+      "alias": "definitions",
+      "nom": "Définitions",
+      "famille": "preuves",
+      "question": "Les approches mesurent-elles exactement la même grandeur ?",
+      "preuve": "Définitions, unités et périmètres alignés.",
+      "limite": "Deux calculs justes peuvent répondre à deux questions.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-033",
+      "alias": "calcul-inverse",
+      "nom": "Contrôle inverse",
+      "famille": "preuves",
+      "question": "Peut-on retrouver l'entrée depuis la sortie calculée ?",
+      "preuve": "Identité inverse vérifiée avec précision suffisante.",
+      "limite": "Ne valide pas la qualité des entrées.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-034",
+      "alias": "ordre-grandeur",
+      "nom": "Ordre de grandeur",
+      "famille": "preuves",
+      "question": "Le résultat reste-t-il plausible avec une estimation grossière ?",
+      "preuve": "Fourchette obtenue par décomposition simple.",
+      "limite": "Une approximation ne remplace pas un calcul engageant.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-035",
+      "alias": "reconciliation",
+      "nom": "Rapprochement",
+      "famille": "preuves",
+      "question": "Le détail rejoint-il un total issu d'une source distincte ?",
+      "preuve": "Écart chiffré et éléments de rapprochement.",
+      "limite": "Vérifier les différences de date et périmètre.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-036",
+      "alias": "echantillon",
+      "nom": "Représentativité",
+      "famille": "preuves",
+      "question": "Qui ou quoi manque dans les observations ?",
+      "preuve": "Population, sélection et exclusions documentées.",
+      "limite": "Une grande taille n'efface pas un biais de sélection.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-037",
+      "alias": "taux-base",
+      "nom": "Taux de base",
+      "famille": "preuves",
+      "question": "Que se passe-t-il habituellement dans des cas comparables ?",
+      "preuve": "Fréquence de référence et comparabilité discutée.",
+      "limite": "Une moyenne externe peut mal correspondre au cas.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-038",
+      "alias": "incertitude",
+      "nom": "Incertitude",
+      "famille": "preuves",
+      "question": "Quelle plage de résultats est compatible avec les inconnues ?",
+      "preuve": "Bornes et hypothèses qui les déterminent.",
+      "limite": "Ne pas transformer une intuition en probabilité calibrée.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-039",
+      "alias": "contre-preuve",
+      "nom": "Réfutation",
+      "famille": "preuves",
+      "question": "Quelle observation ferait abandonner la conclusion ?",
+      "preuve": "Critère de réfutation fixé puis recherche ciblée.",
+      "limite": "L'absence de contre-exemple n'est pas une preuve absolue.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-040",
+      "alias": "non-vacuite",
+      "nom": "Non-vacuité",
+      "famille": "preuves",
+      "question": "Le contrôle a-t-il réellement reçu des données et exécuté son scénario ?",
+      "preuve": "Témoin chargé et preuve d'exécution.",
+      "limite": "Un témoin réussi ne couvre pas tous les cas.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-041",
+      "alias": "premiers-principes",
+      "nom": "Premiers principes",
+      "famille": "causalite",
+      "question": "Quelles contraintes vérifiées subsistent quand on retire les habitudes ?",
+      "preuve": "Faits élémentaires séparés des conventions.",
+      "limite": "Ne pas effacer une contrainte réelle en la renommant.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-042",
+      "alias": "pourquoi",
+      "nom": "Chaîne des causes",
+      "famille": "causalite",
+      "question": "Quel mécanisme explique chaque lien jusqu'à une cause actionnable ?",
+      "preuve": "Liens causaux étayés sur un incident.",
+      "limite": "Ne pas forcer un nombre fixe de pourquoi.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-043",
+      "alias": "causes-concurrentes",
+      "nom": "Causes concurrentes",
+      "famille": "causalite",
+      "question": "Quelles explications rivales prédisent des observations différentes ?",
+      "preuve": "Test qui départage au moins deux causes.",
+      "limite": "Un récit plausible ne démontre pas une cause.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-044",
+      "alias": "chronologie",
+      "nom": "Chronologie causale",
+      "famille": "causalite",
+      "question": "La cause présumée précède-t-elle réellement l'effet ?",
+      "preuve": "Événements datés sur une même référence temporelle.",
+      "limite": "Précéder ne suffit pas à causer.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-045",
+      "alias": "contre-factuel",
+      "nom": "Contrefactuel",
+      "famille": "causalite",
+      "question": "Que se serait-il passé sans l'intervention ?",
+      "preuve": "Comparaison témoin ou hypothèse explicitement bornée.",
+      "limite": "Le monde alternatif n'est pas directement observable.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-046",
+      "alias": "experience-minimale",
+      "nom": "Expérience minimale",
+      "famille": "causalite",
+      "question": "Quel petit essai réversible peut départager l'hypothèse décisive ?",
+      "preuve": "Protocole, critère fixé et observation obtenue.",
+      "limite": "Un essai trop étroit peut mal se généraliser.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-047",
+      "alias": "cas-reussis",
+      "nom": "Cas qui réussissent",
+      "famille": "causalite",
+      "question": "Qu'est-ce qui diffère entre les cas réussis et les cas en échec ?",
+      "preuve": "Comparaison à périmètre similaire.",
+      "limite": "Éviter de sélectionner seulement les survivants.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-048",
+      "alias": "arbre-probleme",
+      "nom": "Décomposition du problème",
+      "famille": "causalite",
+      "question": "Quelles branches couvrent la question sans compter deux fois le même effet ?",
+      "preuve": "Arbre avec frontières et couverture justifiées.",
+      "limite": "Une classification élégante peut omettre une cause.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-049",
+      "alias": "correlation",
+      "nom": "Corrélation et cause",
+      "famille": "causalite",
+      "question": "Une troisième variable ou la sélection explique-t-elle le lien observé ?",
+      "preuve": "Facteurs concurrents et comparaison adaptée.",
+      "limite": "Un ajustement statistique ne résout pas tout biais.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-050",
+      "alias": "invariant",
+      "nom": "Invariant",
+      "famille": "causalite",
+      "question": "Quelle propriété doit rester vraie dans tous les cas autorisés ?",
+      "preuve": "Propriété vérifiée sur cas normal et limite.",
+      "limite": "L'invariant doit venir du contrat réel.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-051",
+      "alias": "frontiere",
+      "nom": "Frontière du système",
+      "famille": "systemes",
+      "question": "Quel élément extérieur change le résultat sans être pris en compte ?",
+      "preuve": "Périmètre et interfaces explicités.",
+      "limite": "Étendre sans limite empêche de décider.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-052",
+      "alias": "goulot",
+      "nom": "Goulot",
+      "famille": "systemes",
+      "question": "Quelle contrainte limite réellement le débit global ?",
+      "preuve": "File ou charge mesurée au point limitant.",
+      "limite": "Le goulot peut se déplacer après amélioration.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-053",
+      "alias": "flux",
+      "nom": "Flux",
+      "famille": "systemes",
+      "question": "Où une unité attend-elle, se perd-elle ou revient-elle en arrière ?",
+      "preuve": "Trajet et temps de traversée mesurés.",
+      "limite": "Le temps de traitement seul cache l'attente.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-054",
+      "alias": "stock",
+      "nom": "Stocks et accumulations",
+      "famille": "systemes",
+      "question": "Qu'est-ce qui s'accumule quand entrées et sorties se déséquilibrent ?",
+      "preuve": "Stock initial et mouvements rapprochés.",
+      "limite": "Les unités et périodes doivent être homogènes.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-055",
+      "alias": "boucle-renforcement",
+      "nom": "Boucle amplificatrice",
+      "famille": "systemes",
+      "question": "Quel effet nourrit sa propre croissance ou dégradation ?",
+      "preuve": "Chaîne de rétroaction et délai observables.",
+      "limite": "Une flèche dessinée ne prouve pas son effet.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-056",
+      "alias": "boucle-regulation",
+      "nom": "Boucle régulatrice",
+      "famille": "systemes",
+      "question": "Quelle correction ramène le système vers une cible ?",
+      "preuve": "Écart, correction et réponse mesurés.",
+      "limite": "Une correction retardée peut déstabiliser.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-057",
+      "alias": "optimum-global",
+      "nom": "Optimum global",
+      "famille": "systemes",
+      "question": "Un gain local dégrade-t-il le résultat de bout en bout ?",
+      "preuve": "Mesure locale comparée à la mesure finale.",
+      "limite": "Ne pas choisir une mesure globale trop vague.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-058",
+      "alias": "interoperabilite",
+      "nom": "Interopérabilité",
+      "famille": "systemes",
+      "question": "Les deux côtés interprètent-ils les échanges de la même façon ?",
+      "preuve": "Contrat et échange réel de test rapprochés.",
+      "limite": "Un schéma compatible ne prouve pas tout le sens métier.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-059",
+      "alias": "maintenabilite",
+      "nom": "Maintenabilité",
+      "famille": "systemes",
+      "question": "Qui pourra comprendre et modifier ce mécanisme plus tard ?",
+      "preuve": "Modification représentative et documentation utile.",
+      "limite": "Un code court peut rester opaque.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-060",
+      "alias": "observabilite",
+      "nom": "Observabilité",
+      "famille": "systemes",
+      "question": "Comment distinguera-t-on fonctionnement, retard et panne ?",
+      "preuve": "Signal utile, erreur provoquée en isolation et diagnostic.",
+      "limite": "Un journal existant ne prouve pas qu'une alerte est reçue.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-061",
+      "alias": "retroplanning",
+      "nom": "Rétroplanning",
+      "famille": "calendrier",
+      "question": "Que doit être terminé juste avant chaque jalon final ?",
+      "preuve": "Chaîne remontée depuis une échéance explicite.",
+      "limite": "Une date voulue ne garantit pas sa faisabilité.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-062",
+      "alias": "chemin-critique",
+      "nom": "Chemin critique",
+      "famille": "calendrier",
+      "question": "Quelle chaîne de dépendances impose la durée minimale ?",
+      "preuve": "Réseau de tâches et durées justifiées.",
+      "limite": "Les durées incertaines fragilisent le chemin.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-063",
+      "alias": "capacite",
+      "nom": "Capacité réelle",
+      "famille": "calendrier",
+      "question": "Les personnes et équipements peuvent-ils absorber la charge prévue ?",
+      "preuve": "Charge par période rapprochée des disponibilités.",
+      "limite": "Une disponibilité théorique peut être déjà engagée.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-064",
+      "alias": "precedences",
+      "nom": "Prérequis",
+      "famille": "calendrier",
+      "question": "Qu'est-ce qui doit être vrai avant de commencer chaque action ?",
+      "preuve": "Dépendances et critères d'entrée vérifiés.",
+      "limite": "Une liste de tâches ne montre pas leurs dépendances.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-065",
+      "alias": "marges-delai",
+      "nom": "Marges de délai",
+      "famille": "calendrier",
+      "question": "Où absorber un retard sans déplacer l'échéance finale ?",
+      "preuve": "Réserves explicites et scénario de retard.",
+      "limite": "Ne pas compter la même réserve plusieurs fois.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-066",
+      "alias": "estimation-exterieure",
+      "nom": "Estimation par précédents",
+      "famille": "calendrier",
+      "question": "Combien de temps des travaux comparables ont-ils réellement pris ?",
+      "preuve": "Historique comparable avec dispersion.",
+      "limite": "Un ancien projet peut cacher un autre périmètre.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-067",
+      "alias": "lot-minimal",
+      "nom": "Lot utile minimal",
+      "famille": "calendrier",
+      "question": "Quelle plus petite tranche produit un résultat utilisable ?",
+      "preuve": "Livrable autonome et critère de réception.",
+      "limite": "Un fragment technique n'est pas forcément utile.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-068",
+      "alias": "encours",
+      "nom": "Travail en cours",
+      "famille": "calendrier",
+      "question": "Combien de sujets ouverts allongent-ils les délais de livraison ?",
+      "preuve": "Encours, âge et temps de traversée.",
+      "limite": "Réduire l'encours ne remplace pas les compétences manquantes.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-069",
+      "alias": "replanification",
+      "nom": "Replanification",
+      "famille": "calendrier",
+      "question": "Quel événement doit déclencher une nouvelle version du plan ?",
+      "preuve": "Seuils de révision et impact sur jalons.",
+      "limite": "Ne pas réécrire le plan à chaque variation mineure.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-070",
+      "alias": "cout-retard",
+      "nom": "Coût du retard",
+      "famille": "calendrier",
+      "question": "Quelle perte entraîne une semaine de décalage pour chaque option ?",
+      "preuve": "Effets temporels explicités avec hypothèses.",
+      "limite": "La priorité dépend aussi des durées et dépendances.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-071",
+      "alias": "premortem",
+      "nom": "Pré-mortem",
+      "famille": "risques",
+      "question": "Le projet a échoué : quelles causes plausibles l'expliquent ?",
+      "preuve": "Scénarios de défaillance et prévention associée.",
+      "limite": "Un scénario reste une hypothèse avant observation.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-072",
+      "alias": "adversaire",
+      "nom": "Adversaire",
+      "famille": "risques",
+      "question": "Comment détourner le mécanisme ou contourner son contrôle ?",
+      "preuve": "Essai autorisé en isolation et résultat constaté.",
+      "limite": "Aucune attaque sur une cible non autorisée.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-073",
+      "alias": "reversibilite",
+      "nom": "Réversibilité",
+      "famille": "risques",
+      "question": "Que peut-on annuler et à quel coût réel ?",
+      "preuve": "Retour arrière éprouvé sur copie.",
+      "limite": "Un bouton annuler peut laisser des effets externes.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-074",
+      "alias": "isolation",
+      "nom": "Isolation des données",
+      "famille": "risques",
+      "question": "Un compte ou contexte peut-il accéder au travail d'un autre ?",
+      "preuve": "Cas croisés autorisés et refus vérifiés.",
+      "limite": "Un seul refus ne prouve pas tout le cloisonnement.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-075",
+      "alias": "minimisation",
+      "nom": "Minimisation des données",
+      "famille": "risques",
+      "question": "Quelles données peuvent être retirées sans perdre le service utile ?",
+      "preuve": "Flux avant et après avec besoin justifié.",
+      "limite": "Retirer un champ peut casser un contrôle nécessaire.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-076",
+      "alias": "point-unique",
+      "nom": "Point de panne unique",
+      "famille": "risques",
+      "question": "Quel élément isolé peut arrêter toute la chaîne ?",
+      "preuve": "Dépendance identifiée et scénario d'indisponibilité.",
+      "limite": "La redondance peut partager la même panne.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-077",
+      "alias": "reprise",
+      "nom": "Reprise après interruption",
+      "famille": "risques",
+      "question": "Que devient une action stoppée au milieu ?",
+      "preuve": "Interruption isolée puis état final rapproché.",
+      "limite": "Rejouer peut créer un doublon.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-078",
+      "alias": "effets-partiels",
+      "nom": "Effets partiels",
+      "famille": "risques",
+      "question": "Que reste-t-il si une étape réussit et la suivante échoue ?",
+      "preuve": "États intermédiaires et compensation prévue.",
+      "limite": "Une compensation n'efface pas toujours un effet réel.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-079",
+      "alias": "limites",
+      "nom": "Limites de charge",
+      "famille": "risques",
+      "question": "À partir de quel volume ou délai le service cesse-t-il d'être utile ?",
+      "preuve": "Charge et dégradation mesurées dans un périmètre autorisé.",
+      "limite": "Ne pas tester la production sans mandat.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-080",
+      "alias": "risque-extreme",
+      "nom": "Risque extrême",
+      "famille": "risques",
+      "question": "Quelle conséquence grave rend l'option inacceptable même si elle est rare ?",
+      "preuve": "Condition d'exclusion et moyens de réduction du risque.",
+      "limite": "Une moyenne favorable n'annule pas un risque impératif.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-081",
+      "alias": "statu-quo",
+      "nom": "Statu quo",
+      "famille": "decisions",
+      "question": "Que se passe-t-il si l'on ne change rien maintenant ?",
+      "preuve": "Trajectoire de référence et coût d'inaction.",
+      "limite": "L'inaction a aussi des conséquences.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-082",
+      "alias": "comparaison-options",
+      "nom": "Comparaison multicritère",
+      "famille": "decisions",
+      "question": "Quelle option satisfait les contraintes puis le meilleur compromis ?",
+      "preuve": "Critères explicites et comparaison sourcée.",
+      "limite": "Une pondération arbitraire fabrique le gagnant.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-083",
+      "alias": "simplicite",
+      "nom": "Simplicité",
+      "famille": "decisions",
+      "question": "Quelle solution enlève le plus d'effort inutile à résultat équivalent ?",
+      "preuve": "Étapes et charge d'exploitation comparées.",
+      "limite": "Moins de composants ne suffit pas à prouver la simplicité.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-084",
+      "alias": "valeur-information",
+      "nom": "Valeur de l'information",
+      "famille": "decisions",
+      "question": "Quelle donnée manquante pourrait réellement changer le choix ?",
+      "preuve": "Décision avant et après l'information possible.",
+      "limite": "Ne pas enquêter indéfiniment sans effet attendu.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-085",
+      "alias": "options-futures",
+      "nom": "Options futures",
+      "famille": "decisions",
+      "question": "Quelle décision conserve des possibilités utiles pour plus tard ?",
+      "preuve": "Choix futurs préservés et coût de cette réserve.",
+      "limite": "Garder toute option ouverte peut empêcher d'avancer.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-086",
+      "alias": "regret",
+      "nom": "Regret futur",
+      "famille": "decisions",
+      "question": "Quelle décision serait la plus regrettable selon les issues plausibles ?",
+      "preuve": "Table d'issues et regret relatif.",
+      "limite": "Le recul imaginé dépend des valeurs retenues.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-087",
+      "alias": "second-ordre",
+      "nom": "Conséquences indirectes",
+      "famille": "decisions",
+      "question": "Que provoque le premier effet sur les étapes et acteurs suivants ?",
+      "preuve": "Chaîne d'effets et signaux à surveiller.",
+      "limite": "Éviter de présenter une cascade supposée comme certaine.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-088",
+      "alias": "scenario",
+      "nom": "Scénarios",
+      "famille": "decisions",
+      "question": "L'option reste-t-elle acceptable dans plusieurs futurs plausibles ?",
+      "preuve": "Scénarios distincts et décisions robustes ou conditionnelles.",
+      "limite": "Ne pas attribuer de probabilités sans base.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-089",
+      "alias": "critere-arret",
+      "nom": "Critère d'arrêt",
+      "famille": "decisions",
+      "question": "Quand arrêter, poursuivre ou abandonner l'essai ?",
+      "preuve": "Seuils fixés avant résultat et décision tracée.",
+      "limite": "Un seuil adapté après coup biaise le verdict.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-090",
+      "alias": "existant",
+      "nom": "Fonction de l'existant",
+      "famille": "decisions",
+      "question": "Quel problème la règle ou le composant actuel résout-il déjà ?",
+      "preuve": "Raison d'être et consommateurs vérifiés.",
+      "limite": "L'ancienneté ne prouve ni utilité ni inutilité.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-091",
+      "alias": "operateur",
+      "nom": "Opérateur",
+      "famille": "collectif",
+      "question": "Qui fait fonctionner le service au quotidien et avec quel effort ?",
+      "preuve": "Journée type et tâches réellement nécessaires.",
+      "limite": "Le créateur n'est pas toujours l'opérateur futur.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-092",
+      "alias": "responsabilites",
+      "nom": "Responsabilités",
+      "famille": "collectif",
+      "question": "Qui décide, exécute, vérifie et reçoit le résultat ?",
+      "preuve": "Rôles nommés et limites acceptées.",
+      "limite": "Un tableau de rôles ne prouve pas l'accord des personnes.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-093",
+      "alias": "incitations",
+      "nom": "Incitations",
+      "famille": "collectif",
+      "question": "Quel comportement les récompenses et contraintes rendent-elles rationnel ?",
+      "preuve": "Intérêts et effets observés des indicateurs.",
+      "limite": "Ne pas prêter une intention sans preuve.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-094",
+      "alias": "opposant",
+      "nom": "Objection la plus forte",
+      "famille": "collectif",
+      "question": "Quelle est la meilleure objection honnête à notre choix ?",
+      "preuve": "Argument adverse reformulé puis condition qui le départage.",
+      "limite": "Ne pas fabriquer un adversaire facile à réfuter.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-095",
+      "alias": "negociation",
+      "nom": "Solution de repli",
+      "famille": "collectif",
+      "question": "Quelle option réaliste reste si aucun accord n'est trouvé ?",
+      "preuve": "Alternative praticable et limite d'engagement.",
+      "limite": "Une menace déclarée n'est pas une alternative crédible.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-096",
+      "alias": "transmission",
+      "nom": "Transmission",
+      "famille": "collectif",
+      "question": "Une autre personne peut-elle reprendre avec les éléments laissés ?",
+      "preuve": "Reprise représentative sans explication cachée.",
+      "limite": "Une documentation volumineuse peut rester inutilisable.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-097",
+      "alias": "apprentissage",
+      "nom": "Apprentissage",
+      "famille": "collectif",
+      "question": "Qu'avions-nous prévu et qu'a-t-on effectivement observé ?",
+      "preuve": "Écart prévision-résultat et règle amendée avec cause.",
+      "limite": "Un mauvais résultat ne prouve pas seul une mauvaise décision.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-098",
+      "alias": "communication",
+      "nom": "Compréhension partagée",
+      "famille": "collectif",
+      "question": "Le destinataire comprend-il la décision et l'action attendue ?",
+      "preuve": "Reformulation ou action comprise par le destinataire.",
+      "limite": "Un texte clair pour l'auteur peut rester ambigu.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-099",
+      "alias": "equite",
+      "nom": "Répartition des effets",
+      "famille": "collectif",
+      "question": "Qui reçoit le bénéfice, qui supporte le coût et qui ne peut pas répondre ?",
+      "preuve": "Effets répartis par partie prenante.",
+      "limite": "Une somme positive peut cacher un préjudice majeur.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    },
+    {
+      "id": "PDV-100",
+      "alias": "contre-pouvoir",
+      "nom": "Contre-pouvoir",
+      "famille": "collectif",
+      "question": "Le producteur du résultat peut-il neutraliser son propre contrôle ?",
+      "preuve": "Séparation des droits et contrôle de contournement.",
+      "limite": "Une consigne seule n'est pas une séparation technique.",
+      "origine": "Fiche française originale ; rapprochements documentés dans sources-pdv.md."
+    }
+  ],
+  "packs": {
+    "calcul": [
+      "definitions",
+      "calcul-inverse"
+    ],
+    "complexe": [
+      "utilisateur",
+      "unite-economique",
+      "premortem"
+    ],
+    "plan": [
+      "utilisateur",
+      "operateur",
+      "chemin-critique",
+      "premortem"
+    ],
+    "retroplanning": [
+      "utilisateur",
+      "operateur",
+      "retroplanning",
+      "premortem"
+    ],
+    "diagnostic": [
+      "causes-concurrentes",
+      "non-vacuite",
+      "chronologie"
+    ],
+    "decision": [
+      "comparaison-options",
+      "cout-opportunite",
+      "opposant"
+    ]
+  }
+}

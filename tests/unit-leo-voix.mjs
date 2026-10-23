@@ -206,6 +206,22 @@ verdicts.systemeSansEtat = !/AURORE|ENCLUME/.test(construireSysteme('imladrik', 
     /propre contrôle/.test(s) && /vérifier l’état avant tout rejeu/.test(s));
 }
 
+// Bibliothèque réelle dans le prompt, pas seulement une consigne de charger un fichier absent.
+{
+  const { INDEX_POINTS_DE_VUE } = await import('../api/_lib/leo-points-de-vue.mjs');
+  const systemes = ['riven','bcp','adramelech','imladrik','finubar','ultima']
+    .flatMap(q => [false,true].map(outils => construireSysteme(q,outils)));
+  verdicts.catalogue100Questions = INDEX_POINTS_DE_VUE.split('\n').length === 100;
+  verdicts.anglesTousQuadrants = systemes.every(s => s.includes(INDEX_POINTS_DE_VUE)
+    && s.includes('minimum 2 angles distincts') && s.includes('3 pour une tâche complexe')
+    && s.includes('4 pour tout plan ou rétroplanning') && s.includes('seuil le plus élevé'));
+  verdicts.selectionCoherente = systemes.every(s => s.includes('jamais par mot-clé seul')
+    && s.includes('preuve manquante') && s.includes('sans imposer une vente')
+    && s.includes('Un angle isolé peut être demandé') && s.includes('pas ici du lecteur Python'));
+  verdicts.indexBorne = INDEX_POINTS_DE_VUE.length <= 16000;
+  verdicts.plansCompatiblesFormat = systemes.every(s => s.includes('plan ou un rétroplanning demandé') && s.includes('sans prétendre tout avoir traité'));
+}
+
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);
