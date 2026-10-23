@@ -11,6 +11,8 @@
 
 Une seconde approche inaccessible rend la vérification partielle. Des résultats convergents avec une hypothèse commune fragile restent limités par celle-ci. Ne jamais annoncer une confiance chiffrée sans mesure justifiée.
 
+Vérifier la bibliothèque avec `python bibliotheque.py --validate` : cent identifiants, alias et noms résolus, dix familles et packs valides. Éprouver aussi un identifiant inconnu, un angle répété et une sélection sous le seuil requis. La diversité sémantique reste à examiner sur le sujet réel.
+
 ## 2. Mise en service
 
 Charger la compétence de travail anti-pattern dans le contexte autorisé. Appliquer le protocole au sujet existant, sans lancer un nouveau projet. Conserver la preuve avec sa version et les sources propres à l'instance. Utiliser collecter.mjs sur un dossier privé seulement pour vérifier les champs requis ; le contrôle reste déclaratif et sans appel externe.
