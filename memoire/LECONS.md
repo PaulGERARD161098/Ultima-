@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v107 2026-10-23 sha256:c5133b6e74a9 -->
+<!-- lecons:empreinte v108 2026-10-23 sha256:9cd9f294e6f8 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1866,6 +1866,21 @@ formulaire), il dit **avant** : « ne capture pas cet écran ; si tu veux me
 montrer le résultat, cadre la seule zone Résultat ». Masquer un caractère n'est
 pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arrive
 quand même, **la rotation est la première action**, pas une note de fin.
+
+**UN GESTE DE PLATEFORME DONNÉ À PAUL SE VÉRIFIE SUR SA CIBLE LE SOIR MÊME** *(2026-10-23, RenoDevis, A6a)*.
+Le 22/10 au soir, Paul pose la clé Stripe live et les deux webhooks réels, puis écrit
+« redeploy fait ». Je réponds « je ne peux rien vérifier ce soir » : `get_project` et
+`get_deployment` du connecteur Vercel rendaient 404/403 **avec** `teamId`. Le cron du
+23/10 à 08:30 Paris dit encore `test: true`. Le matin, les mêmes appels **sans**
+`teamId` répondent : le dernier déploiement du projet (00:54 Paris) était un **aperçu**
+(cible vide), pas la production. Production redéployée par l'API à 12:09 Paris.
+*Ce que ça a coûté* : un cycle de cron, soit 24 h, sur le premier geste du premier euro.
+⛔ **La règle** : un redéploiement se vérifie sur **sa cible** (`target: production`) et
+sur **son alias** (`relance-renoboostia.com` dans `alias`), dans la minute qui suit le
+« fait » de Paul. Avant de conclure « non lisible », varier la portée de l'appel : le
+connecteur Vercel lit `reno-devis-final` **sans** `teamId` et le refuse **avec**. Et le
+geste donné à Paul porte sa contre-épreuve : « la fenêtre de confirmation doit dire
+Production ».
 
 ## 4. Conduire une boucle
 

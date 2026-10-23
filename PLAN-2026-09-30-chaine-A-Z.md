@@ -120,10 +120,10 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 |---|---|---|---|---|---|---|---|
 | A1 | Relire et fusionner la PR RenoDevis #214 (la dernière version d'un devis gagne) | M4 | Paul | fait | ✅ **fusionnée le 30/09 sur le go de Paul**, en mode « merge » : `f42aa5b` reste dans l'historique de `main` | PR fusionnée | l'état de la PR sur GitHub |
 | A2 | Déposer les 14 PDF SOLA dans le dossier Drive « SOLA devis a lire », trancher 235/201 | M4 | Paul | lire les 14 PDF, donner le total devisé définitif, les verser au corpus | ⬜ **le dossier n'existe pas** : seul un dossier « SOLA » (recherche Drive, 17:4x UTC) | les 14 PDF dans le dossier ; le total inscrit dans RenoBoost `ROADMAP-2026-09-29-fin-de-session.md` | le connecteur Drive : le dossier et ses fichiers |
-| A3 | Chiffrer, puis émettre un devis depuis l'application | M4 → M5, M6 | Paul | la requête ci-contre ; la liste des devis sans lignes, par identifiant, jamais par nom | ⬜ **1 devis chiffré ET émis depuis l'application, sur 53** (remesuré le 13/10 vers 11:40 UTC ; le « 2 sur 15 » du 30/09 est périmé) | plus de 1 | `select count(*) filter (where case when jsonb_typeof(d.lignes) = 'array' then jsonb_array_length(d.lignes) > 0 else false end and coalesce(d.extra->>'source','') <> 'email' and exists (select 1 from devis_events e where e.devis_id = d.id and e.type = 'sent')) as chiffres_emis, count(*) as devis from devis d` — un devis à lignes mais importé ou resté brouillon ne compte pas |
+| A3 | Chiffrer, puis émettre un devis depuis l'application | M4 → M5, M6 | Paul | la requête ci-contre ; la liste des devis sans lignes, par identifiant, jamais par nom | ⬜ **1 devis chiffré ET émis depuis l'application, sur 33** (remesuré le 23/10 à 07:56 UTC ; le total est passé de 53 le 13/10 à 33 parce que les dossiers e-mail factices ont été supprimés les 20–21/10, RenoDevis #400 — le numérateur, lui, n'a pas bougé ; « 1 sur 53 » du 13/10 et « 2 sur 15 » du 30/09 sont périmés) | plus de 1 | `select count(*) filter (where case when jsonb_typeof(d.lignes) = 'array' then jsonb_array_length(d.lignes) > 0 else false end and coalesce(d.extra->>'source','') <> 'email' and exists (select 1 from devis_events e where e.devis_id = d.id and e.type = 'sent')) as chiffres_emis, count(*) as devis from devis d` — un devis à lignes mais importé ou resté brouillon ne compte pas |
 | A4 | Rejouer la TVA en production, ensemble | M4 | Paul + Claude | préparer la recette : le devis à créer, les conditions à cocher, ce qu'on lira en base | ⬜ **fiche prête le 14/10** : RenoDevis `docs/RECETTE-SOLA-LUNDI-MARDI.md` § A4 (3 passages, requête). Mesuré : 0 condition répondue sur 57 devis. Défaut trouvé et corrigé en la préparant : « Appliquer X % au devis » n'alignait pas les lignes SOLA (`1383510`) | un devis créé avec ses conditions de TVA | la requête s'écrit avec la recette |
 | A5 | Pilote V3, étape 2 : test au téléphone avec Matthieu | M3 | Paul + Matthieu | préparer la fiche de test de la brique 2 | ⬜ **fiche prête le 14/10** : même document, § A5 (6 gestes). Mesuré : compte rattaché, jamais connecté — mot de passe en main propre | les critères de la brique 2 | RenoDevis `REPRISE-PILOTE-V3.md` |
-| A6a | Poser la clé Stripe live en production | M6 | Paul | rappeler où la poser, et ce qu'on vérifie après | ⬜ **fiche prête le 14/10** : RenoDevis `docs/STRIPE-CONNECT.md` § A6a. **Clé de test** : `test: true`, remesuré le 14/10 (battement 06:30 UTC) ; 0 paiement en base. Piège corrigé : l'ancienne répartition des webhooks (`.env.example`) aurait fait payer sans confirmer | `test = false` | `select valeur->>'test' from sentinelle_etat where cle = 'battement:rr-stripe-embarquement'` |
+| A6a | Poser la clé Stripe live en production | M6 | Paul | rappeler où la poser, et ce qu'on vérifie après | 🔵 **geste fait par Paul le 22/10 au soir** (clé `sk_live_` et deux destinations de webhook réelles en Production, Preview restée en test) ; **production redéployée le 23/10 à 10:09 UTC** (`dpl_Dd48n5HoKLKg3syWw7q4TTXEHp4h`, `main` `c139e64`, alias `relance-renoboostia.com`) après un premier redéploiement tombé sur un aperçu. **Preuve NON atteinte** : battement du 23/10 06:30 UTC `test: true`, `remplaces: 0` ; attendue au battement du 24/10 06:30 UTC (ou au lancement manuel du cron) : `test = false`, puis les deux artisans avec un `stripe_account_id` réel en base (non nul, différent de l'ancien compte de test) — `remplaces` seul ne suffit pas, il compte aussi un remplacement suivi d'une erreur. Historique : **fiche prête le 14/10** : RenoDevis `docs/STRIPE-CONNECT.md` § A6a. **Clé de test** : `test: true`, remesuré le 14/10 (battement 06:30 UTC) ; 0 paiement en base. Piège corrigé : l'ancienne répartition des webhooks (`.env.example`) aurait fait payer sans confirmer | `test = false` | `select valeur->>'test' from sentinelle_etat where cle = 'battement:rr-stripe-embarquement'` |
 | A6b | Vérification d'identité de SOLA chez Stripe | M6 | SOLA | suivre le battement, relancer SOLA par Paul | ⬜ **après A6a**, puis ⏳ SOLA : `ouverts: 0` sur 2 artisans | au moins un compte ouvert, puis J1 | `select valeur->>'ouverts' from sentinelle_etat where cle = 'battement:rr-stripe-embarquement'` |
 | A7 | Classer les sorts des devis dans `/bibliotheque` | M4 | Paul | — | ⬜ **20 sans sort** (remesuré le 13/10 vers 11:40 UTC ; 19 le 30/09) | moins de 20 | `select count(*) from corpus_devis where issue = 'inconnu'` |
 | A8 | L'événement Calendly du site est actif | M1 | Claude | fait | ✅ **un seul événement actif**, « Votre demande - 15 minutes » : c'est le seul lien Calendly des pages à la racine de RenoBoost (15 occurrences) et d'Artidispo (2) | `active = true` | l'API Calendly, liste des types d'événement |
@@ -184,6 +184,13 @@ dépôt non attaché. ⚠️ **B3 a changé de forme le 20/10** (RenoDevis
 `CADRAGE-2026-10-20-sync-email-vers-rb.md`) : un mail-devis devient une ligne de
 journal sur la fiche RB, plus un dossier ; l'écran `/devis/email` est retiré. Sa
 ligne est à réécrire (fermée par changement de forme), pas à recetter.
+
+🔁 **Remesuré le 23/10 à 07:56 UTC** (mêmes requêtes) : rien n'a bougé sur le chemin
+du premier euro — J1 **0** paiement · A3 **1** sur 33 · A6a `test = true` à 06:30 UTC
+(voir sa ligne) · A6b `ouverts = 0` · A7 **20** sur 31 · 0 relevé, 0 audit · 6 mails-devis
+sans fiche RB · relances bloquées à dessein, 2 échéances désormais échues. Un client a
+rouvert un devis dans la nuit (1 événement `opened`). Benjamin ESCALES retiré des pros
+(RenoBoost #617, #618, 22/10) : restent SOLA, DOKLÈS, SPC.
 
 ⚠️ **La consigne de paiement a changé le 11/10** (RenoDevis `CLAUDE.md`,
 « Paiement en ligne », source canonique : `docs/STRIPE-CONNECT.md`) : Checkout
@@ -465,6 +472,10 @@ route.
   dans l'application), puis relecture de la file avec Paul avant réouverture ;
 - les **PR périmées sont fermées** : RenoDevis #390 et #387, RenoBoost #606 et #602,
   Ultima #396.
+
+**Rendue par Paul le 23/10** (corps de RenoDevis #419) : la **V2 RenoDevis est publiée**
+(#419 fusionnée le 23/10 à 10:33 UTC, « Paul a demandé explicitement la publication »).
+Elle lève le gel du 22/10 pour la V2 seule ; C, N et D restent gelés (règle 5 du §3).
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
