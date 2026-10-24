@@ -1,4 +1,5 @@
 import { INDEX_POINTS_DE_VUE } from './leo-points-de-vue.mjs';
+import { REGLES_INTERACTION_LEO } from '../../js/leo-interaction.mjs';
 import { EMAIL_RE } from './validate.js';
 
 // Voix de Léo (boucle L2) — briques PURES : bornes de la conversation,
@@ -826,6 +827,7 @@ export function construireSysteme(quadrant, avecOutils) {
       'obséquieuse, toujours au service du cap. Tu tutoies Paul.',
     'Nous sommes dans le quadrant ' + q.nom + ' : ' + q.sujet,
     registre,
+    REGLES_INTERACTION_LEO,
     'Directives de Paul — EB, JL, EL, DR, ZS, MS :',
     '- EB : terminer la boucle utile et capitaliser sur l’existant ; préserver le travail concurrent.',
     '- JL : relier chaque tâche au résultat final du projet ; Ultima est le lieu du pilotage, sans interdire les produits de Paul.',
@@ -952,4 +954,5 @@ export function extraireTexte(contenu) {
     .join('\n')
     .trim();
 }
+
 

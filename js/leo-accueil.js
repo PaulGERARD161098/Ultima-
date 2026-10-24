@@ -967,6 +967,80 @@
 
     var historique = [];
     var enCours = false;
+    var interactionModule = null;
+    var suiviTache = null;
+    var rappelsFocus = 0;
+    var planEnAttente = null;
+    var moduleInteraction = import('/js/leo-interaction.mjs').then(function (m) {
+      interactionModule = m; return m;
+    }, function () { return null; });
+    var panneauSuivi = el('div', 'leo-suivi-tache');
+    panneauSuivi.hidden = true;
+    section.insertBefore(panneauSuivi, dialogue);
+
+    function rendreSuivi() {
+      panneauSuivi.replaceChildren();
+      panneauSuivi.hidden = !suiviTache && !planEnAttente;
+      if (suiviTache && interactionModule) {
+        var bilan = interactionModule.bilanSuivi(suiviTache);
+        panneauSuivi.appendChild(el('strong', 'leo-suivi-titre', suiviTache.titre));
+        var progression = document.createElement('progress');
+        progression.max = bilan.total; progression.value = bilan.finis;
+        progression.setAttribute('aria-label', 'Jalons confirmés par Paul');
+        panneauSuivi.appendChild(progression);
+        panneauSuivi.appendChild(el('p', 'leo-suivi-position', bilan.finis + ' sur ' + bilan.total + ' jalons confirmés par toi.'));
+        var jalons = document.createElement('ol');
+        suiviTache.etapes.forEach(function (etape, index) {
+          jalons.appendChild(el('li', '', etape + (suiviTache.confirmes.indexOf(index) >= 0 ? ' — confirmé par toi' : ' — à terminer')));
+        });
+        panneauSuivi.appendChild(jalons);
+        panneauSuivi.appendChild(el('p', 'leo-suivi-etat', suiviTache.etat === 'suspendue'
+          ? 'En pause — reprise : ' + (bilan.prochain || 'vérifier la clôture')
+          : bilan.termine ? 'Tous les jalons sont confirmés par toi.' : 'Prochaine étape : ' + bilan.prochain));
+      }
+      if (planEnAttente) {
+        panneauSuivi.appendChild(el('strong', 'leo-suivi-titre', 'Plan proposé : ' + planEnAttente.titre));
+        var liste = document.createElement('ol');
+        planEnAttente.etapes.forEach(function (e) { liste.appendChild(el('li', '', e)); });
+        panneauSuivi.appendChild(liste);
+        var adopter = el('button', 'leo-suivi-adopter', 'Suivre ce plan');
+        adopter.type = 'button';
+        adopter.disabled = enCours;
+        adopter.addEventListener('click', function () { adopterPlan(); });
+        panneauSuivi.appendChild(adopter);
+      }
+      panneauSuivi.appendChild(el('small', 'leo-suivi-source', 'Suivi local au cartouche. Les confirmations ne remplacent pas les preuves du résultat.'));
+    }
+
+    function adopterPlan() {
+      if (enCours || !planEnAttente || !interactionModule) { return false; }
+      if (suiviTache) {
+        var bilan = interactionModule.bilanSuivi(suiviTache);
+        var point = 'Point d’arrêt : ' + suiviTache.titre + ' ; ' + bilan.finis + '/' + bilan.total + ' jalons confirmés ; reprise : ' + (bilan.prochain || 'clôture à vérifier');
+        historique.push({ role: 'user', content: echoBorne(point) });
+        bulle('issue', point);
+      }
+      suiviTache = interactionModule.ouvrirSuivi(planEnAttente, (suiviTache ? suiviTache.revision : 0) + 1);
+      planEnAttente = null; rappelsFocus = 0;
+      historique.push({ role: 'user', content: echoBorne('Je valide le plan de suivi : ' + suiviTache.titre) });
+      bulle('issue', 'Plan adopté. Tu peux confirmer un jalon à la voix : « étape 1 terminée ». Cela ne lance aucune action métier.');
+      rendreSuivi(); return true;
+    }
+
+    function lireInteraction(data) {
+      if (!interactionModule || !data || !data.interaction) { return; }
+      var i = data.interaction;
+      var nombre = suiviTache ? suiviTache.rappels : rappelsFocus;
+      if (i.focus && nombre < 2 && i.focus.numero === nombre + 1 && typeof i.focus.texte === 'string' && i.focus.texte.length <= 400) {
+        bulle('leo', i.focus.texte);
+        historique.push({ role: 'assistant', content: echoBorne(i.focus.texte) });
+        rappelsFocus = nombre + 1;
+        if (suiviTache) { suiviTache.rappels = rappelsFocus; }
+      }
+      var plan = interactionModule.validerPlan(i.plan);
+      if (plan) { planEnAttente = plan; }
+      rendreSuivi();
+    }
 
     function bulle(genre, texte) {
       var p = el('p', 'leo-bulle leo-bulle-' + genre, texte);
@@ -983,6 +1057,7 @@
 
     function rearmer() {
       enCours = false;
+      rendreSuivi();
       if (document.contains(formulaire)) {
         champ.disabled = false;
         envoyer.disabled = false;
@@ -1296,7 +1371,27 @@
       evenement.preventDefault();
       var texte = champ.value.trim();
       if (!texte || enCours) { return; }
+      if (interactionModule && planEnAttente && /^(?:go|oui|ok|je valide le plan)[.! ]*$/i.test(texte)) {
+        adopterPlan(); champ.value = ''; return;
+      }
+      if (interactionModule && suiviTache) {
+        if (/^(?:reprends|on reprend|reprenons)(?: la t[âa]che)?[.! ]*$/i.test(texte)) { suiviTache.etat = 'en_cours'; rendreSuivi(); }
+        var jalon = interactionModule.commandeJalon(texte);
+        if (jalon !== null) {
+          try {
+            suiviTache = interactionModule.confirmerJalon(suiviTache, jalon, suiviTache.revision);
+            bulle('issue', 'Jalon ' + (jalon + 1) + ' marqué terminé selon ta confirmation.');
+            historique.push({ role: 'user', content: texte });
+            champ.value = ''; rendreSuivi(); return;
+          } catch (e) { bulle('erreur', 'Ce jalon ne fait pas partie du plan courant.'); return; }
+        }
+        if (interactionModule.prioriteExplicite(texte)) {
+          suiviTache.etat = 'suspendue';
+          rendreSuivi();
+        }
+      }
       enCours = true;
+      rendreSuivi();
       champ.value = '';
       champ.disabled = true;
       envoyer.disabled = true;
@@ -1304,8 +1399,14 @@
       bulle('paul', texte);
       var attente = bulle('leo', 'Léo réfléchit…');
       attente.className += ' leo-bulle-attente';
+      var jaugeAttente = document.createElement('progress');
+      jaugeAttente.setAttribute('aria-label', 'Réponse en préparation, avancement inconnu');
+      attente.appendChild(jaugeAttente);
+      var presence = setTimeout(function () {
+        if (document.contains(attente)) { attente.firstChild.textContent = 'Je prépare toujours la réponse. Aucune nouvelle étape confirmée. '; }
+      }, 8000);
 
-      fetch('/api/leo', {
+      moduleInteraction.then(function () { return fetch('/api/leo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1315,16 +1416,18 @@
         // Les yeux de Léo : l'état du quadrant part avec la question, calculé
         // par la page appelante sur des données DÉJÀ chargées (aucun second
         // fetch). Absent → l'appel repart exactement comme avant (L2 intact).
-        body: JSON.stringify(voix.etat
+        body: JSON.stringify(Object.assign(voix.etat
           ? { quadrant: voix.quadrant, messages: historique, etat: voix.etat }
-          : { quadrant: voix.quadrant, messages: historique })
-      }).then(function (reponse) {
+          : { quadrant: voix.quadrant, messages: historique }, interactionModule
+            ? { interaction: interactionModule.contexteInteraction(suiviTache, rappelsFocus) } : {}))
+      }); }).then(function (reponse) {
         return reponse.json().then(function (corps) {
           return { statut: reponse.status, corps: corps };
         }, function () {
           return { statut: reponse.status, corps: null };
         });
       }).then(function (resultat) {
+        clearTimeout(presence);
         attente.remove();
         var data = resultat.corps && resultat.corps.ok === true ? resultat.corps.data : null;
         var texteLeo = data && typeof data.reponse === 'string' ? data.reponse : null;
@@ -1340,6 +1443,7 @@
             bulle('erreur', "Le journal des appels de Léo est injoignable : un plafond provisoire, plus bas, s'applique.");
           }
         }
+        lireInteraction(data);
         if (proposition) {
           // La saisie reste coupée tant que la carte attend Paul (pas de rearmer).
           // B1 ④ : un vert tente l'exécution directe, qui retombe elle-même
@@ -1381,6 +1485,7 @@
         }
         rearmer();
       }, function () {
+        clearTimeout(presence);
         attente.remove();
         historique.pop();
         champ.value = texte;
@@ -1472,3 +1577,4 @@
     messageRefusDefaire: messageRefusDefaire
   };
 })();
+

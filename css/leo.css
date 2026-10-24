@@ -199,6 +199,31 @@
 
 .leo-bulle-attente { font-style: italic; color: var(--encre-sepia-douce, #6a5636); }
 
+/* Suivi du 24/10 : mêmes jetons que le cartouche, jalons déclarés distincts
+   de l'attente indéterminée d'une réponse. Aucune animation de faux progrès. */
+.leo-suivi-tache {
+  margin: .6rem 0 1rem;
+  padding: .7rem .8rem;
+  border: 1px solid var(--cerne-carte, #5a4118);
+  border-radius: 4px;
+  color: var(--encre-sepia, #3b2f1c);
+  background: var(--parchemin-carte, #efe3c6);
+  overflow-wrap: anywhere;
+}
+.leo-suivi-tache[hidden] { display: none; }
+.leo-suivi-titre { display: block; font-size: .95rem; }
+.leo-suivi-position, .leo-suivi-etat { margin: .3rem 0; font-size: .88rem; }
+.leo-suivi-source { display: block; margin-top: .5rem; font-size: .75rem; line-height: 1.4; }
+.leo-suivi-tache progress, .leo-bulle-attente progress {
+  display: block; width: 100%; height: .55rem; margin: .6rem 0;
+  accent-color: var(--accent-focus, #1f5f8b);
+}
+.leo-suivi-adopter {
+  min-height: 44px; padding: .5rem .8rem; border: 1px solid var(--cerne-carte, #5a4118);
+  border-radius: 4px; background: var(--parchemin, #f6eed9); color: inherit; cursor: pointer;
+}
+.leo-suivi-adopter:focus-visible { outline: 3px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+
 .leo-bulle-erreur {
   align-self: flex-start;
   font-style: italic;
@@ -594,3 +619,4 @@ body { font-kerning: normal; font-variant-ligatures: common-ligatures; }
 @media (pointer: coarse) {
   .leo-dock-action, .leo-dock-parler { min-height: 44px; }
 }
+

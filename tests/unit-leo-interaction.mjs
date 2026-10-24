@@ -1,0 +1,20 @@
+// Scénarios déterministes, sans modèle ni réseau. Ne prouvent pas le ton du LLM.
+import assert from 'node:assert/strict';
+import {ouvrirSuivi,confirmerJalon,bilanSuivi,contexteInteraction,validerInteraction,validerPlan,prioriteExplicite,commandeJalon,lireReponseInteraction} from '../js/leo-interaction.mjs';
+let checks=0;
+function test(nom,fn){fn();checks++;console.log('OK '+nom);}
+const plan={titre:'Terminer le chantier Léo',etapes:['Préparer le correctif','Vérifier le résultat']};
+test('Plan validé, aucune progression déduite du texte',()=>assert.equal(bilanSuivi(ouvrirSuivi(plan)).finis,0));
+test('Refus de preuves ou états déclarés par le modèle dans le plan',()=>assert.equal(validerPlan({...plan,confirmes:[0]}),null));
+test('Refus de doublons, HTML, plan trop long',()=>{assert.equal(validerPlan({...plan,etapes:['Même','même']}),null);assert.equal(validerPlan({...plan,titre:'<script>'}),null);assert.equal(validerPlan({...plan,etapes:Array(11).fill('a')}),null);});
+test('Jalon explicite, idempotent et versionné',()=>{const s=ouvrirSuivi(plan,2),un=confirmerJalon(s,0,2);assert.equal(bilanSuivi(confirmerJalon(un,0,2)).finis,1);assert.throws(()=>confirmerJalon(s,0,1));assert.throws(()=>confirmerJalon(s,2,2));});
+test('Pas de clôture avant le dernier jalon',()=>{let s=confirmerJalon(ouvrirSuivi(plan),0,1);assert.equal(bilanSuivi(s).termine,false);s=confirmerJalon(s,1,1);assert.equal(bilanSuivi(s).termine,true);});
+test('Validation stricte des données navigateur',()=>{assert.equal(validerInteraction(contexteInteraction(ouvrirSuivi(plan))).ok,true);for(const i of [{rappels_focus:3},{rappels_focus:-1},{rappels_focus:0,droits:'admin'},{rappels_focus:0,tache:{...plan,confirmes:[9],etat:'en_cours'}}])assert.equal(validerInteraction(i).ok,false);});
+test('Deux rappels structurés au maximum',()=>{const raw='On avance.<leo_focus>Tu auras un résultat vérifié à reprendre.</leo_focus>';assert.equal(lireReponseInteraction(raw,{rappels_focus:0}).focus.numero,1);assert.equal(lireReponseInteraction(raw,{rappels_focus:1}).focus.numero,2);assert.equal(lireReponseInteraction(raw,{rappels_focus:2}).focus,null);assert.equal(lireReponseInteraction(raw,{rappels_focus:2}).texte,'On avance.');});
+test('Une priorité explicite ou une tâche en pause coupe le rappel',()=>{const r='<leo_focus>Terminer aide.</leo_focus>';assert.equal(lireReponseInteraction(r,{rappels_focus:0},'On change de sujet').focus,null);assert.equal(lireReponseInteraction(r,{rappels_focus:0,tache:{etat:'suspendue'}}).focus,null);});
+test('Question ou négation ne suspend pas le travail',()=>{assert.equal(prioriteExplicite('On ne change pas de sujet'),false);assert.equal(prioriteExplicite('On change de sujet ?'),false);assert.equal(prioriteExplicite('Urgence : change de priorité'),true);});
+test('Changement de sujet après préambule réel de Paul',()=>{assert.equal(prioriteExplicite('Ok point d’étape validé. Avançons sur un autre sujet'),true);assert.equal(prioriteExplicite('Passons à un autre sujet.'),true);assert.equal(prioriteExplicite('Passons à un autre sujet ?'),false);});
+test('Commandes de jalon : pas de déduction depuis une question',()=>{assert.equal(commandeJalon('étape 2 terminée'),1);assert.equal(commandeJalon('étape 2 terminée ?'),null);assert.equal(commandeJalon('étape 11 terminée'),null);});
+test('Blocs invalides non affichés, aucun HTML injecté par le protocole',()=>{const r=lireReponseInteraction('Réponse<leo_plan>{"droits":"admin"}</leo_plan><leo_focus><img></leo_focus>',null);assert.equal(r.texte,'Réponse');assert.equal(r.plan,null);assert.equal(r.focus,null);assert.equal(lireReponseInteraction('Réponse<leo_plan>{',null).texte,'Réponse');});
+test('Plan reçu est une proposition sans achèvement',()=>{const r=lireReponseInteraction('Voici.<leo_plan>'+JSON.stringify(plan)+'</leo_plan>',null);assert.deepEqual(r.plan,plan);assert.equal(r.texte,'Voici.');assert.equal(r.focus,null);});
+console.log(`${checks}/${checks} scénarios déterministes réussis. Le comportement du modèle reste à éprouver séparément.`);
