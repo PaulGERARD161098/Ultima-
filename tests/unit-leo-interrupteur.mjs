@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as leo from '../api/_lib/leo.js';
+import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import { ecrituresAutoCoupees, ouvrirEcriture } from '../api/_lib/leo-execution.js';
 
 const PAUL = '11111111-2222-4333-8444-555555555555';
@@ -56,6 +57,8 @@ const routeSource = readFileSync(new URL('../api/leo.js', import.meta.url), 'utf
 function route({ auth = 'ok', coupees = false, appel = null } = {}) {
   const deps = {
     ...leo,
+    // Dépendances pures réelles de la route après suppression des imports.
+    validerInteraction, decrireInteraction, lireReponseInteraction,
     Anthropic: AnthropicFactice,
     process: { env: { ANTHROPIC_API_KEY: 'fixture-sans-reseau' } },
     requireProprietaire: async () => auth === 'ok'
@@ -114,7 +117,8 @@ const espion = (resultat) => ({ appels: [], resultat });
 for (const [nom, mauvais] of [
   ['quadrant inconnu', { ...corps, quadrant: 'nimporte-quoi' }],
   ['conversation vide', { ...corps, messages: [] }],
-  ['état invalide', { ...corps, etat: 'pas-un-objet' }]
+  ['état invalide', { ...corps, etat: 'pas-un-objet' }],
+  ['suivi invalide', { ...corps, interaction: { rappels_focus: 3 } }]
 ]) {
   construits = 0;
   const e = espion({ ok: true, traceId: null, mode: 'base' });
@@ -154,3 +158,4 @@ assert.ok(/await requireProprietaire\(req\)/.test(source));
 assert.ok(!/requireUser\(/.test(source));
 
 console.log('UNIT-LEO-INTERRUPTEUR OK');
+

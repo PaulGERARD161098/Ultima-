@@ -89,10 +89,14 @@ export default async function handler(req, res) {
   if (!verdictEtat.ok) return fail(res, 400, 'État de quadrant invalide');
   const suivi = validerInteraction(corps.interaction);
   if (!suivi.ok) return fail(res, 400, 'Suivi de tâche invalide');
-  const messages = joindreEtatConversation(conversation.messages, verdictEtat.etat);
+  const messages = joindreEtatConversation(conversation.messages, verdictEtat.etat)
+    .map(message => ({ ...message }));
   if(suivi.valeur){
     const i=messages.length-1;
-    messages[i]={...messages[i],content:messages[i].content+'\n\n'+decrireInteraction(suivi.valeur)};
+    const contexte = decrireInteraction(suivi.valeur);
+    messages[i] = { ...messages[i], content: Array.isArray(messages[i].content)
+      ? [...messages[i].content, { type: 'text', text: contexte }]
+      : messages[i].content + '\n\n' + contexte };
   }
 
   // LE PLAFOND D'APPELS (19/10) : la ligne 'tentee' est posée AVANT le coût, et

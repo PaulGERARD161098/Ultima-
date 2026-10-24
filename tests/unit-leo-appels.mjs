@@ -271,14 +271,18 @@ async function espionne(fn) {
 {
   const i = (s) => route.indexOf(s);
   const idx = {
-    etat: i('validerEtatQuadrant(corps.etat)'), appel: i('await ouvrirAppel('),
+    etat: i('validerEtatQuadrant(corps.etat)'), suivi: i('validerInteraction(corps.interaction)'),
+    appel: i('await ouvrirAppel('),
     sdk: i('new Anthropic('), create: i('client.messages.create('),
-    clo1: i("phase: 'reussie'"), clo2: i("phase: 'echouee'"), texte: i('const texte = extraireTexte('),
+    // L'extraction peut être enveloppée par le parseur d'interaction :
+    // garder l'opération protégée sans dépendre du nom de sa variable.
+    clo1: i("phase: 'reussie'"), clo2: i("phase: 'echouee'"), texte: i('extraireTexte(reponse.content)'),
     catchBloc: i('} catch (erreur) {')
   };
   verdicts.cablageTrouve = Object.values(idx).every((n) => n > 0);
   // Après TOUTES les validations (une requête invalide ne consomme pas le plafond), AVANT le coût.
-  verdicts.ouvertureApresValidations = idx.etat > 0 && idx.appel > idx.etat;
+  verdicts.ouvertureApresValidations = idx.etat > 0 && idx.suivi > 0 &&
+    idx.appel > idx.etat && idx.appel > idx.suivi;
   verdicts.ouvertureAvantLeCout = idx.appel < idx.sdk && idx.appel < idx.create;
   // La clôture : après l'appel payé et avant de lire la réponse ; l'échec dans le catch.
   verdicts.clotureReussieApresLAppel = idx.clo1 > idx.create && idx.clo1 < idx.texte;
@@ -310,3 +314,4 @@ console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);
 console.log(ok ? 'UNIT-LEO-APPELS OK' : 'UNIT-LEO-APPELS ECHEC');
 process.exit(ok ? 0 : 1);
+

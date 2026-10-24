@@ -26,8 +26,16 @@ confirmation répétitive pour une recherche déjà autorisée. Si la recherche
 GitHub n'est pas raccordée dans le produit, le dire ; ne pas inventer de
 consultation. Un dépôt public n'est ni une garantie de qualité ni une
 autorisation d'exécuter son installateur. Les permissions existantes restent
-applicables. Piste ultérieure : moteur à poids ouverts pour une version Léo,
-nom « Odysseus » à identifier, sans installation ni évaluation lancée.
+applicables.
+
+**Destination confirmée par Paul le 24/10/2026 :** sa propre IA pilotée par Léo,
+sur ses machines, modèles et données locaux, sans fournisseur d'IA ni cloud
+d'inférence obligatoires. Odysseus est identifié comme candidat auto-hébergé,
+distinct du modèle Ajax ; aucun remplacement d'Ultima décidé. Les specs et
+l'installation interrompue restent inconnues : poursuivre le cadrage et les
+préparations indépendantes, sans les redemander pour l'instant. Première étape :
+une Léo 2.0 vérifiable ce week-end ; la réception locale attend l'accès réel à
+la machine. Le contrat canonique §11.3 et la recette portent critères et reprise.
 
 **Mise à jour LV1 — 29/09/2026 :** appliquer le contrat canonique au §11 de
 `CADRAGE-2026-09-22-leo-pilote-tout.md`. Les permissions historiques plus larges

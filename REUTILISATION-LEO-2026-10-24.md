@@ -8,6 +8,8 @@ La cartouche produit utilise du JavaScript natif, une route Anthropic Messages e
 
 ## Méthode et limites
 
+**Complément après clarification de Paul.** La destination est désormais une IA personnelle pilotée par Léo, exécutée avec ses modèles et données sur ses machines sans fournisseur d'IA obligatoire. [Odysseus](https://github.com/odysseus-dev/odysseus) est identifié comme application auto-hébergée candidate (licence affichée AGPL-3.0-or-later), et non comme un modèle. Son guide prévoit des moteurs locaux, notamment Ollama sous Windows. Le [site officiel Ajax](https://data.pewdiepie.com/) affiche encore sa sortie comme à venir au contrôle. La recherche est réalisée ; aucune installation, décision de migration ou configuration matérielle finale. Le contrat canonique et la recette fixent l'objectif, les étapes et le besoin d'essai. Les caractéristiques des machines ne sont pas disponibles et ne bloquent pas le cadrage V2.
+
 Lecture des README, licences, manifestes et fichiers ciblés via le connecteur GitHub, sans installation ni appel modèle. Références épinglées à des commits datés au plus tard du 24/10/2026. Les versions ci-dessous sont celles effectivement lues dans les sources ; leur publication npm n'a pas été vérifiée. Les six dépôts étaient publics et non archivés au contrôle. Leur activité récente indique un entretien observable, pas une garantie de maintenance future. Les coûts sont des appréciations de raccordement, sans devis horaire inventé.
 
 ## Comparaison
