@@ -86,4 +86,6 @@ CI du premier lot : runtime, registre, registre-postgres et registre-auth réuss
 
 Correctif préparé après lecture des logs : vraies fonctions d'interaction injectées dans les deux simulations de route ; contrôles de quota et d'ordre préservés et renforcés ; repère d'extraction mis à jour. Une régression ajoute état de quadrant + suivi dans la même requête : la route conserve désormais les blocs structurés, au lieu de les convertir en chaîne, et ne modifie pas le fil fourni. Syntaxe statique des quatre fichiers vérifiée ; passage fonctionnel de la nouvelle version encore attendu.
 
+Au commit `0f17ae4`, le nouveau scénario de données a rencontré le refus de rafale attendu (429) car il réutilisait immédiatement la même route et le même utilisateur. Le scénario est désormais construit sur une instance de route indépendante ; aucun limiteur de production n'est modifié. Passage du nouveau test encore attendu en CI.
+
 Prochaine action : vérifier les trois suites corrigées, puis effectuer la recette navigateur et les dialogues. Aucune fusion, activation, réception locale ou mise en production annoncée.

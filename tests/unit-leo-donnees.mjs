@@ -96,7 +96,10 @@ assert.equal(appel.tools.length, 3);
 
 // Le suivi et les données de quadrant coexistent : aucun tableau de blocs
 // n'est converti en chaîne « [object Object] » lors de leur assemblage.
-const avecSuivi = await route({ method: 'POST', body: {
+// Scénario indépendant : une nouvelle instance évite de rejouer le même
+// utilisateur en rafale. Le limiteur réel reste testé dans ses propres suites.
+const routeAvecSuivi = new Function(...Object.keys(deps), routeSource)(...Object.values(deps));
+const avecSuivi = await routeAvecSuivi({ method: 'POST', body: {
   quadrant: 'adramelech', messages: historique, etat: entree,
   interaction: { rappels_focus: 0, tache: {
     titre: 'Terminer le cadrage', etapes: ['Vérifier les données'],
