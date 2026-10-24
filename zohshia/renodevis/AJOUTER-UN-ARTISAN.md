@@ -67,6 +67,15 @@ case vide reste vide, et l'écran le montre.
 La **TVA** n'est pas à fournir : elle se calcule par la règle légale datée
 (`TECHNO.md`), sur les conditions relevées au chantier.
 
+Pour le parcours vocal (`TECHNO.md` §3, contrat du 24/10/2026), relever aussi
+la distinction entre **achat à transformer** et **forfait de vente final**, les
+accessoires couverts par chaque forfait et les bases de prix de secours
+explicitement autorisées. Ces paramètres appartiennent au compte du pro :
+aucun tarif ni règle d'une autre instance ne sert de valeur par défaut. Un
+forfait final ne reçoit pas de seconde majoration ; un accessoire inclus ne
+devient pas une seconde ligne facturée. La présence de cette check-list ne
+prouve pas que ces paramètres sont déjà raccordés au moteur.
+
 ### 1.4 Ses produits et ses fournisseurs
 
 | Information | Où | Obligatoire |
@@ -77,6 +86,13 @@ La **TVA** n'est pas à fournir : elle se calcule par la règle légale datée
 | Ses prix fixes (kits, forfaits sans prix d'achat) | `banques_reno.banque` · prix fixes | facultatif |
 | Ses prestations (main-d'œuvre, mise en service, déplacement, maintenance, dépose) et leurs prix de vente | `banques_reno.banque` · prestations | recommandé |
 | Ses devis passés (PDF) et leur issue (signé, en attente, refusé) | corpus (`corpus_devis`, `corpus_lignes`) — seul l'identifiant client traverse | facultatif — c'est ce qui rend le premier devis « déjà presque prêt » |
+
+Le pro peut dicter directement ses références. En cas de référence manquante ou
+approximative, un devis passé fournit un candidat ; sans candidat compatible,
+la recherche directe dans son catalogue est permise. Obtenir les documents
+constructeur permettant de vérifier combinaisons, limites et accessoires,
+distincts de la source fournisseur qui établit le prix d'achat actuel. Un prix
+ou une référence retrouvée ne prouve pas la conformité de l'installation.
 
 ### 1.5 Ses clients existants (facultatif)
 
@@ -161,6 +177,18 @@ extraction d'un commit et une base d'un autre ne se mélangent pas.
 - **Son paiement en ligne** : oui ou non, et son taux de commission.
 - **Ses devis entre professionnels** : en émet-il ? Si oui, étape 13.
 
+**Recette du parcours vocal, à effectuer avant de l'annoncer opérationnel :**
+
+- Note vocale envoyée ou fin annoncée d'une dictée en plusieurs messages : titre et synthèse complète relus une fois, puis lancement de la recherche après accord. Pas de redemande des valeurs connues ; les questions indispensables sont regroupées.
+- Référence précise conservée ; modèle manquant recherché puis vérifié ; incompatibilité expliquée sans remplacement silencieux. La somme des longueurs n'est pas une preuve de chaque branche.
+- Prix vérifiés séparément de la technique ; forfait final non majoré, accessoires non doublés. Prix absent : provision seulement sur une base autorisée, sinon exclusion visible et total connu qualifié comme partiel.
+- Correction ciblée : données non modifiées conservées, configuration dépendante revérifiée, ancien résultat tardif refusé ; PDF rattaché à la dernière version validée.
+- Progression fondée sur les événements réellement exécutés et éprouvée dans chaque canal ; interruption et reprise sans faux état « prêt » ni doublon.
+- Même scénario fictif sur les canaux concernés ; mesure du délai vocal vers PDF et de l'attente du pro. Le contrat est adopté ; les résultats réels, le raccord des canaux et la performance restent à prouver par version.
+
+Cette recette ne remplace ni la qualification technique ni les gates de mise en
+service. Elle n'autorise aucun envoi client, aucune activation ni dépense.
+
 ## 5. Ce qui reste manuel — à automatiser
 
 Lu dans la colonne *Mode* du §2 : la fiche (1), la commission (2), le compte (3),
@@ -233,3 +261,4 @@ marquées comme telles dans le code : elles se remplacent par les règles du pro
 
 Chacune pose un **battement** dans `sentinelle_etat` : la requête d'empreinte dit
 si elle tourne, et si elle tourne à vide.
+

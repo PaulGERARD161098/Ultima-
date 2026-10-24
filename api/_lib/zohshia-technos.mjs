@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-23",
+ "publie_le": "2026-10-24",
  "technos": [
   {
    "id": "renodevis",
@@ -620,6 +620,239 @@ export default {
        "r": [
         [
          "3. Les mécanismes qui tiennent la techno",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Contrat du parcours vocal — révision du 24/10/2026",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Exigences validées, réception applicative à établir.",
+         "b"
+        ],
+        [
+         " Ce contrat complète le parcours commun aux canaux conversationnels ; il ne transforme pas la présence du plan en fonctionnalité implantée, en catalogue vérifié ou en extraction neutre à jour. Les états mesurés et datés du §8 restent distincts.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Étape",
+          ""
+         ]
+        ],
+        [
+         [
+          "Comportement attendu",
+          ""
+         ]
+        ],
+        [
+         [
+          "Garde de réception",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Dictée terminée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Une note vocale envoyée constitue une dictée terminée. Pour une saisie en plusieurs messages, attendre la fin annoncée, puis proposer un titre court de chantier et une synthèse complète : équipements, références, quantités, puissances, pose, accessoires, main-d'œuvre, contraintes et exclusions.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Le titre ne remplace jamais le détail ; aucune référence, quantité ou valeur incertaine n'est corrigée silencieusement par la transcription. Aucun fragment ne lance la recherche avant validation de la synthèse.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Validation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Le pro confirme une fois la synthèse ou la corrige ; les informations déjà connues de son compte sont réutilisées.",
+           ""
+          ]
+         ],
+         [
+          [
+           "La recherche métier commence après l'accord sur la version courante ; aucune nouvelle question pour une donnée déjà fournie et non contradictoire.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recherche",
+           ""
+          ]
+         ],
+         [
+          [
+           "Conserver les références précises dictées. Lorsqu'un modèle manque ou reste approximatif, rechercher un candidat dans les devis passés du pro ; à défaut de candidat compatible, rechercher directement dans son catalogue.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Un précédent est une piste de sélection, jamais une preuve de compatibilité ni un tarif actuel. Les données restent cloisonnées par compte.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Vérification",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vérifier la combinaison, les limites et les accessoires sur les données techniques du constructeur, puis vérifier l'achat dans le catalogue fournisseur daté et appliquer les règles de vente du pro.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Distinguer qualification technique, prix vérifié et hypothèse ; une longueur totale ne prouve pas les longueurs individuelles de chaque branche.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Clarifications",
+           ""
+          ]
+         ],
+         [
+          [
+           "Contrôles en arrière-plan ; regrouper les seuls manques indispensables à l'estimation et les incompatibilités qui exigent un choix.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Une réserve ou un contrôle impossible reste visible dans le résultat ; aucun remplacement de produit sans accord. Les détails de pose pouvant attendre ne deviennent pas des questions obligatoires pour une première estimation.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Estimation et PDF",
+           ""
+          ]
+         ],
+         [
+          [
+           "Remettre rapidement une estimation provisoire, même si des points restent à confirmer, avec postes estimés, sources autorisées, réserves et exclusions explicites.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Aucun montant inventé. Sans base de prix autorisée, le poste reste non chiffré et le total connu n'est pas présenté comme un total global. Aucune fiabilité chiffrée déduite de la seule tolérance du pro à l'approximation.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Correction",
+           ""
+          ]
+         ],
+         [
+          [
+           "Conserver les faits et choix non modifiés ; revérifier uniquement les dépendances touchées, y compris la configuration et les raccordements lors d'un ajout d'appareil.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Invalider les anciens résultats dépendants et refuser leur retour tardif ; le PDF désigne la dernière version validée. Une modification sans rapport ne retire pas les références déjà retenues.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Progression",
+           ""
+          ]
+         ],
+         [
+          [
+           "Montrer les étapes réellement exécutées : recherche, vérification, calcul, préparation du document, résultat prêt. Adapter l'indicateur aux capacités éprouvées du canal.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de faux pourcentage, de fausse activité ou de progression en boucle ; attente, interruption et échec sont annoncés avec une reprise possible sans perte ni doublon.",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Prix et forfaits :",
+         "b"
+        ],
+        [
+         " distinguer achats à transformer selon la règle du pro et forfaits déjà exprimés en prix de vente final. Ne pas majorer à nouveau un forfait final ; ne pas facturer deux fois un accessoire couvert par ce forfait. Une durée dictée demeure la prescription du pro, sans réévaluation automatique au seul motif d'un changement de configuration.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Preuve attendue :",
+         "b"
+        ],
+        [
+         " jouer le même scénario fictif et ses corrections sur les canaux concernés, avec un cas de référence précise, un modèle manquant, un prix absent, une incompatibilité, un résultat périmé et une interruption. Mesurer séparément le temps actif de traitement et le temps d'attente du pro. La cible vocal vers PDF en moins de dix minutes est un objectif à chronométrer, pas une performance acquise. Aucune réception, activation, nouvelle dépense ou autorisation d'envoi client ne découle de ce contrat.",
          ""
         ]
        ]
@@ -3350,6 +3583,39 @@ export default {
        ]
       },
       {
+       "t": "p",
+       "r": [
+        [
+         "Pour le parcours vocal (",
+         ""
+        ],
+        [
+         "TECHNO.md",
+         "c"
+        ],
+        [
+         " §3, contrat du 24/10/2026), relever aussi la distinction entre ",
+         ""
+        ],
+        [
+         "achat à transformer",
+         "b"
+        ],
+        [
+         " et ",
+         ""
+        ],
+        [
+         "forfait de vente final",
+         "b"
+        ],
+        [
+         ", les accessoires couverts par chaque forfait et les bases de prix de secours explicitement autorisées. Ces paramètres appartiennent au compte du pro : aucun tarif ni règle d'une autre instance ne sert de valeur par défaut. Un forfait final ne reçoit pas de seconde majoration ; un accessoire inclus ne devient pas une seconde ligne facturée. La présence de cette check-list ne prouve pas que ces paramètres sont déjà raccordés au moteur.",
+         ""
+        ]
+       ]
+      },
+      {
        "t": "h3",
        "r": [
         [
@@ -3536,6 +3802,15 @@ export default {
            ""
           ]
          ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le pro peut dicter directement ses références. En cas de référence manquante ou approximative, un devis passé fournit un candidat ; sans candidat compatible, la recherche directe dans son catalogue est permise. Obtenir les documents constructeur permettant de vérifier combinaisons, limites et accessoires, distincts de la source fournisseur qui établit le prix d'achat actuel. Un prix ou une référence retrouvée ne prouve pas la conformité de l'installation.",
+         ""
         ]
        ]
       },
@@ -5018,6 +5293,66 @@ export default {
           " : en émet-il ? Si oui, étape 13.",
           ""
          ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Recette du parcours vocal, à effectuer avant de l'annoncer opérationnel :",
+         "b"
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Note vocale envoyée ou fin annoncée d'une dictée en plusieurs messages : titre et synthèse complète relus une fois, puis lancement de la recherche après accord. Pas de redemande des valeurs connues ; les questions indispensables sont regroupées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Référence précise conservée ; modèle manquant recherché puis vérifié ; incompatibilité expliquée sans remplacement silencieux. La somme des longueurs n'est pas une preuve de chaque branche.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Prix vérifiés séparément de la technique ; forfait final non majoré, accessoires non doublés. Prix absent : provision seulement sur une base autorisée, sinon exclusion visible et total connu qualifié comme partiel.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Correction ciblée : données non modifiées conservées, configuration dépendante revérifiée, ancien résultat tardif refusé ; PDF rattaché à la dernière version validée.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Progression fondée sur les événements réellement exécutés et éprouvée dans chaque canal ; interruption et reprise sans faux état « prêt » ni doublon.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Même scénario fictif sur les canaux concernés ; mesure du délai vocal vers PDF et de l'attente du pro. Le contrat est adopté ; les résultats réels, le raccord des canaux et la performance restent à prouver par version.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Cette recette ne remplace ni la qualification technique ni les gates de mise en service. Elle n'autorise aucun envoi client, aucune activation ni dépense.",
+         ""
         ]
        ]
       },
@@ -7317,14 +7652,14 @@ export default {
   }
  ],
  "sources": {
-  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
-  "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
-  "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
-  "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
-  "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
+  "anti-pattern/TECHNO.md": "52084231fb8e65c140a83d45436cf1f8e650402135b18823bc44336441cc135d",
+  "anti-pattern/MISE-EN-SERVICE.md": "f8a9fb963a2f4b303dc055b9dc5f39794a37d92eb838c2455f5a40b8ba7094d3",
+  "pilotage-back-office/badge.json": "c4a597d5042090c31bf4cd4d84fb9c34d331a171c85d203161b33b1f682fa0da",
+  "pilotage-back-office/TECHNO.md": "16f422a86faf885ff740c5a8e1d850a26327047315248f1db2604a06b33e41ae",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "7a30e8408f654340b42f0e5b45262abcbd7d4a50627ed649dbcac75e63ffd4e1",
+  "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
+  "renodevis/TECHNO.md": "f7afae80ac897990518a5e3d96a14c9086612358b618923421cff838e7312316",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "e014f2ddbec865d8b3c096cafeaece8648833f10de3e1106b5cd89efb1b9a8dc"
  }
 };
