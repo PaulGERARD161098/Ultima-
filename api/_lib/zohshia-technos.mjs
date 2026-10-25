@@ -5981,17 +5981,6 @@ export default {
      "titre": "Ce que fait la techno",
      "blocs": [
       {
-       "t": "note",
-       "paras": [
-        [
-         [
-          "Règle adoptée et précisée le 13/10/2026 : prévoir le contrôle dès le cadrage, même avant l'existence du système métier ; disposer d'un pilotage utilisable avant tout avancement important ou mise en ligne.",
-          ""
-         ]
-        ]
-       ]
-      },
-      {
        "t": "h2",
        "r": [
         [
@@ -6364,6 +6353,60 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "6. Continuité et charge de travail",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Travailler par unités courtes, terminables et vérifiables, en gardant une seule boucle d'exécution active. Le plan conserve la destination ; chaque unité produit un résultat utile, sa preuve et un point de reprise avant d'ouvrir la suivante. Enchaîner les unités autorisées sans demander une nouvelle confirmation à chaque étape.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant une unité, fixer son résultat, les seuls fichiers et contrôles nécessaires, sa condition de sortie et sa limite d'effort. Si elle grossit, réduire son périmètre et consigner le reste avant de poursuivre. Ne pas accumuler simultanément recherches, modifications et vérifications sur plusieurs fronts.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sauvegarder le travail versionné et le point de reprise dès qu'un résultat utile est obtenu, avant une opération longue ou un changement de sujet. Le point de reprise contient : objectif, version source, fait avec preuve, travail en cours, prochaine action unique, blocage et autorisation réellement manquante. Après interruption, relire ce point et l'état distant ; ne pas recommencer une étape déjà prouvée sur la même version.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Borner les lectures, recherches, sorties d'outils, essais et tâches concurrentes au besoin de l'unité courante. Résumer les résultats volumineux et conserver les références utiles. Si le contexte devient difficile à maîtriser, terminer ou sécuriser l'unité en cours, enregistrer la reprise et repartir dans un contexte allégé. Aucun seuil numérique de surcharge n'est présumé universel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Retour d'expérience déclaré : une session de travail interrompue a nécessité une recherche du dernier état pour pouvoir reprendre. La cause technique du plantage et sa durée ne sont pas établies ; la surcharge est un risque à prévenir, pas une cause démontrée. Cette règle vise une reprise fiable et une charge bornée ; elle ne garantit pas l'absence de panne et n'active aucun automate.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -6393,6 +6436,24 @@ export default {
        "t": "liste",
        "ordonnee": false,
        "items": [
+        [
+         [
+          "Définir une seule unité d'exécution active, avec résultat utile, périmètre borné et condition de sortie.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Prévoir un point de reprise versionné avant une opération longue et après chaque résultat utile.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Borner les lectures, sorties d'outils et essais au besoin courant ; alléger le contexte avant de perdre la maîtrise du suivi.",
+          ""
+         ]
+        ],
         [
          [
           "Recenser toutes les fonctions et leurs effets ; choisir le responsable du pilotage.",
@@ -6698,6 +6759,42 @@ export default {
        "r": [
         [
          "Respecter les autorisations effectives : déploiement public, dépense, migration, suppression ou envoi réel exigent le mandat correspondant. Le pilotage n'élargit jamais ces autorisations. L'activation d'un automate reste distincte de sa présence dans le code.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Vérifier la continuité sans surcharger",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sur une copie ou un environnement isolé, interrompre une unité après son point de sauvegarde. Reprendre à partir du point versionné et de l'état distant : le résultat déjà prouvé doit être retrouvé sans recommencer toute l'analyse ; la prochaine action doit être unique et exécutable. Un travail non sauvegardé reste indiqué comme tel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Contre-épreuve : retirer la version ou la preuve du point de reprise. La reprise doit signaler ce manque et revalider seulement l'élément concerné, sans déclarer l'unité terminée. Vérifier aussi qu'un élargissement du périmètre est reporté explicitement et qu'une étape autorisée n'attend pas un nouveau « go » par simple découpage.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ces critères décrivent la recette à mener dans chaque projet. L'ajout de cette règle ne prouve pas sa recette réelle et ne constitue aucun verrou automatique de charge ou de contexte.",
          ""
         ]
        ]
@@ -8516,20 +8613,20 @@ export default {
   }
  ],
  "sources": {
-  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
-  "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
-  "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
-  "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
-  "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
-  "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
-  "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
-  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "4eb18a840d55838e2c9f7a6bdff3137ad9662e8ff03bc9f98e6b188c49b7d298",
-  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
-  "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
-  "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
+  "anti-pattern/TECHNO.md": "52084231fb8e65c140a83d45436cf1f8e650402135b18823bc44336441cc135d",
+  "anti-pattern/MISE-EN-SERVICE.md": "f8a9fb963a2f4b303dc055b9dc5f39794a37d92eb838c2455f5a40b8ba7094d3",
+  "pilotage-back-office/badge.json": "5262ec7c086df87cb39f7857ff901e4eff85923a6dad7157f3c2822fe8d783d5",
+  "pilotage-back-office/TECHNO.md": "15cf572e956efc43348d425313febdf787d4b74ac657a409e60660bfc3b8651d",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "6c7d609bb12e5e7420b33636018a551d9980d82b874fbe2e328618bf58ff78f9",
+  "presentations-claires/badge.json": "6cd6b05ade762a785487a49143f5fd717fdf23bc389fac919f326364fb663d03",
+  "presentations-claires/TECHNO.md": "c1ef15eb25d6d96f716122c8fb49d64f5608b30cae980eda4380410e4d163d4d",
+  "presentations-claires/references/GRAMMAIRE.md": "e7639ff6f05ba1f7f2171d581d61baad2ca2a4bf726ab36b259e5e1ec89f138a",
+  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "907a0ae73e95cb3556db9353a9ee7c4a3bdc9d7ae5ee4cfc31a8f4b00ee8ba74",
+  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "88014dc6958ea7253e4a7e48e2b41a32f893ca546fdbbdb98cb42af3df1a9271",
+  "presentations-claires/MISE-EN-SERVICE.md": "d31a581cb528669f77779c8f3958bc74a8e34f5749ed7be68b694332b0e2c871",
+  "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
+  "renodevis/TECHNO.md": "10ef808c4ca50e7cf74ed23dbdb23f4d77719cd93643d1583ea642bf14e9b419",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "30eb3d01bbb91734184b314c44aa4eefc183c1419f7ce489196d649991c72df9"
  }
 };
