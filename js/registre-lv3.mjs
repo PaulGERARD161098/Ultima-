@@ -388,8 +388,43 @@ export const NOEUDS = {
     etat: 'Ouvert',
     blason: 'portail',
     cible: 'zohshia.html',
-    resume: 'Tes technos déjà en service, prêtes à déployer chez d’autres pros. '
-      + 'Un badge par techno : ce qu’elle fait, la check-list du pro, sa mise en service.',
+    resume: 'Tes technologies et méthodes réutilisables. Choisis une étoile '
+      + 'pour ouvrir son badge, ses compétences et sa recette.',
+    titre: 'ZOH SHIA',
+    surligne: 'Les technologies réutilisables',
+    invite: 'Choisis une technologie — son contenu s’ouvre dans le catalogue privé.',
+    coeur: 'kalamn',
+    legende: 'les technologies',
+    enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires'],
+  },
+  'zoh-devis': {
+    nom: 'CRÉATION DE DEVIS',
+    etat: 'Socle disponible',
+    blason: 'portail',
+    cible: 'zohshia.html#renodevis',
+    resume: 'Le socle de devis : fonctionnement, informations à obtenir et mise en service.',
+  },
+  'zoh-pilotage': {
+    nom: 'PILOTAGE',
+    etat: 'Méthode disponible',
+    blason: 'rose',
+    cible: 'zohshia.html#pilotage-back-office',
+    resume: 'Le pilotage en back-office : couverture, contrôles et recette de chaque instance.',
+  },
+  'zoh-approches-croisees': {
+    nom: 'APPROCHES CROISÉES',
+    etat: 'Méthode disponible',
+    blason: 'bifurcation',
+    cible: 'zohshia.html#anti-pattern',
+    resume: 'Croiser les raisonnements et traiter les écarts avant de décider.',
+  },
+  'presentations-claires': {
+    nom: 'PRÉSENTATIONS CLAIRES',
+    etat: 'Socle disponible',
+    blason: 'plume',
+    cible: 'zohshia.html#presentations-claires',
+    resume: 'Créer une présentation professionnelle : récit, composition éditoriale, '
+      + 'visuels explicatifs, preuves et contrôle du rendu.',
   },
   // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026). Étoile d'attente, le même geste
   // que ZOH SHIA le 04/10 et qu'IFULVIN : nom, épithète, les mots de Paul — AUCUNE

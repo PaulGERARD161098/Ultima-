@@ -25,7 +25,7 @@ Dans Ultima, charger les modules locaux selon le besoin :
 
 Les deux nouveaux modules sont adaptés de sources GitHub épinglées, avec licences et `sources.lock.json`. Leur périmètre est documentaire ; aucun moteur, police ou service externe amont n'est installé. La liste et la provenance vivent dans `outils/presentations-claires/SOURCES-GITHUB.md`.
 
-Dans ChatGPT sans accès à ces fichiers, lire les modules avec le connecteur GitHub sur la branche de livraison indiquée par le projet. Ne pas les déclarer installés dans les compétences personnelles ou éprouvés sur la machine avant une sauvegarde et une exécution réelles.
+Dans ChatGPT, charger les compétences personnelles `composition-editoriale` et `pitch-source` par leur nom lorsqu'elles sont disponibles. Sinon, lire les modules avec le connecteur GitHub sur la branche de livraison indiquée par le projet. Ne pas les déclarer installés dans les compétences personnelles ou éprouvés sur la machine avant une sauvegarde et une exécution réelles.
 
 ## Préparer sans répéter les questions
 

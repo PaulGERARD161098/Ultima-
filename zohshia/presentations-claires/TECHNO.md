@@ -10,6 +10,10 @@ Les règles complètes vivent dans `references/GRAMMAIRE.md`, les dix compositio
 
 ## 2. Entrées et sorties
 
+Les deux modules sont consultables directement dans les onglets « Composition éditoriale » et « Pitch sourcé ». Le badge lit leurs sections de méthode depuis les compétences du dépôt, sans copie parallèle. Les licences et la provenance restent attachées aux compétences ; la publication ne reprend que les instructions neutres et leurs empreintes de source.
+
+Navigation : ouvrir l'étoile de la technologie dans le catalogue de technologies, puis la fiche correspondante. Les quatre technologies existantes restent accessibles au même niveau ; une ancre ouvre seulement une fiche reçue par l'API réservée au propriétaire.
+
 Entrées : public, décision attendue, durée, objectif, preuves disponibles, identité visuelle et contraintes de diffusion. Demander seulement les manques qui changent réellement le résultat. Préserver les informations connues et marquer les inconnues.
 
 Sorties : synopsis, storyboard, présentation via la capacité d'édition disponible, export de lecture, contrôle qualité et sources. Le moteur local de ce kit produit un PDF de composition et des pages SVG éditables ; il ne produit pas de présentation native ni de fichier de diapositives natif. Utiliser la compétence de présentation de l'environnement pour une livraison native.

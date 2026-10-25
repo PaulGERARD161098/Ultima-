@@ -4,6 +4,7 @@
    aucune animation. */
 
 .technos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.2rem; }
+.techno { scroll-margin-top: 4rem; }
 
 .badge-techno {
   display: flex; gap: 1rem; align-items: center; width: 100%; text-align: left;

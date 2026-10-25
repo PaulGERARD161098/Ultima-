@@ -39,3 +39,19 @@ Après accord de fusion lié à la version, relire les contrôles d'intégration
 ## Complément — compétences depuis GitHub
 
 La suite de la même séance ajoute deux modules adaptés, leur licence et leur provenance, raccordés à l'orchestrateur. Voir `SOURCES-GITHUB.md` pour le périmètre exact. Les preuves précédentes ne deviennent pas des tests d'exécution de ces modules : environnement indisponible, rendu non exécuté dans cette passe. La compétence personnelle de la première livraison reste à sa version précédente.
+
+## Intégration dans ZOH et étoile — phase suivante du 25/10
+
+Mandat : « implante les skills dans zoh et crée bien l'étoile correspondante ». L'environnement d'exécution est de nouveau disponible pour cette phase. La limitation d'environnement de la phase précédente reste une trace historique, pas l'état de cette phase.
+
+Le registre porte maintenant quatre enfants sous ZOH SHIA, un par technologie existante. L'étoile PRÉSENTATIONS CLAIRES ouvre `zohshia.html#presentations-claires`. Les trois autres étoiles conservent l'accès aux technologies préexistantes. La page de catalogue reste disponible à son adresse directe et son retour mène à `imladrik.html#zohshia`.
+
+Le badge publie cinq onglets, dont Composition éditoriale et Pitch sourcé. Ces deux onglets pointent directement vers les sections de méthode des compétences du dépôt : aucun contenu de méthode copié en parallèle. Leurs fichiers complets restent accompagnés des licences et sources.lock. Les empreintes de publication suivent les fichiers de compétences ; les sections d'attribution ne font pas partie du texte neutre publié.
+
+Contrôles exécutés : `unit-registre-lv3.mjs`, `unit-adaptateur-lv4.mjs`, `unit-zohshia.mjs`, `unit-zohshia-navigation.mjs`, `unit-zohshia-presentations.mjs` et `publier.mjs --verifier` passent. Le contrôleur d'arbre est également éprouvé sur un rattachement volontairement supprimé, qu'il refuse. La navigation directe est exécutée sur le code réel avec un DOM simulé : ouverture, focus, défilement, idempotence, ancre inconnue/malformée/hostile et fiche non chargée. Aucun de ces contrôles ne constitue un rendu navigateur.
+
+Les scénarios du harnais navigateur existant sont étendus : ancre sans session, refus 403 avec ancre, cinq onglets, contenu des deux compétences à 1280 et 390 pixels, changement d'ancre et retour à ZOH. Leur syntaxe a été vérifiée ; ils n'ont pas été exécutés localement. L'installation du navigateur Chromium a échoué (archive distante invalide/tronquée), puis l'accès du navigateur distant au serveur local a été refusé. La comparaison visuelle reste donc non vérifiée, ainsi que l'affichage réel avec une session propriétaire.
+
+Les deux compétences personnelles et l'orchestrateur sont validés par quick_validate.py. Leur sauvegarde se prouve par le push du dépôt des compétences, séparément de la proposition d'intégration Ultima. Leur présence ne prouve ni génération d'images ni rendu d'une vraie présentation.
+
+Les mises à jour des tests de navigation conservent les contrôles existants : ZOH devient une tête de rang 1 ; les quatre étoiles ouvrent des fiches publiées ; les cibles HTML avec fragment sont vérifiées sur leur vrai fichier. Aucun changement d'authentification, de droits ou d'API métier.

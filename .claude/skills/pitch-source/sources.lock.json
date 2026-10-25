@@ -18,8 +18,9 @@
   "validation": {
     "sourceReviewed": true,
     "licenseReviewed": true,
-    "execution": "blocked-environment-unavailable",
-    "render": "not-run"
+    "execution": "instructions-only",
+    "render": "not-run-browser-unavailable",
+    "structure": "passed-quick-validate-2026-10-25"
   },
   "changes": [
     "French adaptation for professional presentations",
