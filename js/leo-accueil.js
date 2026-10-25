@@ -1108,7 +1108,7 @@
         panneauSuivi.appendChild(adopter);
       }
       panneauSuivi.appendChild(el('small', 'leo-suivi-source', missionSuivi
-        ? (memoireBusy ? 'Enregistrement du suivi…' : memoireBloquee ? 'Suivi non confirmé — relecture nécessaire.' : 'Suivi enregistré dans la mission liée. Les confirmations restent déclaratives.')
+        ? (memoireBusy ? 'Enregistrement du suivi…' : memoireBloquee ? 'Suivi non confirmé — relecture nécessaire.' : suiviTache ? 'Suivi enregistré dans la mission liée. Les confirmations restent déclaratives.' : 'Mission liée — aucun plan enregistré pour le moment.')
         : 'Suivi local au cartouche, non sauvegardé. Les confirmations ne remplacent pas les preuves du résultat.'));
     }
 

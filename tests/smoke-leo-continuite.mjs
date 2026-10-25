@@ -63,9 +63,7 @@ async function fixture(options={}){
  await page.goto(BASE+'/__leo_continuite_fixture__');
  await page.evaluate(({owner})=>{
   window.UltimaLeoRegistreUI.poserSession({user:{id:owner},access_token:'fixture-token'});
-  window.UltimaLeo.accueillirQuadrant({quadrant:'riven',forcer:true,sansPropositions:true,salutation:'Recette continuité',sections:[],voix:{quadrant:'riven',jeton:'fixture-token'}});
  },{owner});
- await page.locator('.leo-voix-champ').waitFor();
  async function settle(){await page.waitForFunction(()=>!document.querySelector('.leo-voix-champ').disabled&&!document.querySelector('.leo-bulle-attente')&&!window.UltimaLeoRegistreUI.snapshot()?.busy);}
  async function send(text,wait=true){await page.locator('.leo-voix-champ').fill(text);await page.locator('.leo-voix-envoyer').click();if(wait)await settle();}
  async function load(){
@@ -73,8 +71,12 @@ async function fixture(options={}){
   await page.locator('#leo-mission-consulter').click();
   await page.waitForFunction(()=>!!window.UltimaLeoRegistreUI.snapshot()?.data);
   await page.locator('#leo-mission-fermer').click();
+  // Parcours réel : consulter la mission AVANT d'ouvrir le cartouche modal,
+  // sans clic forcé sur une commande masquée derrière son voile.
+  await page.evaluate(()=>window.UltimaLeo.accueillirQuadrant({quadrant:'riven',forcer:true,sansPropositions:true,salutation:'Recette continuité',sections:[],voix:{quadrant:'riven',jeton:'fixture-token'}}));
+  await page.locator('.leo-voix-champ').waitFor();
  }
- async function link(){await page.locator('.leo-suivi-memoire').click();await page.waitForFunction(()=>document.querySelector('.leo-suivi-source')?.textContent.includes('Suivi enregistré'));}
+ async function link(){await page.locator('.leo-suivi-memoire').click();await page.waitForFunction(()=>/Suivi enregistré|Mission liée/.test(document.querySelector('.leo-suivi-source')?.textContent||''));}
  async function reread(){await page.locator('.leo-suivi-memoire').click();await page.waitForFunction(()=>!window.UltimaLeoRegistreUI.snapshot()?.busy&&!window.UltimaLeoRegistreUI.snapshot()?.uncertain&&!window.UltimaLeoRegistreUI.snapshot()?.needsRefresh);await settle();}
  async function close(){check('Aucun appel externe',outside.length===0);check('Aucune erreur JS',errors.length===0);await page.close();}
  return {page,send,load,link,reread,settle,close,answer:f=>{answer=f;}};
@@ -83,7 +85,9 @@ try{
  const a=await fixture();await a.load();
  check('Commande de reprise utilisable au doigt',await a.page.locator('.leo-suivi-memoire').evaluate(b=>b.getBoundingClientRect().height>=44));
  check('Consulter seul ne restaure pas implicitement le suivi',await a.page.locator('.leo-suivi-tache progress').count()===0);
- await a.link();a.answer(async()=>({reponse:'Plan proposé.',interaction:{plan:PLAN}}));await a.send('Cadre ce chantier');
+ await a.link();
+ check('Mission vide liée sans annoncer un plan sauvegardé',await a.page.locator('.leo-suivi-source').textContent()==='Mission liée — aucun plan enregistré pour le moment.');
+ a.answer(async()=>({reponse:'Plan proposé.',interaction:{plan:PLAN}}));await a.send('Cadre ce chantier');
  check('Proposition seule sans écriture',writes===0&&db.mission.checkpoint===null);
  await a.page.locator('.leo-suivi-adopter').click();await a.settle();
  check('Adoption persistée dans la mission explicitement liée',writes===1&&db.mission.checkpoint.titre===PLAN.titre);
