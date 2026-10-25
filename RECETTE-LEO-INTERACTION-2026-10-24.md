@@ -23,7 +23,7 @@ Le module refuse les plans mal formés, états de complétion fournis par le mod
 
 Vérification statique : `node --check` sur les quatre fichiers JS modifiés, réussi. Revue indépendante : deux défauts signalés (liste des jalons absente après adoption et adoption possible pendant une requête) corrigés. Les scénarios déterministes préparés dans `tests/unit-leo-interaction.mjs` sont découverts par le runner unitaire existant.
 
-**Exécution locale bloquée** : Docker absent ; création de namespace Bubblewrap refusée par l'hôte ; la sonde d'une fixture chroot ne peut établir son environnement. Aucun test applicatif exécuté hors isolation. Les tests préparés ne sont pas annoncés verts. Le navigateur et le modèle réel restent non éprouvés. La CI existante doit fournir ses propres preuves ; ne pas fusionner sur la seule analyse statique.
+**Exécution locale bloquée** : Docker absent ; création de namespace Bubblewrap refusée lors de la préparation initiale ; la sonde d'une fixture chroot ne peut établir son environnement. Aucun test applicatif exécuté hors isolation. Depuis, les preuves CI du commit `317b436` ont été reçues : voir la reprise du 25/10 ci-dessous. Elles remplacent le statut « tests préparés non exécutés » pour cette version, sans prouver le ton du modèle ni les nouveaux scénarios navigateur encore absents à ce commit.
 
 ## Dialogues à éprouver avec le modèle
 
@@ -53,7 +53,7 @@ La V2 intermédiaire vise une interlocutrice cohérente qui cadre, déroule, sig
 | Jalon | Résultat et critère de sortie | Dépendance et état observé |
 |---|---|---|
 | 1 — Cap et contrat | Objectif local et comportement validés, limites et hors-périmètre consignés | Décisions de Paul présentes ; cadrage sauvegardé sur la branche de PR419, pas de réception produit |
-| 2 — Fermer le premier lot | Tests isolés pertinents verts ; régressions traitées ; rendu de la liste et attente vérifiés | Au commit `afde238`, 69/72 suites unitaires passent. Trois suites échouent ; navigateur et LV1 rouges. Ne pas les marquer reçus |
+| 2 — Fermer le premier lot | Tests isolés pertinents verts ; régressions traitées ; rendu de la liste et attente vérifiés | `317b436` : 72/72 suites unitaires et neuf checks verts. Couverture navigateur ciblée de la nouvelle interaction ajoutée au lot suivant ; ne pas confondre les parcours historiques avec cette preuve |
 | 3 — Continuité de la V2 | Tâche active, idées de côté, compteur de rappels et point d'arrêt cohérents ; reprise après interruption éprouvée | Suivi actuel local au cartouche seulement. Mémoire durable et progression issue des outils restent à raccorder et vérifier ; pas de duplication d'une mémoire existante |
 | 4 — Recette relationnelle | Scénarios de la table éprouvés sur le modèle réellement utilisé ; ton apprécié par Paul ; cas négatifs vérifiés | Aucun dialogue réel exécuté dans ce lot. Les tests du parseur ne prouvent pas le ton ni toute prose du modèle |
 | 5 — Réception V2 et transmission | Version précise, preuves, limites, retour arrière et prochaine étape disponibles ; Paul reçoit ce résultat | Réception avant annonce de V2 prête. Le déploiement suit son mandat propre ; aucun merge ou activation déduit de ce plan |
@@ -78,7 +78,17 @@ Odysseus est une option de banc d'essai ; l'autre voie est de raccorder un moteu
 | Chemin critique (PDV-062) | Les tests et dialogues conditionnent la réception V2 ; le matériel conditionne le dimensionnement et l'installation locale, pas la rédaction du contrat | Pas d'estimation horaire inventée ; deux chaînes de dépendances distinctes |
 | Pré-mortem (PDV-071) | Risque de baptiser V2 une charte non éprouvée ou d'annoncer « local » avec une API distante : recevoir séparément comportement, état et exécution | Tests hors ligne, provenance des appels et version livrée attendus ; ce sont des critères, pas des preuves déjà obtenues |
 
-## Point de reprise
+## Contrat du prochain lot de continuité — préparé le 25/10
+
+Réutiliser le registre durable `leo/runtime/memoire.py` et les opérations du broker ; ne pas exposer SQLite au navigateur, ni créer une autre mémoire dans `localStorage`, ni encoder un nouveau registre JSON dans `next_action`. La lecture a confirmé que le registre accepte aujourd'hui seulement `state` et `next_action` dans ses patches ; les jalons et rappels demandent une extension structurée et versionnée. `DispatchBroker` reste un transport de fixtures, pas un raccord produit.
+
+Le checkpoint d'interaction devra porter : version de schéma, identité de mission rattachée par l'hôte au propriétaire authentifié, révision de plan, titre et jalons bornés, indices confirmés, compteur de rappels 0–2, état en cours ou suspendu et prochaine étape. Ne pas y copier conversation complète, dossiers, secrets ou idées métier : les idées de côté restent des références vers leur source autorisée. Les jalons restent des déclarations, sans autorité sur l'exécution ou le budget.
+
+Les transitions d'adoption, confirmation, rappel affiché, pause et reprise devront avoir un identifiant d'opération stable et une version attendue. Un conflit de version demande réconciliation ; un événement répété ne consomme pas un second rappel. Une issue inconnue ne se rejoue pas aveuglément. Une session expirée ou un changement de compte ne doit révéler ni reprendre la mission précédente. Sauvegarde et restauration doivent suivre le même propriétaire et le même registre.
+
+Réception attendue : reprise dans un nouveau processus avec le même plan et un compteur déjà à 1 ; refus d'une version périmée ; idempotence d'une même transition ; refus de lecture/écriture par un autre propriétaire ; conservation des points d'arrêt lors d'un changement de priorité. Aucune de ces capacités n'est déclarée raccordée par ce contrat. Les permissions et le contrôle privé R21 restent inchangés et hors accès Work.
+
+## Historique de préparation du 24/10
 
 Boucle active : recevoir le lot d'interaction avant d'élargir la V2. PR419, tête observée `afde23829707f4b7551037278bf8a3882f3f34c1` avant ce complément. Objectif local confirmé et recherches Odysseus réalisées ; aucun logiciel installé sur le PC de Paul. Aucun besoin de ses specs pour continuer les jalons V2 indépendants.
 
@@ -88,4 +98,16 @@ Correctif préparé après lecture des logs : vraies fonctions d'interaction inj
 
 Au commit `0f17ae4`, le nouveau scénario de données a rencontré le refus de rafale attendu (429) car il réutilisait immédiatement la même route et le même utilisateur. Le scénario est désormais construit sur une instance de route indépendante ; aucun limiteur de production n'est modifié. Passage du nouveau test encore attendu en CI.
 
-Prochaine action : vérifier les trois suites corrigées, puis effectuer la recette navigateur et les dialogues. Aucune fusion, activation, réception locale ou mise en production annoncée.
+Ces trois suites ne sont plus à corriger : résultats reçus au point de reprise du 25/10. Aucune fusion, activation, réception locale ou mise en production annoncée.
+
+## Point de reprise du 25/10/2026
+
+Version lue : `317b436df2f234b613f56a755d6af1664fed8944`, PR419 toujours ouverte en brouillon, non fusionnée. Base courante observée : `2ef85d53c761000320627bac697de1fc4c189f49`. Neuf checks terminés avec succès. Les logs de la [suite unitaire](https://github.com/PaulGERARD161098/Ultima-/actions/runs/40127510112/job/120972000870) indiquent **72/72 suites réussies**, dont les trois corrigées et `unit-leo-interaction`. [Navigateur 0](https://github.com/PaulGERARD161098/Ultima-/actions/runs/40127510112/job/120972001059), [navigateur 1](https://github.com/PaulGERARD161098/Ultima-/actions/runs/40127510112/job/120972000993) et [LV1](https://github.com/PaulGERARD161098/Ultima-/actions/runs/40127510095/job/120971985188) sont verts. Ces preuves portent sur cette version et les scénarios existants, pas sur une réception complète V2.
+
+Revue indépendante : l'ancien smoke ne couvre aucun plan, jalon ou rappel structuré de ce lot. `tests/smoke-leo-interaction.mjs` est maintenant préparé sur le vrai cartouche, avec réponses HTTP fictives et aucun appel modèle ou métier : adoption par clic et dictée, progression déclarée idempotente, deux rappels et rejet du troisième, priorité explicite, pause/reprise avec compteur déjà consommé, attente indéterminée, adoption verrouillée pendant l'appel et rendu mobile. Son raccord est assuré par `smoke-*.mjs` dans `tests/lancer.sh`, appelé par la CI navigateur isolée existante ; aucun nouveau workflow ni cron.
+
+La préparation corrige également le client : il n'affiche plus un rappel structuré reçu pendant que la tâche est suspendue, même si une réponse serveur en contient un. Le serveur possède déjà son filtre ; ce contrôle client défend l'état visible courant. La règle ne garantit pas la suppression d'un rappel dans la prose libre du modèle.
+
+Revue des scénarios : le cas de reprise utilise désormais un compteur à 1, pour qu'une remise à zéro ne puisse pas passer. La fixture longue ne prétend pas éprouver le message à huit secondes : elle vérifie seulement l'attente indéterminée et le verrouillage du plan. Syntaxe statique vérifiée ; exécution du nouveau harnais à recevoir avant déclaration de succès. Une exécution de la CI existante est justifiée par cette nouvelle couverture fonctionnelle et la correction client, pas par une relance des seuls tests déjà verts.
+
+Boucle active : obtenir la preuve navigateur ciblée du lot d'interaction. Ensuite : raccord du checkpoint au registre durable selon le contrat ci-dessus, puis dialogues réels et réception V2. Aucun logiciel installé sur le PC de Paul ; ses specs ne sont pas nécessaires pour ce travail. Aucun merge, appel IA externe, migration réelle ni activation.

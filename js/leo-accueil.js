@@ -1031,7 +1031,7 @@
       if (!interactionModule || !data || !data.interaction) { return; }
       var i = data.interaction;
       var nombre = suiviTache ? suiviTache.rappels : rappelsFocus;
-      if (i.focus && nombre < 2 && i.focus.numero === nombre + 1 && typeof i.focus.texte === 'string' && i.focus.texte.length <= 400) {
+      if (i.focus && (!suiviTache || suiviTache.etat !== 'suspendue') && nombre < 2 && i.focus.numero === nombre + 1 && typeof i.focus.texte === 'string' && i.focus.texte.length <= 400) {
         bulle('leo', i.focus.texte);
         historique.push({ role: 'assistant', content: echoBorne(i.focus.texte) });
         rappelsFocus = nombre + 1;
@@ -1577,4 +1577,3 @@
     messageRefusDefaire: messageRefusDefaire
   };
 })();
-
