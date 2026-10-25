@@ -1,4 +1,4 @@
-// Dry run : vérifier que l'instrument détecte quatre versions volontairement
+// Dry run : vérifier que l'instrument détecte six versions volontairement
 // incorrectes. Modules purs chargés depuis data:, zéro modèle/service appelé.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -29,4 +29,14 @@ await saboter('negation-hors-sujet',
   'export const prioriteExplicite=texte=>!String(texte).includes("sans")&&commandePriorite(texte)!==null;',m=>{
     assert.equal(m.prioriteExplicite('On change de sujet sans perdre le point de reprise'),true);
   });
-console.log('4/4 corruptions connues détectées ; aucune mutation des fichiers applicatifs.');
+const checkpoint={task_id:'00000000-0000-4000-8000-000000000001',...plan,
+  confirmes:[0],rappels:2,etat:'suspendue',revision:7};
+await saboter('compteur-restauration','return suivi;','return {...suivi,rappels:0};',m=>{
+  assert.deepEqual(m.hydraterSuiviCheckpoint(checkpoint),checkpoint);
+});
+await saboter('identite-revision',
+  "...(Object.hasOwn(suivi,'task_id')?{task_id:suivi.task_id}:{}),",'',m=>{
+    const s=m.hydraterSuiviCheckpoint(checkpoint);
+    assert.equal(m.reviserSuivi(s,{...plan,etapes:[...plan.etapes,'Clore']}).task_id,checkpoint.task_id);
+  });
+console.log('6/6 corruptions connues détectées ; aucune mutation des fichiers applicatifs.');

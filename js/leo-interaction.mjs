@@ -31,6 +31,33 @@ export function ouvrirSuivi(plan,revision=1){
   if(!p||!Number.isSafeInteger(revision)||revision<1)throw Error('Plan de suivi invalide.');
   return {...p,revision,confirmes:[],rappels:0,etat:'en_cours'};
 }
+// Projection de données uniquement : ni mandat, ni version CAS de mission.
+// Aucun identifiant n'est créé et aucune transition n'est autorisée ici.
+const CLES_CHECKPOINT=['task_id','titre','etapes','confirmes','rappels','etat','revision'];
+const UUID_CHECKPOINT=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+export function validerCheckpoint(brut){
+  if(!objet(brut)||![Object.prototype,null].includes(Object.getPrototypeOf(brut)))return null;
+  const cles=Reflect.ownKeys(brut);
+  if(cles.length!==CLES_CHECKPOINT.length||cles.some(k=>!CLES_CHECKPOINT.includes(k)))return null;
+  if(cles.some(k=>{const d=Object.getOwnPropertyDescriptor(brut,k);return !d.enumerable||!Object.hasOwn(d,'value');}))return null;
+  if(typeof brut.task_id!=='string'||!UUID_CHECKPOINT.test(brut.task_id)
+    ||!Array.isArray(brut.etapes)||!Array.isArray(brut.confirmes))return null;
+  // Les copies denses refusent aussi les tableaux creux dans un appel local.
+  const plan=validerPlan({titre:brut.titre,etapes:Array.from(brut.etapes)});
+  const confirmes=Array.from(brut.confirmes);
+  if(!plan||confirmes.some((n,i)=>!Number.isInteger(n)||n<0||n>=plan.etapes.length||(i>0&&n<=confirmes[i-1]))
+    ||!Number.isInteger(brut.rappels)||brut.rappels<0||brut.rappels>2
+    ||!['en_cours','suspendue'].includes(brut.etat)
+    ||!Number.isSafeInteger(brut.revision)||brut.revision<1)return null;
+  try{if(new TextEncoder().encode(JSON.stringify(brut)).length>10000)return null;}
+  catch{return null;}
+  return {task_id:brut.task_id,...plan,confirmes,rappels:brut.rappels,etat:brut.etat,revision:brut.revision};
+}
+export function hydraterSuiviCheckpoint(brut){
+  const suivi=validerCheckpoint(brut);
+  if(!suivi)throw Error('Checkpoint de suivi invalide.');
+  return suivi;
+}
 export function memePlan(suivi,plan){
   const p=validerPlan(plan);
   return !!p&&!!suivi&&suivi.titre===p.titre&&Array.isArray(suivi.etapes)
@@ -42,7 +69,8 @@ export function reviserSuivi(suivi,plan){
   if(memePlan(suivi,p))return {...suivi,etapes:[...suivi.etapes],confirmes:[...suivi.confirmes]};
   const nouveau=ouvrirSuivi(p,suivi.revision+1);
   const faits=new Set(suivi.etapes.filter((_,i)=>suivi.confirmes.includes(i)).map(e=>e.toLowerCase()));
-  return {...nouveau,confirmes:p.etapes.flatMap((e,i)=>faits.has(e.toLowerCase())?[i]:[]),
+  return {...nouveau,...(Object.hasOwn(suivi,'task_id')?{task_id:suivi.task_id}:{}),
+    confirmes:p.etapes.flatMap((e,i)=>faits.has(e.toLowerCase())?[i]:[]),
     rappels:suivi.rappels,etat:suivi.etat};
 }
 export function tacheTerminee(tache){
