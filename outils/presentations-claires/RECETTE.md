@@ -1,0 +1,37 @@
+# Recette — présentations claires — 25/10/2026
+
+## Version et périmètre
+
+Base de travail mesurée : `Ultima-` main `2ef85d53c761000320627bac697de1fc4c189f49`. Copie locale isolée des seuls fichiers requis, sans variable d'environnement métier ni appel réseau des tests. Le clone Git direct étant indisponible, les fichiers ont été lus à ce SHA par le connecteur ; les commits sont préparés par l'API Git. Aucun test applicatif sur une instance réelle.
+
+## Preuves exécutées
+
+- PDF source : 19 pages rendues et examinées, mesures du texte et de la géométrie ; analyse dans `ANALYSE.md`.
+- `python3 outils/presentations-claires/verifier.py` : 11 contrôles réussis. Dix pages non vides, format 16:9, dix SVG contenant du texte éditable, refus d'écrasement, titre trop long, mot hors zone, composition inconnue, champ inattendu et liste vide ; balise hostile échappée comme texte ; aucune présentation native prétendue.
+- Composition des dix pages mesurée à environ 0,11 seconde sur cet environnement. Ce chiffre ne couvre ni brief, rédaction, visuels personnalisés ni recette et n'est pas une promesse de création complète.
+- Les dix pages d'exemple ont été inspectées en montage ; couverture, chaîne et décision également à leur résolution nominale. Aucun texte coupé ou recouvrement observé. Le contraste calculé de l'accent textuel sur blanc vaut 6,82:1.
+- `node tests/unit-zohshia-presentations.mjs` : contrat, dix compositions, invocation et trois onglets non vides vérifiés.
+- `node tests/unit-zohshia.mjs` : les 28 verdicts passent, notamment neutralité, absence de secrets et exclusion des sources du déploiement.
+- `node tests/unit-zohshia-pilotage.mjs` : 14 assertions passent.
+- `node tests/unit-zohshia-anti-pattern.mjs` : 19 cas structurels et 3 onglets non vides vérifiés.
+- `node zohshia/publier.mjs --verifier` : publication générée conforme, quatre fiches. Comparaison structurelle à la publication de base : les trois fiches préexistantes et leurs empreintes de sources restent identiques ; un seul badge ajouté.
+- Validation de la compétence personnelle par `quick_validate.py` : réussie.
+- Essai dans un fil distinct avec la compétence, sans l'historique d'analyse : un brief d'artisan et une décision d'essai de deux semaines produisent storyboard, PDF et quatre SVG. Lecture du storyboard et du rapport, sortie inspectée par l'exécutant. Aucun produit, résultat, tarif ou gratuité inventé ; conditions à convenir avant l'essai. Le test n'a utilisé ni réseau ni dépôt. La provenance embarquée était alors absente et a été ajoutée avant la sauvegarde finale.
+
+## Incidents corrigés et limites
+
+L'instrument d'échappement concaténait les lignes sans espace : un texte sûr passé sur deux lignes donnait un faux échec. Le contrôle lit maintenant le texte XML en conservant les séparations. La balise reste du texte, sans attribut exécutable.
+
+La récupération textuelle initiale ajoutait un saut de ligne final aux sources de référence : les empreintes le détectaient. Les copies de contrôle ont été rétablies à l'octet textuel attendu et les empreintes préexistantes revalidées. Aucun changement des sources anciennes n'est inclus dans la proposition, sauf l'index et l'invocation explicitement étendus.
+
+Le test existant `unit-zohshia-ecran.mjs` n'a pas pu charger le paquet `@supabase/supabase-js` absent du conteneur isolé. Aucun résultat vert revendiqué pour ce test. Les routes et règles d'accès ne sont pas modifiées. Suite complète du dépôt et navigateur authentifié non exécutés ici ; vérifier la CI et l'écran avec une session propriétaire avant de déclarer la livraison en production.
+
+Le moteur de composition local n'importe pas d'image ni de capture : ses illustrations vectorielles sont des exemples originaux. Les images et captures propres à une vraie présentation se composent via la capacité de présentation et de génération d'images de l'environnement. La qualité photographique de la couverture de référence n'est pas reproduite par ces schémas.
+
+Les SVG contiennent du texte et des objets vectoriels éditables ; leur édition dans un logiciel tiers n'a pas été éprouvée. Export PowerPoint natif non réalisé. Durée complète d'un vrai pitch non mesurée. Aucun envoi, migration, fusion ni affichage réel en production validé par cette recette.
+
+## Lecture et reprise
+
+Le badge et la compétence renvoient au même socle neutre. Le PDF d'aperçu est enregistré séparément : `libfile_9f2b89ce6ef8819180295fc288eed7f0`. Il montre les compositions, pas une présentation commerciale finale.
+
+Après accord de fusion lié à la version, relire les contrôles d'intégration puis vérifier le badge avec la session propriétaire. Premier vrai usage : fournir le brief de la future présentation, ses preuves et sa marque ; mesurer séparément rédaction, visuels, composition et recette.

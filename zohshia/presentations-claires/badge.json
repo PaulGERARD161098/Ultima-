@@ -1,0 +1,10 @@
+{
+  "ordre": 4,
+  "badge": "Présentations claires — narration et compositions",
+  "etat": "Socle local · réception par présentation requise",
+  "onglets": [
+    {"id":"techno","titre":"Ce que fait la techno","source":"TECHNO.md"},
+    {"id":"grammaire","titre":"Règles de création","source":"references/GRAMMAIRE.md"},
+    {"id":"service","titre":"Utilisation et recette","source":"MISE-EN-SERVICE.md"}
+  ]
+}
