@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "kind": "adapted-instructions",
+  "upstream": {
+    "repository": "anthropics/skills",
+    "commit": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+    "paths": [
+      "skills/canvas-design/SKILL.md"
+    ],
+    "license": "Apache-2.0"
+  },
+  "importedAt": "2026-10-25",
+  "dependencies": [],
+  "upstreamRuntimeImported": false,
+  "fontsImported": false,
+  "validation": {
+    "sourceReviewed": true,
+    "licenseReviewed": true,
+    "execution": "instructions-only",
+    "render": "not-run-browser-unavailable",
+    "structure": "passed-quick-validate-2026-10-25"
+  },
+  "changes": [
+    "French adaptation for professional presentations",
+    "User-approved reference takes priority",
+    "No upstream engine, fonts, scripts or provider integration imported"
+  ]
+}

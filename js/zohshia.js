@@ -74,6 +74,7 @@ function rendreOnglet(hote, onglet) {
 
 function rendreTechno(t, index) {
   const li = el('li', 'techno');
+  if (typeof t.id === 'string' && /^[a-z0-9-]+$/.test(t.id)) li.id = 'technologie-' + t.id;
   const idPanneau = `techno-${index}`;
   const badge = el('button', 'badge-techno');
   badge.type = 'button';
@@ -148,6 +149,21 @@ function rendre(donnees) {
     `Publié le ${donnees.publie_le || '—'} — ${technos.length} techno(s). État figé au dernier commit, réservé au propriétaire. Pour le rafraîchir : `));
   prov.appendChild(el('code', null, 'node zohshia/publier.mjs'));
   prov.appendChild(document.createTextNode(', puis commiter.'));
+  ouvrirDepuisAncre();
+}
+
+// L'étoile ouvre un contenu déjà reçu de l'API propriétaire. Une ancre seule
+// ne charge aucune donnée et ne contourne jamais les états fermés.
+function ouvrirDepuisAncre() {
+  let id;
+  try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
+  if (!/^[a-z0-9-]+$/.test(id)) return;
+  const techno = document.getElementById('technologie-' + id);
+  const badge = techno && techno.querySelector('.badge-techno');
+  if (!badge) return;
+  if (badge.getAttribute('aria-expanded') !== 'true') badge.click();
+  badge.focus({ preventScroll: true });
+  techno.scrollIntoView({ block: 'start', behavior: 'instant' });
 }
 
 const MESSAGES = {
@@ -187,6 +203,7 @@ async function demarrer() {
 }
 
 if (typeof document !== 'undefined') {
+  window.addEventListener('hashchange', ouvrirDepuisAncre);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer, { once: true });
   else demarrer();
 }

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "page": {"width":1440,"height":810,"margin":90},
+  "colors": {"paper":"#FFFFFF","ink":"#0A1628","accent":"#1857B6","decoration":"#2B7FFF","tint":"#EDF3FF","muted":"#5B6474","line":"#D8E1EF"},
+  "type": {"cover":60,"title":40.5,"body":24,"label":15,"note":14,"metric":78},
+  "font": {"svg":"DejaVu Sans, sans-serif","pdf":"DejaVuSans","substitution":true},
+  "spacing": {"gutter":30,"cardPadding":28,"contentTop":240,"contentBottom":690},
+  "usage": "Variables de composition adaptables. Les unités correspondent au canevas de référence ; aucune donnée commerciale réelle."
+}

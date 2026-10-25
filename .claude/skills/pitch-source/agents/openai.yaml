@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pitch sourcé"
+  short_description: "Récit, preuves et décision pour un pitch clair"
+  default_prompt: "Utilise $pitch-source avec presentations-claires pour préparer ma présentation."

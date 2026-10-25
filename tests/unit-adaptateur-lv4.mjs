@@ -241,17 +241,18 @@ dit('isoleDragonsNommeSonAmasDRAGONS',
 // ses trois caps (LE REGISTRE, LES ARCHIPELS, LES RAPPROCHEMENTS) et sa propre
 // page. Il est donc une TÊTE À PAGE (rang 1, cible gardée), comme il l'était déjà
 // au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
-// restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
-// le registre, pas supposé.
+// restent des feuilles de rang 0 ; ADRAMELECH et ZOH SHIA ouvrent désormais
+// leurs enfants, donc portent le rang 1 — lu dans le registre.
 // ZOH SHIA a sa page depuis le 04/10/2026, AMATSU depuis le 19/10/2026 : les
 // HUIT cibles sont des pages — plus aucune exception nommée.
 dit('isoleDragonsGardeLesCiblesDesPages',
   foyerDragons.noeuds.length === 8
   && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
   && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
-    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,zohshia,amatsu'
-  && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'
-  && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3);
+    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,amatsu'
+  && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech,zohshia'
+  && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3
+  && NOEUDS.zohshia.enfants.length === 4);
 // INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
 // désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
 // `tao` y reste : il n'est plus nulle part.

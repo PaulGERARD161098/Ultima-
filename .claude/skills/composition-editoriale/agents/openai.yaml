@@ -1,0 +1,4 @@
+interface:
+  display_name: "Composition éditoriale"
+  short_description: "Visuels explicatifs et composition épurée"
+  default_prompt: "Utilise $composition-editoriale avec presentations-claires pour préparer ma présentation."

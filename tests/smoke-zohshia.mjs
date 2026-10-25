@@ -20,7 +20,7 @@ const navigateur = await chromium.launch({
   executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
 });
 
-async function ouvrir({ client, api }, viewport = { width: 1280, height: 900 }) {
+async function ouvrir({ client, api, hash = '' }, viewport = { width: 1280, height: 900 }) {
   const page = await navigateur.newPage({ viewport });
   const journal = { erreurs: [], externes: [], appels: 0 };
   page.on('pageerror', (e) => journal.erreurs.push('pageerror: ' + e.message));
@@ -50,7 +50,7 @@ async function ouvrir({ client, api }, viewport = { width: 1280, height: 900 }) 
         onAuthStateChange: function () {} } }; } };`,
     }));
   }
-  await page.goto(`${BASE}/zohshia.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/zohshia.html${hash}`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(500);
   return { page, journal };
 }
@@ -77,6 +77,8 @@ console.log('§1 — fermé : la page se tait');
 for (const [nom, cas] of [
   ['sans configuration', { client: 'aucun', api: PAUL }],
   ['sans session', { client: 'deconnecte', api: PAUL }],
+  ['sans session avec ancre', { client: 'deconnecte', api: PAUL, hash: '#presentations-claires' }],
+  ['compte non propriétaire avec ancre (403)', { client: 'connecte', api: { status: 403, body: { ok: false } }, hash: '#presentations-claires' }],
   ['session expirée (401)', { client: 'connecte', api: { status: 401, body: { ok: false } } }],
   ['compte qui n’est pas le propriétaire (403)', { client: 'connecte', api: { status: 403, body: { ok: false } } }],
   ['réglage du propriétaire absent (503)', { client: 'connecte', api: { status: 503, body: { ok: false } } }],
@@ -120,8 +122,33 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
     [cBadge, cTable, cTexte].every((c) => Number.isFinite(c) && c >= 4.5), [cBadge, cTable, cTexte].map((c) => c.toFixed(2)).join(' · '));
   verifier('aucune erreur, aucune requête externe', !journal.erreurs.length && !journal.externes.length,
     [...journal.erreurs, ...journal.externes].join(' | '));
-  verifier('le retour mène à la constellation des DRAGONS',
-    (await page.locator('a.retour-ultima').getAttribute('href')) === 'imladrik.html#constellation-dragons');
+  verifier('le retour mène aux technologies de ZOH SHIA',
+    (await page.locator('a.retour-ultima').getAttribute('href')) === 'imladrik.html#zohshia');
+  await page.close();
+}
+
+console.log('§2ter — étoile Présentations : ouverture directe et compétences');
+for (const width of [1280, 390]) {
+  const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL, hash: '#presentations-claires' }, { width, height: 900 });
+  const techno = page.locator('#technologie-presentations-claires');
+  verifier(width + ' : la fiche liée à l’étoile est ouverte',
+    await techno.locator('.badge-techno').getAttribute('aria-expanded') === 'true');
+  verifier(width + ' : cinq onglets dont les deux compétences',
+    (await techno.locator('.onglet').allTextContents()).join('|')
+      === 'Ce que fait la techno|Règles de création|Composition éditoriale|Pitch sourcé|Utilisation et recette');
+  await techno.getByRole('tab', { name: 'Composition éditoriale', exact: true }).click();
+  verifier(width + ' : les instructions éditoriales sont consultables',
+    /Créer les images/.test(await techno.locator('.contenu').textContent()));
+  await techno.getByRole('tab', { name: 'Pitch sourcé', exact: true }).click();
+  verifier(width + ' : les instructions du pitch sont consultables',
+    /Construire l’histoire|Construire l'histoire/.test(await techno.locator('.contenu').textContent()));
+  await page.evaluate(() => { location.hash = 'pilotage-back-office'; });
+  await page.waitForFunction(() => document.querySelector('#technologie-pilotage-back-office .badge-techno')?.getAttribute('aria-expanded') === 'true');
+  verifier(width + ' : une autre technologie reste accessible par ancre',
+    await page.locator('#technologie-pilotage-back-office .badge-techno').getAttribute('aria-expanded') === 'true');
+  await page.evaluate(() => { location.hash = '%E0%A4%A'; });
+  verifier(width + ' : aucune erreur ni requête externe avec une ancre malformée',
+    !journal.erreurs.length && !journal.externes.length);
   await page.close();
 }
 
