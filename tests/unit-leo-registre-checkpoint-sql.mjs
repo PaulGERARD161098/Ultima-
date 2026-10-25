@@ -72,6 +72,9 @@ try{
   await db.exec('grant update on public.leo_missions to public');
   await refuses(()=>db.exec(sql),'P0001','checkpoint_grants_drift');await db.exec('rollback');
   await db.exec('revoke update on public.leo_missions from public');
+  await db.exec('grant select on public.leo_missions to authenticated with grant option');
+  await refuses(()=>db.exec(sql),'P0001','checkpoint_grants_drift');await db.exec('rollback');
+  await db.exec('revoke grant option for select on public.leo_missions from authenticated');
   await db.exec('alter table public.leo_missions force row level security');
   await refuses(()=>db.exec(sql),'P0001','checkpoint_schema_drift');await db.exec('rollback');
   await db.exec('alter table public.leo_missions no force row level security');

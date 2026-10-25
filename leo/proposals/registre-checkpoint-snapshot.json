@@ -415,6 +415,137 @@
           "with_hierarchy": "YES"
         }
       ]
+    },
+    {
+      "kind": "raw_table_acl",
+      "items": [
+        {
+          "table_name": "leo_missions",
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "privilege_type": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "DELETE",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "INSERT",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "MAINTAIN",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "REFERENCES",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "TRIGGER",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "TRUNCATE",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_missions",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "UPDATE",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "privilege_type": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "DELETE",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "INSERT",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "MAINTAIN",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "REFERENCES",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "TRIGGER",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "TRUNCATE",
+          "is_grantable": false
+        },
+        {
+          "table_name": "leo_operations",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege_type": "UPDATE",
+          "is_grantable": false
+        }
+      ]
     }
   ]
 }
