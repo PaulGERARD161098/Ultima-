@@ -42,6 +42,23 @@ export default async function handler(req, res) {
   try {
     let name, args;
     if (req.method === 'GET') {
+      if (exact(req.query, ['list']) && req.query.list === 'missions') {
+        // SELECT sous le JWT vérifié : les policies existantes filtrent les lignes.
+        // Aucune clé privilégiée, aucun paramètre de propriétaire ni nouveau droit.
+        const { data, error } = await auth.client.from('leo_missions')
+          .select('id,state,stopped,expires_at,updated_at,next_action')
+          .order('updated_at', { ascending: false }).order('id', { ascending: true }).limit(51);
+        if (error) return databaseFailure(res, error);
+        if (!Array.isArray(data) || data.length > 51 || data.some(m => !plain(m)
+          || !isUuid(m.id) || typeof m.state !== 'string' || typeof m.stopped !== 'boolean'
+          || typeof m.next_action !== 'string' || m.next_action.length > 4000
+          || !Number.isFinite(Date.parse(m.expires_at)) || !Number.isFinite(Date.parse(m.updated_at))))
+          return fail(res, 503, 'Liste des missions indisponible');
+        return ok(res, { missions: data.slice(0, 50).map(m => ({ id: m.id,
+          state: m.state, stopped: m.stopped, expires_at: m.expires_at, updated_at: m.updated_at,
+          label: m.next_action.trim().slice(0, 160) || 'Mission sans prochaine action' })),
+          truncated: data.length > 50 });
+      }
       if (exact(req.query, ['mission', 'operation_id']) && isUuid(req.query.mission)
         && operationIdValid(req.query.operation_id)) {
         // Lecture exacte sous l'identité vérifiée : SELECT + RLS existants.
@@ -91,4 +108,3 @@ export default async function handler(req, res) {
     return fail(res, 503, 'Résultat incertain : consultez le registre avant tout nouvel essai');
   }
 }
-

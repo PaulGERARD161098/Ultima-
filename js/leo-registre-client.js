@@ -154,7 +154,7 @@ function validerCheckpoint(brut){
       } finally { busy = false; }
       return snapshot();
     }
-    async function request(body, onDispatch, operationId) {
+    async function request(body, onDispatch, operationId, listMissions = false) {
       const controller = new AbortController();
       activeController = controller;
       let timer, expired = false;
@@ -171,7 +171,7 @@ function validerCheckpoint(brut){
           if (expired) throw error('unavailable', 'Délai dépassé');
           if (typeof token !== 'string' || !token) throw error('auth', 'Authentification requise');
           if (onDispatch) onDispatch();
-          const response = await fetcher(body ? '/api/leo-registre'
+          const response = await fetcher(listMissions ? '/api/leo-registre?list=missions' : body ? '/api/leo-registre'
             : '/api/leo-registre?mission=' + encodeURIComponent(missionId)
               + (operationId ? '&operation_id=' + encodeURIComponent(operationId) : ''), {
             method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + token,
@@ -285,6 +285,26 @@ function validerCheckpoint(brut){
       }
     }
     return Object.freeze({ snapshot,
+      listMissions: async () => {
+        let catalogue;
+        await exclusive(async () => {
+          if (uncertain) throw error('uncertain', 'Réconciliez la mission en cours');
+          const result = await request(null, undefined, undefined, true);
+          if (!exactKeys(result, ['missions', 'truncated']) || !Array.isArray(result.missions)
+            || result.missions.length > 50 || typeof result.truncated !== 'boolean'
+            || result.missions.some(m => !exactKeys(m, ['id','state','stopped','expires_at','updated_at','label'])
+              || !uuid(m.id) || !STATES.includes(m.state) || typeof m.stopped !== 'boolean'
+              || typeof m.label !== 'string' || !m.label.trim() || m.label.length > 160
+              || !Number.isFinite(Date.parse(m.expires_at)) || !Number.isFinite(Date.parse(m.updated_at)))
+            || new Set(result.missions.map(m => m.id.toLowerCase())).size !== result.missions.length)
+            throw error('unavailable', 'Liste des missions inexploitable');
+          catalogue = clone(result);
+        }).catch(e => {
+          if (e.code === 'auth' || e.code === 'denied') { data = null; needsRefresh = true; }
+          throw e;
+        });
+        return catalogue;
+      },
       destroy: () => {
         disposed = true; activeController?.abort();
         data = null; missionId = null; uncertain = null; lastError = null; needsRefresh = true;
