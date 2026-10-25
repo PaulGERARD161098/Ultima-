@@ -5981,17 +5981,6 @@ export default {
      "titre": "Ce que fait la techno",
      "blocs": [
       {
-       "t": "note",
-       "paras": [
-        [
-         [
-          "Règle adoptée et précisée le 13/10/2026 : prévoir le contrôle dès le cadrage, même avant l'existence du système métier ; disposer d'un pilotage utilisable avant tout avancement important ou mise en ligne.",
-          ""
-         ]
-        ]
-       ]
-      },
-      {
        "t": "h2",
        "r": [
         [
@@ -6364,6 +6353,60 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "6. Continuité et charge de travail",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Travailler par unités courtes, terminables et vérifiables, en gardant une seule boucle d'exécution active. Le plan conserve la destination ; chaque unité produit un résultat utile, sa preuve et un point de reprise avant d'ouvrir la suivante. Enchaîner les unités autorisées sans demander une nouvelle confirmation à chaque étape.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant une unité, fixer son résultat, les seuls fichiers et contrôles nécessaires, sa condition de sortie et sa limite d'effort. Si elle grossit, réduire son périmètre et consigner le reste avant de poursuivre. Ne pas accumuler simultanément recherches, modifications et vérifications sur plusieurs fronts.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sauvegarder le travail versionné et le point de reprise dès qu'un résultat utile est obtenu, avant une opération longue ou un changement de sujet. Le point de reprise contient : objectif, version source, fait avec preuve, travail en cours, prochaine action unique, blocage et autorisation réellement manquante. Après interruption, relire ce point et l'état distant ; ne pas recommencer une étape déjà prouvée sur la même version.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Borner les lectures, recherches, sorties d'outils, essais et tâches concurrentes au besoin de l'unité courante. Résumer les résultats volumineux et conserver les références utiles. Si le contexte devient difficile à maîtriser, terminer ou sécuriser l'unité en cours, enregistrer la reprise et repartir dans un contexte allégé. Aucun seuil numérique de surcharge n'est présumé universel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Retour d'expérience déclaré : une session de travail interrompue a nécessité une recherche du dernier état pour pouvoir reprendre. La cause technique du plantage et sa durée ne sont pas établies ; la surcharge est un risque à prévenir, pas une cause démontrée. Cette règle vise une reprise fiable et une charge bornée ; elle ne garantit pas l'absence de panne et n'active aucun automate.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -6393,6 +6436,24 @@ export default {
        "t": "liste",
        "ordonnee": false,
        "items": [
+        [
+         [
+          "Définir une seule unité d'exécution active, avec résultat utile, périmètre borné et condition de sortie.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Prévoir un point de reprise versionné avant une opération longue et après chaque résultat utile.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Borner les lectures, sorties d'outils et essais au besoin courant ; alléger le contexte avant de perdre la maîtrise du suivi.",
+          ""
+         ]
+        ],
         [
          [
           "Recenser toutes les fonctions et leurs effets ; choisir le responsable du pilotage.",
@@ -6698,6 +6759,42 @@ export default {
        "r": [
         [
          "Respecter les autorisations effectives : déploiement public, dépense, migration, suppression ou envoi réel exigent le mandat correspondant. Le pilotage n'élargit jamais ces autorisations. L'activation d'un automate reste distincte de sa présence dans le code.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Vérifier la continuité sans surcharger",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sur une copie ou un environnement isolé, interrompre une unité après son point de sauvegarde. Reprendre à partir du point versionné et de l'état distant : le résultat déjà prouvé doit être retrouvé sans recommencer toute l'analyse ; la prochaine action doit être unique et exécutable. Un travail non sauvegardé reste indiqué comme tel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Contre-épreuve : retirer la version ou la preuve du point de reprise. La reprise doit signaler ce manque et revalider seulement l'élément concerné, sans déclarer l'unité terminée. Vérifier aussi qu'un élargissement du périmètre est reporté explicitement et qu'une étape autorisée n'attend pas un nouveau « go » par simple découpage.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ces critères décrivent la recette à mener dans chaque projet. L'ajout de cette règle ne prouve pas sa recette réelle et ne constitue aucun verrou automatique de charge ou de contexte.",
          ""
         ]
        ]
@@ -8519,9 +8616,9 @@ export default {
   "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
   "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
   "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
-  "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
-  "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
+  "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
+  "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "a2074a5ae227fd59674c5956f77e16c76aa14c14f319f6fd1278b71b91319cab",
   "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
   "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
   "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
