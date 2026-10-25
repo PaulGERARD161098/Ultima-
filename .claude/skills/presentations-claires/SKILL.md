@@ -15,6 +15,18 @@ Dans le dépôt Ultima, utiliser le socle canonique `zohshia/presentations-clair
 
 Lire la grammaire avant de composer. Charger aussi la compétence de présentation de l'environnement pour choisir le support natif et ses outils. Le moteur local sert de preuve de composition et de point de départ PDF/SVG ; il ne remplace pas un export natif.
 
+## Charger les compétences complémentaires
+
+Dans Ultima, charger les modules locaux selon le besoin :
+- `.claude/skills/composition-editoriale/SKILL.md` : direction artistique, images explicatives et finition de la couverture.
+- `.claude/skills/pitch-source/SKILL.md` : narration, preuves, objections et décision finale.
+- `.claude/skills/theme-factory/SKILL.md` : variables de thème et cohérence, déjà présentes ; conserver la référence validée sans rouvrir le menu de thèmes.
+- `.claude/skills/frontend-design/SKILL.md` : principes de hiérarchie et de précision, seulement pour les supports HTML ou les maquettes concernés ; ne pas changer le format du livrable.
+
+Les deux nouveaux modules sont adaptés de sources GitHub épinglées, avec licences et `sources.lock.json`. Leur périmètre est documentaire ; aucun moteur, police ou service externe amont n'est installé. La liste et la provenance vivent dans `outils/presentations-claires/SOURCES-GITHUB.md`.
+
+Dans ChatGPT sans accès à ces fichiers, lire les modules avec le connecteur GitHub sur la branche de livraison indiquée par le projet. Ne pas les déclarer installés dans les compétences personnelles ou éprouvés sur la machine avant une sauvegarde et une exécution réelles.
+
 ## Préparer sans répéter les questions
 
 1. Réutiliser le contexte connu. Identifier public, décision, durée, marque, sources et diffusion. Demander seulement les informations indispensables manquantes. Si le destinataire et le but restent inconnus, préparer une trame explicitement hypothétique.

@@ -35,3 +35,7 @@ Les SVG contiennent du texte et des objets vectoriels éditables ; leur édition
 Le badge et la compétence renvoient au même socle neutre. Le PDF d'aperçu est enregistré séparément : `libfile_9f2b89ce6ef8819180295fc288eed7f0`. Il montre les compositions, pas une présentation commerciale finale.
 
 Après accord de fusion lié à la version, relire les contrôles d'intégration puis vérifier le badge avec la session propriétaire. Premier vrai usage : fournir le brief de la future présentation, ses preuves et sa marque ; mesurer séparément rédaction, visuels, composition et recette.
+
+## Complément — compétences depuis GitHub
+
+La suite de la même séance ajoute deux modules adaptés, leur licence et leur provenance, raccordés à l'orchestrateur. Voir `SOURCES-GITHUB.md` pour le périmètre exact. Les preuves précédentes ne deviennent pas des tests d'exécution de ces modules : environnement indisponible, rendu non exécuté dans cette passe. La compétence personnelle de la première livraison reste à sa version précédente.
