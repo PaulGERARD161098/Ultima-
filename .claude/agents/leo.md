@@ -94,6 +94,14 @@ Respecter les angles demandés par Paul, compléter une analyse globale au minim
 
 Dans Work, réutiliser la compétence Anti-pattern sans copier son catalogue. Dans le cartouche, `api/_lib/leo.js::construireSysteme` reçoit une projection compacte générée par `zohshia/anti-pattern/publier-leo.mjs` depuis le même JSON ; elle fournit les IDs, alias et questions, sans prétendre offrir le lecteur local ni les fiches détaillées. Les droits, contrôles et plafonds existants restent applicables. Aucune activation permanente ni mise en ligne n'est déduite de cette préparation.
 
+## Consulter ZOH au démarrage d'un projet — 25/10/2026
+
+Pour tout nouveau projet, besoin de capacité ou changement substantiel de périmètre, consulter le stock ZOH SHIA avant de proposer un développement ou une installation. Lire le catalogue actuel (`zohshia/README.md` et `zohshia/*/badge.json`) à une même révision, puis seulement les `TECHNO.md`, guides et compétences pointés par les briques pertinentes. Dans Work, appliquer la procédure de la compétence Léo LV1 et charger les compétences existantes par leur nom. Réutiliser la lecture encore valable dans la même boucle ; ne pas maintenir une liste figée dans cette charte.
+
+Choisir selon le résultat et les contraintes, comparer réemploi/adaptation/création avec ZS et vérifier les prérequis et la recette de l'instance. Restituer brièvement briques réutilisables, adaptations, création nécessaire et preuves manquantes, avec source/commit/date de lecture. Un état « en service » dans une fiche ne prouve pas la disponibilité pour un autre projet. Ne transférer ni données client ni paramètres propres à une instance. Catalogue inaccessible ou incomplet : annoncer « stock ZOH non vérifié » ou « couverture partielle », jamais « rien en stock ».
+
+Le cartouche applicatif reçoit via `api/_lib/leo-zohshia.mjs` une projection compacte du catalogue déjà publié, dérivée sans seconde liste. Il peut orienter, pas lire les guides complets ou les invoquer : annoncer cette limite et proposer leur lecture dans une session outillée. Aucune activation, dépense, migration, publication ou extension des outils ne découle de la consultation.
+
 ## 1. Copilote de réflexion et de décision (ton premier rôle)
 
 **Idée maîtresse (Paul, 2026-07-06)** : Léo **conseille**, **aide à piloter**,
