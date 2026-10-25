@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as leo from '../api/_lib/leo.js';
+import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import {
   construireSysteme, validerEtatQuadrant, joindreEtatConversation,
   outilsPour, MAX_ETAT_COMPTEURS, MAX_ETAT_LISTES, MAX_ETAT_ENTREES,
@@ -65,6 +66,9 @@ const routeSource = readFileSync(new URL('../api/leo.js', import.meta.url), 'utf
   .replace('export default async function handler', 'return async function handler');
 const deps = {
   ...leo,
+  // Imports retirés de la route : injecter les vraies fonctions pures du
+  // suivi, sans masquer sa validation par des mocks.
+  validerInteraction, decrireInteraction, lireReponseInteraction,
   Anthropic: AnthropicFactice,
   process: { env: { ANTHROPIC_API_KEY: 'fixture-sans-reseau' } },
   requireProprietaire: async () => ({ status: 'ok', user: { id: 'fixture-user' } }),
@@ -89,6 +93,27 @@ assert.equal(appel.messages[0].role, 'user');
 assert.equal(JSON.parse(appel.messages[0].content[0].text).donnees.listes.Idées[0].libelle, hostile);
 // TROIS sur ADRAMELECH depuis le 18/10/2026 : idée, enrichissement, et la lecture d'AMATSU.
 assert.equal(appel.tools.length, 3);
+
+// Le suivi et les données de quadrant coexistent : aucun tableau de blocs
+// n'est converti en chaîne « [object Object] » lors de leur assemblage.
+// Scénario indépendant : une nouvelle instance évite de rejouer le même
+// utilisateur en rafale. Le limiteur réel reste testé dans ses propres suites.
+const routeAvecSuivi = new Function(...Object.keys(deps), routeSource)(...Object.values(deps));
+const avecSuivi = await routeAvecSuivi({ method: 'POST', body: {
+  quadrant: 'adramelech', messages: historique, etat: entree,
+  interaction: { rappels_focus: 0, tache: {
+    titre: 'Terminer le cadrage', etapes: ['Vérifier les données'],
+    confirmes: [], etat: 'en_cours'
+  } }
+} }, {});
+assert.equal(avecSuivi.status, 200);
+const contenuAvecSuivi = appel.messages[0].content;
+assert.ok(Array.isArray(contenuAvecSuivi), 'les données restent des blocs structurés');
+assert.equal(JSON.parse(contenuAvecSuivi[0].text).donnees.listes.Idées[0].libelle, hostile);
+assert.equal(contenuAvecSuivi[1].text, historique[0].content);
+assert.ok(contenuAvecSuivi.slice(2).some(bloc => bloc.type === 'text' &&
+  bloc.text.includes('Terminer le cadrage') && bloc.text.includes('NON AUTORITATIF')));
+assert.equal(typeof historique[0].content, 'string', 'le fil fourni reste inchangé');
 
 const fenetre = {};
 const front = readFileSync(new URL('../js/leo-accueil.js', import.meta.url), 'utf8');
@@ -119,3 +144,4 @@ for (const r of [null, { httpOk: false, corps: null }, { statut: 500, corps: { o
 assert.match(messageEchecEcriture({ statut: 409, corps: { ok: false } }), /réconciliez/);
 assert.match(messageEchecEcriture({ statut: 403, corps: { ok: false } }), /refusée/);
 console.log('UNIT-LEO-DONNEES OK');
+

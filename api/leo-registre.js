@@ -3,6 +3,7 @@
 // Sans installation approuvée de la proposition SQL, réponse 503 fermée.
 import { requireUser, isAuthError } from './_lib/supabase.js';
 import { ok, fail, bodyFail, methodNotAllowed, readJsonBody, logError } from './_lib/http.js';
+import { validerCheckpoint } from '../js/leo-interaction.mjs';
 import { isUuid } from './_lib/validate.js';
 
 const METHODS = ['GET', 'POST'];
@@ -12,6 +13,14 @@ const exact = (value, keys) => plain(value) && Object.keys(value).length === key
   && keys.every(key => Object.hasOwn(value, key));
 const operationIdValid = value => typeof value === 'string'
   && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(value);
+
+const checkpointCommandValid = c => exact(c, ['kind', 'expected_task_id'])
+  && (c.kind === 'adopt' ? c.expected_task_id === null
+    : ['update', 'revise_plan'].includes(c.kind) && isUuid(c.expected_task_id));
+const checkpointPatchValid = p => !Object.hasOwn(p, 'checkpoint') && !Object.hasOwn(p, 'checkpoint_command')
+  || Object.hasOwn(p, 'checkpoint') && Object.hasOwn(p, 'checkpoint_command')
+    && !!validerCheckpoint(p.checkpoint) && checkpointCommandValid(p.checkpoint_command)
+    && (p.checkpoint_command.kind === 'adopt' || p.checkpoint.task_id === p.checkpoint_command.expected_task_id);
 
 function databaseFailure(res, error) {
   if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
@@ -58,13 +67,17 @@ export default async function handler(req, res) {
         && isUuid(body.mission) && operationIdValid(body.operation_id)
         && Number.isSafeInteger(body.expected_version) && body.expected_version > 0
         && plain(body.patch) && Object.keys(body.patch).length > 0
-        && Object.keys(body.patch).every(key => ['state', 'next_action'].includes(key))
+        && Object.keys(body.patch).every(key => ['state', 'next_action', 'checkpoint', 'checkpoint_command'].includes(key))
+        && checkpointPatchValid(body.patch)
         && (!Object.hasOwn(body.patch, 'state') || (typeof body.patch.state === 'string'
           && body.patch.state.length > 0 && body.patch.state.length <= 100))
         && (!Object.hasOwn(body.patch, 'next_action') || (typeof body.patch.next_action === 'string'
           && body.patch.next_action.length <= 4000))) {
+        // Expédier la projection canonique aussi pour les appels HTTP directs.
+        const patch = Object.hasOwn(body.patch, 'checkpoint')
+          ? { ...body.patch, checkpoint: validerCheckpoint(body.patch.checkpoint) } : body.patch;
         name = 'leo_write_memory'; args = { p_mission: body.mission,
-          p_operation: body.operation_id, p_expected_version: body.expected_version, p_patch: body.patch };
+          p_operation: body.operation_id, p_expected_version: body.expected_version, p_patch: patch };
       } else return fail(res, 400, 'Commande invalide ou non disponible');
     }
     // Une seule RPC : le SQL contrôle et enregistre effet/résultat/budget ensemble.
@@ -78,3 +91,4 @@ export default async function handler(req, res) {
     return fail(res, 503, 'Résultat incertain : consultez le registre avant tout nouvel essai');
   }
 }
+

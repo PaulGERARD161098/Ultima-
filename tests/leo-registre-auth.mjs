@@ -96,6 +96,7 @@ try {
       const root = mkdtempSync('/tmp/leo-auth-mutant-');
       cpSync(new URL('../api/', import.meta.url), root + '/api', { recursive: true });
       symlinkSync('/travail/node_modules', root + '/node_modules', 'dir');
+      symlinkSync('/travail/js', root + '/js', 'dir');
       writeFileSync(root + '/package.json', '{"type":"module"}');
       const file = root + '/api/_lib/supabase.js', source = readFileSync(file, 'utf8');
       const needle = '  const { client } = base;';

@@ -1,6 +1,7 @@
 // Route réelle, Auth et transport RPC factices ; aucune base réelle appelée.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { validerCheckpoint } from '../js/leo-interaction.mjs';
 import { isUuid } from '../api/_lib/validate.js';
 const source = readFileSync(new URL('../api/leo-registre.js', import.meta.url), 'utf8')
   .replace(/^import[^\n]*\n/gm, '')
@@ -8,7 +9,7 @@ const source = readFileSync(new URL('../api/leo-registre.js', import.meta.url), 
 const mission = '11111111-1111-4111-8111-111111111111';
 async function invoke(req, options = {}) {
   const calls = [];
-  const deps = { isUuid, isAuthError: error => error?.code === 'PGRST301',
+  const deps = { validerCheckpoint, isUuid, isAuthError: error => error?.code === 'PGRST301',
     requireUser: async () => ({ status: options.auth || 'ok', client: { rpc: async (name, args) => {
       calls.push({ name, args });
       if (options.throw) throw new Error('fixture transport');
@@ -89,3 +90,32 @@ assert.equal(deniedReceipt.response.status, 403);
 assert.equal((await invoke(receiptRequest, { result: { data: [], error: null } })).response.status, 503);
 console.log('Registre API : authentification, commandes fermées, RPC unique et issue inconnue vérifiées sur fixtures.');
 console.log('Reçu ciblé : projection minimale, filtres exacts, absence neutre, auth et entrées refusées.');
+
+
+const cp = {task_id:mission,titre:'Plan',etapes:['Vérifier'],confirmes:[],rappels:0,etat:'en_cours',revision:1};
+for(const kind of ['adopt','update','revise_plan']) {
+  const patch={checkpoint:cp,checkpoint_command:{kind,expected_task_id:kind==='adopt'?null:mission}};
+  const result=await invoke({...request,body:{...request.body,patch}});
+  assert.equal(result.response.status,200);assert.equal(result.calls.length,1);
+  assert.deepEqual(result.calls[0].args.p_patch,patch);
+}
+for(const patch of [
+  {checkpoint:cp}, {checkpoint_command:{kind:'adopt',expected_task_id:null}},
+  {checkpoint:null,checkpoint_command:{kind:'adopt',expected_task_id:null}},
+  ...[{kind:'new_task',expected_task_id:mission},{kind:'update',expected_task_id:null},
+    {kind:'adopt',expected_task_id:mission},{kind:'adopt',expected_task_id:null,owner:true},
+    {kind:'revise_plan',expected_task_id:'22222222-2222-4222-8222-222222222222'}]
+    .map(checkpoint_command=>({checkpoint:cp,checkpoint_command})),
+  {checkpoint:{...cp,rappels:3},checkpoint_command:{kind:'adopt',expected_task_id:null}},
+]) {
+  const result=await invoke({...request,body:{...request.body,patch}});
+  assert.equal(result.response.status,400);assert.equal(result.calls.length,0);
+}
+console.log('PASS checkpoint API fermé : paires, commande, identité et RPC unique');
+
+{
+ const patch={checkpoint:{...cp,titre:' Plan ',etapes:[' Vérifier ']},checkpoint_command:{kind:'adopt',expected_task_id:null}};
+ const result=await invoke({...request,body:{...request.body,patch}});
+ assert.equal(result.response.status,200);assert.deepEqual(result.calls[0].args.p_patch.checkpoint,cp,'API directe canonique');
+ assert.equal(patch.checkpoint.titre,' Plan ','requête appelante conservée');
+}
