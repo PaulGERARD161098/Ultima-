@@ -111,3 +111,169 @@ La préparation corrige également le client : il n'affiche plus un rappel struc
 Revue des scénarios : le cas de reprise utilise désormais un compteur à 1, pour qu'une remise à zéro ne puisse pas passer. La fixture longue ne prétend pas éprouver le message à huit secondes : elle vérifie seulement l'attente indéterminée et le verrouillage du plan. Syntaxe statique vérifiée ; exécution du nouveau harnais à recevoir avant déclaration de succès. Une exécution de la CI existante est justifiée par cette nouvelle couverture fonctionnelle et la correction client, pas par une relance des seuls tests déjà verts.
 
 Boucle active : obtenir la preuve navigateur ciblée du lot d'interaction. Ensuite : raccord du checkpoint au registre durable selon le contrat ci-dessus, puis dialogues réels et réception V2. Aucun logiciel installé sur le PC de Paul ; ses specs ne sont pas nécessaires pour ce travail. Aucun merge, appel IA externe, migration réelle ni activation.
+
+
+## Dry run demandé le 25/10 — correctifs et poursuite
+
+Source vérifiée avant le dry run : `873673192f69010cd2df3985857f8b5b591c3406`, neuf checks verts. La contre-lecture a néanmoins trouvé trois écarts : reproposition/révision de plan réinitialisant les rappels, rappel encore recevable après tous les jalons confirmés, et changement explicite ignoré à cause de mots sans lien avec l'ordre dans le même message. Ces écarts ne sont pas niés par les 27 contrôles précédents : leurs scénarios manquaient.
+
+Correctifs préparés : déduplication d'un plan identique ; révision conservant compteur et confirmations remappées uniquement pour les libellés inchangés ; nouvelle tâche explicitement demandée seule habilitée à repartir à zéro ; filtre de fin de tâche dans le parseur et le client ; analyse des commandes phrase par phrase. La reconnaissance reste une liste bornée de commandes, pas une compréhension exhaustive du langage naturel. La suppression de rappels dans toute prose libre reste à éprouver sur le modèle.
+
+La relecture distincte a ensuite détecté un risque de candidat périmé : un ancien plan encore proposé pouvait être adopté après une nouvelle intention ou une reprise. Ces changements invalident maintenant le candidat précédent, et restituer le plan courant retire une révision devenue sans objet. L’intention de nouvelle tâche est liée au premier candidat reçu ; une priorité différente ou le remplacement de ce candidat la révoque. Chaque bouton conserve la référence du plan affiché et refuse d’adopter un autre candidat à sa place. La détection d'une nouvelle tâche est aussi traitée avant qu'un plan existe. Les smokes vérifient ces chemins en partant de compteurs non nuls et d'un vrai candidat en attente.
+
+Contre-épreuves ajoutées au runner existant : `unit-leo-interaction-sabotages.mjs` charge quatre copies corrompues en mémoire (troisième rappel autorisé, compteur effacé lors d'une révision, suppression du filtre de fin de tâche, négation hors sujet). Chaque preuve doit échouer sur sa corruption puis passer sur la version correcte. Les fichiers applicatifs ne sont pas sabotés. Les unités et le smoke comprennent aussi les scénarios de répétition, révision, nouvelle tâche, achèvement et candidats périmés. Exécution à recevoir en CI isolée ; aucun résultat simulé n'est déclaré réussi avant les logs.
+
+Angles croisés : utilisateur — plafonnement effectif des rappels ; opérateur — validité du candidat après changement d'intention ; adversaire — mutations témoins connues ; dépendances — la mémoire nécessite une extension de registre plutôt qu'un champ texte détourné. Syntaxe statique vérifiée. Le prochain passage ne doit pas relancer les seuls contrôles verts : il doit lire les nouvelles preuves et traiter tout écart.
+
+Poursuite autorisée (« ensuite go ») : préparation de la continuité au registre existant, après correction du dry run. Lecture réelle de métadonnées Ultima le 25/10 : tables `public.leo_missions`, `public.leo_operations` et signatures `leo_status(uuid)`, `leo_write_memory(uuid,text,bigint,jsonb)` présentes ; `leo_missions` porte 18 colonnes historiques et aucun checkpoint. Aucun contenu de mission, aucun contrôle privé R21 ni secret n'a été lu. Aucune donnée, permission ou structure réelle n'a été modifiée.
+
+### Poursuite : proposition de continuité dans le registre existant
+
+## Résultat recherché et périmètre
+
+Retrouver, depuis un autre onglet ou appareil du même propriétaire, le plan adopté, ses confirmations déclarées, les rappels déjà consommés et sa suspension. Réutiliser `public.leo_missions`, `public.leo_operations`, `public.leo_status` et `public.leo_write_memory` ; aucune table de conversation, aucun journal de discussion, aucun nouveau mandat ni RPC de création. Un checkpoint n'est ni une preuve d'exécution ni une permission d'effet externe.
+
+Sources lues dans GitHub, PR #419, tête `873673192f69010cd2df3985857f8b5b591c3406` :
+
+- `api/leo-registre.js` : actions fermées `GET status`, reçu ciblé, `write_memory`, `stop` ; patch actuellement limité à `state` et `next_action`.
+- `js/leo-registre-client.js` : CAS sur `mission.version`, identifiant d'opération, réconciliation, journal `sessionStorage` ne contenant que des identifiants/versions ; comparaison de patch actuellement adaptée uniquement aux primitives.
+- `js/leo-interaction.mjs` : forme locale du suivi `{titre,etapes,revision,confirmes,rappels,etat}` ; rappel borné à deux ; plan proposé sans achèvement automatique.
+- `js/leo-registre-ui.js` : sélection explicite d'une mission existante ; aucun mécanisme de création de mission.
+- `leo/proposals/registre-postgres.sql`, `registre-conflicts-pt409.sql`, `registre-etats-proprietaire.sql` ; migrations `20260929125105_leo_lv1_registre_transactionnel.sql`, `20261001070311_leo_registre_conflicts_pt409.sql`, `20260930081500_leo_operations_read_cloisonne.sql` ; tests API, client/parcours, SQL et Auth existants.
+
+Le parent a constaté en métadonnées la présence des tables et RPC. Au 25/10/2026, il a également lu les colonnes : **18 colonnes historiques dans `leo_missions`, checkpoint absent**, sans lire de donnée métier. Cette observation est transmise par le parent, pas remesurée par ce sous-lot. **Elle ne prouve ni la définition exacte actuelle des RPC, ni l'existence d'une mission utilisable, ni l'application de toutes les propositions SQL.** Les contenus de missions et le contrôle privé restent hors périmètre de cette préparation.
+
+### Choix minimal recommandé
+
+Ajouter **une colonne nullable `checkpoint jsonb` à la mission existante**, exposée par la lecture et écrite par la même transaction que `leo_write_memory`. Conserver l'historique d'opérations et tous les verrous existants. Ne pas sérialiser le plan dans `next_action` : cela détournerait une chaîne libre de son contrat et empêcherait une validation structurée.
+
+Les lignes existantes gardent `checkpoint IS NULL`. L'ancien client continue à écrire `state`/`next_action` sans toucher au checkpoint. Le nouveau client désactive les commandes de continuité quand le serveur ne déclare pas cette capacité ; il ne prétend pas sauvegarder dans un ancien backend.
+
+Forme canonique minimale proposée (**sept clés**, identité stable de tâche distincte de la révision du plan ; valeurs d'exemple fictives) :
+
+```json
+{
+  "task_id": "00000000-0000-4000-8000-000000000001",
+  "titre": "Terminer une mission fictive",
+  "etapes": ["Préparer le résultat", "Vérifier le résultat"],
+  "confirmes": [0],
+  "rappels": 1,
+  "etat": "en_cours",
+  "revision": 1
+}
+```
+
+Validation à partager entre les lecteurs/rédacteurs applicatifs et à réimplémenter explicitement dans SQL :
+
+- objet simple conforme au contrat retenu, incluant `task_id`, pas de `null` ni champ libre de droits ; la validation stricte doit suivre ce schéma **à sept clés**, pas l'ancienne proposition à six clés ; taille JSONB <= 10 000 octets et maintien du plafond actuel de 16 384 octets pour le payload d'opération ;
+- `task_id` : identité opaque stable, émise par l'hôte ou par une commande propriétaire explicite ; jamais déduite d'une révision, d'un titre reformulé ou d'une proposition du modèle. Le format de production recommandé est UUID aléatoire validé ; l'UUID ci-dessus est strictement fictif et ne désigne aucune tâche réelle ;
+- `titre` : chaîne non vide <= 160 caractères ;
+- `etapes` : tableau de 1 à 10 chaînes non vides <= 160 caractères, sans doublon après normalisation existante ;
+- `confirmes` : tableau trié d'entiers uniques, de 0 à `etapes.length - 1`, jamais interprétés comme preuves serveur ;
+- `rappels` : entier de 0 à 2 ; `etat` : `en_cours` ou `suspendue` ; `revision` : entier sûr positif <= 9 007 199 254 740 991 ;
+- mêmes refus de caractères de contrôle et de balises que `validerPlan`, sans prétendre que cette validation supprime toute donnée personnelle ; le checkpoint ne contient que le minimum utile, sans discussion complète, jeton, secret ou contrôle privé.
+
+La `revision` du checkpoint identifie la **version du plan à l'intérieur de la même tâche**, nécessaire aux boutons de confirmation d'un jalon. `task_id` reste stable à travers ces révisions. La `version` de mission reste **l'unique version CAS transactionnelle** : ne pas créer un second compteur de concurrence. Les objets d'étapes restent immuables au sein d'une révision.
+
+#### Transitions recommandées
+
+1. Première adoption sur `checkpoint IS NULL` : identité de tâche émise par l'hôte, `revision=1`, `confirmes=[]`, `rappels=0`, `etat=en_cours`.
+2. Même révision : titre et étapes strictement inchangés ; confirmations seulement ajoutées, rappels non décroissants et augmentés au plus de un ; reprise/suspension explicitement demandée par le propriétaire.
+3. Révision de plan explicitement adoptée pour la **même tâche** : même `task_id`, `revision=ancienne+1`, **rappels intégralement conservés**. Les confirmations des libellés d'étapes inchangés sont conservées et remappées vers leurs nouveaux indices ; les étapes ajoutées ou réellement modifiées restent non confirmées. Dédupliquer une proposition identique : titre/étapes inchangés ne créent ni nouvelle révision ni nouvelle tâche. La comparaison des libellés utilise une normalisation canonique partagée ; les doublons normalisés sont interdits afin que le remappage soit univoque.
+4. Une nouvelle tâche et son compteur initial à zéro exigent une **commande propriétaire explicite, versionnée et distincte d'une révision**. Elle est liée à l'identité de tâche précédente, à la version CAS de mission et à un candidat courant précis (identifiant, révision et empreinte de son plan). L'intention ne s'applique qu'à ce candidat ; toute nouvelle proposition l'invalide. Une simple approbation de plan, un nouveau titre, une révision, une recharge ou une réponse du modèle n'autorisent jamais ce renouvellement. Après accord explicite du candidat non périmé, l'hôte émet le nouveau `task_id`, `revision=1`, `confirmes=[]`, `rappels=0`. L'ancien plan demeure dans les reçus, sans nouveau magasin.
+5. Pas de remise à zéro silencieuse ou de `checkpoint:null`. Le compteur est attaché à `task_id`, pas à `revision`. Une correction importante du plan reste une révision tant que la nouvelle tâche n'a pas été explicitement commandée ; le dispositif n'invente pas une autorisation de retour arrière métier.
+6. Tous jalons confirmés : état d'affichage « confirmations complètes », pas modification automatique de `mission.state=closed`, pas « livraison prouvée » ni action externe.
+
+**Correction issue du dry run transmis le 25/10 :** l'ancienne transition qui remettait les rappels à zéro à chaque génération était un contournement du plafond de deux rappels par tâche. Elle est retirée et ne doit pas servir de base à un patch. La distinction identité de tâche / révision de plan est une exigence de réception, pas une optimisation.
+
+### Commande de nouvelle tâche : liaison nécessaire, pas nouveau mandat
+
+Conserver la route `write_memory` et l'opération idempotente ; étendre son contrat par une commande de checkpoint fermée, par exemple `checkpoint_command={kind:"revise_plan"|"new_task"|"update",expected_task_id,candidate_id,candidate_revision,candidate_hash}`. Pour la première adoption, l'identité précédente est explicitement absente selon un cas validé séparé. La commande est enregistrée dans le payload de **cette nouvelle opération**, sans ajouter une clé par défaut aux anciennes opérations.
+
+Le marqueur `new_task` seul n'est pas une preuve suffisante : le cartouche/hôte doit lier l'intention explicite à son candidat courant, la consommer une seule fois et la révoquer dès que le candidat change. Le serveur vérifie en plus owner, CAS, identité précédente et transition autorisée. Si la vérification du candidat courant requiert une attestation hôte, son format et sa vérification devront être définis et éprouvés avant migration ; **ne pas simuler cette garantie par un booléen client ou un champ libre fourni par le modèle**. Le lot reste préparatoire tant que cette liaison exacte n'est pas raccordée.
+
+**Recommandation d'autorité à faire apparaître dans le lot :** réserver les écritures du nouveau champ `checkpoint` au propriétaire de la mission. Les writers existants gardent leurs droits actuels sur les seuls champs historiques. Cela protège les déclarations de suivi contre un autre writer sans élargir les droits existants. Même ainsi, une requête avec le JWT du propriétaire ne distingue pas techniquement Léo de Paul : les confirmations restent déclaratives, et seules des actions UI explicites doivent les produire. La proposition historique `registre-etats-proprietaire.sql` n'est pas supposée appliquée et n'est pas absorbée silencieusement dans ce lot.
+
+### Changements SQL exacts à préparer dans le dépôt
+
+Le fichier final devra être une nouvelle **proposition hors `supabase/migrations/`**, puis une migration revue seulement après lecture des définitions actuellement installées. Ne jamais rejouer le `create schema`/`create table` du bootstrap sur l'instance existante.
+
+1. Vérifier en métadonnées : colonne absente ou définition compatible, définitions exactes `leo_status` et `leo_private.write_memory_impl`, propriétaires des fonctions, `search_path`, invoker/definer, grants, RLS actuelle et empreintes des migrations. Un écart interdit de remplacer une fonction à partir d'un ancien snapshot.
+2. Ajouter `leo_missions.checkpoint jsonb NULL`, sans valeur d'instance et sans réécriture de l'historique. Ajouter une contrainte de forme avec un validateur SQL strict ; `SQL NULL` reste réservé aux anciennes missions. Ne changer ni ACL/readers/writers, ni privilège DML, ni budget.
+3. Étendre la projection de `leo_status` à `mission.checkpoint` et ajouter une capacité explicite, par exemple `capabilities.checkpoint=1`. Les opérations restent la projection existante et le reçu ciblé reste sous la RLS corrigée. Ne pas renvoyer payload/ACL.
+4. Dans `leo_private.write_memory_impl` : étendre l'allowlist à `state,next_action,checkpoint` et à la commande fermée de checkpoint retenue ; validation stricte de l'identité de tâche, du checkpoint et de l'intention versionnée ; authentification, scope/version et verrou de mission inchangés. **Réutiliser le payload exact existant `jsonb_build_object('expected_version',p_expected_version,'patch',p_patch)`** : ne pas y ajouter une clé par défaut, sinon les anciens rejoués deviendraient divergents.
+5. Après recherche d'une opération déjà terminée (dont le reçu exact doit rester rejouable), appliquer la garde owner du nouveau champ et les transitions ci-dessus : compteur monotone pour une même tâche, remappage des confirmations sur libellés inchangés, révision de plan sans renouvellement de tâche, intention new_task non périmée. Conserver arrêt, expiration, CAS, épuisement de version et plafonds inchangés. Le conflit reste `PT409`, pas `40001` pour un conflit métier.
+6. Dans l'unique `UPDATE` de mission, ajouter la mise à jour conditionnelle du checkpoint ; dans le reçu nouveau, ajouter le checkpoint canonique et l'identité de la commande acceptée (`checkpoint_command`, forme fermée, sans secret) **dans le résultat de la même transaction**. Cela permet de rapprocher la commande de renouvellement sans faire passer une intention pour un champ stocké de mission. `version`, `used_units`, `calls` avancent une seule fois comme aujourd'hui. Pas d'appel IA, de timer ni de nouvelle réservation financière.
+
+Fragment d'intégration précis, **non exécutable seul**, à insérer dans la fonction relue plutôt qu'à appliquer tel quel :
+
+```sql
+-- Allowlist étendue AVANT le verrou :
+-- Allowlist complétée seulement par la commande fermée de checkpoint retenue.
+-- ('state', 'next_action', 'checkpoint', 'checkpoint_command') => clés possibles
+-- p_patch ? 'checkpoint' AND NOT checkpoint_valide(p_patch->'checkpoint') => 22023
+
+-- APRÈS le bloc de rejeu exact existant et AVANT tout effet :
+if p_patch ? 'checkpoint' and v_m.owner <> v_uid then
+  raise exception using errcode = '42501', message = 'owner_checkpoint_required';
+end if;
+-- Vérifier ici les transitions du plan sous le verrou déjà pris.
+
+-- Dans l'UPDATE existant, pas un second UPDATE :
+checkpoint = case when p_patch ? 'checkpoint'
+  then p_patch->'checkpoint' else checkpoint end,
+
+-- Dans v_result, en plus des champs historiques :
+'checkpoint', v_m.checkpoint
+```
+
+Un éventuel validateur `leo_private.checkpoint_valide(jsonb)` est pur, `IMMUTABLE`, avec `search_path=''`, sans accès aux tables. Son nom n'ouvre aucune API : retirer les grants PUBLIC par défaut ; seul le propriétaire de `write_memory_impl` en a besoin. Il ne doit pas être security-definer. Éviter toute exception de cast sur JSON hostile : vérifier les types avant conversion et rendre les mauvais inputs en `22023` dans la RPC. Aucun code de migration complet n'est affirmé prêt tant que le snapshot réel et le banc isolé manquent.
+
+### API, client et interaction : changements nécessaires
+
+| Fichier existant | Modification bornée |
+|---|---|
+| `api/leo-registre.js` | Accepter `patch.checkpoint` dans la même action `write_memory`, valider la forme avant RPC, garder les clés de corps exactes, auth inchangée et un seul RPC. Les champs de droits/budget/identité restent interdits. GET ne découvre aucune mission nouvelle. |
+| `js/leo-interaction.mjs` | Réutiliser `validerPlan`, ajouter `task_id`, validateur complet et import depuis projection serveur. Révision de plan : même task_id/rappels, confirmations des libellés inchangés remappées ; plan identique dédupliqué. Intention explicite de nouvelle tâche liée au candidat courant, jamais héritée par le candidat suivant. Ne pas confondre confirmations déclarées et preuves. |
+| `js/leo-registre-client.js` | Étendre `statusValid` et `resultValid` pour le checkpoint, la capacité et le reçu fermé de la commande. Accepter les anciens reçus sans ces champs. Écrire via la même méthode `write`, le même expected_version et operation_id. **Remplacer les comparaisons primitives `op.result[k]===patch[k]` par une comparaison structurelle canonique pour checkpoint et checkpoint_command** : deux objets JSON identiques ne sont jamais égaux par référence après transport. Le reçu nouveau doit restituer la commande acceptée pour ce rapprochement ; ne pas réclamer cette clé sur une ancienne opération qui ne l'avait pas. Garder la comparaison stricte pour state/next_action. |
+| `js/leo-registre-client.js` | Conserver le journal de reprise minimal (mission/opération/version, aucun contenu de checkpoint ni patch dans sessionStorage). Après réponse perdue, reçu ciblé par mission+operation_id puis réconciliation ; une absence de reçu ne débloque jamais un nouveau POST automatique. Relecture Auth avant toute nouvelle commande. |
+| `js/leo-registre-ui.js` / cartouche consommateur | Rattacher explicitement le suivi à la mission existante sélectionnée par le propriétaire ; hydrater depuis checkpoint après lecture réussie. Si aucune mission choisie ou capacité absente : suivi local clairement non sauvegardé, pas de fausse mémoire durable. Ne pas provisionner une mission depuis le cartouche. |
+| Cartouche de suivi | Adoption, confirmation de jalon, pause/reprise, révision et nouvelle tâche => commandes distinctes. Une révision remappe déterministement les confirmations des libellés inchangés, sans remise à zéro des rappels. Seule une nouvelle tâche explicitement demandée et liée au candidat courant peut créer task_id et compteur neufs. Sauvegarde CAS ; affichage « enregistré » seulement après reçu. Un conflit préserve le brouillon et propose comparaison, jamais fusion automatique de versions concurrentes. |
+| Contexte du modèle | Utiliser la projection relue du registre pour la reprise, toujours étiquetée non autoritative pour les droits. Aucune donnée de mission voisine injectée, aucune instruction tirée du titre. Le prochain jalon se dérive de `etapes/confirmes` ; ne pas stocker une deuxième copie de ce calcul. `next_action` reste le mémo historique distinct, pas une deuxième source du plan. |
+
+#### Compteur de rappels : ordre qui évite une troisième insistance
+
+Avant de rendre visible un rappel structuré, persister l'incrément `rappels+1` par CAS, attendre le reçu puis afficher le rappel. En cas d'issue inconnue, suspendre le rappel visible et réconcilier le reçu. Un crash entre sauvegarde et affichage peut consommer conservativement un rappel ; il ne remet pas le compteur à zéro. Deux onglets concurrents ne peuvent consommer le même créneau : l'un reçoit `PT409`, relit et ne rejoue pas automatiquement. Une priorité explicitement changée ou une tâche suspendue reste respectée sans troisième rappel.
+
+### Recette à ajouter aux bancs existants — aucune exécutée dans cette préparation
+
+| ID | Épreuve isolée | Attendu |
+|---|---|---|
+| C01 | Mission historique sans checkpoint ; ancien client state/next_action | Ancien comportement conservé, checkpoint NULL, pas de réinitialisation. |
+| C02 | Adoption puis relecture sur nouvelle session/appareil autorisé | Même titre, étapes, confirmes, rappels, état et révision ; zéro contenu de conversation dans stockage local. |
+| C03 | Deux writes concurrents même mission.version | Un seul commit, un seul débit et un seul reçu ; second PT409 sans effet. |
+| C04 | Réponse perdue après commit ; même opération/version/patch | Reçu original retrouvé, `replayed=true` si rejeu explicite exact, aucun second effet/débit. Client ne rejoue pas automatiquement. |
+| C05 | Même operation_id, payload/version différents | PT409, aucune mutation ni nouveau débit. |
+| C06 | Reçu hors des 100 plus récents | GET ciblé sous RLS retrouve l'opération ; absence reste issue inconnue. |
+| C07 | Propriétaire / writer / reader / étranger / anon / service_role | Owner peut checkpoint ; writer conserve droits historiques mais pas checkpoint ; reader lecture autorisée seulement ; étranger/anon/service_role refusés selon privilèges existants. Aucun élargissement. |
+| C08 | JSON null, clés droits, index hors bornes, doublons, rappels=3, révision non sûre, payload trop grand | 400/22023 avant effet, zéro budget/version modifié. |
+| C09 | Modification étapes à même révision ; reset confirmes ou rappels ; révision sautée | Refus de transition, données préservées ; une révision adoptée passe seulement par ancienne+1 en conservant task_id/rappels et les confirmations remappables. |
+| C10 | Bouton ancien plan après remplacement | Révision du plan divergente : confirmation refusée, aucun index transposé au nouveau plan. |
+| C11 | Deux rappels puis rechargement, changement appareil, pause et reprise | Compteur conservé à deux ; aucune nouvelle proposition de recentrage. |
+| C12 | Crash après sauvegarde rappel avant affichage | Compteur non réinitialisé ; éventuelle consommation conservatrice annoncée dans la preuve, pas de rappel supplémentaire. |
+| C13 | Arrêt propriétaire, expiration, budget épuisé, scope/version inconnus | Nouveaux writes refusés ; reçu exact déjà terminé toujours consultable/rejouable sous droits actuels. |
+| C14 | Corps checkpoint reçu par HTTP identique mais ordre des clés différent | Accusé valide, comparaison structurelle vraie, pas d'issue incertaine artificielle. |
+| C15 | Mission détenue par autre propriétaire / changement de session pendant lecture | Aucune donnée ancienne affichée ; destruction du client, purge affichage et nouveau chargement autorisé. |
+| C16 | Titre contenant une instruction hostile | Texte inerte, aucune permission ni outil supplémentaires ; pas de HTML injecté. |
+| C17 | Capacité checkpoint absente (ancienne RPC ou migration non appliquée) | Désactivation explicite de la sauvegarde structurée, pas de repli silencieux dans next_action ou dans un nouveau stockage. |
+| C18 | Contrôle témoin retiré sur copie jetable | Le banc owner/CAS/rappel rougit ; un contrôle non exécuté ne compte pas comme succès. |
+| C19 | Deux rappels consommés, plan reformulé/réordonné/révisé puis plan identique reproposé | Même task_id et rappels=2 ; pas de nouveau recentrage. Les confirmations de libellés inchangés sont remappées, les changements réels non confirmés. Plan identique dédupliqué sans nouvelle révision. |
+| C20 | Nouvelle tâche explicitement demandée, puis candidat remplacé avant adoption ; adoption valide ensuite | L'intention ancienne ne vaut pas pour le nouveau candidat : aucun reset ni nouveau task_id. Une commande explicite liée au candidat courant, owner et CAS valides crée une seule nouvelle tâche et remet son seul compteur à zéro ; rejeu exact sans seconde tâche. |
+
+Réutiliser `tests/unit-leo-registre-api.mjs`, `unit-leo-registre-parcours.mjs`, `unit-leo-registre-recu.mjs`, `unit-leo-registre-sql.mjs`, `leo-registre-auth.mjs`, `unit-leo-interaction.mjs` et le smoke existant. Une simulation de route ne remplace pas Auth/PostgREST/SQL isolés. L'exécution reste bloquée tant que l'isolation requise n'est pas disponible ; aucun lancement de PGlite, navigateur ou application a été fait ici.
+
+### Entrée/sortie du prochain lot utile
+
+Prérequis : définir la mission existante explicitement choisie par le propriétaire, relever les seules métadonnées SQL nécessaires et disposer d'un banc isolé. Livrable : proposition SQL complète relue, patch API/client/cartouche, preuves des refus et du round-trip inter-session. Préparer ensuite le dossier de migration réelle avec son diff exact et ses preuves ; ne pas demander maintenant une approbation sur un SQL encore incomplet.
+
+État présent : **raccord proposé, pas continuité implantée, pas mémoire réelle éprouvée**. La présence du registre est réutilisée ; aucun nouveau magasin de mémoire n'est proposé. Le jalon « 3/5 » ne doit être annoncé atteint qu'après son critère de réception explicite et ses preuves, jamais à partir de ce document seul.

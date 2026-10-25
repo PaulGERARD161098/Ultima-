@@ -971,6 +971,8 @@
     var suiviTache = null;
     var rappelsFocus = 0;
     var planEnAttente = null;
+    var nouvelleTacheDemandee = false;
+    var candidatNouvelleTache = null;
     var moduleInteraction = import('/js/leo-interaction.mjs').then(function (m) {
       interactionModule = m; return m;
     }, function () { return null; });
@@ -1003,27 +1005,35 @@
         var liste = document.createElement('ol');
         planEnAttente.etapes.forEach(function (e) { liste.appendChild(el('li', '', e)); });
         panneauSuivi.appendChild(liste);
-        var adopter = el('button', 'leo-suivi-adopter', 'Suivre ce plan');
+        var candidatAffiche = planEnAttente;
+        var adopter = el('button', 'leo-suivi-adopter', nouvelleTacheDemandee
+          ? 'Démarrer cette nouvelle tâche' : suiviTache ? 'Mettre à jour le plan' : 'Suivre ce plan');
         adopter.type = 'button';
         adopter.disabled = enCours;
-        adopter.addEventListener('click', function () { adopterPlan(); });
+        adopter.addEventListener('click', function () { adopterPlan(candidatAffiche); });
         panneauSuivi.appendChild(adopter);
       }
       panneauSuivi.appendChild(el('small', 'leo-suivi-source', 'Suivi local au cartouche. Les confirmations ne remplacent pas les preuves du résultat.'));
     }
 
-    function adopterPlan() {
-      if (enCours || !planEnAttente || !interactionModule) { return false; }
-      if (suiviTache) {
+    function adopterPlan(candidat) {
+      if (enCours || !planEnAttente || !interactionModule || (candidat && candidat !== planEnAttente)) { return false; }
+      var nouvelle = !suiviTache || nouvelleTacheDemandee;
+      if (suiviTache && nouvelleTacheDemandee) {
         var bilan = interactionModule.bilanSuivi(suiviTache);
         var point = 'Point d’arrêt : ' + suiviTache.titre + ' ; ' + bilan.finis + '/' + bilan.total + ' jalons confirmés ; reprise : ' + (bilan.prochain || 'clôture à vérifier');
         historique.push({ role: 'user', content: echoBorne(point) });
         bulle('issue', point);
       }
-      suiviTache = interactionModule.ouvrirSuivi(planEnAttente, (suiviTache ? suiviTache.revision : 0) + 1);
-      planEnAttente = null; rappelsFocus = 0;
+      if (nouvelle) {
+        suiviTache = interactionModule.ouvrirSuivi(planEnAttente, (suiviTache ? suiviTache.revision : 0) + 1);
+        if (!nouvelleTacheDemandee) { suiviTache.rappels = rappelsFocus; }
+      } else {
+        suiviTache = interactionModule.reviserSuivi(suiviTache, planEnAttente);
+      }
+      planEnAttente = null; rappelsFocus = suiviTache.rappels; nouvelleTacheDemandee = false; candidatNouvelleTache = null;
       historique.push({ role: 'user', content: echoBorne('Je valide le plan de suivi : ' + suiviTache.titre) });
-      bulle('issue', 'Plan adopté. Tu peux confirmer un jalon à la voix : « étape 1 terminée ». Cela ne lance aucune action métier.');
+      bulle('issue', (nouvelle ? 'Plan adopté. ' : 'Plan mis à jour, suivi et rappels conservés. ') + 'Tu peux confirmer un jalon à la voix : « étape 1 terminée ». Cela ne lance aucune action métier.');
       rendreSuivi(); return true;
     }
 
@@ -1031,14 +1041,20 @@
       if (!interactionModule || !data || !data.interaction) { return; }
       var i = data.interaction;
       var nombre = suiviTache ? suiviTache.rappels : rappelsFocus;
-      if (i.focus && (!suiviTache || suiviTache.etat !== 'suspendue') && nombre < 2 && i.focus.numero === nombre + 1 && typeof i.focus.texte === 'string' && i.focus.texte.length <= 400) {
+      if (i.focus && (!suiviTache || (suiviTache.etat !== 'suspendue' && !interactionModule.tacheTerminee(suiviTache))) && nombre < 2 && i.focus.numero === nombre + 1 && typeof i.focus.texte === 'string' && i.focus.texte.length <= 400) {
         bulle('leo', i.focus.texte);
         historique.push({ role: 'assistant', content: echoBorne(i.focus.texte) });
         rappelsFocus = nombre + 1;
         if (suiviTache) { suiviTache.rappels = rappelsFocus; }
       }
       var plan = interactionModule.validerPlan(i.plan);
-      if (plan) { planEnAttente = plan; }
+      if (plan && nouvelleTacheDemandee) {
+        if (candidatNouvelleTache && !interactionModule.memePlan(candidatNouvelleTache, plan)) {
+          nouvelleTacheDemandee = false; candidatNouvelleTache = null;
+          bulle('issue', 'Le plan proposé a changé. Le suivi courant est conservé ; demande une nouvelle tâche pour repartir séparément.');
+        } else { candidatNouvelleTache = plan; }
+      }
+      if (plan) { planEnAttente = nouvelleTacheDemandee || !interactionModule.memePlan(suiviTache, plan) ? plan : null; }
       rendreSuivi();
     }
 
@@ -1374,8 +1390,18 @@
       if (interactionModule && planEnAttente && /^(?:go|oui|ok|je valide le plan)[.! ]*$/i.test(texte)) {
         adopterPlan(); champ.value = ''; return;
       }
+      if (interactionModule && /^(?:reprends|on reprend|reprenons)(?: la t[âa]che)?[.! ]*$/i.test(texte)) {
+        nouvelleTacheDemandee = false; candidatNouvelleTache = null; planEnAttente = null;
+        if (suiviTache) { suiviTache.etat = 'en_cours'; }
+        rendreSuivi();
+      }
+      if (interactionModule && interactionModule.prioriteExplicite(texte)) {
+        planEnAttente = null;
+        nouvelleTacheDemandee = interactionModule.nouvelleTacheExplicite(texte); candidatNouvelleTache = null;
+        if (suiviTache) { suiviTache.etat = 'suspendue'; }
+        rendreSuivi();
+      }
       if (interactionModule && suiviTache) {
-        if (/^(?:reprends|on reprend|reprenons)(?: la t[âa]che)?[.! ]*$/i.test(texte)) { suiviTache.etat = 'en_cours'; rendreSuivi(); }
         var jalon = interactionModule.commandeJalon(texte);
         if (jalon !== null) {
           try {
@@ -1384,10 +1410,6 @@
             historique.push({ role: 'user', content: texte });
             champ.value = ''; rendreSuivi(); return;
           } catch (e) { bulle('erreur', 'Ce jalon ne fait pas partie du plan courant.'); return; }
-        }
-        if (interactionModule.prioriteExplicite(texte)) {
-          suiviTache.etat = 'suspendue';
-          rendreSuivi();
         }
       }
       enCours = true;

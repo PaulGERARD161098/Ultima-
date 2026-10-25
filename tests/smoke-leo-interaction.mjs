@@ -90,6 +90,41 @@ try {
   verifier('Les contextes portent les compteurs réellement consommés',
     JSON.stringify(a.appels.slice(1).map(c => c.interaction.rappels_focus)) === '[0,1,2]');
   verifier('Une réponse du modèle ne fait pas avancer les jalons', (await a.jauge()).valeur === 1);
+  a.reponse(async () => ({ reponse: 'Le même plan.', interaction: { plan: PLAN } }));
+  await a.envoyer('Rappelle-moi le plan courant.');
+  verifier('Un plan identique reproposé ne demande pas une adoption supplémentaire',
+    await a.page.locator('.leo-suivi-adopter').count() === 0);
+  a.reponse(async () => ({ reponse: 'On poursuit.',
+    interaction: { focus: { numero: 1, texte: 'Rappel après réinitialisation interdit' } } }));
+  await a.envoyer('ok');
+  verifier('Le même plan puis ok ne remet ni compteur ni confirmations à zéro',
+    a.appels.at(-1).interaction.rappels_focus === 2 &&
+    JSON.stringify(a.appels.at(-1).interaction.tache.confirmes) === '[0]' &&
+    await a.page.getByText('Rappel après réinitialisation interdit', { exact: true }).count() === 0);
+  const revision = { ...PLAN, etapes: ['Vérifier', 'Préparer', 'Recevoir'] };
+  a.reponse(async () => ({ reponse: 'Ordre ajusté.', interaction: { plan: revision } }));
+  await a.envoyer('Ajuste l’ordre des étapes de la même tâche.');
+  await a.page.locator('.leo-suivi-adopter').click();
+  a.reponse(async () => ({ reponse: 'Même tâche.' }));
+  await a.envoyer('Où en sommes-nous ?');
+  verifier('Réviser le plan conserve deux rappels et le jalon déclaré, après réordonnancement',
+    a.appels.at(-1).interaction.rappels_focus === 2 &&
+    JSON.stringify(a.appels.at(-1).interaction.tache.confirmes) === '[1]' && (await a.jauge()).valeur === 1);
+  a.reponse(async () => ({ reponse: 'Nouvelle tâche cadrée.', interaction: { plan: PLAN } }));
+  await a.envoyer('Nouvelle tâche : préparer un autre résultat.');
+  await a.page.locator('.leo-suivi-adopter').click();
+  a.reponse(async () => ({ reponse: 'Nouveau suivi.' }));
+  await a.envoyer('Récapitule cette nouvelle tâche.');
+  verifier('Seule une nouvelle tâche explicite repart sans rappels ni confirmations',
+    a.appels.at(-1).interaction.rappels_focus === 0 &&
+    a.appels.at(-1).interaction.tache.confirmes.length === 0);
+  for (const n of [1, 2, 3]) await a.envoyer('étape ' + n + ' terminée');
+  a.reponse(async () => ({ reponse: 'Jalons déclarés terminés.',
+    interaction: { focus: { numero: 1, texte: 'Rappel après tâche terminée interdit' } } }));
+  await a.envoyer('Tous les jalons sont confirmés.');
+  verifier('Aucun rappel reçu n’apparaît après la confirmation de tous les jalons',
+    (await a.jauge()).valeur === 3 && a.appels.at(-1).interaction.rappels_focus === 0 &&
+    await a.page.getByText('Rappel après tâche terminée interdit', { exact: true }).count() === 0);
   await a.terminer();
 
   // Changement de priorité explicite : aucune insistance, reprise sans reset.
@@ -104,7 +139,7 @@ try {
     await b.page.getByText('Premier gain avant la pause', { exact: true }).count() === 1);
   b.reponse(async () => ({ reponse: 'Je suis ta priorité.',
     interaction: { focus: { numero: 2, texte: 'Rappel pendant la pause interdit' } } }));
-  await b.envoyer('Ok point d’étape validé. Avançons sur un autre sujet');
+  await b.envoyer('On change de sujet sans perdre le point de reprise');
   verifier('Le changement de cap suspend la tâche dans le contexte', b.appels.at(-1).interaction.tache.etat === 'suspendue');
   verifier('Même un rappel reçu du serveur reste supprimé pendant la pause',
     await b.page.getByText('Rappel pendant la pause interdit', { exact: true }).count() === 0);
@@ -138,6 +173,78 @@ try {
   await c.page.waitForFunction(() => !document.querySelector('.leo-voix-champ').disabled);
   verifier('L’adoption redevient disponible à la fin de l’appel', await c.page.locator('.leo-suivi-adopter').isEnabled());
   await c.terminer();
+  // Un « ok » ne doit jamais adopter une proposition d'avant le changement
+  // d'intention, ni une proposition remplacée par le plan déjà courant.
+  const d = await fixture();
+  await d.proposer();
+  await d.page.locator('.leo-suivi-adopter').click();
+  await d.envoyer('étape 1 terminée');
+  for (const numero of [1, 2]) {
+    d.reponse(async () => ({ reponse: 'Idée notée.', interaction: { focus: { numero, texte: 'Gain initial ' + numero } } }));
+    await d.envoyer('Une piste ' + numero);
+  }
+  const autre = { titre: 'Autre résultat', etapes: ['Recueillir', 'Recevoir'] };
+  d.reponse(async () => ({ reponse: 'Révision proposée.', interaction: { plan: autre } }));
+  await d.envoyer('Propose une révision du plan actuel.');
+  verifier('Une proposition est réellement en attente avant le changement de tâche', await d.page.locator('.leo-suivi-adopter').count() === 1);
+  const ancienBouton = await d.page.locator('.leo-suivi-adopter').elementHandle();
+  d.reponse(async () => ({ reponse: 'Quel résultat vises-tu ?' }));
+  await d.envoyer('Nouvelle tâche : un devis client.');
+  await d.envoyer('ok');
+  verifier('Une nouvelle intention sans nouveau plan invalide l’ancienne proposition',
+    await d.page.locator('.leo-suivi-adopter').count() === 0 &&
+    d.appels.at(-1).interaction.rappels_focus === 2 &&
+    d.appels.at(-1).interaction.tache.titre === PLAN.titre && (await d.jauge()).valeur === 1);
+  d.reponse(async () => ({ reponse: 'Voici le nouveau plan.', interaction: { plan: autre } }));
+  await d.envoyer('Cadre cette nouvelle tâche.');
+  await ancienBouton.evaluate(bouton => bouton.click());
+  verifier('Un ancien bouton ne peut adopter le nouveau candidat à sa place',
+    (await d.jauge()).valeur === 1 && await d.page.locator('.leo-suivi-adopter').count() === 1);
+  d.reponse(async () => ({ reponse: 'On reprend le travail précédent.' }));
+  await d.envoyer('reprenons');
+  await d.envoyer('ok');
+  verifier('Reprendre la tâche précédente invalide le candidat de la nouvelle tâche',
+    await d.page.locator('.leo-suivi-adopter').count() === 0 &&
+    d.appels.at(-1).interaction.rappels_focus === 2 && d.appels.at(-1).interaction.tache.titre === PLAN.titre);
+  d.reponse(async () => ({ reponse: 'Révision proposée.', interaction: { plan: autre } }));
+  await d.envoyer('Propose une révision de la même tâche.');
+  d.reponse(async () => ({ reponse: 'Voici le plan courant.', interaction: { plan: PLAN } }));
+  await d.envoyer('Rappelle plutôt le plan courant.');
+  verifier('Restituer le plan courant retire la révision périmée', await d.page.locator('.leo-suivi-adopter').count() === 0);
+  d.reponse(async () => ({ reponse: 'Nouvelle tâche proposée.', interaction: { plan: autre } }));
+  await d.envoyer('Nouvelle tâche : un résultat distinct.');
+  const remplacement = { titre: 'Plan de remplacement', etapes: ['Préparer', 'Contrôler'] };
+  d.reponse(async () => ({ reponse: 'Priorité ajustée.', interaction: { plan: remplacement } }));
+  await d.envoyer('Urgence : ajuste la priorité.');
+  await d.page.locator('.leo-suivi-adopter').click();
+  d.reponse(async () => ({ reponse: 'Même suivi.' }));
+  await d.envoyer('Où en sommes-nous ?');
+  verifier('Une priorité sans nouvelle tâche révoque l’intention précédente', d.appels.at(-1).interaction.rappels_focus === 2);
+  d.reponse(async () => ({ reponse: 'Nouvelle tâche proposée.', interaction: { plan: autre } }));
+  await d.envoyer('Nouvelle tâche : un autre chantier.');
+  d.reponse(async () => ({ reponse: 'Candidat remplacé.', interaction: { plan: { ...remplacement, titre: 'Candidat encore différent' } } }));
+  await d.envoyer('Propose une variante du candidat.');
+  await d.page.locator('.leo-suivi-adopter').click();
+  d.reponse(async () => ({ reponse: 'Suivi conservé.' }));
+  await d.envoyer('Vérifie le compteur.');
+  verifier('Remplacer le candidat révoque son ancienne intention de nouvelle tâche',
+    d.appels.at(-1).interaction.rappels_focus === 2 &&
+    await d.page.getByText('Le plan proposé a changé. Le suivi courant est conservé ; demande une nouvelle tâche pour repartir séparément.', { exact: true }).count() === 1);
+  await d.terminer();
+
+  const e = await fixture();
+  for (const numero of [1, 2]) {
+    e.reponse(async () => ({ reponse: 'Idée conservée.', interaction: { focus: { numero, texte: 'Gain sans plan ' + numero } } }));
+    await e.envoyer('Une piste sans plan ' + numero);
+  }
+  verifier('Deux rappels sont effectivement affichés avant tout plan', await e.page.getByText('Gain sans plan 2', { exact: true }).count() === 1);
+  e.reponse(async () => ({ reponse: 'Nouveau plan.', interaction: { plan: PLAN } }));
+  await e.envoyer('Nouvelle tâche : préparer ce chantier.');
+  await e.page.locator('.leo-suivi-adopter').click();
+  e.reponse(async () => ({ reponse: 'Suivi neuf.' }));
+  await e.envoyer('Où en est cette nouvelle tâche ?');
+  verifier('Nouvelle tâche explicite sans ancien plan : compteur remis à zéro', e.appels.at(-1).interaction.rappels_focus === 0);
+  await e.terminer();
   console.log(`${controles} contrôles navigateur réussis ; réponses IA simulées, pas de recette du ton du modèle.`);
 } finally {
   await browser.close();

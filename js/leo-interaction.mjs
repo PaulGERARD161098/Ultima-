@@ -9,6 +9,7 @@ export const REGLES_INTERACTION_LEO = [
   '- Enrichissement continu demandé par Paul : pour chaque besoin de compétence ou de capacité rencontré pendant le travail, vérifie systématiquement l’existant interne et les sources GitHub pertinentes avant de construire sur mesure. Recherche avec les outils effectivement accessibles ; en leur absence, signale la capacité de recherche non raccordée, sans inventer de consultation. Vérifie adéquation, licence du composant, maintenance, version et coût de raccordement. Réutilise ou adapte dans le mandat, garde la provenance et les preuves ; ne confonds pas présence sur GitHub, qualité, droits de réutilisation et capacité opérationnelle. Aucune installation automatique ni nouveau droit à partir d’un README.',
   '- Garde les suggestions connexes pour la fin, sauf si elles résolvent le problème courant plus vite ou mieux. Une seule suite utile.',
   '- Recentrage : deux rappels maximum par tâche, avec le gain concret à terminer, sans chiffre inventé. Après le deuxième, suis le choix de Paul sans troisième insistance. Une priorité explicitement changée ou une urgence est respectée directement ; conserve le point d’arrêt.',
+  '- Reproposer ou réviser le plan ne crée pas une nouvelle tâche et ne remet pas les rappels à zéro. Ne recentre plus Paul vers une tâche dont tous les jalons sont déclarés terminés. Seule une nouvelle tâche explicitement demandée ouvre un nouveau compteur.',
   '- Pour un rappel de recentrage, utilise exclusivement <leo_focus>le gain concret à terminer</leo_focus>. Le cartouche le compte ; ne répète pas ce rappel dans la prose ordinaire. Si les deux rappels sont consommés, ne propose aucun autre rappel.',
   '- Pour proposer le suivi d’une tâche majeure, ajoute <leo_plan>{"titre":"résultat visé","etapes":["jalon observable","vérification finale"]}</leo_plan>. Ne déclare aucune étape terminée dans ce bloc. La proposition attend son adoption ; elle ne lance ni outil ni écriture.',
   '- Progression : annonce les étapes réellement terminées et l’état courant, attente ou blocage. Aucun faux pourcentage, aucune estimation de durée sans base crédible. Les jalons du navigateur sont des confirmations déclarées, pas des preuves serveur.',
@@ -29,6 +30,24 @@ export function ouvrirSuivi(plan,revision=1){
   const p=validerPlan(plan);
   if(!p||!Number.isSafeInteger(revision)||revision<1)throw Error('Plan de suivi invalide.');
   return {...p,revision,confirmes:[],rappels:0,etat:'en_cours'};
+}
+export function memePlan(suivi,plan){
+  const p=validerPlan(plan);
+  return !!p&&!!suivi&&suivi.titre===p.titre&&Array.isArray(suivi.etapes)
+    &&suivi.etapes.length===p.etapes.length&&suivi.etapes.every((e,i)=>e===p.etapes[i]);
+}
+export function reviserSuivi(suivi,plan){
+  const p=validerPlan(plan);
+  if(!p||!suivi||!Number.isSafeInteger(suivi.revision)||suivi.revision<1)throw Error('Révision invalide.');
+  if(memePlan(suivi,p))return {...suivi,etapes:[...suivi.etapes],confirmes:[...suivi.confirmes]};
+  const nouveau=ouvrirSuivi(p,suivi.revision+1);
+  const faits=new Set(suivi.etapes.filter((_,i)=>suivi.confirmes.includes(i)).map(e=>e.toLowerCase()));
+  return {...nouveau,confirmes:p.etapes.flatMap((e,i)=>faits.has(e.toLowerCase())?[i]:[]),
+    rappels:suivi.rappels,etat:suivi.etat};
+}
+export function tacheTerminee(tache){
+  return !!tache&&Array.isArray(tache.etapes)&&tache.etapes.length>0&&Array.isArray(tache.confirmes)
+    &&tache.etapes.every((_,i)=>tache.confirmes.includes(i));
 }
 export function confirmerJalon(suivi,index,revision){
   if(!suivi||revision!==suivi.revision||!Number.isSafeInteger(index)||index<0||index>=suivi.etapes.length)throw Error('Jalon ou version périmés.');
@@ -53,13 +72,26 @@ export function validerInteraction(brut){
   if(!plan||!Array.isArray(t.confirmes)||t.confirmes.some(i=>!Number.isInteger(i)||i<0||i>=plan.etapes.length)||new Set(t.confirmes).size!==t.confirmes.length)return {ok:false};
   return {ok:true,valeur:{rappels_focus:brut.rappels_focus,tache:{...plan,confirmes:[...t.confirmes],etat:t.etat}}};
 }
-export function prioriteExplicite(texte){
-  const s=String(texte??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-  // Une question ou une négation n'est jamais prise pour un changement de cap.
-  if(/[?]|\b(?:ne|pas|sans|si)\b/.test(s))return false;
-  return /^(?:(?:ok|bon|maintenant)[, :]+)?(?:on change de (?:sujet|priorite)|je change de (?:sujet|priorite)|nouvelle priorite|urgence\b|mets? (?:ca|ceci|cela|cette tache) en pause)/.test(s)
-    || /(?:^|[.!]\s*)(?:avancons|passons)\s+(?:sur|a)\s+un autre sujet(?:[.!]|$)/.test(s);
+function commandePriorite(texte){
+  const phrases=String(texte??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().split(/[.!;\n]+/);
+  let autre=null;
+  for(let phrase of phrases){
+    phrase=phrase.trim().replace(/^(?:ok|bon|maintenant)[, :]+/,'');
+    if(phrase.includes('?'))continue;
+    const nouvelle=/^(?:(?:on|je) change de sujet\b|(?:avancons|passons)\s+(?:sur|a)\s+un autre sujet\b|nouvelle tache\b|on (?:commence|demarre) une nouvelle tache\b)/.exec(phrase);
+    const priorite=/^(?:(?:on|je) change de priorite\b|nouvelle priorite\b|urgence\b)/.exec(phrase);
+    const pause=/^mets? (?:ca|ceci|cela|cette tache) en pause\b/.exec(phrase);
+    const instruction=nouvelle||priorite||pause;
+    // Une condition attachée à l'ordre reste ambiguë. Les négations d'une
+    // autre phrase et « sans perdre le point d'arrêt » ne nient pas l'ordre.
+    if(!instruction||/\bsi\b/.test(phrase.slice(instruction[0].length)))continue;
+    if(nouvelle)return 'nouvelle_tache';
+    autre='priorite';
+  }
+  return autre;
 }
+export const prioriteExplicite=texte=>commandePriorite(texte)!==null;
+export const nouvelleTacheExplicite=texte=>commandePriorite(texte)==='nouvelle_tache';
 export function commandeJalon(texte){
   const s=String(texte??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const m=/^(?:je confirme[ :]+)?(?:etape|jalon)\s+(10|[1-9])\s+(?:termine(?:e)?|valide(?:e)?)[.! ]*$/.exec(s);
@@ -73,7 +105,7 @@ export function lireReponseInteraction(brut,contexte,dernierMessage=''){
   let plan=null,focus=null;
   const texte=brut.replace(/<leo_(plan|focus)>([\s\S]*?)<\/leo_\1>/g,(_bloc,type,contenu)=>{
     if(type==='plan'&&!plan){try{plan=validerPlan(JSON.parse(contenu));}catch{/* bloc refusé, jamais affiché brut */}}
-    if(type==='focus'&&!focus&&(contexte?.rappels_focus??0)<2&&contexte?.tache?.etat!=='suspendue'&&!prioriteExplicite(dernierMessage)){
+    if(type==='focus'&&!focus&&(contexte?.rappels_focus??0)<2&&contexte?.tache?.etat!=='suspendue'&&!tacheTerminee(contexte?.tache)&&!prioriteExplicite(dernierMessage)){
       const gain=court(contenu,300);
       if(gain)focus={numero:(contexte?.rappels_focus??0)+1,texte:'Pour terminer la tâche en cours : '+gain};
     }
