@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-25",
-    "commit": "91dc73e70d8fd8c7ec89634a6a3d1cdc525fb3d0",
-    "quoi": "Léo : consultation du stock ZOH préparée, tests isolés verts. Compétence personnelle sauvegardée ; raccord applicatif en attente de CI et fusion."
+    "commit": "5297f5c54e884ff5b0286e117978f672f36d8e57",
+    "quoi": "Léo → ZOH : raccord et comportement complétés sur branche, contrôles isolés verts. Aperçus des capacités, vrai handler et simulation ; CI finale requise."
   },
-  "prochaine_action": "Lire la CI du raccord Léo → stock ZOH, puis présenter les versions source/cible pour accord de fusion. Recette : RECETTE-LEO-STOCK-ZOH-2026-10-25.md.",
+  "prochaine_action": "Lire la CI finale du raccord ZOH avec main ; terminer la réception avant tout arbitrage de fusion, conformément à la demande de Paul.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -49,11 +49,11 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Léo → stock ZOH : projection compacte issue du catalogue publié, contexte des six quadrants et charte préparés. Tests isolés et essai de compétence passent ; restent CI finale, accord lié aux versions, publication et réponse réelle du cartouche.",
+      "quoi": "Léo → stock ZOH : aperçu issu des fiches, système et handler réels raccordés ; sept comportements simulés, refus et contre-épreuves passent. Cartouche complet ajouté au harnais navigateur. Reste lecture de la CI finale ; modèle réel non reçu. Pas de fusion demandée.",
       "depuis": "2026-10-25"
     },
     {
-      "quoi": "Présentations claires : #420 fusionnée en 46971d0, production Vercel READY sur ce commit, contrôles de PR et après fusion verts. Compétences sauvegardées. Affichage propriétaire restant à constater ; lecture HTTP redirigée vers la connexion Vercel.",
+      "quoi": "Présentations claires : compétences raccordées aux cinq onglets ZOH et étoile sous ZOH SHIA, source a791dd655b6ea1c2243f9d99bd80beb06a3eebf9. Registre, adaptateur, neutralité, publication et navigation simulée verts ; compétences personnelles validées et sauvegarde par Git engagée. Tests visuels navigateur non exécutés localement (Chromium indisponible et navigateur distant sans accès localhost). Restent CI de la tête finale, accord de fusion lié à la version et affichage propriétaire. Preuves : outils/presentations-claires/RECETTE.md.",
       "depuis": "2026-10-25"
     },
     {

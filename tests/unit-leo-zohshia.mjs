@@ -15,15 +15,20 @@ for (const [i, t] of catalogue.technos.entries()) {
   assert.equal(t.etat_declare, stock.technos[i].etat);
   assert.deepEqual(t.onglets, stock.technos[i].onglets.map(o => o.titre));
   assert.equal(t.fiche, 'zohshia.html#' + t.id);
-  assert.deepEqual(Object.keys(t), ['id','nom','etat_declare','onglets','fiche']);
+  assert.deepEqual(Object.keys(t), ['id','nom','etat_declare','capacites_apercu','onglets','fiche']);
+  assert.ok(t.capacites_apercu?.texte.length > 0, 'capacités issues de la fiche publiée');
 }
 assert.ok(projection.length <= MAX_STOCK_ZOH_CHARS);
 const fixture = { id: 'nouvelle-brique', badge: 'Essai fictif', etat: 'À éprouver',
-  onglets: [{ titre: 'Capacités', blocs: [{ texte: 'CONTENU_PRIVE_INTERDIT' }] }],
+  onglets: [{ titre: 'Capacités', blocs: [
+    { t: 'p', r: [['Une capacité fictive venant de la source.', '']] },
+    { t: 'code', texte: 'CONTENU_PRIVE_INTERDIT' }
+  ] }],
   secret: 'SECRET_INTERDIT' };
 const futur = JSON.parse(decrireStockZoh({ publie_le: '2026-10-25', technos: [...stock.technos, fixture] }));
 assert.equal(futur.couverture, 'complete');
 assert.equal(futur.technos.at(-1).id, 'nouvelle-brique', 'une nouvelle techno entre sans modifier Léo');
+assert.equal(futur.technos.at(-1).capacites_apercu.texte, 'Une capacité fictive venant de la source.');
 assert.ok(!JSON.stringify(futur).includes('INTERDIT'), 'ni guides complets ni champs supplémentaires dans le prompt');
 const doublon = JSON.parse(decrireStockZoh({ technos: [fixture, fixture] }));
 assert.equal(doublon.couverture, 'partielle');
@@ -37,6 +42,13 @@ for (const source of [null, {}, { technos: 'absent' }]) {
 const incomplet = JSON.parse(decrireStockZoh({ technos: [fixture, { ...fixture, id: '../invalide' }] }));
 assert.equal(incomplet.couverture, 'partielle');
 assert.equal(incomplet.technos.length, 1);
+const sansResume = JSON.parse(decrireStockZoh({ technos: [{ ...fixture, onglets: [{ titre: 'Plan' }] }] }));
+assert.equal(sansResume.technos[0].capacites_apercu, null, 'pas de capacité inventée si la source ne la décrit pas');
+const borneResume = JSON.parse(decrireStockZoh({ technos: [{ ...fixture,
+  onglets: [{ titre: 'Capacités', blocs: [{ t: 'p', r: [['A'.repeat(1200), '']] }] }]
+}] }));
+assert.equal(borneResume.technos[0].capacites_apercu.texte.length, 900);
+assert.equal(borneResume.technos[0].capacites_apercu.tronque, true);
 const volumineux = decrireStockZoh({ technos: Array.from({ length: 100 }, (_, i) => ({
   ...fixture, id: 'brique-' + i, badge: 'X'.repeat(200), etat: 'E'.repeat(240)
 })) });

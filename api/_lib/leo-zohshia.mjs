@@ -1,10 +1,22 @@
 // Projection serveur du catalogue déjà publié : aucune seconde liste de technos.
-// Les guides complets, leurs blocs et les empreintes restent hors du prompt.
+// Seul l'aperçu des capacités est extrait ; aucun guide complet ni empreinte.
 import stock from './zohshia-technos.mjs';
 
 export const MAX_STOCK_ZOH_CHARS = 7000;
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const texte = (s, max) => typeof s === 'string' && s.trim().length > 0 && s.length <= max;
+
+function apercuCapacites(techno) {
+  const onglet = techno.onglets.find(o => o.id === 'techno') || techno.onglets[0];
+  if (!Array.isArray(onglet?.blocs)) return null;
+  const paragraphes = onglet.blocs.filter(b => b?.t === 'p' && Array.isArray(b.r))
+    .map(b => b.r.filter(r => Array.isArray(r) && typeof r[0] === 'string')
+      .map(r => r[0]).join('').replace(/\s+/g, ' ').trim()).filter(Boolean);
+  if (!paragraphes.length) return null;
+  const extrait = paragraphes.slice(0, 2).join(' ');
+  return { texte: extrait.length > 900 ? extrait.slice(0, 899) + '…' : extrait,
+    tronque: extrait.length > 900 || paragraphes.length > 2 };
+}
 
 export function decrireStockZoh(source = stock) {
   const disponible = Array.isArray(source?.technos);
@@ -29,6 +41,7 @@ export function decrireStockZoh(source = stock) {
       id: techno.id,
       nom: techno.badge,
       etat_declare: techno.etat,
+      capacites_apercu: apercuCapacites(techno),
       onglets: techno.onglets.map(o => o.titre),
       fiche: 'zohshia.html#' + techno.id
     });
