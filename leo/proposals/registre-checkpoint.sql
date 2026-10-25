@@ -122,34 +122,35 @@ $valid$;
 create function leo_private.checkpoint_transition_valid(old_cp jsonb,new_cp jsonb,command jsonb) returns boolean
 language plpgsql immutable security invoker set search_path=''
 as $transition$
-declare kind text:=command->>'kind'; expected jsonb;
+declare kind text:=(command->>'kind'); expected jsonb;
 begin
   if not leo_private.checkpoint_valid(new_cp) then return false; end if;
   if kind='adopt' then
-    return old_cp is null and command->'expected_task_id'='null'::jsonb
-      and (new_cp->>'revision')::numeric=1 and new_cp->'confirmes'='[]'::jsonb
-      and (new_cp->>'rappels')::numeric=0 and new_cp->>'etat'='en_cours';
+    return old_cp is null and (command->'expected_task_id')='null'::jsonb
+      and ((new_cp->>'revision'))::numeric=1 and (new_cp->'confirmes')='[]'::jsonb
+      and ((new_cp->>'rappels'))::numeric=0 and (new_cp->>'etat')='en_cours';
   end if;
-  if old_cp is null or new_cp->>'task_id'<>old_cp->>'task_id'
-     or command->>'expected_task_id'<>old_cp->>'task_id' then return false; end if;
+  if old_cp is null or (new_cp->>'task_id')<>(old_cp->>'task_id')
+     or (command->>'expected_task_id')<>(old_cp->>'task_id') then return false; end if;
   if kind='update' then
-    if new_cp->'revision'<>old_cp->'revision' or new_cp->'titre'<>old_cp->'titre'
-       or new_cp->'etapes'<>old_cp->'etapes' or not (new_cp->'confirmes' @> old_cp->'confirmes')
-       or (new_cp->>'rappels')::integer not between (old_cp->>'rappels')::integer and (old_cp->>'rappels')::integer+1 then return false; end if;
-    if new_cp->'rappels'<>old_cp->'rappels' and (old_cp->>'etat'='suspendue' or new_cp->>'etat'='suspendue'
-       or pg_catalog.jsonb_array_length(old_cp->'confirmes')=pg_catalog.jsonb_array_length(old_cp->'etapes')
-       or pg_catalog.jsonb_array_length(new_cp->'confirmes')=pg_catalog.jsonb_array_length(new_cp->'etapes')) then return false; end if;
+    -- -> et @> ont la meme priorite : extractions parenthesees des deux cotes.
+    if (new_cp->'revision')<>(old_cp->'revision') or (new_cp->'titre')<>(old_cp->'titre')
+       or (new_cp->'etapes')<>(old_cp->'etapes') or not ((new_cp->'confirmes') @> (old_cp->'confirmes'))
+       or ((new_cp->>'rappels'))::integer not between ((old_cp->>'rappels'))::integer and ((old_cp->>'rappels'))::integer+1 then return false; end if;
+    if (new_cp->'rappels')<>(old_cp->'rappels') and ((old_cp->>'etat')='suspendue' or (new_cp->>'etat')='suspendue'
+       or pg_catalog.jsonb_array_length((old_cp->'confirmes'))=pg_catalog.jsonb_array_length((old_cp->'etapes'))
+       or pg_catalog.jsonb_array_length((new_cp->'confirmes'))=pg_catalog.jsonb_array_length((new_cp->'etapes'))) then return false; end if;
     return true;
   end if;
   if kind='revise_plan' then
-    if (new_cp->>'revision')::numeric<>(old_cp->>'revision')::numeric+1
-       or new_cp->'rappels'<>old_cp->'rappels' or new_cp->'etat'<>old_cp->'etat'
-       or (new_cp->'titre'=old_cp->'titre' and new_cp->'etapes'=old_cp->'etapes') then return false; end if;
+    if ((new_cp->>'revision'))::numeric<>((old_cp->>'revision'))::numeric+1
+       or (new_cp->'rappels')<>(old_cp->'rappels') or (new_cp->'etat')<>(old_cp->'etat')
+       or ((new_cp->'titre')=(old_cp->'titre') and (new_cp->'etapes')=(old_cp->'etapes')) then return false; end if;
     select coalesce(pg_catalog.jsonb_agg(n.ord-1 order by n.ord),'[]'::jsonb) into expected
-      from pg_catalog.jsonb_array_elements_text(new_cp->'etapes') with ordinality n(label,ord)
-      where exists(select 1 from pg_catalog.jsonb_array_elements_text(old_cp->'etapes') with ordinality o(label,ord)
-        where pg_catalog.lower(o.label)=pg_catalog.lower(n.label) and old_cp->'confirmes' @> pg_catalog.jsonb_build_array(o.ord-1));
-    return new_cp->'confirmes'=expected;
+      from pg_catalog.jsonb_array_elements_text((new_cp->'etapes')) with ordinality n(label,ord)
+      where exists(select 1 from pg_catalog.jsonb_array_elements_text((old_cp->'etapes')) with ordinality o(label,ord)
+        where pg_catalog.lower(o.label)=pg_catalog.lower(n.label) and (old_cp->'confirmes') @> pg_catalog.jsonb_build_array(o.ord-1));
+    return (new_cp->'confirmes')=expected;
   end if;
   return false;
 end;
