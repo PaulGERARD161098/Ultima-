@@ -8613,20 +8613,20 @@ export default {
   }
  ],
  "sources": {
-  "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
-  "anti-pattern/TECHNO.md": "52084231fb8e65c140a83d45436cf1f8e650402135b18823bc44336441cc135d",
-  "anti-pattern/MISE-EN-SERVICE.md": "f8a9fb963a2f4b303dc055b9dc5f39794a37d92eb838c2455f5a40b8ba7094d3",
+  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
+  "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
+  "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
   "pilotage-back-office/badge.json": "5262ec7c086df87cb39f7857ff901e4eff85923a6dad7157f3c2822fe8d783d5",
   "pilotage-back-office/TECHNO.md": "15cf572e956efc43348d425313febdf787d4b74ac657a409e60660bfc3b8651d",
   "pilotage-back-office/MISE-EN-SERVICE.md": "6c7d609bb12e5e7420b33636018a551d9980d82b874fbe2e328618bf58ff78f9",
-  "presentations-claires/badge.json": "6cd6b05ade762a785487a49143f5fd717fdf23bc389fac919f326364fb663d03",
-  "presentations-claires/TECHNO.md": "c1ef15eb25d6d96f716122c8fb49d64f5608b30cae980eda4380410e4d163d4d",
-  "presentations-claires/references/GRAMMAIRE.md": "e7639ff6f05ba1f7f2171d581d61baad2ca2a4bf726ab36b259e5e1ec89f138a",
-  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "907a0ae73e95cb3556db9353a9ee7c4a3bdc9d7ae5ee4cfc31a8f4b00ee8ba74",
-  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "88014dc6958ea7253e4a7e48e2b41a32f893ca546fdbbdb98cb42af3df1a9271",
-  "presentations-claires/MISE-EN-SERVICE.md": "d31a581cb528669f77779c8f3958bc74a8e34f5749ed7be68b694332b0e2c871",
-  "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
-  "renodevis/TECHNO.md": "10ef808c4ca50e7cf74ed23dbdb23f4d77719cd93643d1583ea642bf14e9b419",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "30eb3d01bbb91734184b314c44aa4eefc183c1419f7ce489196d649991c72df9"
+  "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
+  "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
+  "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
+  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "4eb18a840d55838e2c9f7a6bdff3137ad9662e8ff03bc9f98e6b188c49b7d298",
+  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
+  "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
+  "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
+  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
  }
 };
