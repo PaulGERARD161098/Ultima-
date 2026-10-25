@@ -55,3 +55,7 @@ Les scénarios du harnais navigateur existant sont étendus : ancre sans session
 Les deux compétences personnelles et l'orchestrateur sont validés par quick_validate.py. Leur sauvegarde se prouve par le push du dépôt des compétences, séparément de la proposition d'intégration Ultima. Leur présence ne prouve ni génération d'images ni rendu d'une vraie présentation.
 
 Les mises à jour des tests de navigation conservent les contrôles existants : ZOH devient une tête de rang 1 ; les quatre étoiles ouvrent des fiches publiées ; les cibles HTML avec fragment sont vérifiées sur leur vrai fichier. Aucun changement d'authentification, de droits ou d'API métier.
+
+Première CI de cette phase : les suites unitaires, runtime, registre et authentification passent. Le navigateur groupe 0 signale une seule attente devenue obsolète dans smoke-carte-celeste : le test exigeait encore une seule tête sous DRAGONS. Le rendu observé comporte correctement les deux têtes ADRAMELECH et ZOH SHIA ; les autres contrôles de ce harnais passent. L'attente est mise à jour à deux têtes et six feuilles, sans retirer les contrôles de rang ni d'isolement. Le même harnais est étendu à ZOH SHIA à 390 et 1280 pixels. La syntaxe est vérifiée ; les résultats de la CI de cette nouvelle version doivent encore être lus.
+
+La prévisualisation de l'application est déployée ; sa visite dans le navigateur distant redirige vers la connexion Vercel. Ce blocage ne constitue pas une panne de l'application ni une validation visuelle. Aucune authentification n'est contournée.

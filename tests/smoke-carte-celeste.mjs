@@ -83,6 +83,7 @@ const ECRANS = [
   // rang, elle est mesurée par smoke-lv5-plein-ecran.)
   { nom: 'DRAGONS', fil: 'DRAGONS', page: 'imladrik.html#constellation-dragons',
     deuxRangs: true, sansFigure: true },
+  { nom: 'ZOH SHIA', fil: 'ZOH SHIA', page: 'imladrik.html#zohshia', deuxRangs: false },
 ];
 const TAILLES = [[390, 844], [1280, 800]];
 // VERROU DE COHÉRENCE : `deuxRangs` se lit dans le registre, il ne se croit pas.
@@ -91,7 +92,7 @@ const TAILLES = [[390, 844], [1280, 800]];
 {
   const { NOEUDS } = await import('../js/registre-lv3.mjs');
   const FOYER = { OMEGA: 'omega', IMLADRIK: 'imladrik', 'NICOL BOLAS': 'nicol-bolas',
-    DRAGONS: 'constellation-dragons' };
+    DRAGONS: 'constellation-dragons', 'ZOH SHIA': 'zohshia' };
   for (const e of ECRANS.filter((x) => FOYER[x.nom])) {
     const caps = NOEUDS[FOYER[e.nom]].enfants;
     const tetes = caps.filter((id) => (NOEUDS[id].enfants || []).length > 0).length;
@@ -110,8 +111,8 @@ const TAILLES = [[390, 844], [1280, 800]];
   // DRAGONS avec ses trois caps, est la tête, et le rang s'y exige désormais.
   const capsDragons = NOEUDS['constellation-dragons'].enfants;
   const tetesDragons = capsDragons.filter((id) => (NOEUDS[id].enfants || []).length > 0);
-  verifier('DRAGONS : deux rangs — sept feuilles (AMATSU depuis le 18/10/2026), une tête (ADRAMELECH)',
-    capsDragons.length === 8 && tetesDragons.join() === 'adramelech',
+  verifier('DRAGONS : deux rangs — six feuilles et deux têtes (ADRAMELECH, ZOH SHIA)',
+    capsDragons.length === 8 && tetesDragons.join() === 'adramelech,zohshia',
     `${tetesDragons.join()} sur ${capsDragons.length}`);
   // NON-VACUITÉ DE CE QUI RESTE : l'assertion du rang n'a pas disparu, elle a
   // changé d'écrans. Il en reste au moins deux (racine, OMEGA) qui l'exigent, et
