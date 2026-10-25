@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { randomUUID } from 'node:crypto';
+import { validerCheckpoint } from '../js/leo-interaction.mjs';
 import { isUuid } from '../api/_lib/validate.js';
 import * as http from '../api/_lib/http.js';
 
@@ -42,7 +43,7 @@ function rpc(uid, name, args) {
   serial = task.catch(() => {});
   return task;
 }
-const deps = { ...http, isUuid, logError: () => {}, isAuthError: () => false,
+const deps = { ...http, validerCheckpoint, isUuid, logError: () => {}, isAuthError: () => false,
   requireUser: async req => ({ status: 'ok', client: {
     rpc: (name, args) => rpc(req.fixtureUser, name, args),
     from: table => {

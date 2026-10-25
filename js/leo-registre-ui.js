@@ -2,10 +2,13 @@
 (function () {
   'use strict';
   var session = null, client = null, epoch = 0, dirty = false;
+  var listeners = new Set();
+  function notify() { listeners.forEach(function (fn) { fn(client ? client.snapshot() : null); }); }
   var labels = { proposed: 'Proposée', authorized: 'Autorisée', in_progress: 'En cours', ready_for_review: 'À relire', approved_for_merge: 'Fusion approuvée', merged: 'Fusionnée', closed: 'Terminée', blocked: 'Bloquée', suspended: 'Suspendue', abandoned: 'Abandonnée' };
   function el(id) { return document.getElementById('leo-mission-' + id); }
   function message(text) { el('message').textContent = text; }
   function render() {
+    notify();
     var s = client ? client.snapshot() : {}, m = s.data && s.data.mission;
     el('ouvrir').disabled = !session || !client;
     el('consulter').disabled = !client || s.busy || !!s.uncertain;
@@ -99,7 +102,34 @@
     window.addEventListener('beforeunload', function (event) {
       if (dirty || (client && client.snapshot().uncertain)) { event.preventDefault(); event.returnValue = ''; }
     });
-    window.UltimaLeoRegistreUI = { poserSession: poserSession };
+    window.UltimaLeoRegistreUI = {
+      poserSession: poserSession,
+      snapshot: function () { return client ? client.snapshot() : null; },
+      generation: function () { return epoch; },
+      subscribe: function (fn) { listeners.add(fn); return function () { listeners.delete(fn); }; },
+      checkpoint: async function (missionId, expectedVersion, value, command) {
+        var active = client, mine = epoch, s = active && active.snapshot();
+        if (!s || s.missionId !== missionId || s.data?.mission.version !== expectedVersion
+          || !s.canWriteCheckpoint) { throw new Error('Relis la mission avant de sauvegarder le suivi.'); }
+        try {
+          var pending = active.write({ checkpoint: value, checkpoint_command: command });
+          render(); await pending;
+          if (mine !== epoch || client !== active) { throw new Error('Session modifiée.'); }
+          await active.reconcile();
+          if (mine !== epoch || client !== active) { throw new Error('Session modifiée.'); }
+          return active.snapshot();
+        } finally { render(); }
+      },
+      relireCheckpoint: async function (missionId) {
+        var active = client, mine = epoch;
+        if (!active || active.snapshot().missionId !== missionId) { throw new Error('Mission indisponible.'); }
+        try {
+          var pending = active.reconcile(); render(); await pending;
+          if (mine !== epoch || client !== active) { throw new Error('Session modifiée.'); }
+          return active.snapshot();
+        } finally { render(); }
+      }
+    };
     render();
   }
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }

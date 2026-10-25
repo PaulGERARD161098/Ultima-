@@ -1,0 +1,420 @@
+{
+  "project": "leosfqyidgsaescjbfom",
+  "date": "2026-10-25",
+  "functions": [
+    {
+      "schema_name": "public",
+      "proname": "leo_stop",
+      "args": "p_mission uuid",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "definition": "CREATE OR REPLACE FUNCTION public.leo_stop(p_mission uuid)\n RETURNS jsonb\n LANGUAGE sql\n SET search_path TO ''\nAS $function$ select leo_private.stop_impl(p_mission); $function$\n",
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "owner": "postgres"
+    },
+    {
+      "schema_name": "public",
+      "proname": "leo_status",
+      "args": "p_mission uuid",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "definition": "CREATE OR REPLACE FUNCTION public.leo_status(p_mission uuid)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n  v_uid uuid := auth.uid();\n  v_status jsonb;\nbegin\n  if v_uid is null then\n    raise exception using errcode = '42501', message = 'authentication_required';\n  end if;\n  -- Une requete unique : mission, budget et operations partagent le snapshot.\n  -- VOLATILE conserve la visibilite d'un stop_impl effectue juste auparavant.\n  select pg_catalog.jsonb_build_object(\n    'mission', pg_catalog.jsonb_build_object('id', m.id, 'version', m.version,\n      'state', m.state, 'next_action', m.next_action, 'scope', m.scope,\n      'contract_version', m.contract_version, 'skill_version', m.skill_version,\n      'expires_at', m.expires_at, 'stopped', m.stopped),\n    'budget', pg_catalog.jsonb_build_object('max_units', m.max_units, 'max_calls', m.max_calls,\n      'used_units', m.used_units, 'calls', m.calls),\n    'operations', (select coalesce(pg_catalog.jsonb_agg(pg_catalog.jsonb_build_object(\n      'operation_id', o.operation_id, 'status', o.status, 'result', o.result)\n      order by o.created_at desc, o.operation_id), '[]'::jsonb)\n      from (select operation_id, status, result, created_at from public.leo_operations\n            where mission_id = m.id order by created_at desc, operation_id limit 100) o),\n    'operations_truncated', exists(select 1 from public.leo_operations where mission_id = m.id\n                                  offset 100 limit 1))\n    into v_status from public.leo_missions m where m.id = p_mission\n      and (m.owner = v_uid or v_uid = any(m.readers) or v_uid = any(m.writers));\n  if not found then\n    raise exception using errcode = '42501', message = 'mission_unavailable';\n  end if;\n  return v_status;\nend;\n$function$\n",
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "owner": "postgres"
+    },
+    {
+      "schema_name": "public",
+      "proname": "leo_write_memory",
+      "args": "p_mission uuid, p_operation text, p_expected_version bigint, p_patch jsonb",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "definition": "CREATE OR REPLACE FUNCTION public.leo_write_memory(p_mission uuid, p_operation text, p_expected_version bigint, p_patch jsonb)\n RETURNS jsonb\n LANGUAGE sql\n SET search_path TO ''\nAS $function$ select leo_private.write_memory_impl(p_mission, p_operation, p_expected_version, p_patch); $function$\n",
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "owner": "postgres"
+    },
+    {
+      "schema_name": "leo_private",
+      "proname": "write_memory_impl",
+      "args": "p_mission uuid, p_operation text, p_expected_version bigint, p_patch jsonb",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "definition": "CREATE OR REPLACE FUNCTION leo_private.write_memory_impl(p_mission uuid, p_operation text, p_expected_version bigint, p_patch jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_uid uuid := auth.uid();\n  v_m public.leo_missions%rowtype;\n  v_previous public.leo_operations%rowtype;\n  v_payload jsonb;\n  v_result jsonb;\nbegin\n  if v_uid is null then\n    raise exception using errcode = '42501', message = 'authentication_required';\n  end if;\n  if p_mission is null then\n    raise exception using errcode = '22023', message = 'invalid_request';\n  end if;\n  if p_operation is null or p_operation !~ '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$' then\n    raise exception using errcode = '22023', message = 'invalid_operation_id';\n  end if;\n  if p_expected_version is null or p_expected_version < 1 or p_expected_version > 9007199254740991 then\n    raise exception using errcode = '22023', message = 'invalid_expected_version';\n  end if;\n  if p_patch is null or pg_catalog.jsonb_typeof(p_patch) <> 'object' or p_patch = '{}'::jsonb\n     or pg_catalog.octet_length(p_patch::text) > 16300 then\n    raise exception using errcode = '22023', message = 'invalid_patch';\n  end if;\n  if exists (select 1 from pg_catalog.jsonb_object_keys(p_patch) as field(name)\n             where field.name not in ('state', 'next_action')) then\n    raise exception using errcode = '22023', message = 'invalid_patch';\n  end if;\n  if p_patch ? 'state' then\n    if pg_catalog.jsonb_typeof(p_patch->'state') <> 'string' or p_patch->>'state' not in (\n      'proposed','authorized','in_progress','ready_for_review','approved_for_merge',\n      'merged','closed','blocked','suspended','abandoned') then\n      raise exception using errcode = '22023', message = 'invalid_state';\n    end if;\n  end if;\n  if p_patch ? 'next_action' then\n    if pg_catalog.jsonb_typeof(p_patch->'next_action') <> 'string'\n       or pg_catalog.char_length(p_patch->>'next_action') > 4000 then\n      raise exception using errcode = '22023', message = 'invalid_next_action';\n    end if;\n  end if;\n\n  -- Une seule ligne est verrouillee, seulement si l'identite a le droit d'ecrire.\n  select * into v_m from public.leo_missions m where m.id = p_mission\n    and (m.owner = v_uid or v_uid = any(m.writers)) for update;\n  if not found then\n    raise exception using errcode = '42501', message = 'writer_required';\n  end if;\n  if v_m.scope <> 'memory' or v_m.contract_version <> '1.1' or v_m.skill_version <> '1.0' then\n    raise exception using errcode = 'P0001', message = 'version_scope_denied';\n  end if;\n  v_payload := pg_catalog.jsonb_build_object('expected_version', p_expected_version, 'patch', p_patch);\n  if pg_catalog.octet_length(v_payload::text) > 16384 then\n    raise exception using errcode = '22023', message = 'invalid_patch';\n  end if;\n  select * into v_previous from public.leo_operations\n    where mission_id = p_mission and operation_id = p_operation;\n  if found then\n    if v_previous.payload <> v_payload then\n      raise exception using errcode = 'PT409', message = 'operation_conflict';\n    end if;\n    if v_previous.status <> 'completed' then\n      raise exception using errcode = 'P0001', message = 'operation_unresolved';\n    end if;\n    return pg_catalog.jsonb_build_object('operation_id', p_operation, 'status', 'completed',\n                                        'result', v_previous.result, 'replayed', true);\n  end if;\n  if v_m.stopped then\n    raise exception using errcode = 'P0001', message = 'mission_stopped';\n  end if;\n  if pg_catalog.clock_timestamp() >= v_m.expires_at then\n    raise exception using errcode = 'P0001', message = 'mission_expired';\n  end if;\n  if v_m.version <> p_expected_version then\n    raise exception using errcode = 'PT409', message = 'version_conflict';\n  end if;\n  if v_m.version >= 9007199254740991 then\n    raise exception using errcode = 'P0001', message = 'version_exhausted';\n  end if;\n  if v_m.used_units >= v_m.max_units or v_m.calls >= v_m.max_calls then\n    raise exception using errcode = 'P0001', message = 'budget_exhausted';\n  end if;\n\n  update public.leo_missions set\n    state = coalesce(p_patch->>'state', state),\n    next_action = coalesce(p_patch->>'next_action', next_action),\n    version = version + 1, used_units = used_units + 1, calls = calls + 1,\n    updated_at = pg_catalog.clock_timestamp()\n    where id = p_mission returning * into v_m;\n  v_result := pg_catalog.jsonb_build_object('mission_version', v_m.version,\n                                         'state', v_m.state, 'next_action', v_m.next_action);\n  insert into public.leo_operations(mission_id, operation_id, base_version, payload, status, result)\n    values (p_mission, p_operation, p_expected_version, v_payload, 'completed', v_result);\n  return pg_catalog.jsonb_build_object('operation_id', p_operation, 'status', 'completed',\n                                      'result', v_result, 'replayed', false);\nend;\n$function$\n",
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "owner": "postgres"
+    }
+  ],
+  "metadata": [
+    {
+      "kind": "columns",
+      "items": [
+        {
+          "type": "uuid",
+          "table": "leo_missions",
+          "column": "id",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "leo_missions",
+          "column": "owner",
+          "nullable": "NO"
+        },
+        {
+          "type": "ARRAY",
+          "table": "leo_missions",
+          "column": "readers",
+          "nullable": "NO"
+        },
+        {
+          "type": "ARRAY",
+          "table": "leo_missions",
+          "column": "writers",
+          "nullable": "NO"
+        },
+        {
+          "type": "bigint",
+          "table": "leo_missions",
+          "column": "version",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_missions",
+          "column": "state",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_missions",
+          "column": "next_action",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_missions",
+          "column": "scope",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_missions",
+          "column": "contract_version",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_missions",
+          "column": "skill_version",
+          "nullable": "NO"
+        },
+        {
+          "type": "timestamp with time zone",
+          "table": "leo_missions",
+          "column": "expires_at",
+          "nullable": "NO"
+        },
+        {
+          "type": "bigint",
+          "table": "leo_missions",
+          "column": "max_units",
+          "nullable": "NO"
+        },
+        {
+          "type": "bigint",
+          "table": "leo_missions",
+          "column": "max_calls",
+          "nullable": "NO"
+        },
+        {
+          "type": "bigint",
+          "table": "leo_missions",
+          "column": "used_units",
+          "nullable": "NO"
+        },
+        {
+          "type": "bigint",
+          "table": "leo_missions",
+          "column": "calls",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "leo_missions",
+          "column": "stopped",
+          "nullable": "NO"
+        },
+        {
+          "type": "timestamp with time zone",
+          "table": "leo_missions",
+          "column": "created_at",
+          "nullable": "NO"
+        },
+        {
+          "type": "timestamp with time zone",
+          "table": "leo_missions",
+          "column": "updated_at",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "leo_operations",
+          "column": "mission_id",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_operations",
+          "column": "operation_id",
+          "nullable": "NO"
+        },
+        {
+          "type": "bigint",
+          "table": "leo_operations",
+          "column": "base_version",
+          "nullable": "NO"
+        },
+        {
+          "type": "jsonb",
+          "table": "leo_operations",
+          "column": "payload",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "leo_operations",
+          "column": "status",
+          "nullable": "NO"
+        },
+        {
+          "type": "jsonb",
+          "table": "leo_operations",
+          "column": "result",
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp with time zone",
+          "table": "leo_operations",
+          "column": "created_at",
+          "nullable": "NO"
+        }
+      ]
+    },
+    {
+      "kind": "rls",
+      "items": [
+        {
+          "rls": true,
+          "force": false,
+          "table": "leo_missions"
+        },
+        {
+          "rls": true,
+          "force": false,
+          "table": "leo_operations"
+        }
+      ]
+    },
+    {
+      "kind": "policies",
+      "items": [
+        {
+          "cmd": "SELECT",
+          "qual": "((( SELECT auth.uid() AS uid) IS NOT NULL) AND ((owner = ( SELECT auth.uid() AS uid)) OR (readers @> ARRAY[( SELECT auth.uid() AS uid)]) OR (writers @> ARRAY[( SELECT auth.uid() AS uid)])))",
+          "roles": [
+            "authenticated"
+          ],
+          "tablename": "leo_missions",
+          "permissive": "PERMISSIVE",
+          "policyname": "leo_missions_read",
+          "schemaname": "public",
+          "with_check": null
+        },
+        {
+          "cmd": "SELECT",
+          "qual": "(EXISTS ( SELECT 1\n   FROM leo_missions m\n  WHERE ((m.id = leo_operations.mission_id) AND (( SELECT auth.uid() AS uid) IS NOT NULL) AND ((m.owner = ( SELECT auth.uid() AS uid)) OR (m.readers @> ARRAY[( SELECT auth.uid() AS uid)]) OR (m.writers @> ARRAY[( SELECT auth.uid() AS uid)])))))",
+          "roles": [
+            "public"
+          ],
+          "tablename": "leo_operations",
+          "permissive": "PERMISSIVE",
+          "policyname": "leo_operations_read",
+          "schemaname": "public",
+          "with_check": null
+        }
+      ]
+    },
+    {
+      "kind": "grants",
+      "items": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "INSERT",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "SELECT",
+          "with_hierarchy": "YES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "UPDATE",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "DELETE",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "TRUNCATE",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "REFERENCES",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "TRIGGER",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "table_name": "leo_missions",
+          "is_grantable": "NO",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "SELECT",
+          "with_hierarchy": "YES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "INSERT",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "SELECT",
+          "with_hierarchy": "YES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "UPDATE",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "DELETE",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "TRUNCATE",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "REFERENCES",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "YES",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "TRIGGER",
+          "with_hierarchy": "NO"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "table_name": "leo_operations",
+          "is_grantable": "NO",
+          "table_schema": "public",
+          "table_catalog": "postgres",
+          "privilege_type": "SELECT",
+          "with_hierarchy": "YES"
+        }
+      ]
+    }
+  ]
+}

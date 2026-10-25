@@ -218,11 +218,11 @@
   display: block; width: 100%; height: .55rem; margin: .6rem 0;
   accent-color: var(--accent-focus, #1f5f8b);
 }
-.leo-suivi-adopter {
+.leo-suivi-adopter, .leo-suivi-memoire {
   min-height: 44px; padding: .5rem .8rem; border: 1px solid var(--cerne-carte, #5a4118);
   border-radius: 4px; background: var(--parchemin, #f6eed9); color: inherit; cursor: pointer;
 }
-.leo-suivi-adopter:focus-visible { outline: 3px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.leo-suivi-adopter:focus-visible, .leo-suivi-memoire:focus-visible { outline: 3px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
 
 .leo-bulle-erreur {
   align-self: flex-start;
@@ -619,4 +619,3 @@ body { font-kerning: normal; font-variant-ligatures: common-ligatures; }
 @media (pointer: coarse) {
   .leo-dock-action, .leo-dock-parler { min-height: 44px; }
 }
-
