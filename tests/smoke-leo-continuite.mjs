@@ -37,6 +37,8 @@ async function fixture(options={}){
  await page.route(BASE+'/api/leo-registre**',async route=>{
   const req=route.request(),u=new URL(req.url());
   if(req.method()==='GET'){
+   if(u.searchParams.get('list')==='missions')return response(route,{missions:[{id:mission,label:'Suite',state:'in_progress',
+     stopped:false,expires_at:'2099-01-01T00:00:00Z',updated_at:'2026-10-25T12:00:00Z'}],truncated:false});
    if(u.searchParams.has('operation_id'))return response(route,{mission_id:mission,operation:receipts.get(u.searchParams.get('operation_id'))||null});
    const state=structuredClone(db);if(options.legacy){delete state.capabilities;delete state.mission.checkpoint;}
    return response(route,state);
@@ -67,8 +69,10 @@ async function fixture(options={}){
  async function settle(){await page.waitForFunction(()=>!document.querySelector('.leo-voix-champ').disabled&&!document.querySelector('.leo-bulle-attente')&&!window.UltimaLeoRegistreUI.snapshot()?.busy);}
  async function send(text,wait=true){await page.locator('.leo-voix-champ').fill(text);await page.locator('.leo-voix-envoyer').click();if(wait)await settle();}
  async function load(){
-  await page.locator('#leo-mission-ouvrir').click();await page.locator('#leo-mission-id').fill(mission);
-  await page.locator('#leo-mission-consulter').click();
+  await page.locator('#leo-mission-ouvrir').click();
+  await page.waitForFunction(()=>!document.getElementById('leo-mission-choix').disabled);
+  await page.locator('#leo-mission-choix').selectOption(mission);
+  await page.locator('#leo-mission-selectionner').click();
   await page.waitForFunction(()=>!!window.UltimaLeoRegistreUI.snapshot()?.data);
   await page.locator('#leo-mission-fermer').click();
   // Parcours réel : consulter la mission AVANT d'ouvrir le cartouche modal,

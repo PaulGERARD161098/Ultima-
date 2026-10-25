@@ -57,6 +57,9 @@ await page.route('**/api/leo-registre*', async route => {
   const request = route.request();
   assert.equal(request.headers().authorization, `Bearer ${TOKEN}`, 'identité issue de la session');
   if (request.method() === 'GET') {
+    if (new URL(request.url()).searchParams.get('list') === 'missions') return json(route,200,{ok:true,data:{
+      missions:[MISSION,OTHER_MISSION].map(id=>({id,label:id===MISSION?'Préparer la recette':'Autre mission',state:'in_progress',
+        stopped:false,expires_at:'2099-01-01T00:00:00Z',updated_at:'2026-10-25T12:00:00Z'})),truncated:false}});
     const mission = new URL(request.url()).searchParams.get('mission');
     assert.ok([MISSION, OTHER_MISSION].includes(mission));
     reads.push(request.url());
@@ -122,13 +125,16 @@ try {
   assert.equal(await page.locator('#ecran-connexion').isVisible(), false, 'accueil authentifié réel');
   await field('ouvrir').click();
   assert.equal(await field('dialog').isVisible(), true);
-  await field('id').fill(MISSION);
-  await field('consulter').click();
+  await page.waitForFunction(()=>!document.getElementById('leo-mission-choix').disabled);
+  await field('choix').selectOption(MISSION);
+  await field('selectionner').click();
   await messageMatches(/Mission consultée/);
   assert.match(await field('courant').textContent(), /En cours.*Version 1/);
   assert.equal(await field('action').inputValue(), 'Préparer la recette');
   assert.equal(reads.length, 1);
   console.log('✅ Entrée accueil authentifiée → consultation de mission');
+  assert.equal(await field('avance').getAttribute('open'),null,'identifiant technique replié par défaut');
+  await field('avance').locator('summary').click();
 
   for (const failure of ['read-denied', 'read-unavailable']) {
     await field('action').fill('Brouillon avant échec de lecture');

@@ -3,6 +3,12 @@
   'use strict';
   var session = null, client = null, epoch = 0, dirty = false;
   var listeners = new Set();
+  var choices = [];
+  function clearChoices() {
+    choices = []; el('choix').textContent = '';
+    var option = document.createElement('option'); option.value = ''; option.textContent = 'Choisir une mission';
+    el('choix').append(option); el('choix').value = ''; el('liste-message').textContent = '';
+  }
   function notify() { listeners.forEach(function (fn) { fn(client ? client.snapshot() : null); }); }
   var labels = { proposed: 'Proposée', authorized: 'Autorisée', in_progress: 'En cours', ready_for_review: 'À relire', approved_for_merge: 'Fusion approuvée', merged: 'Fusionnée', closed: 'Terminée', blocked: 'Bloquée', suspended: 'Suspendue', abandoned: 'Abandonnée' };
   function el(id) { return document.getElementById('leo-mission-' + id); }
@@ -13,6 +19,9 @@
     el('ouvrir').disabled = !session || !client;
     el('consulter').disabled = !client || s.busy || !!s.uncertain;
     el('id').disabled = !!s.busy || !!s.uncertain;
+    el('choix').disabled = !client || !!s.busy || !!s.uncertain || !choices.length;
+    el('selectionner').disabled = el('choix').disabled || !el('choix').value;
+    el('actualiser').disabled = !client || !!s.busy || !!s.uncertain;
     el('detail').hidden = !m;
     el('relire').disabled = !s.missionId || s.busy;
     el('enregistrer').disabled = !s.canWrite || !dirty;
@@ -29,6 +38,32 @@
     el('brouillon').textContent = dirty ? 'Brouillon non enregistré, conservé pendant la relecture.' : 'Modifier ce mémo ne déclenche aucune action externe.';
   }
   var errors = { busy: 'Une demande est déjà en cours.', invalid: 'Vérifie l’identifiant et les champs saisis.', auth: 'Reconnecte-toi pour consulter cette mission.', conflict: 'La mission a changé. Relis le registre, compare avec ton brouillon puis enregistre à nouveau.', denied: 'Cette opération n’est pas autorisée pour ton compte.', uncertain: 'Résultat non confirmé. Relis le registre avant toute nouvelle écriture. Aucun renvoi automatique.', unavailable: 'Registre indisponible. Réessaie la lecture plus tard.' };
+  async function loadChoices() {
+    if (!client) return;
+    var active = client, mine = epoch, s = active.snapshot();
+    if (s.busy || s.uncertain) { message(s.uncertain ? errors.uncertain : errors.busy); return; }
+    clearChoices(); el('liste-message').textContent = 'Chargement de tes missions…';
+    try {
+      var pending = active.listMissions(); render();
+      var result = await pending;
+      if (mine !== epoch || active !== client) return;
+      choices = result.missions;
+      choices.forEach(function (m) {
+        var option = document.createElement('option'); option.value = m.id;
+        var state = m.stopped ? 'Arrêtée' : Date.parse(m.expires_at) <= Date.now() ? 'Expirée' : (labels[m.state] || m.state);
+        option.textContent = m.label + ' · ' + state + ' · ' + new Date(m.updated_at).toLocaleString('fr-FR');
+        el('choix').append(option);
+      });
+      el('liste-message').textContent = !choices.length
+        ? 'Aucune mission accessible. Aucune mission n’a été créée. L’initialisation d’un suivi reste nécessaire.'
+        : result.truncated ? 'Les 50 missions les plus récentes sont affichées. Pour une mission plus ancienne, utilise l’accès avancé.'
+          : 'Choisis la mission à reprendre. Son ouverture ne déclenche aucune action externe.';
+    } catch (e) {
+      if (mine !== epoch || active !== client) return;
+      clearChoices(); el('liste-message').textContent = 'Liste indisponible. Actualise-la pour réessayer.';
+      message(errors[e.code] || errors.unavailable);
+    } finally { if (mine === epoch && active === client) render(); }
+  }
   async function run(method, arg, success) {
     if (!client) { return; }
     var mine = epoch, active = client, previous = client.snapshot(), writeConfirmed = false;
@@ -68,7 +103,8 @@
       client = null; dirty = false;
       if (el('dialog').open) { el('dialog').close(); }
       el('chargement').reset(); el('edition-form').reset();
-      el('prochaine').textContent = ''; message('Consulte une mission existante avec son identifiant.');
+      clearChoices(); el('avance').open = false;
+      el('prochaine').textContent = ''; message('Choisis une mission dans la liste.');
     }
     session = next && newId ? next : null;
     if (session && !client && window.UltimaLeoRegistreClient) {
@@ -77,14 +113,23 @@
           getToken: function () { return session && session.access_token; },
           recoveryStore: window.sessionStorage, recoveryKey: 'ultima-leo-recovery:' + newId
         });
-        if (client.snapshot().uncertain) { message(errors.uncertain); el('id').value = client.snapshot().missionId || ''; }
+        if (client.snapshot().uncertain) { message(errors.uncertain); el('id').value = client.snapshot().missionId || ''; el('avance').open = true; }
       } catch (e) { message('La reprise sûre n’est pas disponible dans cet onglet. Autorise le stockage de session puis recharge la page.'); }
     }
     render();
   }
   function init() {
     if (!el('dialog')) { return; }
-    el('ouvrir').addEventListener('click', function () { el('dialog').showModal(); });
+    el('ouvrir').addEventListener('click', function () { el('dialog').showModal(); loadChoices(); });
+    el('actualiser').addEventListener('click', loadChoices);
+    el('choix').addEventListener('change', render);
+    el('selection').addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (dirty) { message('Ton brouillon est conservé. Enregistre-le ou utilise « Abandonner le brouillon » avant de changer de mission.'); return; }
+      var id = el('choix').value;
+      if (!choices.some(function (m) { return m.id === id; })) { message('Choisis une mission dans la liste.'); return; }
+      run('load', id, 'Mission consultée. Les droits sont contrôlés par le registre.');
+    });
     el('fermer').addEventListener('click', function () { el('dialog').close(); });
     el('chargement').addEventListener('submit', function (event) {
       event.preventDefault();

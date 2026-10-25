@@ -17,6 +17,8 @@ async function invoke(req, options = {}) {
     }, from: table => {
       const query = { table, filters: [] };
       const builder = { select: columns => { query.columns = columns; return builder; },
+        order: (key, options) => { (query.order ||= []).push([key, options]); return builder; },
+        limit: async value => { query.limit = value; calls.push(query); return options.result || { data: [], error: null }; },
         eq: (key, value) => { query.filters.push([key, value]); return builder; },
         maybeSingle: async () => { calls.push(query); return options.result || { data: null, error: null }; } };
       return builder;
@@ -112,6 +114,33 @@ for(const patch of [
   assert.equal(result.response.status,400);assert.equal(result.calls.length,0);
 }
 console.log('PASS checkpoint API fermé : paires, commande, identité et RPC unique');
+
+{
+  const req = { method: 'GET', query: { list: 'missions' } };
+  const row = { id: mission, state: 'in_progress', stopped: false, expires_at: '2099-01-01T00:00:00Z',
+    updated_at: '2026-10-25T12:00:00Z', next_action: '  Reprendre le dossier  ', owner: 'secret', checkpoint: { secret: true } };
+  const result = await invoke(req, { result: { data: [row], error: null } });
+  assert.equal(result.response.status, 200);
+  assert.deepEqual(result.calls, [{ table: 'leo_missions', columns: 'id,state,stopped,expires_at,updated_at,next_action',
+    filters: [], order: [['updated_at', { ascending: false }], ['id', { ascending: true }]], limit: 51 }]);
+  assert.deepEqual(result.response.data, { missions: [{ id: mission, state: row.state, stopped: false,
+    expires_at: row.expires_at, updated_at: row.updated_at, label: 'Reprendre le dossier' }], truncated: false });
+  assert.deepEqual((await invoke(req)).response.data, { missions: [], truncated: false });
+  const many = await invoke(req, { result: { data: Array.from({length:51},()=>row), error: null } });
+  assert.equal(many.response.data.missions.length, 50); assert.equal(many.response.data.truncated, true);
+  for (const auth of ['unauthenticated', 'unconfigured']) {
+    const denied = await invoke(req, {auth}); assert.equal(denied.calls.length, 0);
+    assert.equal(denied.response.status, auth === 'unconfigured' ? 503 : 401);
+  }
+  for (const query of [{ list: 'missions', owner: mission }, { list: ['missions'] }, { list: 'all' },
+    { list: 'missions', mission }, { list: 'missions', limit: '99999' }]) {
+    const bad = await invoke({ method: 'GET', query }); assert.equal(bad.response.status,400); assert.equal(bad.calls.length,0);
+  }
+  for (const data of [null, {}, [null], [{...row,id:'invalid'}], [{...row,updated_at:'invalid'}]])
+    assert.equal((await invoke(req,{result:{data,error:null}})).response.status,503);
+  assert.equal((await invoke(req,{result:{error:{code:'42501',message:'secret'}}})).response.status,403);
+  console.log('PASS liste : JWT requis, projection fermée, borne 50, liste vide et filtres étrangers refusés');
+}
 
 {
  const patch={checkpoint:{...cp,titre:' Plan ',etapes:[' Vérifier ']},checkpoint_command:{kind:'adopt',expected_task_id:null}};
