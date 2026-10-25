@@ -7423,6 +7423,24 @@ export default {
        "t": "p",
        "r": [
         [
+         "Les deux modules sont consultables directement dans les onglets « Composition éditoriale » et « Pitch sourcé ». Le badge lit leurs sections de méthode depuis les compétences du dépôt, sans copie parallèle. Les licences et la provenance restent attachées aux compétences ; la publication ne reprend que les instructions neutres et leurs empreintes de source.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Navigation : ouvrir l'étoile de la technologie dans le catalogue de technologies, puis la fiche correspondante. Les quatre technologies existantes restent accessibles au même niveau ; une ancre ouvre seulement une fiche reçue par l'API réservée au propriétaire.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
          "Entrées : public, décision attendue, durée, objectif, preuves disponibles, identité visuelle et contraintes de diffusion. Demander seulement les manques qui changent réellement le résultat. Préserver les informations connues et marquer les inconnues.",
          ""
         ]
@@ -8058,6 +8076,270 @@ export default {
      ]
     },
     {
+     "id": "composition",
+     "titre": "Composition éditoriale",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Partir du sujet et de la référence",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lire presentations-claires et sa grammaire. Définir la décision du destinataire et l'idée à rendre visible. Conserver la direction artistique validée : sobriété, blancs, hiérarchie et visuel signifiant. Ne pas ouvrir un nouveau choix de thème si la référence suffit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rédiger une direction artistique courte : sujet visuel central, matière, palette, famille de caractères, grille, rapport texte/image. Une image doit illustrer le mécanisme, le métier ou la transformation ; une forme décorative ne démontre rien.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Composer",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir une seule famille de caractères disponible, avec des graisses et tailles clairement hiérarchisées. Mesurer les retours de ligne. Préserver la grille et les marges du socle. Faire varier la composition selon le contenu, sans changer l'identité à chaque page.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire un point focal. Laisser respirer les éléments qui l'entourent. La précision des alignements et du rythme remplace les effets décoratifs. Ne pas ajouter de graphiques pour donner artificiellement une impression de sophistication.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préserver les éléments exacts sous forme éditable : titres, chiffres, labels et sources. Ne pas rasteriser une page entière pour contourner les problèmes de mise en page.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Créer les images",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir photo ou capture réelle pour un fait, schéma vectoriel pour un mécanisme exact, image générée pour une métaphore désignée comme telle. Utiliser l'outil d'image réellement disponible ; aucun fournisseur ni achat n'est imposé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Décrire sujet, transformation, cadrage, matière, lumière, palette et zone vide pour le texte. Garder une cohérence d'une page à l'autre. Éviter les clichés génériques et les interfaces inventées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour le registre retenu par Paul : un objet lié au métier, une transformation lisible, fond clair, lumière douce, sujet placé pour préserver la zone du titre, aucun mot ni chiffre incorporé dans l'image.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Polir et vérifier",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rendre la page. Examiner hiérarchie, lisibilité, cadrage, netteté, marges et recouvrements. Lorsqu'une fidélité est demandée, comparer référence et résultat à même échelle, dans une même planche. Une illustration de principe n'équivaut pas à une image finale de la qualité attendue.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Faire une passe de simplification : retirer ce qui n'explique rien, puis affiner les éléments conservés. Respecter les contraintes du format natif choisi par la compétence de présentation. Si le rendu est impossible, signaler la vérification bloquée ; ne pas annoncer un résultat professionnel comme éprouvé.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pitch",
+     "titre": "Pitch sourcé",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Construire l'histoire",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Identifier destinataire, décision, temps de parole et preuves disponibles. Choisir un angle investisseur ou client selon la demande ; ne pas transformer automatiquement une présentation commerciale en demande de financement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire un parcours dans les seuls sujets utiles : promesse, problème vécu, fonctionnement actuel, solution, preuve, différenciation, modèle économique, suite et demande finale. Mettre les détails en annexe. L'ordre et le nombre de pages servent le raisonnement ; ils ne sont pas imposés par le modèle amont.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Écrire des titres qui énoncent un message, pas des rubriques. Lire les titres seuls comme un raisonnement. Pour un client, partir de son travail et du résultat qu'il cherche. Pour un investisseur, distinguer besoin, mécanisme, preuve, marché accessible et besoin de financement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Rendre le contenu précis",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une idée principale par page. Garder les corps courts et parallèles dans les comparaisons. Ne pas supprimer une nuance ou une source indispensable pour respecter un quota arbitraire de mots.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préférer un fait précis à un adjectif vague. Ne pas reprendre comme fait les exemples de performance du dépôt amont. Une promesse chiffrée sans source reste une hypothèse ou disparaît.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Chaque indicateur conserve valeur, unité, dénominateur, période, périmètre et provenance. Distinguer projeté, mesuré, déclaré et non vérifié ; pipeline, signé et encaissé ; discussion, pilote et client payant. Les logos ne remplacent pas ces qualifications.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Choisir la preuve visuelle",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Faire correspondre message et forme : métrique dominante pour une preuve unique ; comparaison pour des options ; étapes pour une séquence ; capture réelle pour une capacité existante ; illustration pour une métaphore.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire les graphiques à partir des données exactes avec des éléments éditables. Ne jamais générer un graphique de données par image IA. Les styles visuels et la palette de presentations-claires restent prioritaires : ne pas importer le rouge ou les effets de signature du module consulting.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Terminer utilement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Formuler une demande finale précise, compatible avec les informations connues : accord de principe, démonstration, essai, prochaine réunion ou financement cadré. Ne pas laisser entendre gratuité, engagement ou disponibilité sans preuve.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relire par trois voies : titres seuls (récit), sources et calculs (fond), destinataire sceptique (objections). Puis rendre et inspecter les pages avec la compétence de présentation.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
      "id": "service",
      "titre": "Utilisation et recette",
      "blocs": [
@@ -8240,9 +8522,11 @@ export default {
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
-  "presentations-claires/badge.json": "f558419d741f39bb1ab902d5a26931862e560bbe3219a3992c8c02269f907e27",
-  "presentations-claires/TECHNO.md": "9d0026e09740e7e4a7ef0212b1c5a43b2edd64477e4b88e03fe6ca852bdf75a3",
+  "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
+  "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
   "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
+  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "4eb18a840d55838e2c9f7a6bdff3137ad9662e8ff03bc9f98e6b188c49b7d298",
+  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
   "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
   "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
