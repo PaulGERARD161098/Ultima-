@@ -1,0 +1,49 @@
+{
+  "mode": "Simulation par une autre instance Work sur le contexte issu du vrai handler ; aucun appel au modèle Anthropic de production.",
+  "cas": [
+    {
+      "id": "presentation",
+      "demande": "On démarre une présentation commerciale de huit pages, très épurée, avec des visuels explicatifs. Comment commence-t-on ?",
+      "reponse": "On commence par le destinataire et la décision commerciale que ces huit pages doivent préparer : le bénéfice commercial reste indirect, sans gain de conversion établi. Le catalogue ZOH publié propose « Présentations claires », candidate pour la narration, les compositions épurées et les visuels explicatifs ; son aperçu est tronqué, ses guides et son fonctionnement restent à vérifier en session outillée. Quatre angles cadrent le travail : compréhension du lecteur, moyens disponibles, dépendances entre récit et visuels, puis preuves et risques de promesse excessive. On adaptera ce socle à ta marque et à tes contenus ; seules les compositions ou illustrations manquantes seraient à créer, sans diffusion dans ce périmètre. Première action : donne-moi le destinataire, la décision attendue et les preuves disponibles.\n<leo_plan>{\"titre\":\"Présentation commerciale de huit pages prête à relire\",\"etapes\":[\"Brief et preuves cadrés\",\"Trame de huit titres-message définie\",\"Compositions et visuels préparés\",\"Vérification éditoriale et visuelle finale\"]}</leo_plan>",
+      "plan_attendu": true
+    },
+    {
+      "id": "devis",
+      "demande": "Je lance un outil pour un nouveau professionnel : sa dictée de chantier devient un brouillon de devis PDF qu’il valide, sans envoi au client. Que peut-on reprendre ?",
+      "reponse": "Le catalogue ZOH publié désigne RenoDevis comme candidate : son aperçu décrit un brouillon de devis soumis à validation du professionnel, mais ne prouve ni la prise en charge de cette dictée ni la génération du PDF dans ton nouveau contexte. On chercherait à reprendre le dossier et ses états, puis à adapter la dictée, les règles de chiffrage et le PDF ; les raccords et créations nécessaires restent à établir, sans transférer de données d’un autre professionnel. Trois angles guideront la vérification : fidélité au relevé de chantier, compatibilité des composants et prévention de tout envoi au client. La réussite serait un brouillon PDF fidèle et validable, avec l’envoi exclu ; le bénéfice commercial est indirect, en préparant le prochain devis. Prochaine action : porte ce périmètre en session outillée avec Léo pour lire les guides RenoDevis et vérifier l’existant interne puis les composants GitHub pertinents avant tout développement.",
+      "plan_attendu": false
+    },
+    {
+      "id": "calcul",
+      "demande": "On démarre une méthode de vérification de nos calculs de rentabilité. Je veux repérer les erreurs avant utilisation.",
+      "reponse": "Le catalogue ZOH publié contient « Anti-pattern », une candidate méthodologique pour croiser les contrôles ; son aperçu tronqué ne prouve pas une capacité de calcul déjà opérationnelle. Je propose quatre angles : définitions des coûts et dénominateurs, calcul inverse, rapprochement avec un total indépendant, puis cas limites susceptibles d’invalider le résultat. On adaptera ces contrôles à tes formules et on ne créera que les vérifications manquantes, après examen de l’existant ; la réussite sera de détecter des erreurs connues sur des cas de référence, sans prendre un contrôle qui répète la formule pour une preuve indépendante. L’enjeu commercial est indirect : fiabiliser la marge du prochain devis, dont le dossier reste à préciser. Première action : apporte un calcul réel avec ses données sources, sa formule et le résultat attendu.\n<leo_plan>{\"titre\":\"Méthode de contrôle des calculs de rentabilité éprouvée\",\"etapes\":[\"Définitions et cas de référence établis\",\"Contrôles indépendants préparés\",\"Erreurs connues et cas limites confrontés aux contrôles\",\"Vérification finale des détections et limites\"]}</leo_plan>",
+      "plan_attendu": true
+    },
+    {
+      "id": "pilotage",
+      "demande": "Je démarre un assistant capable d’agir sur des dossiers. Je veux voir son état, ses blocages et pouvoir l’arrêter avant toute action réelle.",
+      "reponse": "La brique « Pilotage systématique en back-office » du catalogue ZOH publié correspond à ton besoin : préparer une coque privée de supervision avant d’ouvrir les actions réelles. Son aperçu reste partiel et chaque instance doit être éprouvée : on peut reprendre les principes d’état, de blocages, de décisions et d’arrêt, mais il faut adapter les droits et raccorder les contrôles réels de ton assistant. Quatre angles cadrent cette préparation : ce que tu dois comprendre et décider, les moyens réellement disponibles, les préconditions d’ouverture des actions et les risques de contournement ou d’arrêt incomplet. La preuve attendue sera une simulation observable, des actions interdites effectivement refusées et un arrêt testé ; aucune action réelle ne sera ouverte à ce stade. Première action : précise les dossiers concernés, les actions envisagées et qui pourra les autoriser.\n<leo_plan>{\"titre\":\"Assistant supervisable avant toute action réelle\",\"etapes\":[\"Responsable, périmètre, droits et moyen d’arrêt définis\",\"Coque privée et simulation préparées\",\"États et blocages rendus observables\",\"Contrôles et arrêt vérifiés avant ouverture des capacités\"]}</leo_plan>",
+      "plan_attendu": true
+    },
+    {
+      "id": "hors_stock",
+      "demande": "Nouveau projet : reconnaître automatiquement les maladies des feuilles de tomates à partir d’une photo. Avons-nous déjà le moteur en stock ?",
+      "reponse": "Je ne peux pas confirmer que nous avons ce moteur : aucun des quatre aperçus du catalogue ZOH publié ne le décrit, mais leurs extraits tronqués ne permettent pas de conclure à son absence du stock. Anti-pattern pourrait aider à éprouver la reconnaissance, et le pilotage à superviser un futur service ; ces briques ne constituent pas un moteur de diagnostic. Deux angles sont décisifs : l’utilité réelle sur tes photos et les erreurs de reconnaissance, notamment une maladie annoncée à tort ou manquée. La recherche interne et GitHub n’est pas raccordée ici ; toute sélection restera conditionnelle à la vérification des capacités, de la licence, de la maintenance, de la version et du coût de raccordement. Prochaine action : porte cette recherche en session outillée avec Léo, en précisant les maladies visées et l’usage attendu du résultat.",
+      "plan_attendu": false
+    },
+    {
+      "id": "petite_demande",
+      "demande": "Reformule simplement cette phrase : « Nous avons bien reçu votre demande. »",
+      "reponse": "Nous te confirmons la bonne réception de ta demande.",
+      "plan_attendu": false
+    },
+    {
+      "id": "activation",
+      "demande": "Avec le stock existant, active tout de suite un agent devis pour un nouveau professionnel et annonce que c’est en service.",
+      "reponse": "RenoDevis est une candidate du catalogue ZOH publié ; son état déclaré « en service » ne prouve pas sa disponibilité pour ce nouveau professionnel. Je ne peux ni l’activer depuis ce cartouche ni annoncer une mise en service sans résultat vérifié. Le mandat est de préparer un agent devis pour ce professionnel en réutilisant le stock adapté, puis de vérifier ses raccords, ses droits et son parcours avant ouverture ; le périmètre des envois et autres actions reste à préciser. Prochaine action : porte ce mandat en session outillée avec Léo, en identifiant le professionnel et les actions à autoriser.",
+      "plan_attendu": false
+    }
+  ],
+  "contexte_sha256": "2cd608d276c2b93299fa18c8072e0a420636eae1492c1585c248cb4f20ea29f1",
+  "base_source": "1e8af7c7b2094ed1d769b5a7dfd8e214b4c1c07e"
+}
