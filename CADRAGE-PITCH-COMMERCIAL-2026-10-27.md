@@ -50,3 +50,28 @@ Statut : brouillon à adapter ; aucune preuve sociale ni disponibilité produit 
 Étape suivante : confirmer les offres et profils manquants, façonner les trois discours et leurs variantes appel/mail. Puis inspecter le stockage et le parcours Prospection existants avant maquette et raccord : choisir la campagne et le profil, consulter le discours, noter la qualification et la prochaine action au bon prospect. Aucun duplicata de la base clients.
 
 Références inspectées : `RenoBoost/prospection-pro.js` et `RenoBoost/prospection-workspace.css` repérés via recherche ; leur contenu complet et le stockage des scripts restent à inspecter avant implémentation. Le catalogue ZOH est servi au propriétaire par `Ultima-/api/zohshia.js` ; aucun droit modifié par ce lot.
+
+## Vérification de l'ossature — consigne finale du 27/10/2026
+
+Priorité confirmée par Paul : assurer l'ossature avec tous les éléments du jour ; les adaptations viennent ensuite. Les trois marques restent des campagnes futures distinctes ; aucune précision d'offre n'est requise pour terminer ce socle commun.
+
+| Élément demandé | Emplacement de référence | État documentaire |
+|---|---|---|
+| Discours direct, bref, motif du contact et rendez-vous | OSSATURE.md — Appel principal | Présent |
+| Toujours parler du prospect, jamais développer une présentation de soi | TECHNO.md — Résultat attendu et règles | Présent |
+| Répondre au besoin et le reformuler avant la solution | OSSATURE.md — Appel principal | Présent |
+| AIDA : accroche métier, intérêt client, désir, action | TECHNO.md — Méthode AIDA | Présent |
+| Accroche dédiée aux professionnels CVC | OSSATURE.md — Variante CVC | Présent |
+| Sous-traitance, administratif, devis, relances et temps chantier/client | OSSATURE.md — Variante CVC et qualification | Présent |
+| Preuve sociale réelle, référence comparable et pertinence de la zone | OSSATURE.md — Appel principal | Présent |
+| Nombre de clients et CA généré seulement si sourcés et attribuables | TECHNO.md — Règles ; MISE-EN-SERVICE.md — Préparer une campagne | Encadré ; aucun chiffre disponible ajouté |
+| Confrère à Lyon, seulement si réel | Décisions commerciales conservées ; OSSATURE.md — référence à [ville] | Conservé sans affirmation factuelle |
+| Variante « pire moment », rappel court et deux créneaux | OSSATURE.md — Variantes de rendez-vous | Présent |
+| Quatre informations : sous-traitance, relances lourdes, perte clients, participant | OSSATURE.md — Qualification en fin d'échange | Présent |
+| En cas de doute, poser une question, puis confirmer | TECHNO.md — Règles ; OSSATURE.md — ambiguïté | Présent |
+| Appel et mail adaptés au profil, service et client représenté | TECHNO.md — Entrées et sorties ; OSSATURE.md — Mail | Présent ; adaptation reportée à la suite |
+| Utilisation future dans RB → Prospection | Reprise vers Prospection ; MISE-EN-SERVICE.md — Utilisation | Prévue, non implémentée |
+
+Relecture depuis le prospect : son problème ne doit pas être présumé ; les exemples restent des pistes à confirmer. Relecture depuis le vendeur : un prochain rendez-vous et les bons participants doivent être identifiables. Relecture adverse : ni confrère, ni résultat, ni service disponible ne sont fabriqués pour compléter les blancs. Il s'agit d'une vérification documentaire, pas d'une recette d'appel réel ni d'un test de l'écran.
+
+État de livraison : socle et badge généré sauvegardés sur la branche de la PR #424 ; non fusionnés. Les contrôles structurels de la livraison précédente passent et la projection distante a été relue. Tests applicatifs et affichage non vérifiés. Prochaine étape à la demande de Paul : adapter l'ossature à chacune des trois campagnes.
