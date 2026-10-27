@@ -21,6 +21,10 @@
 
 `anti-pattern/` porte la méthode neutre de calcul et de travail : rétrocadrage, deux approches différentes, traitement des écarts, guide de réception et collecteur structurel de déclarations. Son badge réutilise la publication existante. Les preuves et valeurs propres aux instances restent hors du dossier neutre.
 
+## Pitch commercial
+
+`pitch-commercial/` conserve la méthode AIDA, les variantes appel/mail, les questions de qualification et les règles d’adaptation par cible et service. Le prospect reste au centre ; preuves et offres inconnues restent à compléter. Les discours et données de campagne vivent dans l’outil de prospection, hors du socle neutre. Le badge suit la publication existante ; sa présence ne prouve pas encore l’intégration métier.
+
 ## Comment on l'invoque
 
 Par la compétence **`zohshia`** (`.claude/skills/zohshia/SKILL.md`) : remesurer,

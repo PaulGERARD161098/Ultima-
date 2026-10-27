@@ -1,0 +1,10 @@
+{
+  "ordre": 5,
+  "badge": "Pitch commercial",
+  "etat": "Ossature documentée · discours à adapter et éprouver",
+  "onglets": [
+    { "id": "techno", "titre": "Ce que fait la techno", "source": "TECHNO.md" },
+    { "id": "discours", "titre": "Ossature des discours", "source": "OSSATURE.md" },
+    { "id": "service", "titre": "Adaptation et utilisation", "source": "MISE-EN-SERVICE.md" }
+  ]
+}
