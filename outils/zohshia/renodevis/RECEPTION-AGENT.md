@@ -24,3 +24,11 @@ Résultat attendu : un autre professionnel, avec sa propre banque et ses règles
 5. Comparer deux agents sur le même jeu d'entrées et de sources, sans donner le résultat attendu à l'un d'eux. Chronométrer le canal réel jusqu'au PDF complet et conserver les preuves de la version reçue.
 
 État : **audit des raccords réalisé ; adaptations et implantation non reçues**. La CI structurelle du stock prouve la publication du contrat, pas la portabilité du parcours. Les 32 conflits / 25 fichiers spécialisés consignés au 10/10 restent historiques : ils n'ont pas été remesurés ici. Aucun transfert du catalogue, des règles, des secrets ou des identifiants réels du pilote vers un autre compte.
+
+## Réception de source et conditions de passage au réel — 27/10/2026
+
+CI complète de cette branche (`85fe59ed17c4e287ef697490f5535573e1789544`) : `40478803749` success ; contrôles Léo `40478803589` et `40478803500` success. Cela ferme la vérification de la branche documentaire, pas celle d'une implantation.
+
+La source du projet Claude annoncé comme socle neutre n'est pas accessible via les outils de cette session. Deux recherches de fichiers n'ont rien résolu et le contexte personnel est indisponible ; cela ne prouve pas que ce projet n'existe pas. Avant adaptation, obtenir le code/contrat exact et sa version, réutiliser les tests existants, puis vérifier les raccords et la persistance. Ne pas annoncer une réception à partir du nombre historique de tests, ni reconstruire silencieusement un second socle.
+
+Contrôle inverse depuis l'exploitation : une prévisualisation correcte et un budget historiquement configuré ne suffisent pas. Vérifier la version réellement servie par le point d'entrée du canal, l'échéance du canal ET celle du budget, le rattachement réellement employé par les messages, les réservations conservées, l'absence de réponses d'issue inconnue à rapprocher et l'arrêt effectif en fin de fenêtre. Les mesures propres au pilote restent dans son dépôt ; aucune valeur de son compte ne devient une configuration par défaut ici.
