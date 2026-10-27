@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-25",
+ "publie_le": "2026-10-27",
  "technos": [
   {
    "id": "renodevis",
@@ -8610,6 +8610,870 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "pitch-commercial",
+   "ordre": 5,
+   "badge": "Pitch commercial",
+   "etat": "Ossature documentée · discours à adapter et éprouver",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Résultat attendu",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préparer des discours courts pour les appels et les mails, adaptés au profil contacté, à son besoin, au service vendu et au client représenté. Obtenir une discussion ou un rendez-vous pertinent avec les bons participants.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le prospect reste le centre de chaque phrase : son activité, ses difficultés, le résultat utile pour lui. La présentation du vendeur, de ses outils et de sa technologie ne constitue pas l'argumentaire.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Règles de rédaction",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Être direct et aller à l'essentiel ; annoncer le motif du contact.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Partir d'un besoin connu ; sinon poser une question courte pour le confirmer.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ne jamais présenter un problème supposé comme un fait établi chez le prospect.",
+          ""
+         ]
+        ],
+        [
+         [
+          "En cas de doute, poser la question ; reformuler la réponse avant d'argumenter.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une priorité, une réponse concrète et une prochaine action principale.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une preuve sociale sert à éclairer le résultat du prospect ; elle ne devient pas une présentation du vendeur.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Aucun chiffre, témoignage, client de référence, résultat ou territoire exclusif inventé.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une capacité en pilote reste présentée comme un test ou une démonstration.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le rendez-vous sert à examiner son cas ; une signature ou un chiffre d'affaires ne sont jamais garantis.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Méthode AIDA",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Étape",
+          ""
+         ]
+        ],
+        [
+         [
+          "Fonction",
+          ""
+         ]
+        ],
+        [
+         [
+          "Formulation de départ",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Accroche",
+           ""
+          ]
+         ],
+         [
+          [
+           "Montrer pourquoi ce profil est contacté",
+           ""
+          ]
+         ],
+         [
+          [
+           "Cet échange concerne les professionnels de [métier] sur [zone].",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Intérêt",
+           ""
+          ]
+         ],
+         [
+          [
+           "Confirmer une difficulté du prospect",
+           ""
+          ]
+         ],
+         [
+          [
+           "Entre [tâche] et [tâche], qu'est-ce qui vous prend le plus de temps aujourd'hui ?",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Désir",
+           ""
+          ]
+         ],
+         [
+          [
+           "Relier une preuve réelle à son besoin",
+           ""
+          ]
+         ],
+         [
+          [
+           "Un confrère comparable a obtenu [résultat vérifié, période et périmètre]. Pour votre activité, l'enjeu serait [bénéfice adapté].",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Action",
+           ""
+          ]
+         ],
+         [
+          [
+           "Proposer un échange concret",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vous préférez [créneau 1] ou [créneau 2] pour regarder votre cas ?",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Entrées et sorties",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Entrées : campagne, profil et rôle contactés, métier, zone, service vendu, client représenté, besoin confirmé ou à confirmer, bénéfice visé, preuves autorisées, canal, objectif et créneaux.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sorties : discours adapté, variantes, questions de qualification, informations encore manquantes, prochaine action et version. Un discours incomplet porte le statut « à compléter » ; une hypothèse ne devient pas une offre prête à employer.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Séparation des données",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ce dossier porte la méthode neutre. Les marques, offres, noms, coordonnées, résultats, prix, notes d'appel et preuves propres aux campagnes vivent dans leur outil métier. Aucun fichier neutre n'embarque de données d'un professionnel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "L'utilisation en prospection ne vaut pas autorisation d'appeler, d'envoyer un message ou d'inscrire une personne dans une séquence automatique.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "discours",
+     "titre": "Ossature des discours",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Appel principal",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Bonjour [prénom]. Cet appel concerne votre activité de [métier] sur [zone], pour convenir d'un rendez-vous autour de [besoin ou résultat pertinent]. Ce n'est pas un hasard si vous êtes contacté.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Entre [difficulté 1] et [difficulté 2], vos journées peuvent laisser peu de temps pour [activité essentielle]. Comment cela se passe chez vous ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "[Écouter ; reprendre son besoin avec ses mots.]",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Donc votre priorité, c'est bien [besoin confirmé] ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "[Si une référence pertinente est autorisée et vérifiée :] Un de vos confrères à [ville] avait le même enjeu. Il a obtenu [résultat vérifié sur une période précisée]. Pour votre entreprise, l'objectif serait [bénéfice concret], en tenant compte de votre zone.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "[Sans preuve disponible :] Pour votre entreprise, l'intérêt serait de [bénéfice visé]. Le rendez-vous permettrait de vérifier ce que cette démarche peut vous apporter sur votre cas.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour en parler concrètement, vous seriez disponible plutôt [créneau 1] ou [créneau 2] ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Variante CVC",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Cet échange concerne uniquement les professionnels du chauffage et de la climatisation comme vous.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Entre l'administratif, les devis et les relances, qu'est-ce qui vous prend le plus de temps au détriment de vos chantiers et de vos clients ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "[Reprendre le besoin confirmé, présenter la réponse adaptée puis proposer deux créneaux.]",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Variantes de rendez-vous",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Directe : Pour regarder ce que cela peut vous apporter concrètement, vous préférez [créneau 1] ou [créneau 2] ?",
+          ""
+         ]
+        ],
+        [
+         [
+          "Prospect pressé : Quel moment vous conviendrait pour un rappel court : [créneau 1] ou [créneau 2] ?",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ton espiègle, selon le contexte : C'est quand le pire moment pour vous voir ? [Écouter.] Alors évitons ce créneau. Vous préférez [créneau 1] ou [créneau 2] ?",
+          ""
+         ]
+        ],
+        [
+         [
+          "Participant supplémentaire : Qui s'occupe de ces sujets avec vous et aurait intérêt à participer au rendez-vous ?",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le rappel court est une alternative au rendez-vous immédiat, pas un second objectif à ajouter systématiquement. Laisser la possibilité de refuser ou de proposer un autre créneau.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Qualification en fin d'échange",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Information utile",
+          ""
+         ]
+        ],
+        [
+         [
+          "Question naturelle",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ce qu'il faut distinguer",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Sous-traitance",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vos chantiers viennent surtout de vos clients directs ou de la sous-traitance ? Cela vous convient ?",
+           ""
+          ]
+         ],
+         [
+          [
+           "Travailler pour un donneur d'ordre ou confier ses chantiers à une autre entreprise",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Relance des devis",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vos devis envoyés, qui les relance chez vous ? Cela vous prend beaucoup de temps ?",
+           ""
+          ]
+         ],
+         [
+          [
+           "Charge réelle, responsable et fonctionnement actuel",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Perte de clients",
+           ""
+          ]
+         ],
+         [
+          [
+           "Des demandes ou des devis restent-ils sans suite faute de temps pour les suivre ?",
+           ""
+          ]
+         ],
+         [
+          [
+           "Perte confirmée, motif déclaré ou simple absence de réponse",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Personne à inclure",
+           ""
+          ]
+         ],
+         [
+          [
+           "Qui s'occupe de ces sujets avec vous et devrait participer au rendez-vous ?",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilisateur, associé, décideur et rôle de chacun",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Question de priorité : Parmi ces sujets, lequel vous pose le plus de difficultés aujourd'hui ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "En cas d'ambiguïté : Quand vous dites sous-traitance, vous travaillez pour d'autres entreprises ou vous leur confiez vos chantiers ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les quatre points sont une fiche de qualification, pas un questionnaire à réciter. Les adapter à l'offre : ne pas imposer un problème de relance à une campagne dont le service ne le traite pas. Noter « inconnu » pour une réponse non obtenue ; ne jamais remplacer par « non ».",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Mail",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Objet : [bénéfice concret] pour votre activité de [métier]",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Bonjour [prénom],",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Votre activité de [métier] sur [zone] vous amène à [enjeu connu ou question à confirmer]. Aujourd'hui, comment gérez-vous [problème ciblé] ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "[Preuve sociale autorisée et vérifiée si disponible ; sinon omettre ce passage.]",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour votre entreprise, l'objectif serait [bénéfice pertinent]. Un échange permettrait de vérifier cette démarche sur votre cas.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Vous seriez disponible plutôt [créneau 1] ou [créneau 2] ?",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "[Signature d'identification]",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Objections courantes",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Pas le temps : Quel moment serait moins chargé pour un rappel court ? [Deux créneaux si approprié.]",
+          ""
+         ]
+        ],
+        [
+         [
+          "Déjà équipé : Votre organisation actuelle vous convient sur [besoin ciblé], ou reste-t-il un point qui vous prend du temps ?",
+          ""
+         ]
+        ],
+        [
+         [
+          "Envoyez un mail : Quel sujet serait le plus utile pour vous dans ce mail ? [Préparer le contenu ciblé, confirmer le destinataire avant tout envoi autorisé.]",
+          ""
+         ]
+        ],
+        [
+         [
+          "Aucun besoin ou refus : prendre acte ; ne pas forcer un rendez-vous. Consigner le résultat selon les règles de l'outil métier.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Adaptation et utilisation",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Préparer une campagne",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Identifier l'offre, le client représenté, la cible, la zone et l'objectif du contact.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Relier chaque problème ciblé à une réponse réellement disponible.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Confirmer les capacités en production, en pilote et non disponibles.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Pour chaque preuve : source, période, périmètre, montant HT ou TTC si pertinent et droit d'utilisation. Un chiffre d'affaires signé ne devient pas un chiffre encaissé ni un résultat causé par le service sans preuve.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Rédiger une version appel et une version mail, avec une seule priorité et une prochaine action.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Si une information change la pertinence, la demander avant de finaliser le discours dépendant ; continuer les parties indépendantes.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Utilisation dans l'outil de prospection",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La méthode est conservée dans le catalogue des technos. Les discours propres aux campagnes vivent dans la rubrique Prospection de l'outil métier, avec choix du client représenté, du service, du profil et du canal.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une fiche discours porte : identifiant stable, version, statut (à compléter, brouillon, validé, archivé), cible, offre, canal, texte, variantes, questions, références des preuves et date de révision. Les notes de qualification restent rattachées au prospect, pas au socle partagé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant toute intégration : inspecter le stockage, les accès et les parcours existants. Réutiliser leur cloisonnement ; ne pas créer une deuxième base de prospects. Cette documentation décrit le raccord attendu, pas une interface déjà livrée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Faire vivre les discours",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Conserver une version de référence par campagne et profil ; réviser à partir des objections et réponses réellement entendues. Préserver l'historique dans le versionnement existant, sans dupliquer les versions actives.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Évaluer les échanges avec leur dénominateur : conversations obtenues, besoins confirmés, rendez-vous acceptés, rendez-vous tenus et suites utiles. Aucun taux d'efficacité ni lien causal n'est déclaré avant mesure comparable.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Recette avant utilisation",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Angle prospect : le bénéfice et le motif du contact sont compréhensibles dès le début ; lecture à voix haute pour repérer les lourdeurs.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Angle opérateur : la bonne campagne, l'offre, le canal, les preuves et la version sont identifiables ; les inconnues restent visibles.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Angle adverse : enlever la preuve sociale ne provoque aucune invention ; une sous-traitance ambiguë déclenche une question ; une offre inconnue reste à compléter ; un refus n'est pas transformé en intérêt.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Vérifier que le discours ne parle pas du vendeur pour meubler et ne promet pas une capacité non disponible.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Vérifier que les deux créneaux sont réels et que les bons participants sont inclus.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une recette documentaire ne prouve ni affichage dans l'outil de prospection, ni envoi, ni efficacité commerciale réelle.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
@@ -8619,6 +9483,10 @@ export default {
   "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
   "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
   "pilotage-back-office/MISE-EN-SERVICE.md": "a2074a5ae227fd59674c5956f77e16c76aa14c14f319f6fd1278b71b91319cab",
+  "pitch-commercial/badge.json": "982cb6f0bc69c54dda6881032b021cdb18305243c8de03b76d805e6dad397dae",
+  "pitch-commercial/TECHNO.md": "bb55a381cf40ff2bed27a5c9918001fd75bfb4c072a6716983df43d0870f759f",
+  "pitch-commercial/OSSATURE.md": "98e3592525077747112a59f1733f7392117c842225486bde3bab7d4bea52e213",
+  "pitch-commercial/MISE-EN-SERVICE.md": "56ea24e91d128ef50c4adf50e0abe7e6603ca80662404eb4b6104b42f4483ed5",
   "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
   "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
   "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
