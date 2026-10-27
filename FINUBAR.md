@@ -24,18 +24,18 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md",
+  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-23",
-    "commit": "77b475a061c14d24207f6ecfe055a15f77349a4c",
-    "quoi": "22–23/10 : audit de la chaîne RB (AUDIT-2026-10-22-chaine-RB.md) fusionné (#410, 594175c), avec #394 (fc24de7) et RenoDevis #372 (c139e64), chacune sur go SHA de Paul ; 5 PR périmées fermées ; V2 RenoDevis gelée le 22/10 puis publiée le 23/10 sur demande de Paul (RenoDevis #419) ; relances fermées. A6a : Paul a posé la clé live et les webhooks réels le 22/10 au soir ; production de reno-devis-final redéployée le 23/10 10:09 UTC (dpl_Dd48n5HoKLKg3syWw7q4TTXEHp4h) ; preuve attendue au battement du 24/10 06:30 UTC. Leçon v106 (vérifier un redéploiement sur sa cible). Après-midi : Ultima #413 et RenoDevis #422 fusionnées (5271217, 4939819) ; mon-dpe.fr #250 « la PAC du devis » fusionnée en squash 85998b0 après intégration de main et correction de deux défauts relevés par Codex, production READY ; plan C1/D3 mis à jour ; leçon v109 (une branche ancienne se relit par ses appelants) ; sa propagation aux neuf autres dépôts reste à faire — mon-dpe.fr attend qu'une autre séance en vol (#259, #257, #262 fusionnées cet après-midi) ait posé son grain. Soir : contact Brice Papon (Soli, partenaire, apporté par Hugo de Symphonics) posé dans RIVEN par le SQL Editor — preuve lue : fiche + personne rattachée, apports 0 — et rappel du 26/10 09:30 posé dans Google Calendar par la séance ; Léo n'a pas de main pour créer une fiche réseau → cadrage `proposer_contact` déposé (CADRAGE-RIVEN-SAISIE.md §8) ; go de Paul à 18 h 50 UTC (« vert, type requis, construis maintenant ») → proposer_contact CONSTRUIT dans la PR #415 (12 outils, 11 verts, 14 mains, 11 défaires ; smoke-leo-accueil §C7-bis vert ; cinq sabotages rouges ; 71/71 unitaires). Relecture Codex (6 constats) traitée en 83fb25b ; PR #415 FUSIONNÉE en 77b475a sur go de Paul (« go fusion sur 83fb25b, vert confirmé »). Leçon v110 (une requête citée comme preuve se joue avant d'être écrite) dans Ultima seulement, à propager avec v91/v103/v109."
+    "le": "2026-10-25",
+    "commit": "5297f5c54e884ff5b0286e117978f672f36d8e57",
+    "quoi": "Léo → ZOH : raccord et comportement complétés sur branche, contrôles isolés verts. Aperçus des capacités, vrai handler et simulation ; CI finale requise."
   },
-  "prochaine_action": "Chaîne RB : lire battement:rr-stripe-embarquement après le 24/10 06:30 UTC (attendu test=false), puis vérifier en base que SOLA et DOKLES ont chacun un stripe_account_id non nul et différent de leur ancien compte de test (`remplaces` compte aussi un remplacement suivi d'une erreur) ; si oui, A6b — Matthieu termine son dossier Stripe (identité, IBAN). Puis finir les boucles ouvertes dans l'ordre de AUDIT-2026-10-22-chaine-RB.md §5.",
+  "prochaine_action": "Lire la CI finale du raccord ZOH avec main ; terminer la réception avant tout arbitrage de fusion, conformément à la demande de Paul.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -48,6 +48,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Léo → stock ZOH : aperçu issu des fiches, système et handler réels raccordés ; sept comportements simulés, refus et contre-épreuves passent. Cartouche complet ajouté au harnais navigateur. Reste lecture de la CI finale ; modèle réel non reçu. Pas de fusion demandée.",
+      "depuis": "2026-10-25"
+    },
+    {
+      "quoi": "Présentations claires : compétences raccordées aux cinq onglets ZOH et étoile sous ZOH SHIA, source a791dd655b6ea1c2243f9d99bd80beb06a3eebf9. Registre, adaptateur, neutralité, publication et navigation simulée verts ; compétences personnelles validées et sauvegarde par Git engagée. Tests visuels navigateur non exécutés localement (Chromium indisponible et navigateur distant sans accès localhost). Restent CI de la tête finale, accord de fusion lié à la version et affichage propriétaire. Preuves : outils/presentations-claires/RECETTE.md.",
+      "depuis": "2026-10-25"
+    },
     {
       "quoi": "proposer_contact — douzième outil de Léo (RIVEN, vert confirmé par Paul, type requis) : cadré, construit et FUSIONNÉ le 23/10 (CADRAGE-RIVEN-SAISIE.md §8, #415 → 77b475a), aucune migration ni route nouvelle ; relecture Codex traitée (4 corrigés, 2 tranchés par Paul). Restent : la preuve réelle en production (Paul dicte un contact à Léo sur RIVEN ; lecture dans RIVEN et leo_ecritures, puis une relance dessus — exige un accès à la base Ultima que la séance n'a pas) ; les trois POV du §8 non creusés (l'adversaire d'abord : les notes des fiches relues par Léo) ; le doublon jugé sur l'instantané chargé (non corrigé, §8).",
       "depuis": "2026-10-23"
@@ -189,7 +197,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-23"
+  "maj": "2026-10-25"
 }
 ```
 

@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { randomUUID } from 'node:crypto';
+import { validerCheckpoint } from '../js/leo-interaction.mjs';
 import { isUuid } from '../api/_lib/validate.js';
 import * as http from '../api/_lib/http.js';
 
@@ -42,7 +43,7 @@ function rpc(uid, name, args) {
   serial = task.catch(() => {});
   return task;
 }
-const deps = { ...http, isUuid, logError: () => {}, isAuthError: () => false,
+const deps = { ...http, validerCheckpoint, isUuid, logError: () => {}, isAuthError: () => false,
   requireUser: async req => ({ status: 'ok', client: {
     rpc: (name, args) => rpc(req.fixtureUser, name, args),
     from: table => {
@@ -381,6 +382,18 @@ try {
   assert.equal((await archiveStop.api.reconcile()).uncertain, null);
   assert.ok(archiveStop.wire.requests.every(r => r.method === 'GET'));
   console.log('Reçu ancien : 101 écritures SQL, reprise ciblée sans doublon, ACL/inter-missions et arrêt éprouvés.');
+  // Même SELECT que le catalogue, sous les vrais rôles/policies de la fixture.
+  // Le statut arrêté n'efface pas le droit historique de lecture.
+  for (const [uid, visible] of [[owner,true],[writer,true],[reader,true],[stranger,false]]) {
+    await db.exec('reset role; set role authenticated');
+    await db.query("select set_config('request.jwt.claim.sub',$1,false)", [uid]);
+    const rows=(await db.query(`select id,state,stopped,expires_at,updated_at,next_action
+      from public.leo_missions order by updated_at desc,id asc limit 51`)).rows;
+    assert.equal(rows.some(row=>row.id===mission),visible,'liste RLS selon identité '+uid);
+    if(!visible)assert.equal(rows.length,0,'étranger : aucun intitulé ni identifiant');
+    rows.forEach(row=>assert.deepEqual(Object.keys(row).sort(),['expires_at','id','next_action','state','stopped','updated_at']));
+  }
+  console.log('Liste RLS réelle en PGlite : propriétaire, writer, reader et étranger vérifiés.');
   for (const api of clients) api.destroy();
   console.log('Parcours composé client→route→PostgreSQL : écriture, CAS, refus, réponse perdue, reçu, reprise et arrêt vérifiés ; auth/HTTP fictifs.');
 } finally { await db.close(); }

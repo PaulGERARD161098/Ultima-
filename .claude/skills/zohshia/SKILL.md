@@ -72,3 +72,8 @@ Une technologie nouvelle entre sous `zohshia/<nom>/` avec la même forme : une
 collecte qui mesure et neutralise, un plan qui pointe sans recopier, un test qui
 rougit quand le plan oublie une pièce ou laisse passer un nom propre, et
 l'exclusion du déploiement.
+
+
+## Présentations claires
+
+Pour une présentation épurée, un pitch ou un support de rendez-vous, charger `.claude/skills/presentations-claires/SKILL.md`. Le socle neutre vit dans `zohshia/presentations-claires/` : grammaire, thème, dix compositions, moteur local PDF/SVG et guide de recette. Il ne constitue pas une présentation native ni un envoi ; chaque instance doit faire sa propre recette.

@@ -162,7 +162,9 @@ const cibles = Object.values(NOEUDS).map((n) => n.cible).filter((c) => typeof c 
 verdicts.cibleNePointePasVersUnePageDisparue = cibles.length > 0
   && cibles.every((c) => !/^(grima|naga|ultima|tao)\.html$/.test(c)); // + tao.html (supprimé le 30/09)
 const ciblesLocalesManquantes = cibles
-  .filter((c) => /\.html$/.test(c) && !c.startsWith('http') && !existsSync(RACINE_REPO + c));
+  .filter((c) => !c.startsWith('http'))
+  .map((c) => c.split(/[?#]/)[0])
+  .filter((c) => /\.html$/.test(c) && !existsSync(RACINE_REPO + c));
 verdicts.ciblesLocalesExistent = cibles.length > 0 && ciblesLocalesManquantes.length === 0;
 detail.ciblesLocalesExistent = ciblesLocalesManquantes.join(',');
 // Les anciennes adresses ne tombent pas dans le vide : vercel.json redirige.

@@ -6,7 +6,15 @@
     {
       "id": "techno",
       "titre": "Ce que fait la techno",
-      "source": "TECHNO.md"
+      "source": "TECHNO.md",
+      "sections": [
+        "## 1.",
+        "## 2.",
+        "## 3.",
+        "## 4.",
+        "## 5.",
+        "## 6."
+      ]
     },
     {
       "id": "checklist",
@@ -22,9 +30,9 @@
       "source": "MISE-EN-SERVICE.md",
       "sections": [
         "## 2.",
-        "## 3."
+        "## 3.",
+        "## 4."
       ]
     }
   ]
 }
-

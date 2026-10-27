@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v110 2026-10-23 sha256:97749f2fc87a -->
+<!-- lecons:empreinte v111 2026-10-27 sha256:e5ba29713ff1 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1902,6 +1902,9 @@ Production ».
 
 ## 4. Conduire une boucle
 
+**UN PARCOURS REÇU PRIME SUR L'ADDITION DE CORRECTIFS VERTS** *(2026-10-27, RenoDevis).* Le travail SOLA était présenté par petits défauts fermés alors que la livraison attendue restait un vocal neuf jusqu'au PDF avec peu d'effort. Paul a dû rappeler le cap de fin de semaine. Le test de synthèse utilisait un document simulé ; le test de PDF natif partait d'un autre état. Coût observé : recadrage nécessaire et effort excessif encore accepté par le scénario sans référence, huit interventions simulées. L'épreuve intégrée en mode réellement prévu a ensuite établi deux interventions avec références connues. Le lot de choix groupés vise le même résultat sans références dictées ; sa preuve ne se déduit pas du scénario précédent.
+⇒ Avant de choisir le prochain correctif, fixer résultat, qualité, effort utilisateur, preuve finale et échéance. Confronter ces critères au chemin réel du code, puis faire passer la même demande à travers les fonctions intégrées. Comparer les agents avec les mêmes entrées et sources. Un PDF partiel n'est pas un devis complet, un temps local n'est pas une mesure sur téléphone, une CI verte n'est pas une recette de terrain. Les données et règles du professionnel restent hors du contrat neutre ; l'implantation suivante doit nommer aussi les raccordements et capacités manquants, au lieu de promettre un simple chargement de catalogue. Sources : `RenoDevis/memoire/APPRENTISSAGES-SOLA.md`, `RenoDevis/lib/whatsappAgent.test.ts`, PR #427 ; aucun délai terrain ni gain commercial inventé.
+
 **LA COMPILATION PEUT ÉMETTRE MÊME SI L'APPLICATION N'A PAS DE TÉLÉMÉTRIE CONFIGURÉE**
 *(2026-10-23, mon-dpe.fr).* Malgré la télémétrie du framework désactivée et les
 sources non envoyées, l'extension de compilation gardait sa propre télémétrie active.
@@ -2743,4 +2746,5 @@ paramètre d'outil. L'écrire par un outil d'écriture distante aurait fait
 transiter 22 Ko **sept fois**, pour un fichier qu'aucun de nous n'avait besoin
 de relire. *Un octet qui passe par le fil coûte ; un octet que `git` déplace de
 disque à disque ne coûte rien.*
+
 

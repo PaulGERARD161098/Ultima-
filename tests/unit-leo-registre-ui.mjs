@@ -26,6 +26,7 @@ function fixture() {
     const node = { tag, parent: stack.at(-1), hidden: /\bhidden\b/.test(attrs),
       disabled: /\bdisabled\b/.test(attrs), value: '', textContent: '', open: tag === 'dialog',
       handlers: {}, attributes: {},
+      append() {},
       addEventListener(name, fn) { this.handlers[name] = fn; },
       setAttribute(name, value) { this.attributes[name] = value; },
       showModal() { this.open = true; }, close() { this.open = false; }, reset() {},
@@ -38,7 +39,8 @@ function fixture() {
   const visible = node => !!node && !node.hidden && (!node.parent || visible(node.parent));
   const disabled = node => node.disabled || (node.parent && disabled(node.parent));
   const store = new Map(), requests = [];
-  let failure = null, held = null;
+  let failure = null, held = null, missions = [{id:A,label:'Action A',state:'in_progress',stopped:false,
+    expires_at:'2099-01-01T00:00:00Z',updated_at:'2026-10-25T12:00:00Z'}];
   const window = { crypto: { randomUUID }, addEventListener() {},
     sessionStorage: { getItem: k => store.get(k) ?? null,
       setItem: (k,v) => store.set(k,v), removeItem: k => store.delete(k) },
@@ -47,6 +49,8 @@ function fixture() {
       assert.equal(init.method, 'GET', 'cette sortie de blocage ne doit jamais écrire');
       if (held) await held;
       if (failure) return {ok:false, status:failure, json:async()=>({ok:false,error:'fixture refusal'})};
+      if (new URL(url, 'https://fixture.invalid').searchParams.get('list') === 'missions')
+        return {ok:true,json:async()=>({ok:true,data:{missions,truncated:false}})};
       const id = new URL(url, 'https://fixture.invalid').searchParams.get('mission');
       return {ok:true, json:async()=>({ok:true,data:{
         mission:{id,version:1,state:'in_progress',next_action:id===A?'Action A':'Action B',
@@ -55,7 +59,7 @@ function fixture() {
       }})};
     },
   };
-  const document = {readyState:'complete',getElementById:id=>nodes.get(id)};
+  const document = {readyState:'complete',getElementById:id=>nodes.get(id),createElement:()=>({})};
   new Function('window',clientSource)(window);
   new Function('window','document',uiSource)(window,document);
   window.UltimaLeoRegistreUI.poserSession({user:{id:user},access_token:'fixture-token'});
@@ -68,10 +72,37 @@ function fixture() {
   }
   function trigger(suffix,event) { el(suffix).handlers[event]({preventDefault(){}}); }
   return {el, visible, disabled, requests, trigger, settle,
+    session: next => window.UltimaLeoRegistreUI.poserSession(next),
+    missions: next => { missions=next; },
     fail: status => {failure=status;},
     hold: () => {let release;held=new Promise(resolve=>{release=resolve;});return()=>{held=null;release();};},
     load: async id => {el('id').value=id;trigger('chargement','submit');await settle();},
   };
+}
+
+{
+  const f=fixture(); f.trigger('ouvrir','click'); await f.settle();
+  assert.equal(f.el('choix').disabled,false); assert.equal(f.el('selectionner').disabled,true);
+  assert.equal(f.requests.length,1); assert.match(f.requests[0].url,/list=missions/);
+  f.el('choix').value=A;f.trigger('choix','change');assert.equal(f.el('selectionner').disabled,false);
+  f.trigger('selection','submit');await f.settle();assert.equal(f.el('action').value,'Action A');
+  assert.equal(f.el('id').value,'','aucune saisie d’identifiant requise');
+  f.el('action').value='Brouillon';f.trigger('edition','input');
+  const n=f.requests.length;f.trigger('selection','submit');await f.settle();assert.equal(f.requests.length,n);
+  f.session(null);assert.equal(f.el('choix').value,'');assert.equal(f.el('choix').disabled,true);
+  console.log('PASS sélection par libellé : zéro UUID saisi, brouillon et déconnexion protégés');
+}
+for(const status of [403,503]){
+  const f=fixture();f.fail(status);f.trigger('ouvrir','click');await f.settle();
+  assert.equal(f.el('choix').disabled,true);assert.match(f.el('liste-message').textContent,/indisponible/);
+  f.fail(null);f.missions([]);f.trigger('actualiser','click');await f.settle();
+  assert.match(f.el('liste-message').textContent,/Aucune mission accessible/);assert.equal(f.el('selectionner').disabled,true);
+}
+{
+  const f=fixture(),release=f.hold();f.trigger('ouvrir','click');f.session(null);release();
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(f.el('choix').disabled,true);assert.equal(f.el('liste-message').textContent,'');
+  console.log('PASS réponse de liste tardive ignorée après déconnexion');
 }
 
 for (const status of [403,503]) {

@@ -105,6 +105,7 @@ jobs:
               --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \
               --memory 512m --cpus 1 --pids-limit 128 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=32m \
               --mount "type=bind,src=$GITHUB_WORKSPACE/api,dst=/travail/api,readonly" \
+              --mount "type=bind,src=$GITHUB_WORKSPACE/js/leo-interaction.mjs,dst=/travail/js/leo-interaction.mjs,readonly" \
               --mount "type=bind,src=$GITHUB_WORKSPACE/tests,dst=/travail/tests,readonly" \
               --mount "type=bind,src=$GITHUB_WORKSPACE/node_modules,dst=/travail/node_modules,readonly" \
               --mount "type=bind,src=$GITHUB_WORKSPACE/package.json,dst=/travail/package.json,readonly" \

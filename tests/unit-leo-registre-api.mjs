@@ -1,6 +1,7 @@
 // Route réelle, Auth et transport RPC factices ; aucune base réelle appelée.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { validerCheckpoint } from '../js/leo-interaction.mjs';
 import { isUuid } from '../api/_lib/validate.js';
 const source = readFileSync(new URL('../api/leo-registre.js', import.meta.url), 'utf8')
   .replace(/^import[^\n]*\n/gm, '')
@@ -8,7 +9,7 @@ const source = readFileSync(new URL('../api/leo-registre.js', import.meta.url), 
 const mission = '11111111-1111-4111-8111-111111111111';
 async function invoke(req, options = {}) {
   const calls = [];
-  const deps = { isUuid, isAuthError: error => error?.code === 'PGRST301',
+  const deps = { validerCheckpoint, isUuid, isAuthError: error => error?.code === 'PGRST301',
     requireUser: async () => ({ status: options.auth || 'ok', client: { rpc: async (name, args) => {
       calls.push({ name, args });
       if (options.throw) throw new Error('fixture transport');
@@ -16,6 +17,8 @@ async function invoke(req, options = {}) {
     }, from: table => {
       const query = { table, filters: [] };
       const builder = { select: columns => { query.columns = columns; return builder; },
+        order: (key, options) => { (query.order ||= []).push([key, options]); return builder; },
+        limit: async value => { query.limit = value; calls.push(query); return options.result || { data: [], error: null }; },
         eq: (key, value) => { query.filters.push([key, value]); return builder; },
         maybeSingle: async () => { calls.push(query); return options.result || { data: null, error: null }; } };
       return builder;
@@ -89,3 +92,59 @@ assert.equal(deniedReceipt.response.status, 403);
 assert.equal((await invoke(receiptRequest, { result: { data: [], error: null } })).response.status, 503);
 console.log('Registre API : authentification, commandes fermées, RPC unique et issue inconnue vérifiées sur fixtures.');
 console.log('Reçu ciblé : projection minimale, filtres exacts, absence neutre, auth et entrées refusées.');
+
+
+const cp = {task_id:mission,titre:'Plan',etapes:['Vérifier'],confirmes:[],rappels:0,etat:'en_cours',revision:1};
+for(const kind of ['adopt','update','revise_plan']) {
+  const patch={checkpoint:cp,checkpoint_command:{kind,expected_task_id:kind==='adopt'?null:mission}};
+  const result=await invoke({...request,body:{...request.body,patch}});
+  assert.equal(result.response.status,200);assert.equal(result.calls.length,1);
+  assert.deepEqual(result.calls[0].args.p_patch,patch);
+}
+for(const patch of [
+  {checkpoint:cp}, {checkpoint_command:{kind:'adopt',expected_task_id:null}},
+  {checkpoint:null,checkpoint_command:{kind:'adopt',expected_task_id:null}},
+  ...[{kind:'new_task',expected_task_id:mission},{kind:'update',expected_task_id:null},
+    {kind:'adopt',expected_task_id:mission},{kind:'adopt',expected_task_id:null,owner:true},
+    {kind:'revise_plan',expected_task_id:'22222222-2222-4222-8222-222222222222'}]
+    .map(checkpoint_command=>({checkpoint:cp,checkpoint_command})),
+  {checkpoint:{...cp,rappels:3},checkpoint_command:{kind:'adopt',expected_task_id:null}},
+]) {
+  const result=await invoke({...request,body:{...request.body,patch}});
+  assert.equal(result.response.status,400);assert.equal(result.calls.length,0);
+}
+console.log('PASS checkpoint API fermé : paires, commande, identité et RPC unique');
+
+{
+  const req = { method: 'GET', query: { list: 'missions' } };
+  const row = { id: mission, state: 'in_progress', stopped: false, expires_at: '2099-01-01T00:00:00Z',
+    updated_at: '2026-10-25T12:00:00Z', next_action: '  Reprendre le dossier  ', owner: 'secret', checkpoint: { secret: true } };
+  const result = await invoke(req, { result: { data: [row], error: null } });
+  assert.equal(result.response.status, 200);
+  assert.deepEqual(result.calls, [{ table: 'leo_missions', columns: 'id,state,stopped,expires_at,updated_at,next_action',
+    filters: [], order: [['updated_at', { ascending: false }], ['id', { ascending: true }]], limit: 51 }]);
+  assert.deepEqual(result.response.data, { missions: [{ id: mission, state: row.state, stopped: false,
+    expires_at: row.expires_at, updated_at: row.updated_at, label: 'Reprendre le dossier' }], truncated: false });
+  assert.deepEqual((await invoke(req)).response.data, { missions: [], truncated: false });
+  const many = await invoke(req, { result: { data: Array.from({length:51},()=>row), error: null } });
+  assert.equal(many.response.data.missions.length, 50); assert.equal(many.response.data.truncated, true);
+  for (const auth of ['unauthenticated', 'unconfigured']) {
+    const denied = await invoke(req, {auth}); assert.equal(denied.calls.length, 0);
+    assert.equal(denied.response.status, auth === 'unconfigured' ? 503 : 401);
+  }
+  for (const query of [{ list: 'missions', owner: mission }, { list: ['missions'] }, { list: 'all' },
+    { list: 'missions', mission }, { list: 'missions', limit: '99999' }]) {
+    const bad = await invoke({ method: 'GET', query }); assert.equal(bad.response.status,400); assert.equal(bad.calls.length,0);
+  }
+  for (const data of [null, {}, [null], [{...row,id:'invalid'}], [{...row,updated_at:'invalid'}]])
+    assert.equal((await invoke(req,{result:{data,error:null}})).response.status,503);
+  assert.equal((await invoke(req,{result:{error:{code:'42501',message:'secret'}}})).response.status,403);
+  console.log('PASS liste : JWT requis, projection fermée, borne 50, liste vide et filtres étrangers refusés');
+}
+
+{
+ const patch={checkpoint:{...cp,titre:' Plan ',etapes:[' Vérifier ']},checkpoint_command:{kind:'adopt',expected_task_id:null}};
+ const result=await invoke({...request,body:{...request.body,patch}});
+ assert.equal(result.response.status,200);assert.deepEqual(result.calls[0].args.p_patch.checkpoint,cp,'API directe canonique');
+ assert.equal(patch.checkpoint.titre,' Plan ','requête appelante conservée');
+}

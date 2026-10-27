@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-24",
+ "publie_le": "2026-10-27",
  "technos": [
   {
    "id": "renodevis",
@@ -612,6 +612,51 @@ export default {
            ""
           ]
          ]
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Contrat de livraison de l'agent et portabilité",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le résultat de l'agent est un parcours complet reçu par le professionnel, pas une somme de correctifs ou un compteur de tests. La demande neuve, sa compréhension validée, les références et prix sourcés, les contrôles et le PDF doivent être éprouvés ensemble sur la même version. Un document où des postes essentiels ne sont pas chiffrés reste une estimation partielle ; il ne ferme pas la recette d'un devis complet.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Mesurer séparément les interventions du professionnel, les messages de l'agent, les questions redondantes, les omissions et conflits détectés, les appels externes et le délai jusqu'à réception du document. Les seuils relèvent du dossier d'implantation. Une correction invalide les choix et documents dépendants sans effacer les autres besoins. Les propositions uniques peuvent être présentées et confirmées ensemble ; toute ambiguïté garde une décision explicite et le serveur recontrôle les références au clic.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une issue d'envoi inconnue est conservée durablement avant tout rejeu possible. Une acceptation certaine, un refus certain et une absence de preuve sont des états distincts. L'issue inconnue exige un rapprochement opérateur et ne repart pas automatiquement. L'arrêt, la rétention et les compteurs gardent leur rôle ; une purge n'est pas un accusé de réception.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La technologie conserve les mécanismes génériques ; identité, catalogue, règles de vente, forfaits, contexte fiscal, modèle de document et autorisations viennent du compte. La check-list d'implantation détaille les entrées et les preuves. Tant qu'un chemin du moteur dépend d'une identité d'instance, il reste à paramétrer ou à neutraliser : un contrat documenté n'annonce pas une portabilité déjà reçue. Ne pas emporter de données réelles dans la technologie, ses exemples ou ses tests génériques.",
+         ""
         ]
        ]
       },
@@ -4189,6 +4234,307 @@ export default {
          ]
         ]
        ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "1.9 Dossier d'implantation de l'agent devis",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le dossier est privé, rattaché au compte du professionnel, et reste hors de cette technologie neutre. Collecter les pièces existantes avant de poser des questions ; rendre une liste unique des manques. Chaque donnée comporte sa source, sa date, son périmètre et sa validation. Une case remplie n'est pas une preuve de bon raccordement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Bloc à obtenir",
+          ""
+         ]
+        ],
+        [
+         [
+          "Contenu propre au professionnel",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve avant ouverture",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Identité et responsables",
+           ""
+          ]
+         ],
+         [
+          [
+           "Identité légale, coordonnées, établissements, utilisateurs autorisés, valideur métier et opérateur",
+           ""
+          ]
+         ],
+         [
+          [
+           "Compte testé, bon émetteur dans le PDF, accès étranger refusé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Bibliothèque commerciale",
+           ""
+          ]
+         ],
+         [
+          [
+           "Catalogue et achats datés, références exactes, conditionnements, unités, quantités, écoparticipations et prix fixes ; devis passés pertinents si disponibles",
+           ""
+          ]
+         ],
+         [
+          [
+           "Références retrouvées et prix rapprochés des pièces ; aucun prix d'un autre compte",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Calculs et prestations",
+           ""
+          ]
+         ],
+         [
+          [
+           "Méthode de vente, arrondis, assiette de marge, traitement de l'apport, forfaits et leur contenu, main-d'œuvre et déplacements, validité des prix et règles de remises",
+           ""
+          ]
+         ],
+         [
+          [
+           "Calcul direct puis contrôle inverse sur un chantier accepté ; aucun défaut repris d'une autre instance",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Faits techniques",
+           ""
+          ]
+         ],
+         [
+          [
+           "Caractéristiques et compatibilités, références liées aux documents et pages, exclusions, équivalences expressément permises, limites de prestation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Besoin et faits fabricant distincts ; conflit bloqué, source absente nommée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Document et fiscalité",
+           ""
+          ]
+         ],
+         [
+          [
+           "Modèle de devis, logo, mentions, garanties, conditions de règlement, contexte fiscal et règles datées",
+           ""
+          ]
+         ],
+         [
+          [
+           "PDF relu avec totaux, réserves et mentions ; estimation partielle distincte du devis complet",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Canal et raccords",
+           ""
+          ]
+         ],
+         [
+          [
+           "Canal choisi, comptes et numéros autorisés si nécessaires, transcription/compréhension, accès aux dossiers, stockage, génération et transport du PDF",
+           ""
+          ]
+         ],
+         [
+          [
+           "Parcours réel depuis une demande neuve jusqu'au document reçu ; clés posées par un moyen sécurisé, jamais dans ce dossier",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Exploitation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Droits de validation et d'envoi, budget et quotas, fenêtre pilote, arrêt, journal, cockpit, traitement des envois d'issue inconnue et rétention",
+           ""
+          ]
+         ],
+         [
+          [
+           "Refus au dépassement, arrêt effectif et reprise sans renvoi automatique d'une issue inconnue",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recette du professionnel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Chantiers représentatifs, résultats attendus acceptés, plafond d'interventions et durée cible, cas négatifs et responsable de réception",
+           ""
+          ]
+         ],
+         [
+          [
+           "Mesure de l'effort, de la qualité et du temps réels ; verdict sur la version exacte",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "À distinguer à chaque implantation :",
+         "b"
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Paramétrage",
+          "b"
+         ],
+         [
+          " : les données, règles, documents, accès et limites de ce professionnel.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Raccordement",
+          "b"
+         ],
+         [
+          " : les fonctions qui doivent réellement lire ce paramétrage et utiliser son canal, son stockage et son modèle. Une configuration écrite ne prouve pas que le moteur la consomme.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Capacité manquante",
+          "b"
+         ],
+         [
+          " : toute branche encore réservée à l'instance de référence, extraction non reçue ou connecteur absent. L'implanter et la tester avant de dire « il suffit de charger les données ».",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La comparaison entre deux agents emploie la même demande, les mêmes sources et règles, les mêmes corrections et le même résultat attendu. Mesurer interventions, questions répétées, postes conservés, erreurs détectées, prix justifiés, coût et temps jusqu'au PDF reçu. Le temps local et le chronométrage du canal réel restent séparés.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une confirmation groupée est permise pour plusieurs propositions uniques et tarifées, présentées explicitement. Elle conserve le besoin, les quantités et les valeurs demandées ; chaque référence est à nouveau contrôlée au clic sur la banque et la version courantes. Un candidat parmi plusieurs n'est pas choisi par son rang. Un choix périmé, une source manquante ou une ambiguïté ne devient pas un accord implicite.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "1.10 État de préparation, sans raccourci",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La voie A n'exige pas une extraction, mais exige le contrôle du bon compte et des capacités effectivement disponibles pour lui. La voie B exige toujours extraction neutre et base neuve éprouvées. Les constats historiques du plan ne prouvent pas l'état actuel de l'extraction. Le contrat vocal préparé et les évolutions du moteur doivent être intégrés à la série de neutralisation, puis extraits et éprouvés, avant de déclarer la voie B prête.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Chaque dossier d'implantation donne pour chaque bloc : ",
+         ""
+        ],
+        [
+         "fourni · vérifié · à raccorder · bloqué",
+         "b"
+        ],
+        [
+         ", avec la preuve et son responsable. Ne pas exiger les clients existants, le paiement en ligne, les relances ou la synchronisation de messagerie lorsqu'ils sont hors du périmètre de l'agent demandé. Ne pas ouvrir un canal ni créer une infrastructure facturée pour compléter une case.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -6316,17 +6662,6 @@ export default {
      "titre": "Ce que fait la techno",
      "blocs": [
       {
-       "t": "note",
-       "paras": [
-        [
-         [
-          "Règle adoptée et précisée le 13/10/2026 : prévoir le contrôle dès le cadrage, même avant l'existence du système métier ; disposer d'un pilotage utilisable avant tout avancement important ou mise en ligne.",
-          ""
-         ]
-        ]
-       ]
-      },
-      {
        "t": "h2",
        "r": [
         [
@@ -6699,6 +7034,60 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "6. Continuité et charge de travail",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Travailler par unités courtes, terminables et vérifiables, en gardant une seule boucle d'exécution active. Le plan conserve la destination ; chaque unité produit un résultat utile, sa preuve et un point de reprise avant d'ouvrir la suivante. Enchaîner les unités autorisées sans demander une nouvelle confirmation à chaque étape.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant une unité, fixer son résultat, les seuls fichiers et contrôles nécessaires, sa condition de sortie et sa limite d'effort. Si elle grossit, réduire son périmètre et consigner le reste avant de poursuivre. Ne pas accumuler simultanément recherches, modifications et vérifications sur plusieurs fronts.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sauvegarder le travail versionné et le point de reprise dès qu'un résultat utile est obtenu, avant une opération longue ou un changement de sujet. Le point de reprise contient : objectif, version source, fait avec preuve, travail en cours, prochaine action unique, blocage et autorisation réellement manquante. Après interruption, relire ce point et l'état distant ; ne pas recommencer une étape déjà prouvée sur la même version.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Borner les lectures, recherches, sorties d'outils, essais et tâches concurrentes au besoin de l'unité courante. Résumer les résultats volumineux et conserver les références utiles. Si le contexte devient difficile à maîtriser, terminer ou sécuriser l'unité en cours, enregistrer la reprise et repartir dans un contexte allégé. Aucun seuil numérique de surcharge n'est présumé universel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Retour d'expérience déclaré : une session de travail interrompue a nécessité une recherche du dernier état pour pouvoir reprendre. La cause technique du plantage et sa durée ne sont pas établies ; la surcharge est un risque à prévenir, pas une cause démontrée. Cette règle vise une reprise fiable et une charge bornée ; elle ne garantit pas l'absence de panne et n'active aucun automate.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -6728,6 +7117,24 @@ export default {
        "t": "liste",
        "ordonnee": false,
        "items": [
+        [
+         [
+          "Définir une seule unité d'exécution active, avec résultat utile, périmètre borné et condition de sortie.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Prévoir un point de reprise versionné avant une opération longue et après chaque résultat utile.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Borner les lectures, sorties d'outils et essais au besoin courant ; alléger le contexte avant de perdre la maîtrise du suivi.",
+          ""
+         ]
+        ],
         [
          [
           "Recenser toutes les fonctions et leurs effets ; choisir le responsable du pilotage.",
@@ -7033,6 +7440,42 @@ export default {
        "r": [
         [
          "Respecter les autorisations effectives : déploiement public, dépense, migration, suppression ou envoi réel exigent le mandat correspondant. Le pilotage n'élargit jamais ces autorisations. L'activation d'un automate reste distincte de sa présence dans le code.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Vérifier la continuité sans surcharger",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sur une copie ou un environnement isolé, interrompre une unité après son point de sauvegarde. Reprendre à partir du point versionné et de l'état distant : le résultat déjà prouvé doit être retrouvé sans recommencer toute l'analyse ; la prochaine action doit être unique et exécutable. Un travail non sauvegardé reste indiqué comme tel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Contre-épreuve : retirer la version ou la preuve du point de reprise. La reprise doit signaler ce manque et revalider seulement l'élément concerné, sans déclarer l'unité terminée. Vérifier aussi qu'un élargissement du périmètre est reporté explicitement et qu'une étape autorisée n'attend pas un nouveau « go » par simple découpage.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ces critères décrivent la recette à mener dans chaque projet. L'ajout de cette règle ne prouve pas sa recette réelle et ne constitue aucun verrou automatique de charge ou de contexte.",
          ""
         ]
        ]
@@ -7649,17 +8092,1222 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "presentations-claires",
+   "ordre": 4,
+   "badge": "Présentations claires — narration et compositions",
+   "etat": "Socle local · réception par présentation requise",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Résultat et périmètre",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Transformer un brief en présentation claire, sobre et vérifiable, avec un titre-message par page, une composition adaptée et des visuels qui expliquent. Le bénéfice commercial est indirect : préparer plus vite un rendez-vous, une proposition ou un pitch crédible. Aucun gain de conversion n'est établi.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le socle comporte six compétences coordonnées : narration et synthèse ; direction artistique ; composition et typographie ; conception de visuels ; représentation des preuves et données ; recette éditoriale et visuelle. Une compétence de conduite les applique ensemble ; six agents distincts ne sont pas nécessaires.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les règles complètes vivent dans ",
+         ""
+        ],
+        [
+         "references/GRAMMAIRE.md",
+         "c"
+        ],
+        [
+         ", les dix compositions dans ",
+         ""
+        ],
+        [
+         "assets/exemple.json",
+         "c"
+        ],
+        [
+         ", les variables graphiques dans ",
+         ""
+        ],
+        [
+         "assets/theme.json",
+         "c"
+        ],
+        [
+         ", le moteur dans ",
+         ""
+        ],
+        [
+         "scripts/composer.py",
+         "c"
+        ],
+        [
+         ". La compétence de conduite est ",
+         ""
+        ],
+        [
+         ".claude/skills/presentations-claires/SKILL.md",
+         "c"
+        ],
+        [
+         ". La provenance et l'analyse du document de référence restent hors du socle neutre, dans ",
+         ""
+        ],
+        [
+         "outils/presentations-claires/ANALYSE.md",
+         "c"
+        ],
+        [
+         ".",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Entrées et sorties",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les deux modules sont consultables directement dans les onglets « Composition éditoriale » et « Pitch sourcé ». Le badge lit leurs sections de méthode depuis les compétences du dépôt, sans copie parallèle. Les licences et la provenance restent attachées aux compétences ; la publication ne reprend que les instructions neutres et leurs empreintes de source.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Navigation : ouvrir l'étoile de la technologie dans le catalogue de technologies, puis la fiche correspondante. Les quatre technologies existantes restent accessibles au même niveau ; une ancre ouvre seulement une fiche reçue par l'API réservée au propriétaire.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Entrées : public, décision attendue, durée, objectif, preuves disponibles, identité visuelle et contraintes de diffusion. Demander seulement les manques qui changent réellement le résultat. Préserver les informations connues et marquer les inconnues.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sorties : synopsis, storyboard, présentation via la capacité d'édition disponible, export de lecture, contrôle qualité et sources. Le moteur local de ce kit produit un PDF de composition et des pages SVG éditables ; il ne produit pas de présentation native ni de fichier de diapositives natif. Utiliser la compétence de présentation de l'environnement pour une livraison native.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Parcours rapide",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Manuel assisté : préciser la décision et sélectionner les seules preuves utiles.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel assisté : écrire les titres comme une histoire lisible sans les corps de texte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : repartir des compositions et des variables communes ; ne pas reconstruire la grille.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel assisté : créer ou sélectionner les visuels, puis les adapter à la marque du projet.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto puis manuel : contrôler les débordements, les données et les rendus page par page.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : relire comme destinataire et livrer avec les limites ; tout envoi exige son mandat.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Choix de moyen",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le kit local ne demande ni abonnement supplémentaire, ni service permanent. Le coût de génération d'images dépend de l'outil utilisé et doit être vérifié au moment de l'usage. Le temps complet reste à mesurer sur un vrai brief.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Voie",
+          ""
+         ]
+        ],
+        [
+         [
+          "Simplicité et rapidité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Coût et pertinence",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Socle versionné et capacité de présentation disponible",
+           ""
+          ]
+         ],
+         [
+          [
+           "Réutilise la grille et les consignes ; conserve l'édition native lorsque disponible",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de nouvelle interface à maintenir ; compromis retenu",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Reconstruction de chaque présentation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Répète les décisions de composition",
+           ""
+          ]
+         ],
+         [
+          [
+           "Effort récurrent ; garder pour une direction artistique différente",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Application dédiée de génération",
+           ""
+          ]
+         ],
+         [
+          [
+           "Intégration et maintenance supplémentaires",
+           ""
+          ]
+         ],
+         [
+          [
+           "Non justifiée pour ce besoin ; ne pas la construire dans cette boucle",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Garde-fous et preuve",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ne pas reprendre les chiffres, logos, portraits, captures ou données d'une autre organisation. Les exemples sont explicitement fictifs. Une image décorative ne devient pas une preuve produit. Une projection ne devient pas un résultat. La beauté d'un support ne valide pas ses affirmations.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le moteur refuse une composition inconnue, un champ inattendu, une entrée vide, du texte trop long ou un débordement mesuré. Il conserve une taille lisible au lieu de réduire automatiquement les caractères. Les sorties existantes sont refusées ; utiliser un dossier neuf.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le badge expose la méthode et sa recette au même endroit que les autres technologies. Le moteur est un outil local, pas un bouton de génération dans l'écran. Présence dans le dépôt, publication générée et affichage réel sont trois états à distinguer.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "grammaire",
+     "titre": "Règles de création",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Lire et raconter",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Commencer par la décision attendue. Pour un pitch, choisir dans cette séquence : promesse, problème concret, difficulté du fonctionnement actuel, moment opportun, solution, preuve, marché accessible, différenciation, modèle économique, plan, demande. L'équipe se place là où elle répond à une objection. Les détails techniques vont en annexe. Ne pas imposer dix-neuf pages ni une levée de fonds à une présentation commerciale.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Écrire chaque titre comme une conclusion compréhensible : « Une demande devient un dossier complet » plutôt que « La solution ». Une page porte une idée, éventuellement trois manifestations de cette idée. Lire les titres seuls : ils doivent raconter le raisonnement. Retirer slogans vagues, superlatifs sans preuve et répétitions.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Composer",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Format de référence : 1440 × 810, rapport 16:9. Marge latérale 90 unités, zone utile 1260 ; repère de section vers y=80, titre vers y=118, contenu à partir de y=235, sources vers y=730 et pied vers y=770. Sur un support de 13,333 pouces de large, diviser ces tailles par 1,5 pour obtenir des points typographiques usuels.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Titres intérieurs autour de 40,5 unités, couverture 60, corps 22 à 24 pour le nouveau socle ; les corps plus petits de la référence conviennent surtout à la lecture de près. Les notes de source ne portent jamais une information indispensable à la compréhension. Une police sans empattements disponible et licenciée ; sa famille exacte ne peut pas être déduite d'une fonte PDF anonyme. Le moteur utilise une famille disponible explicitement substituée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Palette : fond blanc, encre très sombre, un accent bleu, une teinte claire et un gris secondaire. Les valeurs de ",
+         ""
+        ],
+        [
+         "assets/theme.json",
+         "c"
+        ],
+        [
+         " sont des choix de reproduction, pas la charte d'une organisation. Le bleu #2B7FFF observé dans des éléments de la référence reste décoratif dans le kit ; le texte bleu utilise une nuance plus sombre pour la lisibilité. Une couleur distingue une fonction, elle ne décore pas chaque mot.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Aligner les éléments sur les mêmes repères. Espacer davantage les groupes que les lignes d'un groupe. Limiter bordures, ombres et encarts ; les panneaux ne servent qu'à comparer des éléments parallèles. Un panneau sombre peut porter la conclusion, avec texte clair et contraste vérifié. Ne pas recopier le même triptyque sur toutes les pages.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Choisir une composition",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Code",
+          ""
+         ]
+        ],
+        [
+         [
+          "Usage",
+          ""
+         ]
+        ],
+        [
+         [
+          "Discipline",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "couverture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Promesse et visuel principal",
+           ""
+          ]
+         ],
+         [
+          [
+           "Phrase courte à gauche, visuel signifiant à droite",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "triptyque",
+           ""
+          ]
+         ],
+         [
+          [
+           "Trois manifestations ou trois options",
+           ""
+          ]
+         ],
+         [
+          [
+           "Titres parallèles et textes de longueur comparable",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "chaine",
+           ""
+          ]
+         ],
+         [
+          [
+           "Entrée, transformation, résultat",
+           ""
+          ]
+         ],
+         [
+          [
+           "Verbes et objets concrets ; trois étapes maximum",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "preuves",
+           ""
+          ]
+         ],
+         [
+          [
+           "Trois indicateurs",
+           ""
+          ]
+         ],
+         [
+          [
+           "Valeur, unité, périmètre, période et source",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "comparaison",
+           ""
+          ]
+         ],
+         [
+          [
+           "Quelques critères discriminants",
+           ""
+          ]
+         ],
+         [
+          [
+           "Distinguer absent, inconnu et annoncé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "offre",
+           ""
+          ]
+         ],
+         [
+          [
+           "Deux modalités",
+           ""
+          ]
+         ],
+         [
+          [
+           "Tarification et unité explicites ; rien d'inventé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "feuille-route",
+           ""
+          ]
+         ],
+         [
+          [
+           "Jalons",
+           ""
+          ]
+         ],
+         [
+          [
+           "Séparer réalisé, en cours et prévu ; pas de fausse certitude",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "produit",
+           ""
+          ]
+         ],
+         [
+          [
+           "Texte et capture ou visuel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Captures réelles pour les capacités existantes",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "interlude",
+           ""
+          ]
+         ],
+         [
+          [
+           "Changement de partie",
+           ""
+          ]
+         ],
+         [
+          [
+           "Respiration, aucun paragraphe dense",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "decision",
+           ""
+          ]
+         ],
+         [
+          [
+           "Demande finale",
+           ""
+          ]
+         ],
+         [
+          [
+           "Décision précise, condition et prochaine étape",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ces compositions sont un vocabulaire, pas une obligation de tout utiliser. Pour une projection courte, scinder toute page dense. Pour un support envoyé, fournir plus de contexte sans réduire la police jusqu'à l'illisible.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Concevoir les images",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir le mode selon le rôle : photo réelle pour une équipe ou un événement ; capture réelle pour un produit existant ; schéma vectoriel pour un mécanisme exact ; image générée pour une métaphore ou une projection explicitement désignée. La provenance de génération des images du PDF n'est pas démontrée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire un visuel central par page quand il apporte une information. Définir sujet, transformation à montrer, cadrage, lumière, fond et espace réservé au texte. Garder palette et matière cohérentes sur l'ensemble. Produire des variantes seulement si elles changent la compréhension. Garder les titres et chiffres hors des images générées : les poser en texte éditable.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Patron de prompt : « Illustration éditoriale de [objet du métier], montrant [transformation observable], [matière et lumière], fond clair, sujet placé à droite, espace vide à gauche pour le titre, palette [accent], sans texte, sans logo, sans chiffres, sans interface inventée. » Décliner un seul univers visuel ; éviter les robots, cerveaux lumineux, poignées de main et assemblages décoratifs sans lien avec le sujet.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Exemple neutre : « Des feuilles de chantier éparses qui se regroupent en un dossier structuré, papier et matière réalistes, lumière latérale douce, fond blanc, composition à droite, sans texte ni marque. » Cet exemple est une direction d'illustration, jamais une preuve de résultat commercial.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Montrer des preuves",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Associer une assertion importante à sa source, sa date et son périmètre. Séparer mesuré, déclaré, hypothèse et non vérifié. Distinguer chiffre d'affaires signé, encaissé et pipeline ; ne pas transformer une discussion en client. Distinguer marché total théorique et marché effectivement accessible. Une étude rétrospective ne démontre pas une performance future.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire les tableaux et graphiques avec des données structurées et des éléments éditables. Indiquer unités et dénominateurs. Comparer à période et périmètre constants. Ne pas mettre de chiffres dans une image générée. Les logos ne prouvent ni contrat, ni partenariat, ni revenu.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "6. Contrôler et arrêter",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Passage lecteur : identifier le message de chaque page et ce qu'il permet de décider. Passage opérateur : rejouer depuis le brief et les ressources sans reconstruire la grille. Passage contradicteur : chercher une promesse non étayée, une source manquante et un état présenté trop favorablement. Ces angles partagent les données d'entrée ; ils ne valident pas une source fausse.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Contrôler les titres seuls, puis chaque page à taille de lecture et le montage de l'ensemble. Vérifier marges, lisibilité, alignements, crops, glyphes, contraste et absence de recouvrement. Le succès d'un export ne remplace pas cette inspection. Corriger puis rendre à nouveau les seules pages affectées. Arrêter lorsque les critères sont éprouvés ; ne pas annoncer une durée de production rapide avant de l'avoir mesurée sur un vrai dossier.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "composition",
+     "titre": "Composition éditoriale",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Partir du sujet et de la référence",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lire presentations-claires et sa grammaire. Définir la décision du destinataire et l'idée à rendre visible. Conserver la direction artistique validée : sobriété, blancs, hiérarchie et visuel signifiant. Ne pas ouvrir un nouveau choix de thème si la référence suffit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rédiger une direction artistique courte : sujet visuel central, matière, palette, famille de caractères, grille, rapport texte/image. Une image doit illustrer le mécanisme, le métier ou la transformation ; une forme décorative ne démontre rien.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Composer",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir une seule famille de caractères disponible, avec des graisses et tailles clairement hiérarchisées. Mesurer les retours de ligne. Préserver la grille et les marges du socle. Faire varier la composition selon le contenu, sans changer l'identité à chaque page.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire un point focal. Laisser respirer les éléments qui l'entourent. La précision des alignements et du rythme remplace les effets décoratifs. Ne pas ajouter de graphiques pour donner artificiellement une impression de sophistication.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préserver les éléments exacts sous forme éditable : titres, chiffres, labels et sources. Ne pas rasteriser une page entière pour contourner les problèmes de mise en page.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Créer les images",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir photo ou capture réelle pour un fait, schéma vectoriel pour un mécanisme exact, image générée pour une métaphore désignée comme telle. Utiliser l'outil d'image réellement disponible ; aucun fournisseur ni achat n'est imposé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Décrire sujet, transformation, cadrage, matière, lumière, palette et zone vide pour le texte. Garder une cohérence d'une page à l'autre. Éviter les clichés génériques et les interfaces inventées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour le registre retenu par Paul : un objet lié au métier, une transformation lisible, fond clair, lumière douce, sujet placé pour préserver la zone du titre, aucun mot ni chiffre incorporé dans l'image.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Polir et vérifier",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rendre la page. Examiner hiérarchie, lisibilité, cadrage, netteté, marges et recouvrements. Lorsqu'une fidélité est demandée, comparer référence et résultat à même échelle, dans une même planche. Une illustration de principe n'équivaut pas à une image finale de la qualité attendue.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Faire une passe de simplification : retirer ce qui n'explique rien, puis affiner les éléments conservés. Respecter les contraintes du format natif choisi par la compétence de présentation. Si le rendu est impossible, signaler la vérification bloquée ; ne pas annoncer un résultat professionnel comme éprouvé.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pitch",
+     "titre": "Pitch sourcé",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Construire l'histoire",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Identifier destinataire, décision, temps de parole et preuves disponibles. Choisir un angle investisseur ou client selon la demande ; ne pas transformer automatiquement une présentation commerciale en demande de financement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire un parcours dans les seuls sujets utiles : promesse, problème vécu, fonctionnement actuel, solution, preuve, différenciation, modèle économique, suite et demande finale. Mettre les détails en annexe. L'ordre et le nombre de pages servent le raisonnement ; ils ne sont pas imposés par le modèle amont.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Écrire des titres qui énoncent un message, pas des rubriques. Lire les titres seuls comme un raisonnement. Pour un client, partir de son travail et du résultat qu'il cherche. Pour un investisseur, distinguer besoin, mécanisme, preuve, marché accessible et besoin de financement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Rendre le contenu précis",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une idée principale par page. Garder les corps courts et parallèles dans les comparaisons. Ne pas supprimer une nuance ou une source indispensable pour respecter un quota arbitraire de mots.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préférer un fait précis à un adjectif vague. Ne pas reprendre comme fait les exemples de performance du dépôt amont. Une promesse chiffrée sans source reste une hypothèse ou disparaît.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Chaque indicateur conserve valeur, unité, dénominateur, période, périmètre et provenance. Distinguer projeté, mesuré, déclaré et non vérifié ; pipeline, signé et encaissé ; discussion, pilote et client payant. Les logos ne remplacent pas ces qualifications.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Choisir la preuve visuelle",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Faire correspondre message et forme : métrique dominante pour une preuve unique ; comparaison pour des options ; étapes pour une séquence ; capture réelle pour une capacité existante ; illustration pour une métaphore.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Construire les graphiques à partir des données exactes avec des éléments éditables. Ne jamais générer un graphique de données par image IA. Les styles visuels et la palette de presentations-claires restent prioritaires : ne pas importer le rouge ou les effets de signature du module consulting.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Terminer utilement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Formuler une demande finale précise, compatible avec les informations connues : accord de principe, démonstration, essai, prochaine réunion ou financement cadré. Ne pas laisser entendre gratuité, engagement ou disponibilité sans preuve.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relire par trois voies : titres seuls (récit), sources et calculs (fond), destinataire sceptique (objections). Puis rendre et inspecter les pages avec la compétence de présentation.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Utilisation et recette",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Avant livraison",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Une décision attendue, un public et une durée sont connus ou explicitement supposés.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Chaque titre porte un message ; leur lecture seule raconte l'histoire.",
+          ""
+         ]
+        ],
+        [
+         [
+          "La marque du projet est fournie ; aucun logo, chiffre ou portrait de la référence n'est recopié.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Chaque donnée importante a une source datée, un périmètre et une qualification.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Chaque visuel explique le sujet ; une illustration générée est identifiable comme telle.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Les pages sont rendues et inspectées ; les débordements sont corrigés sans réduction automatique du corps.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le moteur est vérifié sur une entrée valable et sur une entrée volontairement trop longue.",
+          ""
+         ]
+        ],
+        [
+         [
+          "L'édition native, la lecture PDF et l'envoi sont des capacités distinctes ; indiquer celles effectivement éprouvées.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Invocation et moyens",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Manuel assisté : invoquer la compétence « présentations-claires » avec le public, la décision et les preuves. Lire ",
+         ""
+        ],
+        [
+         "references/GRAMMAIRE.md",
+         "c"
+        ],
+        [
+         ", puis adapter le storyboard au temps disponible. Réutiliser la capacité de présentation de l'environnement pour une présentation native.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Auto local : exécuter ",
+         ""
+        ],
+        [
+         "python3 zohshia/presentations-claires/scripts/composer.py --brief zohshia/presentations-claires/assets/exemple.json --sortie /tmp/compositions-neuves",
+         "c"
+        ],
+        [
+         ". Le dossier de sortie doit être neuf. Le rendu requiert le module de dessin PDF indiqué dans le script. Aucune API externe, aucun compte et aucun service permanent ne sont appelés.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Manuel : remplacer les textes fictifs dans une copie du brief placée hors du socle ; ne pas stocker les données clients dans le kit. Les fichiers SVG portent du texte et des objets éditables. Le PDF sert à la lecture et à la recette. L'export natif reste du ressort de la capacité de présentation disponible.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Recette et état réel",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Auto : vérifier la génération des dix compositions ; les fichiers sont non vides et les entrées invalides sont refusées. Vérifier la publication du badge avec ",
+         ""
+        ],
+        [
+         "node zohshia/publier.mjs --verifier",
+         "c"
+        ],
+        [
+         ".",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Manuel : inspecter les rendus et consigner les défauts corrigés. Chronométrer séparément la composition automatique et le travail complet à partir d'un vrai brief. Un temps de rendu n'est pas un temps de création de présentation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La preuve détaillée est dans ",
+         ""
+        ],
+        [
+         "outils/presentations-claires/RECETTE.md",
+         "c"
+        ],
+        [
+         ", hors du socle neutre. La fusion exige l'accord lié à la version dans ce dépôt. La visibilité sur le site se vérifie après publication avec une session propriétaire ; elle n'est pas déduite d'une génération locale. Aucun envoi réel n'est autorisé par ce kit.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
   "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
   "anti-pattern/TECHNO.md": "52084231fb8e65c140a83d45436cf1f8e650402135b18823bc44336441cc135d",
   "anti-pattern/MISE-EN-SERVICE.md": "f8a9fb963a2f4b303dc055b9dc5f39794a37d92eb838c2455f5a40b8ba7094d3",
-  "pilotage-back-office/badge.json": "c4a597d5042090c31bf4cd4d84fb9c34d331a171c85d203161b33b1f682fa0da",
-  "pilotage-back-office/TECHNO.md": "16f422a86faf885ff740c5a8e1d850a26327047315248f1db2604a06b33e41ae",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "7a30e8408f654340b42f0e5b45262abcbd7d4a50627ed649dbcac75e63ffd4e1",
+  "pilotage-back-office/badge.json": "f367a5756838e0a582bad20d3513cf0fc4b5892809c8def079b7cb38147d27d2",
+  "pilotage-back-office/TECHNO.md": "df36910508b8d6f6858aaf309170d86687b203936d7b1e9119084b57605223e0",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "4457150c484a2b8db3ca0cda873ec46db868e4386db758c429d4686515cfd14f",
+  "presentations-claires/badge.json": "6cd6b05ade762a785487a49143f5fd717fdf23bc389fac919f326364fb663d03",
+  "presentations-claires/TECHNO.md": "c1ef15eb25d6d96f716122c8fb49d64f5608b30cae980eda4380410e4d163d4d",
+  "presentations-claires/references/GRAMMAIRE.md": "e7639ff6f05ba1f7f2171d581d61baad2ca2a4bf726ab36b259e5e1ec89f138a",
+  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "907a0ae73e95cb3556db9353a9ee7c4a3bdc9d7ae5ee4cfc31a8f4b00ee8ba74",
+  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "88014dc6958ea7253e4a7e48e2b41a32f893ca546fdbbdb98cb42af3df1a9271",
+  "presentations-claires/MISE-EN-SERVICE.md": "d31a581cb528669f77779c8f3958bc74a8e34f5749ed7be68b694332b0e2c871",
   "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
-  "renodevis/TECHNO.md": "f7afae80ac897990518a5e3d96a14c9086612358b618923421cff838e7312316",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "e014f2ddbec865d8b3c096cafeaece8648833f10de3e1106b5cd89efb1b9a8dc"
+  "renodevis/TECHNO.md": "b7a90c0ba6d1c84b0e1c1a97c8d0f3453b12b293debf410acad96f614877844d",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "c5a40c76c57aed9a6e44c333581563e0181514a9631c5c8acef14a1c87b4f42f"
  }
 };

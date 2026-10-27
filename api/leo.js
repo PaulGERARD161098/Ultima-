@@ -26,6 +26,7 @@ import { ok, fail, methodNotAllowed, logError, readJsonBody, bodyFail } from './
 import { requireProprietaire } from './_lib/proprietaire.js';
 import { ecrituresAutoCoupees } from './_lib/leo-execution.js';
 import { ouvrirAppel, cloreAppel } from './_lib/leo-appels.js';
+import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import {
   LEO_MODELE,
   MAX_TOKENS_REPONSE,
@@ -86,7 +87,17 @@ export default async function handler(req, res) {
   // rattrapage silencieux. Absent → l'appel repart exactement comme avant.
   const verdictEtat = validerEtatQuadrant(corps.etat);
   if (!verdictEtat.ok) return fail(res, 400, 'État de quadrant invalide');
-  const messages = joindreEtatConversation(conversation.messages, verdictEtat.etat);
+  const suivi = validerInteraction(corps.interaction);
+  if (!suivi.ok) return fail(res, 400, 'Suivi de tâche invalide');
+  const messages = joindreEtatConversation(conversation.messages, verdictEtat.etat)
+    .map(message => ({ ...message }));
+  if(suivi.valeur){
+    const i=messages.length-1;
+    const contexte = decrireInteraction(suivi.valeur);
+    messages[i] = { ...messages[i], content: Array.isArray(messages[i].content)
+      ? [...messages[i].content, { type: 'text', text: contexte }]
+      : messages[i].content + '\n\n' + contexte };
+  }
 
   // LE PLAFOND D'APPELS (19/10) : la ligne 'tentee' est posée AVANT le coût, et
   // c'est elle qui compte (cf. `leo-appels.js`, migration `leo_appels`).
@@ -121,7 +132,9 @@ export default async function handler(req, res) {
     await cloreAppel(auth.client, appel.traceId, {
       phase: 'reussie', usage: reponse.usage, quadrant, modele
     });
-    const texte = extraireTexte(reponse.content);
+    const interaction = lireReponseInteraction(extraireTexte(reponse.content),suivi.valeur,conversation.messages.at(-1).content);
+    const texte = interaction.texte || (interaction.plan?'Voici le plan proposé pour cette tâche.':interaction.focus?'Je garde cette nouvelle piste pour la suite.':'');
+    const retourInteraction=interaction.plan||interaction.focus?{interaction:{plan:interaction.plan,focus:interaction.focus}}:{};
     // L2b : un tool_use devient une PROPOSITION validée + reformulée côté
     // serveur (rendu déterministe de la carte de confirmation — jamais la
     // prose du modèle). On ne renvoie JAMAIS de tool_result au modèle ici :
@@ -132,6 +145,7 @@ export default async function handler(req, res) {
       if (verdict.ok) {
         return ok(res, {
           reponse: texte,
+          ...retourInteraction,
           ...journal,
           proposition: {
             outil: verdict.proposition.outil,
@@ -155,7 +169,7 @@ export default async function handler(req, res) {
       logError('leo.voix.vide', reponse.stop_reason || '');
       return fail(res, 502, "Léo n'a pas pu répondre", { cause: 'ia vide' });
     }
-    return ok(res, { reponse: texte, ...journal });
+    return ok(res, { reponse: texte, ...journal, ...retourInteraction });
   } catch (erreur) {
     await cloreAppel(auth.client, appel.traceId, { phase: 'echouee', quadrant, modele });
     // Jamais le contenu ni le message brut : statut HTTP ou nom d'erreur.
@@ -164,3 +178,4 @@ export default async function handler(req, res) {
     return fail(res, 502, "Léo n'a pas pu répondre", { cause: causeEchecIA(erreur) });
   }
 }
+

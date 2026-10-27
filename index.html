@@ -162,13 +162,23 @@
   <dialog id="leo-mission-dialog" class="leo-mission-dialog" aria-labelledby="leo-mission-titre">
     <header><h2 id="leo-mission-titre">Mission Léo</h2><button type="button" id="leo-mission-fermer">Fermer</button></header>
     <p>Consulter l’avancement et tenir le mémo de la mission.</p>
+    <form id="leo-mission-selection" autocomplete="off">
+      <label for="leo-mission-choix">Choisir une mission</label>
+      <select id="leo-mission-choix" required aria-describedby="leo-mission-liste-message" disabled>
+        <option value="">Ouvre la liste de tes missions</option>
+      </select>
+      <p id="leo-mission-liste-message" role="status" aria-live="polite"></p>
+      <div class="leo-mission-actions"><button id="leo-mission-selectionner" type="submit" disabled>Ouvrir la mission</button><button id="leo-mission-actualiser" type="button">Actualiser la liste</button></div>
+    </form>
+    <details id="leo-mission-avance"><summary>Accès avancé par identifiant</summary>
     <form id="leo-mission-chargement" autocomplete="off">
       <label for="leo-mission-id">Identifiant de mission</label>
       <input id="leo-mission-id" type="text" required maxlength="36" spellcheck="false" autocomplete="off" aria-describedby="leo-mission-aide">
       <p id="leo-mission-aide">Utilise l’identifiant fourni lors de l’initialisation. Aucune mission n’est créée depuis cet écran.</p>
       <button id="leo-mission-consulter" type="submit">Consulter</button>
     </form>
-    <p id="leo-mission-message" role="status" aria-live="polite">Consulte une mission existante avec son identifiant.</p>
+    </details>
+    <p id="leo-mission-message" role="status" aria-live="polite">Choisis une mission dans la liste.</p>
     <section id="leo-mission-detail" hidden>
       <h3>État enregistré</h3><p id="leo-mission-courant"></p>
       <h3>Prochaine action enregistrée</h3><p id="leo-mission-prochaine"></p><p id="leo-mission-budget"></p>

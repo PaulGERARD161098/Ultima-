@@ -45,6 +45,16 @@ Un dossier est **un devis**, qui naît brouillon et avance d'état en état.
 | **Facture** | Une facture client **miroir** du devis se prépare dès sa création et devient définitive après signature, sur action du pro. Les **factures fournisseurs** se rattachent à chaque devis émis (pièce déposée, montant d'achat). |
 | **Assistant** | Un assistant conversationnel répond au pro sur ses dossiers, et recueille ses retours. |
 
+### Contrat de livraison de l'agent et portabilité
+
+Le résultat de l'agent est un parcours complet reçu par le professionnel, pas une somme de correctifs ou un compteur de tests. La demande neuve, sa compréhension validée, les références et prix sourcés, les contrôles et le PDF doivent être éprouvés ensemble sur la même version. Un document où des postes essentiels ne sont pas chiffrés reste une estimation partielle ; il ne ferme pas la recette d'un devis complet.
+
+Mesurer séparément les interventions du professionnel, les messages de l'agent, les questions redondantes, les omissions et conflits détectés, les appels externes et le délai jusqu'à réception du document. Les seuils relèvent du dossier d'implantation. Une correction invalide les choix et documents dépendants sans effacer les autres besoins. Les propositions uniques peuvent être présentées et confirmées ensemble ; toute ambiguïté garde une décision explicite et le serveur recontrôle les références au clic.
+
+Une issue d'envoi inconnue est conservée durablement avant tout rejeu possible. Une acceptation certaine, un refus certain et une absence de preuve sont des états distincts. L'issue inconnue exige un rapprochement opérateur et ne repart pas automatiquement. L'arrêt, la rétention et les compteurs gardent leur rôle ; une purge n'est pas un accusé de réception.
+
+La technologie conserve les mécanismes génériques ; identité, catalogue, règles de vente, forfaits, contexte fiscal, modèle de document et autorisations viennent du compte. La check-list d'implantation détaille les entrées et les preuves. Tant qu'un chemin du moteur dépend d'une identité d'instance, il reste à paramétrer ou à neutraliser : un contrat documenté n'annonce pas une portabilité déjà reçue. Ne pas emporter de données réelles dans la technologie, ses exemples ou ses tests génériques.
+
 ## 3. Les mécanismes qui tiennent la techno
 
 ### Contrat du parcours vocal — révision du 24/10/2026
@@ -277,4 +287,5 @@ et sur l'écran Finubar. Il INDIQUE quand rafraîchir ; seule l'extraction prouv
 ⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
 `outils/zohshia/renodevis/`, hors du dossier, comme la liste des noms propres.
+
 

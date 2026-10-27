@@ -7,6 +7,9 @@ Le pilotage est prévu avant le projet et rendu utilisable dès ses premiers
 incréments ; il n'est pas ajouté en fin de construction. Les cases se remplissent
 à partir du travail mesuré ; une fonction bloquée reste visible avec sa prochaine action.
 
+- Définir une seule unité d'exécution active, avec résultat utile, périmètre borné et condition de sortie.
+- Prévoir un point de reprise versionné avant une opération longue et après chaque résultat utile.
+- Borner les lectures, sorties d'outils et essais au besoin courant ; alléger le contexte avant de perdre la maîtrise du suivi.
 - Recenser toutes les fonctions et leurs effets ; choisir le responsable du pilotage.
 - Localiser le cockpit miroir dans l’interface d’administration de l’outil supervisé ; une console centrale ne l’héberge pas.
 - Réutiliser son cockpit existant lorsque sa couverture suffit, sans dupliquer les sources ni le moteur métier.
@@ -44,4 +47,10 @@ La recette de fonctionnement précède l'ouverture de la capacité et l'annonce 
 
 Respecter les autorisations effectives : déploiement public, dépense, migration, suppression ou envoi réel exigent le mandat correspondant. Le pilotage n'élargit jamais ces autorisations. L'activation d'un automate reste distincte de sa présence dans le code.
 
+## 4. Vérifier la continuité sans surcharger
 
+Sur une copie ou un environnement isolé, interrompre une unité après son point de sauvegarde. Reprendre à partir du point versionné et de l'état distant : le résultat déjà prouvé doit être retrouvé sans recommencer toute l'analyse ; la prochaine action doit être unique et exécutable. Un travail non sauvegardé reste indiqué comme tel.
+
+Contre-épreuve : retirer la version ou la preuve du point de reprise. La reprise doit signaler ce manque et revalider seulement l'élément concerné, sans déclarer l'unité terminée. Vérifier aussi qu'un élargissement du périmètre est reporté explicitement et qu'une étape autorisée n'attend pas un nouveau « go » par simple découpage.
+
+Ces critères décrivent la recette à mener dans chaque projet. L'ajout de cette règle ne prouve pas sa recette réelle et ne constitue aucun verrou automatique de charge ou de contexte.

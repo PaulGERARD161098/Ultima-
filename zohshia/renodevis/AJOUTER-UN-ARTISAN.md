@@ -125,6 +125,36 @@ ou une référence retrouvée ne prouve pas la conformité de l'installation.
 | Son taux de commission (% du HT) | `artisans.commission_pct` — ⛔ sans valeur par défaut : un taux absent se voit |
 | Son compte de paiement connecté | créé par lui, sur invitation (`STRIPE_INVITE_ENABLED`) |
 
+### 1.9 Dossier d'implantation de l'agent devis
+
+Le dossier est privé, rattaché au compte du professionnel, et reste hors de cette technologie neutre. Collecter les pièces existantes avant de poser des questions ; rendre une liste unique des manques. Chaque donnée comporte sa source, sa date, son périmètre et sa validation. Une case remplie n'est pas une preuve de bon raccordement.
+
+| Bloc à obtenir | Contenu propre au professionnel | Preuve avant ouverture |
+|---|---|---|
+| Identité et responsables | Identité légale, coordonnées, établissements, utilisateurs autorisés, valideur métier et opérateur | Compte testé, bon émetteur dans le PDF, accès étranger refusé |
+| Bibliothèque commerciale | Catalogue et achats datés, références exactes, conditionnements, unités, quantités, écoparticipations et prix fixes ; devis passés pertinents si disponibles | Références retrouvées et prix rapprochés des pièces ; aucun prix d'un autre compte |
+| Calculs et prestations | Méthode de vente, arrondis, assiette de marge, traitement de l'apport, forfaits et leur contenu, main-d'œuvre et déplacements, validité des prix et règles de remises | Calcul direct puis contrôle inverse sur un chantier accepté ; aucun défaut repris d'une autre instance |
+| Faits techniques | Caractéristiques et compatibilités, références liées aux documents et pages, exclusions, équivalences expressément permises, limites de prestation | Besoin et faits fabricant distincts ; conflit bloqué, source absente nommée |
+| Document et fiscalité | Modèle de devis, logo, mentions, garanties, conditions de règlement, contexte fiscal et règles datées | PDF relu avec totaux, réserves et mentions ; estimation partielle distincte du devis complet |
+| Canal et raccords | Canal choisi, comptes et numéros autorisés si nécessaires, transcription/compréhension, accès aux dossiers, stockage, génération et transport du PDF | Parcours réel depuis une demande neuve jusqu'au document reçu ; clés posées par un moyen sécurisé, jamais dans ce dossier |
+| Exploitation | Droits de validation et d'envoi, budget et quotas, fenêtre pilote, arrêt, journal, cockpit, traitement des envois d'issue inconnue et rétention | Refus au dépassement, arrêt effectif et reprise sans renvoi automatique d'une issue inconnue |
+| Recette du professionnel | Chantiers représentatifs, résultats attendus acceptés, plafond d'interventions et durée cible, cas négatifs et responsable de réception | Mesure de l'effort, de la qualité et du temps réels ; verdict sur la version exacte |
+
+**À distinguer à chaque implantation :**
+- **Paramétrage** : les données, règles, documents, accès et limites de ce professionnel.
+- **Raccordement** : les fonctions qui doivent réellement lire ce paramétrage et utiliser son canal, son stockage et son modèle. Une configuration écrite ne prouve pas que le moteur la consomme.
+- **Capacité manquante** : toute branche encore réservée à l'instance de référence, extraction non reçue ou connecteur absent. L'implanter et la tester avant de dire « il suffit de charger les données ».
+
+La comparaison entre deux agents emploie la même demande, les mêmes sources et règles, les mêmes corrections et le même résultat attendu. Mesurer interventions, questions répétées, postes conservés, erreurs détectées, prix justifiés, coût et temps jusqu'au PDF reçu. Le temps local et le chronométrage du canal réel restent séparés.
+
+Une confirmation groupée est permise pour plusieurs propositions uniques et tarifées, présentées explicitement. Elle conserve le besoin, les quantités et les valeurs demandées ; chaque référence est à nouveau contrôlée au clic sur la banque et la version courantes. Un candidat parmi plusieurs n'est pas choisi par son rang. Un choix périmé, une source manquante ou une ambiguïté ne devient pas un accord implicite.
+
+### 1.10 État de préparation, sans raccourci
+
+La voie A n'exige pas une extraction, mais exige le contrôle du bon compte et des capacités effectivement disponibles pour lui. La voie B exige toujours extraction neutre et base neuve éprouvées. Les constats historiques du plan ne prouvent pas l'état actuel de l'extraction. Le contrat vocal préparé et les évolutions du moteur doivent être intégrés à la série de neutralisation, puis extraits et éprouvés, avant de déclarer la voie B prête.
+
+Chaque dossier d'implantation donne pour chaque bloc : **fourni · vérifié · à raccorder · bloqué**, avec la preuve et son responsable. Ne pas exiger les clients existants, le paiement en ligne, les relances ou la synchronisation de messagerie lorsqu'ils sont hors du périmètre de l'agent demandé. Ne pas ouvrir un canal ni créer une infrastructure facturée pour compléter une case.
+
 ## 2. Voie A — il rejoint la plateforme existante
 
 Chaque ligne dit **qui** agit et **comment** : *Auto* (le système le fait),
@@ -261,4 +291,5 @@ marquées comme telles dans le code : elles se remplacent par les règles du pro
 
 Chacune pose un **battement** dans `sentinelle_etat` : la requête d'empreinte dit
 si elle tourne, et si elle tourne à vide.
+
 

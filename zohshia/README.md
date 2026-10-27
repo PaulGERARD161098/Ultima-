@@ -13,6 +13,10 @@
 | `renodevis/` | Le plan de la techno RénoDevis (`TECHNO.md`), le guide et la check-list pour la mettre en service chez un pro (`AJOUTER-UN-ARTISAN.md`), l'inventaire mesuré (`inventaire.json`), l'extraction du code neutre (`extraire.mjs`) et la base neuve prouvée (`base/`) |
 | `pilotage-back-office/` | Règle transversale : chaque système a un cockpit ou un moyen de pilotage utilisable ; contrat neutre, couverture par fonction, guide de recette et contrôle des attestations privées |
 
+## Présentations claires
+
+`presentations-claires/` porte un socle de narration et de composition : six capacités coordonnées, dix compositions, variables graphiques, moteur local PDF/SVG et recette. La compétence `presentations-claires` guide la création ; les données et rendus propres à chaque projet restent hors du socle. Le badge utilise la publication existante ; aucun nouveau bouton de génération en ligne.
+
 ## Approches croisées
 
 `anti-pattern/` porte la méthode neutre de calcul et de travail : rétrocadrage, deux approches différentes, traitement des écarts, guide de réception et collecteur structurel de déclarations. Son badge réutilise la publication existante. Les preuves et valeurs propres aux instances restent hors du dossier neutre.
@@ -44,4 +48,5 @@ plus, la page ne change pas. Après toute modification d'un fichier pointé :
 STOCKE pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence, pour
 être toujours à jour (`renodevis/extraire.mjs`) ; et aucun bouton n'agit depuis
 l'écran (pas d'« extraire » en ligne).
+
 

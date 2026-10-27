@@ -153,28 +153,22 @@ const DRAGONS = [
   ['adramelech', 'adramelech.html'],
   ['reshiram', 'reshiram.html'],
   ['zekrom', 'zekrom.html'],
-  // ZOH SHIA a sa page depuis le 04/10/2026 (un badge par techno) : il revient
-  // à sa constellation comme les six autres.
-  ['zohshia', 'zohshia.html'],
-  // AMATSU a sa page depuis le 19/10/2026 (la rose des vents des lectures) : il
-  // revient à sa constellation comme les sept autres.
+  // AMATSU revient à DRAGONS ; le catalogue ZOH revient à son propre ciel.
   ['amatsu', 'amatsu.html'],
 ];
-const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom', 'zohshia'];
+const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-// Depuis le 04/10/2026, SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
-// AMATSU, étoile d'attente du 18 au 19/10/2026, a la sienne depuis la 2b-β : les
-// HUIT enfants ont leur page, et la liste éprouvée ici est EXACTEMENT la leur —
-// un dragon ajouté sans page, ou une page oubliée ici, ferait rougir cette ligne.
+// Les huit enfants ont leur page : sept retours vers DRAGONS et le catalogue
+// ZOH vers son propre ciel. Les deux parcours sont éprouvés ci-dessous.
 verifier('Verrou : les huit pages sont exactement les enfants de DRAGONS, aucun n’attend',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
-    === JSON.stringify(DRAGONS.map((d) => d[0]))
+    === JSON.stringify([...DRAGONS.slice(0, 6).map((d) => d[0]), 'zohshia', 'amatsu'])
   && NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible).length === 0
   && NOEUDS['constellation-dragons'].enfants.length === 8
   && NOEUDS.amatsu.etat === 'Ouvert');
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
-async function etoilesApresLeRetour(idDragon, fichier) {
+async function etoilesApresLeRetour(idDragon, fichier, retour = RETOUR_DRAGONS) {
   const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
   const page = await contexte.newPage();
   page.on('pageerror', (e) => erreurs.push(`${idDragon} (retour) pageerror: ${e.message}`));
@@ -188,7 +182,7 @@ async function etoilesApresLeRetour(idDragon, fichier) {
   });
   await page.waitForTimeout(300);
   // On SUIT le lien, comme le ferait le doigt — pas un `goto` de l'adresse attendue.
-  const lien = page.locator(`a[href="${RETOUR_DRAGONS}"]`).first();
+  const lien = page.locator(`a[href="${retour}"]`).first();
   let suivi = true; let raison = '';
   try { await lien.click({ timeout: 6000 }); } catch (e) { suivi = false; raison = String(e.message).split('\n')[0]; }
   await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 }).catch(() => {});
@@ -229,6 +223,26 @@ for (const [id, fichier] of DRAGONS) {
     && JSON.stringify(r.etoiles.map((e) => e.nom).sort())
       === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
+}
+// 25/10 : la fiche ZOH SHIA revient à son propre ciel, qui expose désormais
+// quatre technologies. On éprouve le lien au doigt et les quatre destinations.
+{
+  const retour = 'imladrik.html#zohshia';
+  const liens = await sonder('zohshia', 'zohshia.html');
+  verifier('zohshia.html : retour visible et libellé vers ZOH SHIA',
+    liens.some((l) => l.vu && l.brut === retour && l.texte === '↞ ZOH SHIA'));
+  verifier('zohshia.html : aucun ancien retour nu ou vers DRAGONS',
+    liens.length > 0 && liens.some((l) => l.vu && l.brut === retour)
+    && !liens.some((l) => l.vu && ['imladrik.html', RETOUR_DRAGONS].includes(l.brut)));
+  const r = await etoilesApresLeRetour('zohshia', 'zohshia.html', retour);
+  verifier('zohshia.html : le retour est cliquable au doigt', r.suivi, r.raison);
+  verifier('zohshia.html : le retour arrive sur le ciel ZOH SHIA',
+    r.arrivee.endsWith('/' + retour), r.arrivee);
+  const attendues = ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires'].sort();
+  verifier('zohshia.html : le ciel affiche exactement les quatre étoiles technologiques',
+    r.etoiles.length === 4
+    && JSON.stringify(r.etoiles.map((e) => e.id).sort()) === JSON.stringify(attendues),
+    JSON.stringify(r.etoiles.map((e) => e.id)));
 }
 // LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui
 // répondrait toujours trois : l'adresse SANS fragment ouvre le ciel à plat —

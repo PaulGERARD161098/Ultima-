@@ -55,4 +55,14 @@ Secrets au serveur, accès privés et cloisonnement des comptes. Aucune copie de
 
 Les alertes et lectures répétées sont bornées ; elles respectent la visibilité de la page et le budget. Une supervision permanente requiert un mécanisme autorisé et une preuve séparée.
 
+## 6. Continuité et charge de travail
 
+Travailler par unités courtes, terminables et vérifiables, en gardant une seule boucle d'exécution active. Le plan conserve la destination ; chaque unité produit un résultat utile, sa preuve et un point de reprise avant d'ouvrir la suivante. Enchaîner les unités autorisées sans demander une nouvelle confirmation à chaque étape.
+
+Avant une unité, fixer son résultat, les seuls fichiers et contrôles nécessaires, sa condition de sortie et sa limite d'effort. Si elle grossit, réduire son périmètre et consigner le reste avant de poursuivre. Ne pas accumuler simultanément recherches, modifications et vérifications sur plusieurs fronts.
+
+Sauvegarder le travail versionné et le point de reprise dès qu'un résultat utile est obtenu, avant une opération longue ou un changement de sujet. Le point de reprise contient : objectif, version source, fait avec preuve, travail en cours, prochaine action unique, blocage et autorisation réellement manquante. Après interruption, relire ce point et l'état distant ; ne pas recommencer une étape déjà prouvée sur la même version.
+
+Borner les lectures, recherches, sorties d'outils, essais et tâches concurrentes au besoin de l'unité courante. Résumer les résultats volumineux et conserver les références utiles. Si le contexte devient difficile à maîtriser, terminer ou sécuriser l'unité en cours, enregistrer la reprise et repartir dans un contexte allégé. Aucun seuil numérique de surcharge n'est présumé universel.
+
+Retour d'expérience déclaré : une session de travail interrompue a nécessité une recherche du dernier état pour pouvoir reprendre. La cause technique du plantage et sa durée ne sont pas établies ; la surcharge est un risque à prévenir, pas une cause démontrée. Cette règle vise une reprise fiable et une charge bornée ; elle ne garantit pas l'absence de panne et n'active aucun automate.

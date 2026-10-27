@@ -9,11 +9,67 @@
     && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
   const plain = value => value !== null && typeof value === 'object' && !Array.isArray(value)
     && [Object.prototype, null].includes(Object.getPrototypeOf(value));
+const court=(s,max=160)=>typeof s==='string'&&s.trim().length>0&&s.trim().length<=max&&!/[\u0000-\u001f<>]/.test(s)?s.trim():null;
+const objet=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
+function validerPlan(brut){
+  if(!objet(brut)||Object.keys(brut).some(k=>!['titre','etapes'].includes(k)))return null;
+  const titre=court(brut.titre);
+  if(!titre||!Array.isArray(brut.etapes)||brut.etapes.length<1||brut.etapes.length>10)return null;
+  const etapes=brut.etapes.map(e=>court(e));
+  if(etapes.some(e=>!e)||new Set(etapes.map(e=>e.toLowerCase())).size!==etapes.length)return null;
+  return {titre,etapes};
+}
+const CLES_CHECKPOINT=['task_id','titre','etapes','confirmes','rappels','etat','revision'];
+const UUID_CHECKPOINT=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function validerCheckpoint(brut){
+  if(!objet(brut)||![Object.prototype,null].includes(Object.getPrototypeOf(brut)))return null;
+  const cles=Reflect.ownKeys(brut);
+  if(cles.length!==CLES_CHECKPOINT.length||cles.some(k=>!CLES_CHECKPOINT.includes(k)))return null;
+  if(cles.some(k=>{const d=Object.getOwnPropertyDescriptor(brut,k);return !d.enumerable||!Object.hasOwn(d,'value');}))return null;
+  if(typeof brut.task_id!=='string'||!UUID_CHECKPOINT.test(brut.task_id)
+    ||!Array.isArray(brut.etapes)||!Array.isArray(brut.confirmes))return null;
+  // Les copies denses refusent aussi les tableaux creux dans un appel local.
+  const plan=validerPlan({titre:brut.titre,etapes:Array.from(brut.etapes)});
+  const confirmes=Array.from(brut.confirmes);
+  if(!plan||confirmes.some((n,i)=>!Number.isInteger(n)||n<0||n>=plan.etapes.length||(i>0&&n<=confirmes[i-1]))
+    ||!Number.isInteger(brut.rappels)||brut.rappels<0||brut.rappels>2
+    ||!['en_cours','suspendue'].includes(brut.etat)
+    ||!Number.isSafeInteger(brut.revision)||brut.revision<1)return null;
+  try{if(new TextEncoder().encode(JSON.stringify(brut)).length>10000)return null;}
+  catch{return null;}
+  return {task_id:brut.task_id,...plan,confirmes,rappels:brut.rappels,etat:brut.etat,revision:brut.revision};
+}
+
+  const exactKeys = (v,keys) => plain(v) && Reflect.ownKeys(v).length === keys.length
+    && keys.every(k => Object.hasOwn(v,k));
+  const commandValid = c => exactKeys(c,['kind','expected_task_id'])
+    && (c.kind === 'adopt' ? c.expected_task_id === null
+      : ['update','revise_plan'].includes(c.kind) && uuid(c.expected_task_id));
+  const checkpointPairValid = v => !Object.hasOwn(v,'checkpoint') && !Object.hasOwn(v,'checkpoint_command')
+    || Object.hasOwn(v,'checkpoint') && Object.hasOwn(v,'checkpoint_command')
+      && !!validerCheckpoint(v.checkpoint) && commandValid(v.checkpoint_command)
+      && (v.checkpoint_command.kind === 'adopt' || v.checkpoint.task_id === v.checkpoint_command.expected_task_id);
+  // Objets comparés sans dépendre de l'ordre des clés ; l'ordre des tableaux compte.
+  function structuralEqual(a,b) {
+    if(a===b)return true;
+    if(Array.isArray(a)||Array.isArray(b))return Array.isArray(a)&&Array.isArray(b)
+      &&a.length===b.length&&a.every((v,i)=>structuralEqual(v,b[i]));
+    if(!plain(a)||!plain(b))return false;
+    const keys=Object.keys(a);
+    return keys.length===Object.keys(b).length&&keys.every(k=>Object.hasOwn(b,k)&&structuralEqual(a[k],b[k]));
+  }
+  const patchMatches = (result,patch) => Object.keys(patch).every(k =>
+    ['checkpoint','checkpoint_command'].includes(k) ? structuralEqual(result[k],patch[k]) : result[k]===patch[k]);
+  const capabilityValid = d => !Object.hasOwn(d,'capabilities') ? !Object.hasOwn(d.mission,'checkpoint')
+    : exactKeys(d.capabilities,['checkpoint','checkpoint_write']) && d.capabilities.checkpoint===1
+      && typeof d.capabilities.checkpoint_write==='boolean' && Object.hasOwn(d.mission,'checkpoint')
+      && (d.mission.checkpoint===null || !!validerCheckpoint(d.mission.checkpoint));
+
   const clone = value => value == null ? value : JSON.parse(JSON.stringify(value));
   const version = value => Number.isSafeInteger(value) && value > 0;
   const resultValid = value => plain(value) && version(value.mission_version)
     && STATES.includes(value.state) && typeof value.next_action === 'string'
-    && value.next_action.length <= 4000;
+    && value.next_action.length <= 4000 && checkpointPairValid(value);
   const operationValid = o => plain(o) && typeof o.operation_id === 'string'
     && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(o.operation_id)
     && ['completed', 'pending', 'unknown'].includes(o.status)
@@ -21,7 +77,7 @@
   function error(code, message) { return Object.assign(new Error(message), { code }); }
   function statusValid(data, missionId) {
     const m = data?.mission, b = data?.budget;
-    return plain(data) && plain(m) && m.id === missionId && version(m.version)
+    return plain(data) && plain(m) && capabilityValid(data) && m.id === missionId && version(m.version)
       && STATES.includes(m.state) && typeof m.next_action === 'string' && m.next_action.length <= 4000
       && typeof m.stopped === 'boolean' && typeof m.scope === 'string'
       && typeof m.contract_version === 'string' && typeof m.skill_version === 'string'
@@ -77,11 +133,13 @@
     function snapshot() {
       const m = data?.mission, b = data?.budget;
       const ready = !!m && !busy && !uncertain && !needsRefresh;
-      return clone({ missionId, data, busy, uncertain, needsRefresh, lastError, disposed,
-        canWrite: ready && !m.stopped && m.scope === 'memory'
+      const canWrite = ready && !m.stopped && m.scope === 'memory'
           && m.contract_version === '1.1' && m.skill_version === '1.0'
           && Date.parse(m.expires_at) > Date.now() && m.version < Number.MAX_SAFE_INTEGER
-          && b.used_units < b.max_units && b.calls < b.max_calls,
+          && b.used_units < b.max_units && b.calls < b.max_calls;
+      return clone({ missionId, data, busy, uncertain, needsRefresh, lastError, disposed, canWrite,
+        canWriteCheckpoint: !!canWrite && data?.capabilities?.checkpoint===1
+          && data.capabilities.checkpoint_write===true,
         canStop: !!m && !busy && !disposed && !m.stopped });
     }
     async function exclusive(action) {
@@ -96,7 +154,7 @@
       } finally { busy = false; }
       return snapshot();
     }
-    async function request(body, onDispatch, operationId) {
+    async function request(body, onDispatch, operationId, listMissions = false) {
       const controller = new AbortController();
       activeController = controller;
       let timer, expired = false;
@@ -113,7 +171,7 @@
           if (expired) throw error('unavailable', 'Délai dépassé');
           if (typeof token !== 'string' || !token) throw error('auth', 'Authentification requise');
           if (onDispatch) onDispatch();
-          const response = await fetcher(body ? '/api/leo-registre'
+          const response = await fetcher(listMissions ? '/api/leo-registre?list=missions' : body ? '/api/leo-registre'
             : '/api/leo-registre?mission=' + encodeURIComponent(missionId)
               + (operationId ? '&operation_id=' + encodeURIComponent(operationId) : ''), {
             method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + token,
@@ -150,7 +208,7 @@
       if (op?.status === 'completed' && op.result.mission_version === uncertain.expected_version + 1
         && op.result.mission_version <= data.mission.version
         && (!uncertain.stopRequested || data.mission.stopped)
-        && (!uncertain.patch || Object.keys(uncertain.patch).every(k => op.result[k] === uncertain.patch[k])))
+        && (!uncertain.patch || patchMatches(op.result, uncertain.patch)))
         clearUncertain();
       // Une absence, même sans troncature, n'est jamais une preuve de non-exécution.
     }
@@ -204,7 +262,7 @@
         } else {
           if (answer.operation_id !== body.operation_id || answer.status !== 'completed'
             || !resultValid(answer.result) || answer.result.mission_version !== body.expected_version + 1
-            || !Object.keys(body.patch).every(k => answer.result[k] === body.patch[k]))
+            || !patchMatches(answer.result, body.patch))
             throw error('unavailable', 'Écriture non confirmée');
           // Le reçu ne contient pas le budget courant : ne pas fabriquer un état complet.
           needsRefresh = true;
@@ -227,6 +285,26 @@
       }
     }
     return Object.freeze({ snapshot,
+      listMissions: async () => {
+        let catalogue;
+        await exclusive(async () => {
+          if (uncertain) throw error('uncertain', 'Réconciliez la mission en cours');
+          const result = await request(null, undefined, undefined, true);
+          if (!exactKeys(result, ['missions', 'truncated']) || !Array.isArray(result.missions)
+            || result.missions.length > 50 || typeof result.truncated !== 'boolean'
+            || result.missions.some(m => !exactKeys(m, ['id','state','stopped','expires_at','updated_at','label'])
+              || !uuid(m.id) || !STATES.includes(m.state) || typeof m.stopped !== 'boolean'
+              || typeof m.label !== 'string' || !m.label.trim() || m.label.length > 160
+              || !Number.isFinite(Date.parse(m.expires_at)) || !Number.isFinite(Date.parse(m.updated_at)))
+            || new Set(result.missions.map(m => m.id.toLowerCase())).size !== result.missions.length)
+            throw error('unavailable', 'Liste des missions inexploitable');
+          catalogue = clone(result);
+        }).catch(e => {
+          if (e.code === 'auth' || e.code === 'denied') { data = null; needsRefresh = true; }
+          throw e;
+        });
+        return catalogue;
+      },
       destroy: () => {
         disposed = true; activeController?.abort();
         data = null; missionId = null; uncertain = null; lastError = null; needsRefresh = true;
@@ -245,11 +323,22 @@
       write: patch => exclusive(async () => {
         requireMutation();
         if (!plain(patch) || !Object.keys(patch).length
-          || !Object.keys(patch).every(k => ['state', 'next_action'].includes(k))
+          || !Object.keys(patch).every(k => ['state', 'next_action', 'checkpoint', 'checkpoint_command'].includes(k))
+          || !checkpointPairValid(patch)
           || (Object.hasOwn(patch, 'state') && !STATES.includes(patch.state))
           || (Object.hasOwn(patch, 'next_action') && (typeof patch.next_action !== 'string'
             || patch.next_action.length > 4000))) throw error('invalid', 'Modification invalide');
+        // Même projection pour le transport, le pending et le rapprochement du reçu.
+        if(Object.hasOwn(patch,'checkpoint'))patch={...patch,checkpoint:validerCheckpoint(patch.checkpoint)};
         const m = data.mission, b = data.budget;
+        if(Object.hasOwn(patch,'checkpoint')) {
+          if(data.capabilities?.checkpoint!==1 || data.capabilities.checkpoint_write!==true)
+            throw error('denied','Sauvegarde structurée indisponible pour cet accès');
+          const c=patch.checkpoint_command;
+          if(c.kind==='adopt' ? m.checkpoint!==null
+            : !m.checkpoint || c.expected_task_id!==m.checkpoint.task_id || patch.checkpoint.task_id!==m.checkpoint.task_id)
+            throw error('conflict','Identité de tâche divergente ; relisez le registre');
+        }
         if (m.stopped || m.scope !== 'memory' || m.contract_version !== '1.1'
           || m.skill_version !== '1.0' || Date.parse(m.expires_at) <= Date.now()
           || m.version === Number.MAX_SAFE_INTEGER || b.used_units >= b.max_units || b.calls >= b.max_calls)
@@ -265,5 +354,5 @@
       })
     });
   }
-  window.UltimaLeoRegistreClient = Object.freeze({ create });
+  window.UltimaLeoRegistreClient = Object.freeze({ create, validateCheckpoint: validerCheckpoint });
 })();

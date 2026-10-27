@@ -1,0 +1,12 @@
+{
+  "ordre": 4,
+  "badge": "Présentations claires — narration et compositions",
+  "etat": "Socle local · réception par présentation requise",
+  "onglets": [
+    {"id":"techno","titre":"Ce que fait la techno","source":"TECHNO.md"},
+    {"id":"grammaire","titre":"Règles de création","source":"references/GRAMMAIRE.md"},
+    {"id":"composition","titre":"Composition éditoriale","source":"../../.claude/skills/composition-editoriale/SKILL.md","sections":["## Partir du sujet","## Composer","## Créer les images","## Polir et vérifier"]},
+    {"id":"pitch","titre":"Pitch sourcé","source":"../../.claude/skills/pitch-source/SKILL.md","sections":["## Construire l'histoire","## Rendre le contenu précis","## Choisir la preuve visuelle","## Terminer utilement"]},
+    {"id":"service","titre":"Utilisation et recette","source":"MISE-EN-SERVICE.md"}
+  ]
+}
