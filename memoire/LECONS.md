@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v111 2026-10-27 sha256:e5ba29713ff1 -->
+<!-- lecons:empreinte v112 2026-10-27 sha256:6eef789d297d -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,9 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UNE GÉNÉRATION SE VÉRIFIE SUR LES OCTETS LIVRÉS, Y COMPRIS LES SOURCES INCHANGÉES** *(2026-10-27, Ultima-).* La copie locale des sources du catalogue technologique avait une fin de ligne supplémentaire après reconstruction par patch. Le module publié a été généré et contrôlé contre ces copies, puis seul le module et les documents modifiés ont été livrés. Les autres sources sont restées exactes dans GitHub : leurs empreintes ne correspondaient donc plus au module. Coût observé : la CI s'est arrêtée à 79/80 suites ; les trois jobs partageant ce verrou ont échoué malgré les contrôles locaux favorables. Aucun changement de données métier.
+⇒ Avant génération, comparer à la révision distante les empreintes Git de toutes les sources, pas seulement celles du diff. Reconstituer les fichiers sans ajouter ni retirer de caractère ; ne pas normaliser arbitrairement un fichier métier. Après génération, comparer les empreintes des fichiers livrés et vérifier la publication avec les sources exactes qui resteront dans l'arbre final. Le garde-fou a détecté l'écart ; il reste actif. Source : Ultima- PR #418, workflow 40474174207, verdict `donneeAJour` ; correction sur branche, sans publication de production.
 
 **UN RÉSULTAT COURANT EXIGE TOUTES SES DÉPENDANCES, PAS SEULEMENT SES CHIFFRES**
 *(2026-10-23, mon-dpe.fr, audit KELVIN).* L'empreinte ne couvrait pas toutes les
