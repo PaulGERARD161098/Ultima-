@@ -1,0 +1,459 @@
+{
+  "schema_version": 1,
+  "date_verification": "2026-10-28",
+  "couverture": "Bibliothèque personnelle active, skills présents dans le dépôt source et historique accessible. Ne prétend pas retracer les installations supprimées ni toutes les recherches anciennes.",
+  "source_ultima": "1126529589e235261d1c0edb1fe1d1e251357189",
+  "skills": [
+    {
+      "id": "emails",
+      "label": "Séquences email",
+      "famille": "Rédaction et vente",
+      "origine": "github",
+      "usage": "Construire une suite de messages selon l’étape du client, les réponses et les sorties du parcours.",
+      "invocation": "Utilise emails pour préparer un parcours de relance de devis.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "coreyhaines31/marketingskills",
+          "path": "skills/emails/SKILL.md",
+          "commit": "0cd9b3a0ef4c411a1d690419ce843f2a1da32cce"
+        }
+      ],
+      "limite": "Adaptation française ; cadence et performances à valider pour chaque projet.",
+      "preuve_work": {
+        "sha256": "4a7f29ff829ce3ccad8caa45d59b6bbcc0cdefd49450227f1abd65c297d74158",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/emails/SKILL.md",
+        "sha256": "4a7f29ff829ce3ccad8caa45d59b6bbcc0cdefd49450227f1abd65c297d74158",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "copy-editing",
+      "label": "Révision éditoriale",
+      "famille": "Rédaction et vente",
+      "origine": "github",
+      "usage": "Reprendre le style, la voix, la clarté, la précision et les preuves d’un texte.",
+      "invocation": "Utilise copy-editing pour rendre ce mail naturel et précis.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "coreyhaines31/marketingskills",
+          "path": "skills/copy-editing/SKILL.md",
+          "commit": "0cd9b3a0ef4c411a1d690419ce843f2a1da32cce"
+        }
+      ],
+      "limite": "La révision ne valide pas les faits non sourcés ni les performances commerciales.",
+      "preuve_work": {
+        "sha256": "70000fdb74103e20f65085ae913dceed88c27dd42180de9b22e1ef5607a74da2",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/copy-editing/SKILL.md",
+        "sha256": "70000fdb74103e20f65085ae913dceed88c27dd42180de9b22e1ef5607a74da2",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "email-writer",
+      "label": "Suivi commercial par email",
+      "famille": "Rédaction et vente",
+      "origine": "github",
+      "usage": "Préparer un message individuel depuis un rendez-vous, un devis ou un échange réel.",
+      "invocation": "Utilise email-writer pour reprendre cette discussion commerciale.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "lucaslinares1/gtm-skills",
+          "path": "skills/email-writer/SKILL.md",
+          "commit": "d5799d2f8f5d40e3a5a49f77851e186fd8e7a94e"
+        }
+      ],
+      "limite": "Méthode B2B adaptée en français ; aucun CRM ni droit d’envoi ajouté.",
+      "preuve_work": {
+        "sha256": "4a70fec4188df1cb853b5e19d5e7183c88b006427e2e4af573df981981633578",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/email-writer/SKILL.md",
+        "sha256": "4a70fec4188df1cb853b5e19d5e7183c88b006427e2e4af573df981981633578",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "composition-editoriale",
+      "label": "Composition éditoriale",
+      "famille": "Présentations et visuels",
+      "origine": "github",
+      "usage": "Définir direction artistique, typographie et visuels explicatifs d’une présentation.",
+      "invocation": "Utilise composition-editoriale avec presentations-claires pour composer cette présentation.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/composition-editoriale/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        },
+        {
+          "repository": "anthropics/skills",
+          "path": "skills/canvas-design/SKILL.md",
+          "commit": "dbd4588f9e1033efb41dad4bef2f7947c8993d44"
+        }
+      ],
+      "limite": "Adaptation d’instructions ; moteur et polices amont non importés.",
+      "preuve_work": {
+        "sha256": "4eb18a840d55838e2c9f7a6bdff3137ad9662e8ff03bc9f98e6b188c49b7d298",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/composition-editoriale/SKILL.md",
+        "sha256": "907a0ae73e95cb3556db9353a9ee7c4a3bdc9d7ae5ee4cfc31a8f4b00ee8ba74",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "pitch-source",
+      "label": "Pitch sourcé",
+      "famille": "Présentations et visuels",
+      "origine": "github",
+      "usage": "Construire le récit, les titres-message et les preuves d’un pitch.",
+      "invocation": "Utilise pitch-source pour préparer le récit de cette présentation.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/pitch-source/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        },
+        {
+          "repository": "SlideSpeak/slide-design-skill",
+          "path": "skills/pitch/SKILL.md",
+          "commit": "5e87d8ae71f6306e0c88f4910e6c09114581d91b"
+        }
+      ],
+      "limite": "Adaptation d’instructions ; aucun résultat commercial ni moteur tiers garanti.",
+      "preuve_work": {
+        "sha256": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/pitch-source/SKILL.md",
+        "sha256": "88014dc6958ea7253e4a7e48e2b41a32f893ca546fdbbdb98cb42af3df1a9271",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "frontend-design",
+      "label": "Design d’interface",
+      "famille": "Design et validation",
+      "origine": "github",
+      "usage": "Concevoir une direction visuelle et des interfaces cohérentes.",
+      "invocation": "Dans l’environnement de développement, charge frontend-design pour cette interface.",
+      "installation": {
+        "work": "non_installe_personnellement",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/frontend-design/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Présence du guide constatée ; dépendances et rendu à éprouver pour le projet. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+      "preuve_ultima": {
+        "path": ".claude/skills/frontend-design/SKILL.md",
+        "sha256": "dcd7ce36c17f953ed2092b40085d4c7563872df7e46f33c2b20e385689ab35a2",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "theme-factory",
+      "label": "Thèmes graphiques",
+      "famille": "Présentations et visuels",
+      "origine": "github",
+      "usage": "Choisir une palette et des polices pour harmoniser un support.",
+      "invocation": "Charge theme-factory pour proposer un thème à ce support.",
+      "installation": {
+        "work": "non_installe_personnellement",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/theme-factory/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Vérifier les ressources réellement présentes avant d’appliquer un thème. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+      "preuve_ultima": {
+        "path": ".claude/skills/theme-factory/SKILL.md",
+        "sha256": "ed1b4c19a04e4c85914f0e2c6c14c01b8b1c33522d215a6cc3b399de0d3b4860",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "algorithmic-art",
+      "label": "Art génératif",
+      "famille": "Présentations et visuels",
+      "origine": "github",
+      "usage": "Créer un visuel original par code et paramètres.",
+      "invocation": "Charge algorithmic-art pour explorer un visuel génératif.",
+      "installation": {
+        "work": "non_installe_personnellement",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/algorithmic-art/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Présence documentaire constatée ; moteur graphique non testé dans cette séance. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+      "preuve_ultima": {
+        "path": ".claude/skills/algorithmic-art/SKILL.md",
+        "sha256": "c7b82d7256e936e1e0b31499156b0a1b8d8cd4ac837c81b2ccb48524c700b405",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "webapp-testing",
+      "label": "Tests d’application web",
+      "famille": "Design et validation",
+      "origine": "github",
+      "usage": "Préparer des parcours et vérifications navigateur avec les outils du projet.",
+      "invocation": "Charge webapp-testing pour vérifier ce parcours web.",
+      "installation": {
+        "work": "non_installe_personnellement",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/webapp-testing/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Ne prouve ni la disponibilité du navigateur ni l’isolation de l’environnement. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+      "preuve_ultima": {
+        "path": ".claude/skills/webapp-testing/SKILL.md",
+        "sha256": "257046f7c6e7c4a3f9f94da47a43557d77c25afd4816c41daec41145578073e5",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "skill-creator",
+      "label": "Création de skills",
+      "famille": "Bibliothèque et méthodes",
+      "origine": "github",
+      "usage": "Structurer, améliorer et éprouver une compétence réutilisable.",
+      "invocation": "Dans le dépôt source, charge .claude/skills/skill-creator/SKILL.md pour préparer une compétence.",
+      "installation": {
+        "work": "non_installe_personnellement",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/skill-creator/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Cette copie de dépôt est distincte de la compétence de gestion des skills fournie par la plateforme. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+      "preuve_ultima": {
+        "path": ".claude/skills/skill-creator/SKILL.md",
+        "sha256": "d6d01c462951f68a151338b14c287bb47bafe81f3b9280a78b421cee14e66eee",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "discourse-theme-authoring",
+      "label": "Thèmes de forum",
+      "famille": "Communautés",
+      "origine": "github",
+      "usage": "Créer et modifier un thème ou composant de thème de forum.",
+      "invocation": "Utilise discourse-theme-authoring pour modifier ce thème.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "non_present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "discourse/discourse-theme-skills",
+          "path": null,
+          "commit": null
+        }
+      ],
+      "limite": "Guide personnel vérifié ; version d’import amont non retracée. Aucun accès forum ajouté.",
+      "preuve_work": {
+        "sha256": "3ca4b0ac501499b0f85209175858260fd0b55a79e1896b40ce2a6d2f55295833",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      }
+    },
+    {
+      "id": "discourse-block-authoring",
+      "label": "Blocs de forum",
+      "famille": "Communautés",
+      "origine": "github",
+      "usage": "Créer et enregistrer des blocs de thème et leurs conditions d’affichage.",
+      "invocation": "Utilise discourse-block-authoring pour préparer ce bloc de forum.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "non_present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "discourse/discourse-theme-skills",
+          "path": null,
+          "commit": null
+        }
+      ],
+      "limite": "Guide personnel vérifié ; version d’import amont non retracée. Exécution à vérifier dans le forum cible.",
+      "preuve_work": {
+        "sha256": "34ef204a9dc5f16aba407defe8452dcb3e5f4f0b3ba7a24b8b45f6bf6d13fb6b",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      }
+    },
+    {
+      "id": "community-marketing",
+      "label": "Marketing de communauté",
+      "famille": "Communautés",
+      "origine": "github",
+      "usage": "Préparer engagement, parcours membre, rituels et ambassadeurs.",
+      "invocation": "Utilise community-marketing pour préparer une stratégie de communauté.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "non_present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "coreyhaines31/marketingskills",
+          "path": "skills/community-marketing/SKILL.md",
+          "commit": null
+        }
+      ],
+      "limite": "Guide personnel vérifié ; commit d’import non conservé, aucun service communautaire connecté par ce seul skill.",
+      "preuve_work": {
+        "sha256": "e4c4a21e82a04e8ef6e2845fa34ebaf5512ba59ae1c9c74d8caa9f045628f4da",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      }
+    },
+    {
+      "id": "presentations-claires",
+      "label": "Présentations claires",
+      "famille": "Assemblages internes",
+      "origine": "assemblage",
+      "usage": "Coordonner récit, composition et contrôles d’une présentation.",
+      "invocation": "Utilise presentations-claires pour créer une présentation à partir de ce brief.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/presentations-claires/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Socle local et compétences complémentaires ; faire la recette du livrable final.",
+      "preuve_work": {
+        "sha256": "5ae86a590beb1b514bbb9e2968d454f6d4228b584fc0953916a0b3e02d801271",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/presentations-claires/SKILL.md",
+        "sha256": "9a6e4247cbf8f0f9fde195a212136ab33232d1906c37ac8edc4f690427a43310",
+        "etat": "present_dans_source"
+      }
+    },
+    {
+      "id": "anti-pattern",
+      "label": "Approches croisées",
+      "famille": "Assemblages internes",
+      "origine": "assemblage",
+      "usage": "Croiser des raisonnements et traiter les écarts entre hypothèses et preuves.",
+      "invocation": "Utilise anti-pattern avec les angles utilisateur, preuve commerciale et opérateur.",
+      "installation": {
+        "work": "installe_verifie",
+        "ultima": "present_dans_source"
+      },
+      "sources": [
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": ".claude/skills/anti-pattern/SKILL.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        },
+        {
+          "repository": "PaulGERARD161098/Ultima-",
+          "path": "zohshia/anti-pattern/sources-pdv.md",
+          "commit": "1126529589e235261d1c0edb1fe1d1e251357189"
+        }
+      ],
+      "limite": "Synthèse méthodologique ; les bibliothèques sources ne sont pas des agents installés.",
+      "preuve_work": {
+        "sha256": "362146269b04b7a2856b57eb52342b55074ffe0c6c87c2a61daf1da87def2e50",
+        "le": "2026-10-28",
+        "etat": "active_apres_verification_distante"
+      },
+      "preuve_ultima": {
+        "path": ".claude/skills/anti-pattern/SKILL.md",
+        "sha256": "a7119cf6b66d4598fc26c88991fb7953e20deba934c6d749ec5f523cbd2519af",
+        "etat": "present_dans_source"
+      }
+    }
+  ],
+  "pistes": [
+    {
+      "id": "impeccable",
+      "label": "Impeccable",
+      "statut": "consulte_non_installe",
+      "description": "Piste de conception et de critique d’interface évoquée dans l’historique ; aucune installation vérifiée."
+    },
+    {
+      "id": "superpowers",
+      "label": "Superpowers",
+      "statut": "piste_non_installee",
+      "description": "Piste de méthodes de développement et de contrôle ; aucun import constaté."
+    },
+    {
+      "id": "ag-ui",
+      "label": "AG-UI",
+      "statut": "piste_non_installee",
+      "description": "Protocole d’interaction, pas un skill installé ; compatibilité à examiner avant tout emploi."
+    }
+  ],
+  "preuves": {
+    "date": "2026-10-28",
+    "work": "Dix noms de skills concernés retrouvés dans la bibliothèque personnelle active après vérification des sauvegardes distantes ; empreintes relevées dans le fichier de contrôle de cette préparation.",
+    "ultima": "Les guides sont présents dans cette version du catalogue. Les copies antérieures ont été relevées sur 1126529589e235261d1c0edb1fe1d1e251357189 ; les trois ajouts rédactionnels sont suivis par empreinte de contenu.",
+    "historique": "Recherche ciblée des acquisitions et pistes antérieures. Une ancienne annonce n’est pas une preuve d’installation courante."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-28",
+  "upstream": "coreyhaines31/marketingskills",
+  "commit": "0cd9b3a0ef4c411a1d690419ce843f2a1da32cce",
+  "license": "MIT",
+  "adaptation": "Version française et garde-fous contextuels ; sources documentaires amont conservées sans exécution de code.",
+  "files": [
+    {
+      "path": "LICENSE",
+      "blob_sha": "7c48dd638a9ebed49a8ef0c0c4eea90105381cdf"
+    },
+    {
+      "path": "skills/emails/SKILL.md",
+      "blob_sha": "e660baf4adf7430ff90bfbdeaf9a9ad101a2d2ed"
+    },
+    {
+      "path": "skills/emails/references/copy-guidelines.md",
+      "blob_sha": "6e31f2b5cc331ae6ffbe3127b52199bbaf05c14d"
+    },
+    {
+      "path": "skills/emails/references/email-types.md",
+      "blob_sha": "dd6124051517e98d0550f7e35477b428ef5b81f6"
+    },
+    {
+      "path": "skills/emails/references/sequence-templates.md",
+      "blob_sha": "6146dd36af0200ee35213091fc51dbc9bbf5750e"
+    }
+  ]
+}
+

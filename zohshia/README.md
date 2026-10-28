@@ -54,3 +54,9 @@ STOCKE pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence,
 l'écran (pas d'« extraire » en ligne).
 
 
+
+
+## Bibliothèque de skills
+
+`skills-github/` réunit le catalogue des compétences récupérées et des assemblages internes : utilité, état par environnement, sources et exemples d’appel. Son badge utilise la publication existante. Le registre structuré et ses fiches sont contrôlés par `node zohshia/skills-github/collecter.mjs --verifier`. Le catalogue oriente ; il n’installe pas d’outil ni n’injecte les guides complets dans un agent.
+
