@@ -1,0 +1,28 @@
+{
+  "ordre": 6,
+  "badge": "Bibliothèque de skills",
+  "etat": "Catalogue vérifié · disponibilité selon l’environnement",
+  "onglets": [
+    {
+      "id": "techno",
+      "titre": "Rôle de la bibliothèque",
+      "source": "TECHNO.md"
+    },
+    {
+      "id": "catalogue",
+      "titre": "Compétences et états",
+      "source": "CATALOGUE.md"
+    },
+    {
+      "id": "appels",
+      "titre": "Comment les appeler",
+      "source": "APPELER.md"
+    },
+    {
+      "id": "sources",
+      "titre": "Sources et limites",
+      "source": "SOURCES.md"
+    }
+  ]
+}
+

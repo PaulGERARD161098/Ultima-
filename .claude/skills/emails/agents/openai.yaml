@@ -1,0 +1,14 @@
+interface:
+  display_name: Séquences email
+  short_description: Concevoir des parcours email utiles et progressifs
+  default_prompt: Utilise $emails pour construire une séquence adaptée au parcours
+    client.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

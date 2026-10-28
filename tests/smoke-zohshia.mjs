@@ -207,6 +207,29 @@ console.log('§4 — une balise dans la donnée reste du texte');
   await page.close();
 }
 
+console.log('§5 — bibliothèque de skills : ancre, contenu et lecture mobile');
+for (const width of [1280, 390]) {
+  const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL, hash: '#skills-github' }, { width, height: 900 });
+  const fiche = page.locator('#technologie-skills-github');
+  verifier(width + ' : la bibliothèque liée à l’étoile s’ouvre', await fiche.locator('.badge-techno').getAttribute('aria-expanded') === 'true');
+  verifier(width + ' : quatre onglets utiles', await fiche.getByRole('tab').count() === 4);
+  await fiche.getByRole('tab', { name: 'Compétences et états', exact: true }).click();
+  verifier(width + ' : les nouvelles compétences et les pistes sont distinctes',
+    /emails/.test(await fiche.locator('.contenu').textContent()) &&
+    /Pistes non installées/.test(await fiche.locator('.contenu').textContent()));
+  for (const titre of ['Rôle de la bibliothèque', 'Compétences et états', 'Comment les appeler', 'Sources et limites']) {
+    await fiche.getByRole('tab', { name: titre, exact: true }).click();
+    const deborde = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    verifier(width + ' : ' + titre + ' sans débordement de page', deborde <= 1, String(deborde));
+  }
+  await fiche.getByRole('tab', { name: 'Comment les appeler', exact: true }).click();
+  verifier(width + ' : les exemples d’appel sont lisibles', /Utilise emails pour/.test(await fiche.locator('.contenu').textContent()));
+  verifier(width + ' : aucun appel externe ni erreur', !journal.erreurs.length && !journal.externes.length);
+  await page.close();
+}
+
+
 await navigateur.close();
 if (echecs) { console.log(`\n${echecs} échec(s)`); process.exit(1); }
 console.log('\nSMOKE-ZOHSHIA OK');
+

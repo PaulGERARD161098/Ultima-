@@ -1,0 +1,14 @@
+interface:
+  display_name: Suivi commercial par email
+  short_description: Rédiger un suivi commercial ancré dans les échanges
+  default_prompt: Utilise $email-writer pour préparer le suivi de cette proposition
+    commerciale.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

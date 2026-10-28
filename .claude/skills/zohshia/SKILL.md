@@ -77,3 +77,9 @@ l'exclusion du déploiement.
 ## Présentations claires
 
 Pour une présentation épurée, un pitch ou un support de rendez-vous, charger `.claude/skills/presentations-claires/SKILL.md`. Le socle neutre vit dans `zohshia/presentations-claires/` : grammaire, thème, dix compositions, moteur local PDF/SVG et guide de recette. Il ne constitue pas une présentation native ni un envoi ; chaque instance doit faire sa propre recette.
+
+
+## Bibliothèque de skills
+
+Pour retrouver une compétence ou choisir comment l’appeler, lire `zohshia/skills-github/CATALOGUE.md` puis `APPELER.md`. Le registre `catalogue.json` distingue les états Work et dépôt source, les adaptations préparées et les pistes non installées. Charger le SKILL.md de la compétence dans l’environnement qui peut le lire ; le résumé de catalogue ne le remplace pas. Utiliser `emails`, `email-writer` et `copy-editing` selon le besoin rédactionnel. Vérifier l’état réel avant une invocation : présence documentaire et capacité d’exécution ne sont pas équivalentes.
+

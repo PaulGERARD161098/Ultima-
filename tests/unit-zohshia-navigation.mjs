@@ -11,7 +11,10 @@ assert.deepEqual(verifierRegistre(NOEUDS, BLASONS, COEURS), []);
 assert.equal(parentDe('presentations-claires'), 'zohshia');
 assert.deepEqual(chemin('presentations-claires'), ['racine','omega','imladrik','constellation-dragons','zohshia','presentations-claires']);
 const sky = versCiel('imladrik', NOEUDS, { isole:'zohshia' });
-assert.equal(sky.noeuds.length, 4);
+assert.equal(sky.noeuds.length, 5);
+assert.equal(parentDe('bibliotheque-skills'), 'zohshia');
+assert.deepEqual(chemin('bibliotheque-skills'), ['racine','omega','imladrik','constellation-dragons','zohshia','bibliotheque-skills']);
+assert.equal(sky.noeuds.filter((n) => n.id==='bibliotheque-skills').length, 1);
 assert.equal(sky.noeuds.filter((n) => n.id==='presentations-claires').length, 1);
 for (const star of sky.noeuds) {
   assert.equal(star.cible.split('#')[0], 'zohshia.html');
@@ -57,4 +60,5 @@ context.window.location.hash='#presentations-claires';
 context.document.getElementById=()=>null;
 context.ouvrirDepuisAncre();
 assert.equal(clicks,1,'une ancre ne révèle pas une fiche non reçue');
-console.log('UNIT-ZOHSHIA-NAVIGATION OK : arbre sain, quatre étoiles reliées, cinq onglets et garde éprouvée');
+console.log('UNIT-ZOHSHIA-NAVIGATION OK : arbre sain, cinq étoiles reliées et garde éprouvée');
+

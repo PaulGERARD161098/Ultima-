@@ -1,17 +1,14 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-27",
+ "publie_le": "2026-10-28",
  "technos": [
   {
    "id": "renodevis",
    "ordre": 1,
    "badge": "Outil de création de devis / relance automatique",
    "etat": "En service",
-   "mesure": {
-    "commit": "92225cb",
-    "le": "2026-10-10"
-   },
+   "mesure": null,
    "onglets": [
     {
      "id": "techno",
@@ -9474,27 +9471,1787 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "skills-github",
+   "ordre": 6,
+   "badge": "Bibliothèque de skills",
+   "etat": "Catalogue vérifié · disponibilité selon l’environnement",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Rôle de la bibliothèque",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Résultat attendu",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Retrouver les compétences réutilisables, comprendre leur utilité et choisir comment les appeler. Le catalogue distingue les guides installés, les copies présentes dans le dépôt, les adaptations préparées et les pistes non installées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour la rédaction, appeler emails, copy-editing et email-writer ; pour les supports, presentations-claires, composition-editoriale, pitch-source et theme-factory ; pour l’interface, frontend-design et webapp-testing ; pour les communautés, community-marketing, discourse-theme-authoring et discourse-block-authoring. algorithmic-art crée des visuels par code ; skill-creator prépare des compétences ; anti-pattern croise les approches. Exemple : « utilise emails pour ce parcours de devis ». Le catalogue oriente, sans charger les guides complets ni accorder de droit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Organisation",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Catalogue : famille, utilité et état dans chaque environnement.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Appels : exemples de demandes et combinaisons utiles.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Sources : version, provenance et limites.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Registre structuré : catalogue.json, source des fiches et des contrôles de cohérence.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Réutiliser avant d’ajouter",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Consulter ce stock au début du besoin. Charger le guide existant quand il convient ; adapter seulement la lacune identifiée. Une nouvelle installation doit préserver source, licence et version, puis être validée et sauvegardée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Réception",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Vérifier chaque nom, sa source et son état ; ne pas appeler une piste comme une compétence installée. Éprouver les ajouts sur une demande fictive avant emploi. Une validation de structure n’est pas une preuve de qualité rédactionnelle ou d’exécution métier.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "catalogue",
+     "titre": "Compétences et états",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Périmètre vérifié",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relevé du 2026-10-28 : 13 compétences récupérées via des dépôts, 2 assemblages internes et 3 pistes séparées. Les capacités d’exécution restent à éprouver dans chaque projet.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les états sont datés et propres à chaque environnement. Une lecture passée ne signifie pas une installation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Rédaction et vente",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Utilité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Work",
+          ""
+         ]
+        ],
+        [
+         [
+          "Dépôt source",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "emails",
+           ""
+          ]
+         ],
+         [
+          [
+           "Construire une suite de messages selon l’étape du client, les réponses et les sorties du parcours.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "copy-editing",
+           ""
+          ]
+         ],
+         [
+          [
+           "Reprendre le style, la voix, la clarté, la précision et les preuves d’un texte.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "email-writer",
+           ""
+          ]
+         ],
+         [
+          [
+           "Préparer un message individuel depuis un rendez-vous, un devis ou un échange réel.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Présentations et visuels",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Utilité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Work",
+          ""
+         ]
+        ],
+        [
+         [
+          "Dépôt source",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "composition-editoriale",
+           ""
+          ]
+         ],
+         [
+          [
+           "Définir direction artistique, typographie et visuels explicatifs d’une présentation.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "pitch-source",
+           ""
+          ]
+         ],
+         [
+          [
+           "Construire le récit, les titres-message et les preuves d’un pitch.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "theme-factory",
+           ""
+          ]
+         ],
+         [
+          [
+           "Choisir une palette et des polices pour harmoniser un support.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de copie personnelle constatée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "algorithmic-art",
+           ""
+          ]
+         ],
+         [
+          [
+           "Créer un visuel original par code et paramètres.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de copie personnelle constatée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Design et validation",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Utilité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Work",
+          ""
+         ]
+        ],
+        [
+         [
+          "Dépôt source",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "frontend-design",
+           ""
+          ]
+         ],
+         [
+          [
+           "Concevoir une direction visuelle et des interfaces cohérentes.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de copie personnelle constatée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "webapp-testing",
+           ""
+          ]
+         ],
+         [
+          [
+           "Préparer des parcours et vérifications navigateur avec les outils du projet.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de copie personnelle constatée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Bibliothèque et méthodes",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Utilité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Work",
+          ""
+         ]
+        ],
+        [
+         [
+          "Dépôt source",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "skill-creator",
+           ""
+          ]
+         ],
+         [
+          [
+           "Structurer, améliorer et éprouver une compétence réutilisable.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de copie personnelle constatée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Communautés",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Utilité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Work",
+          ""
+         ]
+        ],
+        [
+         [
+          "Dépôt source",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "discourse-theme-authoring",
+           ""
+          ]
+         ],
+         [
+          [
+           "Créer et modifier un thème ou composant de thème de forum.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Absent de cette source",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "discourse-block-authoring",
+           ""
+          ]
+         ],
+         [
+          [
+           "Créer et enregistrer des blocs de thème et leurs conditions d’affichage.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Absent de cette source",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "community-marketing",
+           ""
+          ]
+         ],
+         [
+          [
+           "Préparer engagement, parcours membre, rituels et ambassadeurs.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Absent de cette source",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Assemblages internes",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Utilité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Work",
+          ""
+         ]
+        ],
+        [
+         [
+          "Dépôt source",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "presentations-claires",
+           ""
+          ]
+         ],
+         [
+          [
+           "Coordonner récit, composition et contrôles d’une présentation.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "anti-pattern",
+           ""
+          ]
+         ],
+         [
+          [
+           "Croiser des raisonnements et traiter les écarts entre hypothèses et preuves.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Installé et vérifié",
+           ""
+          ]
+         ],
+         [
+          [
+           "Présent dans la source vérifiée",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Pistes non installées",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Piste",
+          ""
+         ]
+        ],
+        [
+         [
+          "État",
+          ""
+         ]
+        ],
+        [
+         [
+          "Limite",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Impeccable",
+           ""
+          ]
+         ],
+         [
+          [
+           "consulte_non_installe",
+           ""
+          ]
+         ],
+         [
+          [
+           "Piste de conception et de critique d’interface évoquée dans l’historique ; aucune installation vérifiée.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Superpowers",
+           ""
+          ]
+         ],
+         [
+          [
+           "piste_non_installee",
+           ""
+          ]
+         ],
+         [
+          [
+           "Piste de méthodes de développement et de contrôle ; aucun import constaté.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "AG-UI",
+           ""
+          ]
+         ],
+         [
+          [
+           "piste_non_installee",
+           ""
+          ]
+         ],
+         [
+          [
+           "Protocole d’interaction, pas un skill installé ; compatibilité à examiner avant tout emploi.",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ces pistes ne doivent pas être appelées comme des compétences installées.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "appels",
+     "titre": "Comment les appeler",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Demander le résultat",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Exprimer le travail attendu et, si utile, le nom de la compétence. Choisir selon le besoin et les accès réels.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Exemples d’appel",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Besoin",
+          ""
+         ]
+        ],
+        [
+         [
+          "Formulation à réutiliser",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Séquences email",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise emails pour préparer un parcours de relance de devis.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Révision éditoriale",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise copy-editing pour rendre ce mail naturel et précis.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Suivi commercial par email",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise email-writer pour reprendre cette discussion commerciale.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Composition éditoriale",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise composition-editoriale avec presentations-claires pour composer cette présentation.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Pitch sourcé",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise pitch-source pour préparer le récit de cette présentation.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Design d’interface",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dans l’environnement de développement, charge frontend-design pour cette interface.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Thèmes graphiques",
+           ""
+          ]
+         ],
+         [
+          [
+           "Charge theme-factory pour proposer un thème à ce support.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Art génératif",
+           ""
+          ]
+         ],
+         [
+          [
+           "Charge algorithmic-art pour explorer un visuel génératif.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Tests d’application web",
+           ""
+          ]
+         ],
+         [
+          [
+           "Charge webapp-testing pour vérifier ce parcours web.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Création de skills",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dans le dépôt source, charge .claude/skills/skill-creator/SKILL.md pour préparer une compétence.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Thèmes de forum",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise discourse-theme-authoring pour modifier ce thème.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Blocs de forum",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise discourse-block-authoring pour préparer ce bloc de forum.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Marketing de communauté",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise community-marketing pour préparer une stratégie de communauté.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Présentations claires",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise presentations-claires pour créer une présentation à partir de ce brief.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Approches croisées",
+           ""
+          ]
+         ],
+         [
+          [
+           "Utilise anti-pattern avec les angles utilisateur, preuve commerciale et opérateur.",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Choisir l’environnement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Dans Work, appeler la compétence personnelle par son nom ou le sélecteur de skills. Sur mobile, ouvrir Plugins puis Skills pour consulter les compétences installées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Dans un environnement de développement ayant le dépôt, charger le SKILL.md indiqué et ses références utiles. Les copies de rédaction conservent leur licence et leur version amont. Vérifier la version du dépôt réellement chargée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Dans Léo sur le site, le catalogue oriente la demande. Le résumé projeté ne remplace pas les guides complets. Si le guide ou les outils ne peuvent pas être chargés, Léo doit le dire. Cliquer sur une fiche n’exécute pas un moteur et n’accorde aucun droit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Combinaisons utiles",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Devis : emails pour le parcours, email-writer pour un échange individuel, copy-editing pour la révision.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Présentation : presentations-claires avec pitch-source et composition-editoriale.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Communauté : community-marketing pour le parcours, puis les compétences de thème et de blocs pour les changements techniques.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Contrôle : anti-pattern pour croiser les approches et une vérification adaptée au livrable.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Remettre à jour",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Après chaque ajout ou retrait demandé, remesurer les environnements, actualiser le registre et régénérer les fiches. Ne changer la date qu’après une mesure réelle. Aucune routine permanente n’est activée.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sources",
+     "titre": "Sources et limites",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Registre de référence",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le registre catalogue.json porte noms, utilités, appels, environnements, sources et preuves. Les fiches sont générées par collecter.mjs ; le mode --verifier refuse une copie périmée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Sources par compétence",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Compétence",
+          ""
+         ]
+        ],
+        [
+         [
+          "Source constatée",
+          ""
+         ]
+        ],
+        [
+         [
+          "Révision",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "emails",
+           ""
+          ]
+         ],
+         [
+          [
+           "coreyhaines31/marketingskills/skills/emails/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "0cd9b3a0ef4c",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "copy-editing",
+           ""
+          ]
+         ],
+         [
+          [
+           "coreyhaines31/marketingskills/skills/copy-editing/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "0cd9b3a0ef4c",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "email-writer",
+           ""
+          ]
+         ],
+         [
+          [
+           "lucaslinares1/gtm-skills/skills/email-writer/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "d5799d2f8f5d",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "composition-editoriale",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/composition-editoriale/SKILL.md ; anthropics/skills/skills/canvas-design/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2 ; dbd4588f9e10",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "pitch-source",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/pitch-source/SKILL.md ; SlideSpeak/slide-design-skill/skills/pitch/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2 ; 5e87d8ae71f6",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "frontend-design",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/frontend-design/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "theme-factory",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/theme-factory/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "algorithmic-art",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/algorithmic-art/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "webapp-testing",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/webapp-testing/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "skill-creator",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/skill-creator/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "discourse-theme-authoring",
+           ""
+          ]
+         ],
+         [
+          [
+           "discourse/discourse-theme-skills",
+           ""
+          ]
+         ],
+         [
+          [
+           "Import non retracé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "discourse-block-authoring",
+           ""
+          ]
+         ],
+         [
+          [
+           "discourse/discourse-theme-skills",
+           ""
+          ]
+         ],
+         [
+          [
+           "Import non retracé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "community-marketing",
+           ""
+          ]
+         ],
+         [
+          [
+           "coreyhaines31/marketingskills/skills/community-marketing/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "Import non retracé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "presentations-claires",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/presentations-claires/SKILL.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "anti-pattern",
+           ""
+          ]
+         ],
+         [
+          [
+           "PaulGERARD161098/Ultima-/.claude/skills/anti-pattern/SKILL.md ; PaulGERARD161098/Ultima-/zohshia/anti-pattern/sources-pdv.md",
+           ""
+          ]
+         ],
+         [
+          [
+           "1126529589e2 ; 1126529589e2",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Limites par compétence",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "emails : Adaptation française ; cadence et performances à valider pour chaque projet.",
+          ""
+         ]
+        ],
+        [
+         [
+          "copy-editing : La révision ne valide pas les faits non sourcés ni les performances commerciales.",
+          ""
+         ]
+        ],
+        [
+         [
+          "email-writer : Méthode B2B adaptée en français ; aucun CRM ni droit d’envoi ajouté.",
+          ""
+         ]
+        ],
+        [
+         [
+          "composition-editoriale : Adaptation d’instructions ; moteur et polices amont non importés.",
+          ""
+         ]
+        ],
+        [
+         [
+          "pitch-source : Adaptation d’instructions ; aucun résultat commercial ni moteur tiers garanti.",
+          ""
+         ]
+        ],
+        [
+         [
+          "frontend-design : Présence du guide constatée ; dépendances et rendu à éprouver pour le projet. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "theme-factory : Vérifier les ressources réellement présentes avant d’appliquer un thème. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "algorithmic-art : Présence documentaire constatée ; moteur graphique non testé dans cette séance. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "webapp-testing : Ne prouve ni la disponibilité du navigateur ni l’isolation de l’environnement. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "skill-creator : Cette copie de dépôt est distincte de la compétence de gestion des skills fournie par la plateforme. L’amont exact de cette copie n’a pas été retracé dans cette collecte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "discourse-theme-authoring : Guide personnel vérifié ; version d’import amont non retracée. Aucun accès forum ajouté.",
+          ""
+         ]
+        ],
+        [
+         [
+          "discourse-block-authoring : Guide personnel vérifié ; version d’import amont non retracée. Exécution à vérifier dans le forum cible.",
+          ""
+         ]
+        ],
+        [
+         [
+          "community-marketing : Guide personnel vérifié ; commit d’import non conservé, aucun service communautaire connecté par ce seul skill.",
+          ""
+         ]
+        ],
+        [
+         [
+          "presentations-claires : Socle local et compétences complémentaires ; faire la recette du livrable final.",
+          ""
+         ]
+        ],
+        [
+         [
+          "anti-pattern : Synthèse méthodologique ; les bibliothèques sources ne sont pas des agents installés.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Licences et réemploi",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les trois compétences de rédaction conservent leur licence MIT et les sources documentaires. Les adaptations de présentation conservent leurs fichiers de provenance et leurs licences. Pour les autres copies, lire la licence du dossier avant redistribution. Aucun droit n’est déduit du seul hébergement dans un dépôt.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les anciennes compétences restent à leur emplacement. Les trois nouvelles copies dans le dépôt sont des instantanés des adaptations personnelles ; aucune synchronisation permanente n’est annoncée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Couverture",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Bibliothèque personnelle active, skills présents dans le dépôt source et historique accessible. Ne prétend pas retracer les installations supprimées ni toutes les recherches anciennes.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les états installés reposent sur une lecture courante de la bibliothèque ou du dépôt. Les services fournis par des plugins ne sont pas confondus avec des acquisitions de skills personnels.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
-  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
-  "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
-  "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
-  "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "a2074a5ae227fd59674c5956f77e16c76aa14c14f319f6fd1278b71b91319cab",
-  "pitch-commercial/badge.json": "982cb6f0bc69c54dda6881032b021cdb18305243c8de03b76d805e6dad397dae",
-  "pitch-commercial/TECHNO.md": "bb55a381cf40ff2bed27a5c9918001fd75bfb4c072a6716983df43d0870f759f",
-  "pitch-commercial/OSSATURE.md": "98e3592525077747112a59f1733f7392117c842225486bde3bab7d4bea52e213",
-  "pitch-commercial/MISE-EN-SERVICE.md": "56ea24e91d128ef50c4adf50e0abe7e6603ca80662404eb4b6104b42f4483ed5",
-  "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
-  "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
-  "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
-  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "4eb18a840d55838e2c9f7a6bdff3137ad9662e8ff03bc9f98e6b188c49b7d298",
-  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
-  "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
-  "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
+  "anti-pattern/TECHNO.md": "52084231fb8e65c140a83d45436cf1f8e650402135b18823bc44336441cc135d",
+  "anti-pattern/MISE-EN-SERVICE.md": "f8a9fb963a2f4b303dc055b9dc5f39794a37d92eb838c2455f5a40b8ba7094d3",
+  "pilotage-back-office/badge.json": "f367a5756838e0a582bad20d3513cf0fc4b5892809c8def079b7cb38147d27d2",
+  "pilotage-back-office/TECHNO.md": "df36910508b8d6f6858aaf309170d86687b203936d7b1e9119084b57605223e0",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "4457150c484a2b8db3ca0cda873ec46db868e4386db758c429d4686515cfd14f",
+  "pitch-commercial/badge.json": "8759d6bda8ac2f364896407e210df489a5e6b8f68bd8f21ffb4396014478f758",
+  "pitch-commercial/TECHNO.md": "ab6e172aa4670c83af27919e270d6f274b38af0249f7dc645fcdb20d32576809",
+  "pitch-commercial/OSSATURE.md": "c3b617e90974a2a115e2d90c1bcf518a80dcc1e04a0dcf0f7f1d3228a77744a3",
+  "pitch-commercial/MISE-EN-SERVICE.md": "0ffe041641ec52692af299dbeac505d63f958dd5c64fc41975ad50c7d14f6900",
+  "presentations-claires/badge.json": "6cd6b05ade762a785487a49143f5fd717fdf23bc389fac919f326364fb663d03",
+  "presentations-claires/TECHNO.md": "c1ef15eb25d6d96f716122c8fb49d64f5608b30cae980eda4380410e4d163d4d",
+  "presentations-claires/references/GRAMMAIRE.md": "e7639ff6f05ba1f7f2171d581d61baad2ca2a4bf726ab36b259e5e1ec89f138a",
+  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "907a0ae73e95cb3556db9353a9ee7c4a3bdc9d7ae5ee4cfc31a8f4b00ee8ba74",
+  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "88014dc6958ea7253e4a7e48e2b41a32f893ca546fdbbdb98cb42af3df1a9271",
+  "presentations-claires/MISE-EN-SERVICE.md": "d31a581cb528669f77779c8f3958bc74a8e34f5749ed7be68b694332b0e2c871",
+  "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
+  "renodevis/TECHNO.md": "10ef808c4ca50e7cf74ed23dbdb23f4d77719cd93643d1583ea642bf14e9b419",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "30eb3d01bbb91734184b314c44aa4eefc183c1419f7ce489196d649991c72df9",
+  "skills-github/badge.json": "69709f26cbf59d8925818529a10e7f31b593f532c100183a3a0a89a82c632054",
+  "skills-github/TECHNO.md": "8f63aafadb56f2eb6698fa2fbffc8b80ef67bf1c896a5752182642ddf50ad277",
+  "skills-github/CATALOGUE.md": "aa253983d3c75d9d10508db8c79665a4105018e3a4be78f04b79f81a519e220e",
+  "skills-github/APPELER.md": "99b5167ec956e9c9203f1bf047f8346e9f1e98cdcb5af5bfb353630b475c4d82",
+  "skills-github/SOURCES.md": "08254ed4350f3c87dec9c2faafb627fa3cf50a75d47a033f29387519ffc8ecd2"
  }
 };

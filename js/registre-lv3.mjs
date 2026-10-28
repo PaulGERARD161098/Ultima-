@@ -395,7 +395,7 @@ export const NOEUDS = {
     invite: 'Choisis une technologie — son contenu s’ouvre dans le catalogue privé.',
     coeur: 'kalamn',
     legende: 'les technologies',
-    enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires'],
+    enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires', 'bibliotheque-skills'],
   },
   'zoh-devis': {
     nom: 'CRÉATION DE DEVIS',
@@ -425,6 +425,13 @@ export const NOEUDS = {
     cible: 'zohshia.html#presentations-claires',
     resume: 'Créer une présentation professionnelle : récit, composition éditoriale, '
       + 'visuels explicatifs, preuves et contrôle du rendu.',
+  },
+  'bibliotheque-skills': {
+    nom: 'BIBLIOTHÈQUE DE SKILLS',
+    etat: 'Catalogue disponible',
+    blason: 'registre',
+    cible: 'zohshia.html#skills-github',
+    resume: 'Retrouver les compétences réutilisables, leurs sources et les formulations pour les appeler.',
   },
   // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026). Étoile d'attente, le même geste
   // que ZOH SHIA le 04/10 et qu'IFULVIN : nom, épithète, les mots de Paul — AUCUNE
@@ -574,3 +581,4 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
 
   return anomalies;
 }
+

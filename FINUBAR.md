@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md",
+  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md · zohshia/skills-github/TECHNO.md · zohshia/skills-github/catalogue.json",
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
@@ -35,7 +35,7 @@
     "commit": "5297f5c54e884ff5b0286e117978f672f36d8e57",
     "quoi": "Léo → ZOH : raccord et comportement complétés sur branche, contrôles isolés verts. Aperçus des capacités, vrai handler et simulation ; CI finale requise."
   },
-  "prochaine_action": "Lire la CI finale du raccord ZOH avec main ; terminer la réception avant tout arbitrage de fusion, conformément à la demande de Paul.",
+  "prochaine_action": "Réceptionner l’aperçu de la bibliothèque de skills et les contrôles de la branche codex/zoh-bibliotheque-skills-20261028, puis obtenir l’accord de fusion lié aux versions avant publication.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -48,6 +48,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Bibliothèque de skills : 13 compétences récupérées, 2 assemblages et 3 pistes répertoriés. Les trois compétences rédactionnelles sont installées dans Work, sauvegardes distantes et 18 sources exactes vérifiées. Étoile préparée sur codex/zoh-bibliotheque-skills-20261028, guides copiés dans le dépôt, fiches et projection régénérées. Deux tests purs, onze refus connus, parcours navigateur ZOH complet avec bibliothèque à 1280 et 390 px verts, revue distincte corrigée. Reste CI complète, aperçu de branche et accord de fusion lié aux versions ; aucun déploiement de production effectué.",
+      "depuis": "2026-10-28"
+    },
     {
       "quoi": "Léo → stock ZOH : aperçu issu des fiches, système et handler réels raccordés ; sept comportements simulés, refus et contre-épreuves passent. Cartouche complet ajouté au harnais navigateur. Reste lecture de la CI finale ; modèle réel non reçu. Pas de fusion demandée.",
       "depuis": "2026-10-25"
@@ -731,3 +735,4 @@ RenoDevis conserve ses condensats de sources. Aucun accès au contrôle privé R
 [RESTANT] Fusion de cette version avec accord explicite ; la règle n’est pas
 annoncée publiée sur main avant cette fusion. Côté ArtiDispo : inventaire et
 maquette de l’onglet administrateur, puis parcours allégé du compte Matthieu.
+
