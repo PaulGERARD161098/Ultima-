@@ -31,11 +31,11 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-29",
-    "commit": "cb0e25a1eda72951f4cfb007700aa01a0a11e5bf",
-    "quoi": "Retour de journée RenoDevis capitalisé sur branche : Paul confirme le nouveau calcul, délai encore long ; leçons v111 chargées intégralement, contrat neutre R29-01 à R29-10 et fiches ZOH régénérées. 52 contrôles ciblés réussis. V3 RenoDevis laissée à la séance Claude Code."
+    "le": "2026-10-31",
+    "commit": "07841c4db82e044149aebfdd33d298b6fb6aec28",
+    "quoi": "Clôture ZOH : alerte de dérive vérifiée (le raccord 5297f5c était déjà dans main par #422, CI main verte sur c25259c) ; #427 fusionnée sur accord de Paul (30f6f1b) ; #428 reprise sur claude/ecstatic-bell-cpnynk au-dessus de main, seul conflit sur le fichier généré, réglé par publier.mjs. 81/81 unitaires, smoke-zohshia et smoke-retour-feuilles verts en local."
   },
-  "prochaine_action": "Recevoir la CI et la relecture de cette capitalisation Ultima, puis obtenir l’accord de fusion sur sa version exacte ; transmettre à Claude Code le prompt des correctifs RenoDevis sans intervenir dans sa V3.",
+  "prochaine_action": "Lire la CI de la PR qui reprend #428 depuis claude/ecstatic-bell-cpnynk, puis obtenir l’accord de Paul sur son SHA exact avant fusion ; #425 et #418 (conflits réels) restent des boucles séparées.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -53,7 +53,7 @@
       "depuis": "2026-10-29"
     },
     {
-      "quoi": "Léo → stock ZOH : aperçu issu des fiches, système et handler réels raccordés ; sept comportements simulés, refus et contre-épreuves passent. Cartouche complet ajouté au harnais navigateur. Reste lecture de la CI finale ; modèle réel non reçu. Pas de fusion demandée.",
+      "quoi": "Léo → stock ZOH : aperçu issu des fiches, système et handler réels raccordés ; sept comportements simulés, refus et contre-épreuves passent. Cartouche complet ajouté au harnais navigateur. CI finale lue le 31/10 : raccord fusionné (#422), main verte sur c25259c, puis #427 fusionnée (30f6f1b). Reste : modèle réel non reçu.",
       "depuis": "2026-10-25"
     },
     {
