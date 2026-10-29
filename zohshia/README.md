@@ -54,3 +54,8 @@ STOCKE pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence,
 l'écran (pas d'« extraire » en ligne).
 
 
+
+
+## Diligence et correspondance documentaire
+
+`diligence-correspondance/` porte la recherche sourcée, le classement explicite de précédents, la comparaison financière séparée et la livraison avec note professionnelle. Le code neutre s'extrait d'un commit et d'empreintes vérifiés ; les paramètres et dossiers restent dans chaque instance. Le badge décrit un socle à raccorder, sans activation automatique des agents.

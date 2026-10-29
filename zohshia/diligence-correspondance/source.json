@@ -1,0 +1,15 @@
+{
+  "description": "Source versionnée du moteur neutre de diligence. Les paramètres et les données des instances restent hors de ce dossier ; les empreintes permettent de refuser une extraction périmée.",
+  "depot": "PaulGERARD161098/RenoDevis",
+  "commit": "5198de1d1fe2d7489cd38b630444febed00578b0",
+  "fichiers": [
+    {
+      "chemin": "lib/diligenceCorrespondance.ts",
+      "sha256": "d244e7d2ab713d8f69004f03650df31dd6a16d7211b5be042be43616a45662e8"
+    },
+    {
+      "chemin": "lib/diligenceCorrespondance.test.ts",
+      "sha256": "e879a8667deb5021230a43600816af353dcc2a2b742f9106e99400eb1a317bff"
+    }
+  ]
+}

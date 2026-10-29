@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-27",
+ "publie_le": "2026-10-29",
  "technos": [
   {
    "id": "renodevis",
@@ -9474,27 +9474,289 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "diligence-correspondance",
+   "ordre": 6,
+   "badge": "Diligence et correspondance documentaire",
+   "etat": "Socle neutre testé ; raccord et recette requis par agent",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la technologie",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Ce que fait la technologie",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un agent reprend le contexte professionnel autorisé, la demande et ses corrections, puis recherche les sources et les précédents avant de produire un livrable. Une donnée absente reste inconnue : une analogie ne la transforme pas en fait. Le moteur ne promet pas une absence absolue d'erreurs ; il refuse les entrées invalides et rend visibles les limites des preuves.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Recherche et contrôle",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le compte est résolu par les accès serveur. Les mots de la conversation orientent la recherche, sans donner de droits ni changer silencieusement de compte. Chaque caractéristique comparée porte un repère documentaire. Les critères et leurs poids sont explicites avant le calcul ; leur somme est égale à cent. Une valeur inconnue ou sans source rapporte zéro, sans changer le dénominateur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les documents sont classés par points, date puis identifiant. Les versions d'un même chantier sont regroupées avant de retenir un ou deux précédents distincts. Une correspondance à zéro point ne constitue pas un précédent utile. Le meilleur est cité dans la note professionnelle, avec ses différences et ses inconnues. Le second sert au contrôle interne. Aucun précédent n'est joint automatiquement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Les prix restent un autre contrôle",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une similarité technique ne valide ni prix ni signature. La comparaison financière exige un périmètre et des conditions compatibles documentés ainsi que des totaux réconciliés avec les lignes, en unités monétaires entières. Sinon elle reste non vérifiable. Un ancien prix de vente ne remplace jamais une source d'achat. Les règles tarifaires et fiscales appartiennent à l'instance ; aucune valeur n'est imposée par ce socle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Livraison et réemploi",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le document client contient les lignes chiffrées et les mentions du professionnel. Les hypothèses, sources et différences historiques vont dans une note séparée. Un produit inconnu ou non chiffré empêche de déclarer le document complet. La génération ne constitue jamais une permission d'envoi. Après un incident constaté, corriger le code ou la procédure et éprouver un cas qui reproduit l'erreur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le code neutre s'extrait du commit indiqué dans le manifeste : il n'est pas recopié dans ce dossier. Le collecteur vérifie le commit et les empreintes des fichiers exacts. Il ne certifie pas la vérité des sources métier. Les essais du moteur sont distincts de l'audit d'une instance et de l'activation des autres agents.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "checklist",
+     "titre": "Avant livraison",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Avant livraison",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La vérification suit les étapes ci-dessous, avec une preuve propre à chaque instance. Une liste cochée sans document ou sans scénario exécuté ne constitue pas une réception.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Manuel : identifier le professionnel, le compte, le livrable, le destinataire et le mandat.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : qualifier les sources autorisées et leurs dates ; distinguer fait, déclaration, hypothèse et inconnu.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : adapter les critères et pondérations au métier ; ne pas copier les valeurs d'une autre instance.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : refuser les mélanges de comptes, poids invalides, identifiants dupliqués et montants incohérents.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : dédoublonner les chantiers et classer les correspondances documentées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : vérifier les différences techniques, le périmètre et les conditions avant toute comparaison de prix.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : séparer le document client de la note professionnelle et conserver les contrôles du moteur métier.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : autoriser explicitement l'envoi de la version contrôlée ; conserver son résultat avant tout rejeu.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Mise en service",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Extraction et raccord",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le manifeste décrit un commit du dépôt de référence et les empreintes des deux fichiers neutres. Depuis un clone local contenant ce commit : ",
+         ""
+        ],
+        [
+         "node zohshia/diligence-correspondance/collecter.mjs --depot <clone>",
+         "c"
+        ],
+        [
+         " vérifie la source sans appeler de service externe. ",
+         ""
+        ],
+        [
+         "--sortie <dossier-neuf>",
+         "c"
+        ],
+        [
+         " extrait uniquement ces fichiers. Aucune extraction de base ou de donnée professionnelle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le raccord reçoit des caractéristiques structurées et des localisateurs de preuves, jamais une décision libre du modèle présentée comme une preuve. La fonction de classement est pure ; elle ne lit aucun compte. L'appelant serveur conserve la responsabilité de filtrer les sources avant l'appel et d'en vérifier le contenu. Les résultats peuvent être réutilisés par plusieurs agents uniquement après leur propre intégration et recette.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Recette et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Éprouver : scénario valide, valeur inconnue, preuve absente, aucun comparable utile, versions du même chantier, mélange de comptes, modification de note après aperçu, montant altéré, source absente, document non chiffré et tentative d'envoi sans mandat. Un scénario sauté ne passe pas. Le test structurel ne prouve pas une source vraie ou un accès de production.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le badge est publié par le mécanisme existant ; il décrit un socle préparé, sans agent permanent activé. Le présent guide n'autorise aucune dépense, migration, fusion, publication de données professionnelles ou envoi réel.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
-  "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
-  "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
-  "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
-  "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
-  "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "a2074a5ae227fd59674c5956f77e16c76aa14c14f319f6fd1278b71b91319cab",
-  "pitch-commercial/badge.json": "982cb6f0bc69c54dda6881032b021cdb18305243c8de03b76d805e6dad397dae",
-  "pitch-commercial/TECHNO.md": "bb55a381cf40ff2bed27a5c9918001fd75bfb4c072a6716983df43d0870f759f",
-  "pitch-commercial/OSSATURE.md": "98e3592525077747112a59f1733f7392117c842225486bde3bab7d4bea52e213",
-  "pitch-commercial/MISE-EN-SERVICE.md": "56ea24e91d128ef50c4adf50e0abe7e6603ca80662404eb4b6104b42f4483ed5",
-  "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
-  "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
-  "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
-  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "4eb18a840d55838e2c9f7a6bdff3137ad9662e8ff03bc9f98e6b188c49b7d298",
-  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
-  "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
-  "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "anti-pattern/badge.json": "df26a23eb9716e12ee1ad6353b90564f6bb6edb1db1af35a1066a7c7b142fe04",
+  "anti-pattern/TECHNO.md": "52084231fb8e65c140a83d45436cf1f8e650402135b18823bc44336441cc135d",
+  "anti-pattern/MISE-EN-SERVICE.md": "f8a9fb963a2f4b303dc055b9dc5f39794a37d92eb838c2455f5a40b8ba7094d3",
+  "diligence-correspondance/badge.json": "2011fbf865919f9914953f9608771e73ae2cceaeff6ba01acc85123665111f10",
+  "diligence-correspondance/TECHNO.md": "61f7e7118655e53b1fd3d7dec62f52672d40ee4edd39e09863881fbd02bc62a7",
+  "diligence-correspondance/MISE-EN-SERVICE.md": "7995eb0b4db82d1dac8669db1e40cf29dc63f24c3abb62b6bc3ec5fef2dada13",
+  "pilotage-back-office/badge.json": "f367a5756838e0a582bad20d3513cf0fc4b5892809c8def079b7cb38147d27d2",
+  "pilotage-back-office/TECHNO.md": "df36910508b8d6f6858aaf309170d86687b203936d7b1e9119084b57605223e0",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "4457150c484a2b8db3ca0cda873ec46db868e4386db758c429d4686515cfd14f",
+  "pitch-commercial/badge.json": "8759d6bda8ac2f364896407e210df489a5e6b8f68bd8f21ffb4396014478f758",
+  "pitch-commercial/TECHNO.md": "ab6e172aa4670c83af27919e270d6f274b38af0249f7dc645fcdb20d32576809",
+  "pitch-commercial/OSSATURE.md": "c3b617e90974a2a115e2d90c1bcf518a80dcc1e04a0dcf0f7f1d3228a77744a3",
+  "pitch-commercial/MISE-EN-SERVICE.md": "0ffe041641ec52692af299dbeac505d63f958dd5c64fc41975ad50c7d14f6900",
+  "presentations-claires/badge.json": "6cd6b05ade762a785487a49143f5fd717fdf23bc389fac919f326364fb663d03",
+  "presentations-claires/TECHNO.md": "c1ef15eb25d6d96f716122c8fb49d64f5608b30cae980eda4380410e4d163d4d",
+  "presentations-claires/references/GRAMMAIRE.md": "e7639ff6f05ba1f7f2171d581d61baad2ca2a4bf726ab36b259e5e1ec89f138a",
+  "presentations-claires/../../.claude/skills/composition-editoriale/SKILL.md": "907a0ae73e95cb3556db9353a9ee7c4a3bdc9d7ae5ee4cfc31a8f4b00ee8ba74",
+  "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "88014dc6958ea7253e4a7e48e2b41a32f893ca546fdbbdb98cb42af3df1a9271",
+  "presentations-claires/MISE-EN-SERVICE.md": "d31a581cb528669f77779c8f3958bc74a8e34f5749ed7be68b694332b0e2c871",
+  "renodevis/badge.json": "7f1d82766a6688c9539062b31a507a46c888cef9e151f63d6d0af1ce0ae89283",
+  "renodevis/TECHNO.md": "10ef808c4ca50e7cf74ed23dbdb23f4d77719cd93643d1583ea642bf14e9b419",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "30eb3d01bbb91734184b314c44aa4eefc183c1419f7ce489196d649991c72df9"
  }
 };
