@@ -4890,3 +4890,12 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
   `smoke-lv5-passerelle`, `smoke-quadrants`, `smoke-retour-feuilles`). IFULVIN
   redevient la seule étoile inerte d'IMLADRIK, nommée.
 
+## 2026-10-29 — Retour RenoDevis : conserver le calcul, capitaliser dans Ultima
+
+**Source :** déclaration directe de Paul en clôture de la journée. Il confirme le passage au nouveau système et le bon fonctionnement des méthodes de création et de calcul redéfinies. Le temps de préparation reste trop long. Cette confirmation d'usage ne remplace pas les mesures de durée ni la qualification des sources métier.
+
+**Mandat :** Paul travaille sur la V3 dans Claude Code. Aucun changement dans RenoDevis par cette séance ; lui remettre un prompt de correctifs et de réception. Intégration autorisée des leçons et du contrat neutre dans Ultima/ZOH SHIA, sans données client, sans tarifs de l'instance, sans modifier l'extraction comme si la V3 était déjà reçue. Aucune propagation des copies de leçons vers les autres dépôts pendant ce mandat.
+
+**Capitalisation :** `memoire/LECONS.md` traite les écarts entre statut et événement, brouillon local et reprise effective, réparation d'un dossier et correction du parcours. Deux entrées répétitives sont condensées en préservant incidents et règles pour rester sous la limite existante de chargement ; aucun hook ni droit modifié. Le contrat détaillé et ses preuves attendues sont dans `zohshia/renodevis/TECHNO.md`, section « Retour d’usage du 29 octobre 2026 », relié à la fiche diligence. Les sources originales, corrections explicites, achats qualifiés et matrice du professionnel restent distincts des analogies historiques. Les remises conservent les achats ; les forfaits de vente évitent une seconde marge.
+
+**Suite :** préserver le moteur qui fonctionne ; réduire les reprises et le délai mesuré, puis éprouver la préparation partagée, les documents, les versions et le canal jusqu'à l'archive d'envoi. Rafraîchir l'extraction neutre seulement après stabilisation et réception de la source. Le statut d'intégration de cette capitalisation et son commit de reprise sont suivis dans `FINUBAR.md`.
