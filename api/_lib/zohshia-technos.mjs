@@ -9575,6 +9575,60 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. État vérifié au 29 octobre 2026",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le socle et son catalogue sont fusionnés dans les dépôts de référence : correction RenoDevis nº 435 et correction Ultima nº 426. Les déploiements de ces deux corrections sont prêts. Le manifeste conserve son commit source exact et ses empreintes ; une fusion ne justifie pas de modifier une extraction déjà vérifiée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Contrôles exécutés : 53 contrôles ciblés du moteur métier après fusion ; 8 contre-épreuves de collecte et de neutralité après fusion. Les intégrations continues des corrections sont réussies. Ces preuves concernent les scénarios exécutés, pas une garantie universelle de précision.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le rendu client reconnaît le format préparé, avec note professionnelle séparée. Le raccord automatique des consommateurs reste à réaliser et à éprouver agent par agent. La qualification des sources de prix dans la banque réelle reste également à réaliser par un administrateur ; aucune donnée de production n'a été modifiée pour la simuler. Aucun pilote ni envoi automatique n'est activé par cette livraison.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le contrôle HTTP direct du catalogue en production a été bloqué par l'authentification du déploiement. Le fonctionnement en session propriétaire reste donc non vérifié ; ne pas confondre ce blocage avec une recette applicative réussie.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour la prochaine instance : résoudre le compte autorisé, sélectionner sa matrice, qualifier les sources, raccorder le consommateur, puis éprouver le document et la note sur un dossier réel sans envoi. La cible de délai doit être mesurée sur ce parcours complet avant d'être annoncée comme acquise.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -9740,7 +9794,7 @@ export default {
   "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
   "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
   "diligence-correspondance/badge.json": "2011fbf865919f9914953f9608771e73ae2cceaeff6ba01acc85123665111f10",
-  "diligence-correspondance/TECHNO.md": "61f7e7118655e53b1fd3d7dec62f52672d40ee4edd39e09863881fbd02bc62a7",
+  "diligence-correspondance/TECHNO.md": "a74d09c3944cc19f9dd9c5249dd01bc57abeda64bcc029cd263fc916d377d719",
   "diligence-correspondance/MISE-EN-SERVICE.md": "7995eb0b4db82d1dac8669db1e40cf29dc63f24c3abb62b6bc3ec5fef2dada13",
   "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
   "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
