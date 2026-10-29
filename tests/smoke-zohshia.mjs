@@ -73,6 +73,30 @@ function contraste(page, sel) {
 
 const PAUL = { status: 200, body: { ok: true, data: donnee } };
 
+// Chaque fiche publiée doit fonctionner ; tester seulement la première ne
+// prouve ni les nouveaux onglets ni leurs ancres. API et session sont factices.
+console.log('§0 — couverture de toutes les fiches, desktop et mobile');
+verifier('catalogue non vide et identifiants uniques', donnee.technos.length > 0
+  && new Set(donnee.technos.map(t => t.id)).size === donnee.technos.length);
+for (const width of [1280, 390]) {
+  for (const t of donnee.technos) {
+    const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL, hash: '#' + t.id }, { width, height: 900 });
+    const fiche = page.locator('#technologie-' + t.id);
+    verifier(`${width} ${t.id} : ancre ouverte`, await fiche.locator('.badge-techno').getAttribute('aria-expanded') === 'true');
+    verifier(`${width} ${t.id} : tous les onglets publiés`, t.onglets.length > 0
+      && JSON.stringify(await fiche.getByRole('tab').allTextContents()) === JSON.stringify(t.onglets.map(o => o.titre)));
+    for (const o of t.onglets) {
+      await fiche.getByRole('tab', { name: o.titre, exact: true }).click();
+      verifier(`${width} ${t.id} ${o.id} : contenu non vide`, (await fiche.locator('.contenu').innerText()).trim().length > 30);
+      const deborde = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      verifier(`${width} ${t.id} ${o.id} : aucune largeur hors écran`, deborde <= 1);
+    }
+    verifier(`${width} ${t.id} : aucune erreur ni requête externe`, !journal.erreurs.length && !journal.externes.length,
+      [...journal.erreurs, ...journal.externes].join(' | '));
+    await page.close();
+  }
+}
+
 console.log('§1 — fermé : la page se tait');
 for (const [nom, cas] of [
   ['sans configuration', { client: 'aucun', api: PAUL }],
@@ -210,3 +234,4 @@ console.log('§4 — une balise dans la donnée reste du texte');
 await navigateur.close();
 if (echecs) { console.log(`\n${echecs} échec(s)`); process.exit(1); }
 console.log('\nSMOKE-ZOHSHIA OK');
+

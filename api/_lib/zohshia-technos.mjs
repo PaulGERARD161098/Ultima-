@@ -9577,6 +9577,15 @@ export default {
        ]
       },
       {
+       "t": "p",
+       "r": [
+        [
+         "La boucle reste ouverte tant qu'un contrôle requis manque, échoue ou s'appuie sur une donnée imprécise. Définir les critères avant l'exécution, vérifier que chaque contrôle s'exécute sur une entrée non vide et sur la version livrée, puis éprouver le contrôleur avec un défaut connu. Corriger la cause et rejouer les contrôles concernés avant de passer au dossier suivant. Un contrôle bloqué reste bloqué ; son absence ne devient jamais un succès. Consigner la cause, la dépendance à résoudre et la preuve attendue sans inventer de résultat ni contourner les droits.",
+         ""
+        ]
+       ]
+      },
+      {
        "t": "h2",
        "r": [
         [
@@ -9794,7 +9803,7 @@ export default {
   "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
   "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
   "diligence-correspondance/badge.json": "2011fbf865919f9914953f9608771e73ae2cceaeff6ba01acc85123665111f10",
-  "diligence-correspondance/TECHNO.md": "a74d09c3944cc19f9dd9c5249dd01bc57abeda64bcc029cd263fc916d377d719",
+  "diligence-correspondance/TECHNO.md": "1921122fd522d095c67164a7a3a43e4600e9dee700e24d1b73a070be2e375753",
   "diligence-correspondance/MISE-EN-SERVICE.md": "7995eb0b4db82d1dac8669db1e40cf29dc63f24c3abb62b6bc3ec5fef2dada13",
   "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
   "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",

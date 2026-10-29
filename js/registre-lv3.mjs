@@ -395,7 +395,8 @@ export const NOEUDS = {
     invite: 'Choisis une technologie — son contenu s’ouvre dans le catalogue privé.',
     coeur: 'kalamn',
     legende: 'les technologies',
-    enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires'],
+    enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires',
+      'zoh-pitch-commercial', 'zoh-diligence-correspondance'],
   },
   'zoh-devis': {
     nom: 'CRÉATION DE DEVIS',
@@ -425,6 +426,20 @@ export const NOEUDS = {
     cible: 'zohshia.html#presentations-claires',
     resume: 'Créer une présentation professionnelle : récit, composition éditoriale, '
       + 'visuels explicatifs, preuves et contrôle du rendu.',
+  },
+  'zoh-pitch-commercial': {
+    nom: 'PITCH COMMERCIAL',
+    etat: 'Méthode disponible',
+    blason: 'plume',
+    cible: 'zohshia.html#pitch-commercial',
+    resume: 'Préparer un discours adapté au prospect, avec ses preuves et ses limites.',
+  },
+  'zoh-diligence-correspondance': {
+    nom: 'DILIGENCE DOCUMENTAIRE',
+    etat: 'Socle testé ; raccord requis',
+    blason: 'bifurcation',
+    cible: 'zohshia.html#diligence-correspondance',
+    resume: 'Rapprocher les précédents sourcés, contrôler les écarts et séparer le document de sa note.',
   },
   // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026). Étoile d'attente, le même geste
   // que ZOH SHIA le 04/10 et qu'IFULVIN : nom, épithète, les mots de Paul — AUCUNE
@@ -574,3 +589,4 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
 
   return anomalies;
 }
+
