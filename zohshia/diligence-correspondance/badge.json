@@ -1,0 +1,10 @@
+{
+  "ordre": 6,
+  "badge": "Diligence et correspondance documentaire",
+  "etat": "Socle neutre testé ; raccord et recette requis par agent",
+  "onglets": [
+    {"id":"techno","titre":"Ce que fait la technologie","source":"TECHNO.md"},
+    {"id":"checklist","titre":"Avant livraison","source":"MISE-EN-SERVICE.md","sections":["## 1."]},
+    {"id":"service","titre":"Mise en service","source":"MISE-EN-SERVICE.md","sections":["## 2.","## 3."]}
+  ]
+}
