@@ -179,7 +179,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "Un dossier est ",
+         "Le relevé historique ci-dessous décrit le cycle d'",
          ""
         ],
         [
@@ -187,7 +187,7 @@ export default {
          "b"
         ],
         [
-         ", qui naît brouillon et avance d'état en état.",
+         ", qui naît brouillon et avance d'état en état. Le contrat de réception multi-propositions issu du retour d'usage du 29 octobre figure dans « Retour d’usage du 29 octobre 2026 » ; il ne constitue pas une preuve de mise à jour de l'extraction.",
          ""
         ]
        ]
@@ -2583,6 +2583,306 @@ export default {
         ],
         [
          ", hors du dossier, comme la liste des noms propres.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Retour d'usage du 29 octobre 2026 et réception de la prochaine extraction",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Déclaré par Paul :",
+         "b"
+        ],
+        [
+         " le nouveau système est utilisé et les méthodes de création et de calcul redéfinies fonctionnent bien. Le délai reste trop long. Cette confirmation d'usage est à conserver ; elle ne vaut ni mesure de performance, ni validation de toutes les sources métier, ni recette de la prochaine extraction neutre. Les inventaires, commits et preuves historiques du §8 restent inchangés.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les exigences ci-dessous sont un ",
+         ""
+        ],
+        [
+         "contrat à vérifier sur la version source stabilisée",
+         "b"
+        ],
+        [
+         ", pas une liste de fonctions déjà reçues. Elles capitalisent les difficultés de préparation, de reprise et d'envoi observées dans une instance, sans importer ses données ni ses règles commerciales.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Repère",
+          ""
+         ]
+        ],
+        [
+         [
+          "Exigence réutilisable",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve de réception attendue",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "R29-01",
+           ""
+          ]
+         ],
+         [
+          [
+           "Un dossier rassemble plusieurs propositions avec des groupes d'alternatives et des compléments facultatifs ou indépendants. Un devis complémentaire conserve son rôle de devis ; une fiche produit conserve son rôle documentaire. Aucun total ne cumule des alternatives.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dossier fictif avec deux alternatives, un devis complémentaire et trois fiches ; ordre, sélection, total, signature et relance cohérents.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-02",
+           ""
+          ]
+         ],
+         [
+          [
+           "Un lien unique donne accès au manifeste complet des documents autorisés, avec leurs versions. Les pièces jointes au mail et les documents accessibles par le lien sont deux sélections explicites.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Comparaison du manifeste, de la page client, de l'aperçu final et de l'archive d'envoi ; lien expiré ou révoqué refusé.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-03",
+           ""
+          ]
+         ],
+         [
+          [
+           "Destinataires, objet, texte, canal et sélection des pièces appartiennent au brouillon partagé. Une note privée ou un stockage local ne suffit pas à le déclarer prêt.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Rechargement puis reprise depuis une autre session autorisée : même brouillon et mêmes pièces ; divergence signalée avant l'envoi.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-04",
+           ""
+          ]
+         ],
+         [
+          [
+           "L'import conserve l'original et une représentation canonique des montants HT, taxes et TTC. Un montant absent est inconnu, jamais zéro par défaut. Les lecteurs compatibles ne recalculent pas silencieusement un PDF signé ou fourni.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Import neuf, lecture, reprise et second import identique sans réparation manuelle ; variantes cohérentes entre PDF et écran, anomalies explicites.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-05",
+           ""
+          ]
+         ],
+         [
+          [
+           "La chaîne distingue document original, préparation, contrôle, acceptation par le prestataire, livraison et ouverture. Le statut affiché dérive des événements disponibles.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Un import marqué « envoyé » ne fabrique aucun reçu ; une acceptation ne prouve pas la réception ; timeout puis reprise sans double envoi.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-06",
+           ""
+          ]
+         ],
+         [
+          [
+           "Le contrôle porte sur le contenu exact du dossier : documents, versions, destinataires et message. Une modification invalide les seules preuves dépendantes et impose un nouvel aperçu. L'historique reste conservé.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Changer une pièce après contrôle empêche l'emploi de la validation périmée ; aucune fabrication manuelle d'empreinte ni effacement d'historique.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-07",
+           ""
+          ]
+         ],
+         [
+          [
+           "Les corrections explicites et sources d'achat qualifiées précèdent l'application de la matrice. Une ressemblance technique ou un ancien prix de vente ne remplace pas une preuve d'achat. Un forfait déjà exprimé en vente ne subit pas une seconde marge.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Source absente, contradictoire ou non datée visible ; comparaison historique séparée et périmètre comparable ; règles propres au professionnel configurées hors socle.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-08",
+           ""
+          ]
+         ],
+         [
+          [
+           "Une remise commerciale modifie la vente, conserve les achats et recalcule la marge résultante selon la définition du professionnel. Marge sur produits, marge chantier et résultat net restent distincts.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Réconciliation lignes/totaux/arrondis avant et après remise, achats inchangés, fiscalité justifiée par l'instance.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-09",
+           ""
+          ]
+         ],
+         [
+          [
+           "Le texte du professionnel est conservé avec correction de langue et d'unités vérifiable, sans inventer une performance, une économie ni un accord technique. Les questions ouvertes restent dans la note professionnelle.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Aperçu fidèle à la demande et au canal choisi ; aucune hypothèse transformée en engagement client.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "R29-10",
+           ""
+          ]
+         ],
+         [
+          [
+           "La rapidité se mesure de la demande au dossier réellement contrôlable. Réutiliser contexte et preuves encore valides, mutualiser les lectures et ne recalculer que les dépendances modifiées.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Même jeu fictif avant/après : durée par étape, nombre de reprises et actions manuelles ; aucun gain chiffré annoncé sans mesure.",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Ce qui appartient au socle et ce qui reste à l'instance",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le socle porte les rôles documentaires, relations entre propositions, contrats d'import, événements, persistance, empreintes, provenance et mécanismes de calcul paramétrables. Les identités, catalogues privés, achats, prix, marges, coefficients, forfaits, fiscalité applicable, modèles commerciaux et documents clients restent dans la configuration et les données autorisées de chaque instance. Aucun tarif ou seuil issu du retour d'usage ne devient une constante universelle. Éprouver le même contrat sur deux professionnels fictifs aux règles différentes, avec refus de lecture entre comptes.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Ordre de réception",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Après stabilisation de la version source : relire les changements déjà livrés pour éviter un second moteur, épingler le commit complet, rapprocher chaque repère de son implémentation et de sa preuve, puis lancer l'extracteur existant et les contrôles de neutralité. Si le schéma change, rejouer aussi la base dans une instance isolée. Recevoir ensuite le parcours complet avec service d'envoi simulé et données fictives, y compris reprise de session et modification après contrôle. Ne changer les manifestes, inventaires ou états de disponibilité qu'après ces preuves. Une réparation de dossier en production ne remplace pas cette réception. La présente capitalisation n'active aucun envoi, relance, paiement ou consommateur.",
          ""
         ]
        ]
@@ -9629,6 +9929,41 @@ export default {
          ""
         ]
        ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "6. Retour d'usage confirmé le 29 octobre 2026",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Paul confirme l'utilisation du nouveau système et le bon fonctionnement des méthodes de création et de calcul redéfinies. Le délai de préparation reste à améliorer. Cette déclaration positive complète les preuves techniques du §5 ; elle ne certifie ni la qualification de chaque source de prix ni le raccord de tous les consommateurs ou la future extraction.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Conserver le calcul éprouvé et mesurer le parcours complet avant de l'optimiser. Réutiliser le contexte déjà acquis et les preuves dont les dépendances n'ont pas changé ; limiter les relectures et recalculs aux éléments affectés. La rapidité ne doit pas supprimer la provenance, la note professionnelle ou le contrôle final. Le contrat de réception réutilisable est centralisé dans ",
+         ""
+        ],
+        [
+         "zohshia/renodevis/TECHNO.md",
+         "c"
+        ],
+        [
+         ", section « Retour d’usage du 29 octobre 2026 », repères R29-01 à R29-10 : il couvre aussi import, dossier multi-propositions, brouillon partagé et preuves d'envoi. Ces exigences restent à éprouver sur chaque version et chaque consommateur concernés.",
+         ""
+        ]
+       ]
       }
      ]
     },
@@ -9794,7 +10129,7 @@ export default {
   "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
   "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
   "diligence-correspondance/badge.json": "2011fbf865919f9914953f9608771e73ae2cceaeff6ba01acc85123665111f10",
-  "diligence-correspondance/TECHNO.md": "a74d09c3944cc19f9dd9c5249dd01bc57abeda64bcc029cd263fc916d377d719",
+  "diligence-correspondance/TECHNO.md": "8be9e42d4c338dd34399afbc500f325dc3a5dd362697f788798bf56ec6ebbf05",
   "diligence-correspondance/MISE-EN-SERVICE.md": "7995eb0b4db82d1dac8669db1e40cf29dc63f24c3abb62b6bc3ec5fef2dada13",
   "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
   "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
@@ -9810,7 +10145,7 @@ export default {
   "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
   "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
+  "renodevis/TECHNO.md": "1fd94acf4e4a8a166f02c9a8a0dd0f794fefe21600aa17a786cb969a5232d4cd",
   "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
  }
 };

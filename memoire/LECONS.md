@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v110 2026-10-23 sha256:97749f2fc87a -->
+<!-- lecons:empreinte v111 2026-10-29 sha256:836706dd7447 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -124,74 +124,35 @@ sortie (`; echo "code=$?"`), jamais à la place. Et sur une fusion d'essai,
 vérifier d'abord qu'un ancêtre commun existe : `git merge-base A B`.
 
 **UN IDENTIFIANT ABRÉGÉ N'EST PAS L'IDENTIFIANT — ET IL NE SE COMPLÈTE JAMAIS
-DE MÉMOIRE** *(2026-09-11, 09-13 ×2, 09-30 ×3 — six fois payée)*. Les sept
-premiers caractères d'un SHA suffisent à le *reconnaître*, jamais à le
-*reconstituer*. Vrai d'un SHA, d'un UUID, d'un identifiant de déploiement ou de
-ticket. **11/09** : douze caractères inventés derrière les sept lus, refus
-immédiat. **13/09** : deux `409` à deux heures d'intervalle, la seconde après
-que la première eut été racontée en toutes lettres dans un compte rendu.
-**30/09** : `a1dbd126e7a5…` passé à la place de `a1dbd12e25c5…` — sept justes,
-trente-trois inventés ; puis, **trois heures après avoir écrit cette leçon
-ici**, `bb50a0fb1a3c…` à la place de `bb50a0fb344f…`, huit justes sur quarante.
+DE MÉMOIRE** *(2026-09-11 à 2026-10-21 — dix occurrences)*.
+Un préfixe permet de reconnaître un SHA, UUID, déploiement ou ticket, jamais de le
+reconstituer. Historique : **11/09**, douze caractères inventés après sept lus, refus ;
+**13/09 ×2**, deux `409` à deux heures d'intervalle, malgré un compte rendu explicite ;
+**30/09 ×3**, SHA fabriqués après 7, 8 puis 13 caractères justes, jusque dans le geste
+qui consignait cette leçon. Le troisième a été attrapé en reprenant la valeur par
+`git rev-parse` puis en la comparant caractère par caractère avant écriture.
+**03/10 (RenoDevis)**, littéral Python `86f45c99` au lieu de `86f45c98…`, rejeté avant
+commit par `git merge-base --is-ancestor` ; **06/10 (Ultima #356)**, SHA complet de
+mémoire en `expectedHeadSha`, fusion refusée puis réussie avec le SHA lu ;
+**08/10**, ancre `dernier_arret.commit` fabriquée dans Python après sept caractères
+justes, découverte par le `rev-parse` lancé après écriture, avant commit ;
+**21/10**, même faute dans le grain FINUBAR, rejetée par
+`Ultima-/finubar/collecter.mjs` (« commit inatteignable »), pas par la relecture.
 
-⛔ **C'est la récidive qui enseigne, pas la faute** : une règle qui dépend de la
-vigilance de celui qui tape sera violée **par celui qui l'a rédigée**. Un
-paragraphe de rapport ne s'exécute pas. Il faut un mécanisme, et il y en a deux,
-gratuits : **ne jamais TAPER un identifiant** — substitution de commande
-(`VRAI=$(git rev-parse origin/main)`), la main qui recopie est le point de
-défaillance, on la retire du chemin ; et **un garde-fou aval qui sache refuser**
-— `Ultima-/finubar/collecter.mjs` annonce « grain non rattaché », `expectedHeadSha` est
-un *lease* qui a refusé la valeur fabriquée. Sans lui la fusion réussissait, par
-chance, sur un lot que personne n'aurait su non vérifié.
+⛔ La vigilance, même celle de l'auteur de la leçon, n'a arrêté aucune récidive.
+Un préfixe juste rend l'invention crédible ; un littéral dans un script reste une
+saisie. Un rapport ne s'exécute pas. ⇒ **Lire l'identifiant complet puis injecter
+directement sa sortie dans l'écriture** (`VRAI=$(git rev-parse origin/main)`),
+jamais taper, compléter ou écrire avant de vérifier. Le préfixe d'un rapport, journal
+ou d'une PR n'est pas une source.
 
-⚠️ **Deux angles morts, chacun payé une fois.** Le garde-fou était **distant**
-les deux fois du 13/09 : quand c'est le serveur d'en face qui rattrape, le
-contrôle local manquait — et il coûtera le jour où l'API n'en a pas non plus.
-Et le 30/09, **le message d'erreur désignait la mauvaise cause** : `409 Head
-branch was modified` invite à croire qu'une autre séance a poussé, hypothèse
-crédible ce jour-là. Vérifié au lieu d'être cru (`git rev-parse` des deux côtés,
-SHA identiques) : la branche n'avait pas bougé d'un octet.
-
-⊕ **SIXIÈME OCCURRENCE, LE 30/09 AU SOIR — ET C'EST LA PREMIÈRE FOIS QUE LE
-MÉCANISME MORD.** En écrivant l'ancre du grain Finubar : `b01afed9d4606b1a...`
-à la place de `b01afed9d4607926...` — **13 caractères justes sur 40**, 27
-inventés. Trois choses à en retenir, et la troisième est la seule nouvelle :
-**(1)** la faute est survenue dans le geste même qui consigne cette leçon, dans
-la séance qui venait de l'écrire deux fois ; **(2)** les 13 premiers caractères
-justes rendent la valeur **reconnaissable**, donc crédible à la relecture — c'est
-exactement ce qui la rend dangereuse ; **(3)** elle a été **attrapée**, pour la
-première fois, parce que les deux mécanismes étaient en place : la valeur a été
-reprise par **substitution de commande** (`VRAI=$(git rev-parse origin/main)`) et
-**comparée caractère par caractère avant d'écrire**, le contrôle nommant l'écart
-au lieu de le taire. ⛔ **Le compte des récidives n'est plus l'enseignement** :
-six fois suffisent à établir que la vigilance ne tient pas. Ce qui s'enseigne
-désormais, c'est qu'**un identifiant ne s'écrit que par une commande qui le lit,
-et qu'aucune valeur reconnaissable n'est réputée juste** — un préfixe correct
-est le déguisement de l'invention, pas sa preuve.
-⊕ **SEPTIÈME, LE 03/10 (RenoDevis) — DANS UN SCRIPT, PAS AU CLAVIER.** Le
-grain Finubar a été réécrit par un script Python où l'ancre était un littéral :
-`86f45c99` à la place de `86f45c98…` — sept justes, le huitième inventé, et le
-reste absent. Attrapé avant le commit par `git merge-base --is-ancestor`. ⛔ Un
-script n'est pas une commande qui lit : un littéral tapé dedans est une saisie
-comme une autre. Le script prend le SHA de `git rev-parse`, ou il ne l'écrit pas.
-⊕ **HUITIÈME, LE 06/10 (Ultima #356) — et le lease a encore mordu.** Un SHA
-complet écrit de mémoire passé en `expectedHeadSha` : `409`, fusion refusée. Repris
-par `git rev-parse`, la fusion est passée. Rien de nouveau dans la faute ; ce qui se
-confirme, c'est que **le seul rempart qui a tenu les huit fois est aval** — la
-vigilance n'a arrêté aucune des huit.
-⊕ **NEUVIÈME, LE 08/10 (Ultima, grain Finubar).** `dernier_arret.commit` tapé
-dans un script Python : `6203fe48e75f…`, le vrai étant `6203fe407c74…` — sept
-justes, le reste inventé. Vu en relisant la sortie de `git rev-parse` lancée juste
-après, avant tout commit. ⇒ L'ordre se retourne : **le `rev-parse` d'abord, sa
-sortie injectée dans l'écriture** (`V=$(git rev-parse …)`), jamais l'écriture puis
-la vérification.
-⊕ **DIXIÈME, LE 21/10 (Ultima, grain Finubar) — et c'est encore l'aval qui a mordu.**
-Un SHA complet complété de mémoire à partir d'un préfixe juste, écrit dans le grain
-FINUBAR d'Ultima ; attrapé par `Ultima-/finubar/collecter.mjs` (« commit inatteignable »),
-pas par la relecture. Rien de nouveau dans la faute : la règle du 08/10 n'avait pas été
-appliquée. ⛔ Le préfixe vu dans un rapport, un journal ou une PR n'est pas une source :
-la seule source est `git rev-parse`, injectée telle quelle.
-
+Conserver aussi un refus aval : `expectedHeadSha` est un lease ; le collecteur
+signale « grain non rattaché » ou un commit inatteignable. Ce refus a tenu quand la
+vigilance échouait ; sans lui une fusion peut réussir sur un lot non vérifié.
+**Deux angles morts** : un rejet distant (13/09) révèle l'absence de contrôle local,
+dangereuse si une autre API n'a pas de garde ; un libellé peut tromper (30/09,
+`409 Head branch was modified`). Relire les SHA des deux côtés : ici ils étaient
+identiques, la branche n'avait pas bougé.
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
 CONTENUS, PAS LES SHA** *(2026-09-18)*. Vu RenoBoost sur une branche à sept
@@ -853,6 +814,8 @@ un bug dès qu'il y en a deux ; le faire dériver de la cible
 (`basename(chemin)`) — et vérifier que la correction n'introduit pas un import
 manquant, sinon elle jette au lieu d'informer, ce qui est pire.
 
+⊕ **État affiché ≠ acte accompli** *(2026-10-29, RenoDevis)*. Deux devis importés portaient « Envoyé » sans archive d'envoi client ; Paul a dû demander si le client les avait reçus. L'envoi réel n'a été confirmé qu'ensuite par l'archive et la copie du mail. ⇒ Distinguer import, préparation, contrôle, acceptation prestataire, livraison et ouverture. Un statut ne prouve pas l'événement ; une acceptation ne prouve pas la réception. Ne pas renvoyer pour lever un doute : relire d'abord l'opération.
+
 **UN TEST QUI PINCE UNE ADRESSE NE DIT RIEN DE CE QU'ELLE SERT** *(2026-09-27, RenoBoost)*.
 `RenoBoost/tests/accueil-v3.test.mjs` exigeait le lien Calendly exact du hero, et il est
 resté vert du 23 au 27/09 pendant que ce lien renvoyait « This Calendly URL is
@@ -1232,6 +1195,8 @@ liste des choses à regarder.* La question à poser après chaque correction n'e
 pas « est-ce réparé ? » mais **« de quelle famille était ce défaut, et qui
 d'autre en est ? »** — puis on présente la famille entière au garde-fou.
 
+⊕ **Réparer les données d'un dossier ne prouve pas le parcours suivant** *(2026-10-29, RenoDevis)*. Le HT d'une variante figurait dans le PDF et les données, mais manquait à l'affichage ; correction d'import puis nouvelle vérification nécessaires. Coût : intervention technique avant envoi. ⇒ Séparer « dossier corrigé » et « défaut général corrigé » ; ce dernier exige une création/importation neuve et une reprise, sans réparation manuelle. Cela ne remet pas en cause le nouveau calcul dont Paul confirme le bon fonctionnement.
+
 **UN INVARIANT VRAI ET NON GARDÉ SE CASSE EN SILENCE** *(2026-09-13)*. Deux
 invariants du radar étaient parfaitement respectés et **absolument pas testés** :
 la garde `requireAdmin` (correcte — elle interroge `is_admin` avec le JWT de
@@ -1567,6 +1532,10 @@ les fichiers `"use server"`. Même famille que « la valeur ne se porte jamais s
 le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
+
+**UN BROUILLON PRÊT CHEZ L'AGENT N'EST PAS PRÊT CHEZ PAUL**
+*(2026-10-29, RenoDevis).* Texte gardé dans le navigateur et sélection des pièces non durable : il a fallu copier le message dans deux notes privées et demander une nouvelle sélection. Cinq PDF étaient préparés ; l'archive finale en joint deux, les trois autres restant accessibles par le lien. La cause exacte de la sélection finale n'est pas établie. Coût constaté : reprises manuelles et écart entre préparation annoncée et mail envoyé, sans document devenu inaccessible. ⇒ Avant « prêt à envoyer », éprouver la reprise du même brouillon dans une autre session, puis rapprocher message, destinataires, versions et pièces de l'aperçu final. Sinon nommer précisément ce qui reste local ; une note de secours n'est pas un brouillon partagé.
+Méthode neutre : `Ultima-/zohshia/renodevis/TECHNO.md`, « Retour d'usage du 29 octobre 2026 » (R29-01 à R29-10).
 
 **UNE LIVRAISON TECHNIQUE NE SOLDE PAS LES DEMANDES UTILISATEUR**
 *(2026-10-22, Artidispo ; retour d’Henry transmis par Paul)*.
@@ -2657,38 +2626,33 @@ s'arrête sans prévenir le dépôt : une alerte à 75 % se pose dans « Budgets
 harnais navigateur), jouée même pour un commit de `.md`.
 
 **UNE COMMANDE QUE LA PLATEFORME EXÉCUTE SE VÉRIFIE SUR LA PLATEFORME** *(2026-10-19)*.
-J'ai écrit l'`ignoreCommand` de Vercel de RenoBoost comme un script, éprouvé en local
-(tests verts, sabotages au rouge). Premier déploiement réel : `ERROR`, code 127 — Vercel
-SUPPRIME les fichiers de `RenoBoost/.vercelignore` (dont `RenoBoost/scripts/`) AVANT d'exécuter la
-commande, et tout code de sortie autre que 0 ou 1 casse le déploiement. Mise en ligne dans
-`RenoBoost/vercel.json` : 365 caractères pour un plafond de schéma de 256 → second `ERROR`.
-Deux aperçus perdus, rattrapés avant toute fusion. ⛔ Un test local prouve la logique, pas
-l'environnement : relire le journal du PREMIER déploiement réel, lire la doc du champ
-AVANT d'écrire sa valeur, et mettre en test toute limite de plateforme dès qu'on la
-découvre (`RenoBoost/tests/vercel-ignore-build.test.mjs`, `MAX_IGNORE_COMMAND`). Une
-commande lancée par une plateforme ne dépend d'aucun fichier qu'elle peut retirer, et
-ramène TOUT code inattendu à « construire ».
+RenoBoost : `ignoreCommand` de Vercel vert en local, sabotages compris, puis
+`ERROR 127` au premier déploiement : `RenoBoost/.vercelignore` retirait
+`RenoBoost/scripts/` AVANT l'exécution ; tout retour autre que 0 ou 1 casse le
+déploiement. Commande déplacée dans `RenoBoost/vercel.json` : 365 caractères
+pour une limite de 256, second `ERROR`. Coût : deux aperçus perdus, avant fusion.
+⇒ Lire la doc du champ avant écriture et le journal du PREMIER déploiement ;
+tester les limites découvertes (`RenoBoost/tests/vercel-ignore-build.test.mjs`,
+`MAX_IGNORE_COMMAND`). Ne dépendre d'aucun fichier que la plateforme retire ;
+ramener tout code inattendu à « construire ». Le local prouve la logique, pas le milieu.
 
-*Rechute du 2026-10-19 (Ultima-, premier passage réel de la CI) — TROIS tentatives pour une seule fausse panne* :
-`tests/unit-ci-md-seuls.mjs` simulait un `grep` en panne. ① Un faux binaire dans `os.tmpdir()` : vert en
-local, rouge sur GitHub — le harnais tourne sous `docker --tmpfs /tmp`, monté `noexec` par défaut, le
-faux binaire n'était jamais exécuté et le VRAI grep répondait. ② Une fonction injectée par `BASH_ENV`,
-vérifiée sous un `/tmp` `noexec` en root : verte chez moi, rouge sur GitHub — dans l'environnement
-minimal du conteneur elle ne prenait pas effet (observé avec bash 5.2.21 : sans `SHLVL` dans
-l'environnement, la fonction n'agit pas ; cause non établie, le fichier est pourtant bien lu).
-③ Un LIEN SYMBOLIQUE vers `node` (qui refuse les options de grep et sort en erreur) : indépendant du
-montage de `/tmp` et de l'environnement ; vert dans le banc ci-dessous. Coût : trois passages de CI,
-dont deux rouges sur un test que je croyais éprouvé « comme la CI ». ⛔ Un banc qui reproduit UN facteur
-de l'environnement n'est pas l'environnement : mon `noexec` en root, avec l'environnement complet de la
-session, passait là où la CI échouait. Le banc qui reproduit : utilisateur `nobody`, `env -i` (PATH et
-HOME seulement), `TMPDIR` sur un tmpfs `noexec` (`mount -t tmpfs -o noexec,nosuid,mode=1777 tmpfs <dir>`,
-dossier lisible par `nobody` — pas sous `/tmp/claude-0`, remis en 700 par la séance). Il a reproduit
-l'échec de la CI à l'identique avec la version ②, et prouvé le correctif ③ (suite complète 68/68).
-⛔ Et le verrou de non-vacuité (« le faux grep MORD ici ») est ce qui a désigné la cause dès le premier
-passage réel : sans lui, le verdict aurait seulement dit `false`. ⚠️ Un sabotage se vérifie sur le BON
-verdict : mes trois « rouge ✔ » d'une passe étaient rouges pour `EACCES` (un dossier devenu illisible
-pour `nobody`), pas pour le sabotage — le script impose désormais la référence verte AVANT et nomme le
-verdict qui tombe.
+*Rechute le même jour, Ultima-, `Ultima-/tests/unit-ci-md-seuls.mjs`* : trois
+tentatives pour simuler un `grep` en panne. ① Faux binaire dans `os.tmpdir()` :
+vert localement, inexécuté en CI sous `docker --tmpfs /tmp` (`noexec`), donc vrai
+grep appelé. ② Fonction par `BASH_ENV` : verte sous `noexec` en root avec
+l'environnement de séance, inactive en conteneur minimal (bash 5.2.21 sans
+`SHLVL`, fichier pourtant lu ; cause non établie). ③ Lien symbolique vers
+`node`, qui rejette les options de grep : fonctionne sans dépendre du montage
+ou de l'environnement. Coût : trois CI, dont deux rouges malgré le banc local.
+
+Le banc probant reproduit **ensemble** : utilisateur `nobody`, `env -i` (PATH et
+HOME seuls), TMPDIR en tmpfs `noexec,nosuid,mode=1777`, dossier lisible par
+`nobody` (hors `/tmp/claude-0`, remis en 700 par la séance). Il reproduit ② et
+valide ③, suite complète 68/68. Le verrou « le faux grep MORD ici » désigne la
+cause au lieu d'un simple `false`. ⛔ Trois sabotages affichés « rouge ✔ » étaient
+en fait rouges pour `EACCES`, dossier illisible : imposer **la référence verte
+AVANT**, puis vérifier le verdict attendu de chaque sabotage. Reproduire un seul
+facteur n'est pas reproduire l'environnement.
 
 **`pkill -f` AVEC UN MOTIF QUE SA PROPRE COMMANDE CONTIENT TUE LE SHELL** *(2026-10-12)*.
 `pkill -f "next start -p 3123"` puis `pkill -f "http.server 8765"` : le motif
