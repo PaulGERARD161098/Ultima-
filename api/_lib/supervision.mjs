@@ -23,6 +23,14 @@ import { verifierForme } from './supervision-forme.mjs';
 import { examinerProposition } from './supervision-juge.mjs';
 import { verifierMatiere } from './supervision-preuves.mjs';
 
+// L'INTERRUPTEUR — fermé par défaut, même règle que `LEO_ECRITURES_AUTO` : seule
+// la valeur exacte 'active' sert l'outil à Léo et ouvre la soumission. Absente,
+// vide ou mal tapée : coupé. Il ne s'ouvre qu'une fois la migration appliquée et
+// le cockpit d'arbitrage en place (pilotage en back-office : le contrôle précède).
+export function supervisionActive(env = process.env) {
+  return env?.LEO_SUPERVISION === 'active';
+}
+
 // Les arguments de l'outil, à plat. `max` borne chaque texte comme le catalogue
 // de Léo le fait pour tous ses outils. Les noms suivent le contrat.
 export const ARGS_SUPERVISION = Object.freeze({

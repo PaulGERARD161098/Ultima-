@@ -45,8 +45,14 @@ cette techno.
 2. **Objets supervisables** — technos ZOH, dépôts Finubar, outils de l'agent.
 3. **Pas de purge** — une décision devenue caduque passe à `OBSOLETE` ; rien
    n'est supprimé, sinon le blocage d'une proposition refusée disparaîtrait.
-4. **Proposer est une écriture de l'anneau vert**, journalisée avant l'acte et
-   défaisable (passage à `OBSOLETE`). L'agent n'a **aucun** moyen d'arbitrer.
+4. **Proposer est une écriture de l'anneau ORANGE** (révisé le 31/10, choix de
+   Paul : un dossier de vingt champs rédigés par l'agent n'est jamais mot pour
+   mot dans la dictée, le vert n'aurait jamais joué). Le responsable clique pour
+   SOUMETTRE ; une proposition en attente se retire au cockpit (`OBSOLETE`).
+   L'agent n'a **aucun** moyen d'arbitrer ni de retirer.
+5. **Lieu** — le quadrant FINUBAR (choix de Paul du 31/10), réservé au
+   propriétaire. L'outil est **coupé par défaut** (`LEO_SUPERVISION` doit valoir
+   exactement `active`) tant que la migration et le cockpit ne sont pas en place.
 
 Moyens : une fonction SQL et le client Supabase déjà en place ; ni `pg` ni
 `ajv` (décision de Paul).

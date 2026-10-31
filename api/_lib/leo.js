@@ -2,6 +2,7 @@ import { INDEX_POINTS_DE_VUE } from './leo-points-de-vue.mjs';
 import { REGLES_INTERACTION_LEO } from '../../js/leo-interaction.mjs';
 import { EMAIL_RE } from './validate.js';
 import { decrireStockZoh } from './leo-zohshia.mjs';
+import { ARGS_SUPERVISION, supervisionActive } from './supervision.mjs';
 
 // Voix de Léo (boucle L2) — briques PURES : bornes de la conversation,
 // prompt système Jarvis par quadrant, validation d'entrée, extraction de la
@@ -376,6 +377,56 @@ const CATALOGUE = {
       souffle: { max: 500, requis: true, description: 'Deuxième vent — « cohérent avec moi-même, mes choix, ma paix ? » : sa réponse.' },
       ouragan: { max: 500, requis: true, description: 'Troisième vent — « emporté par le vent ? » (la volatilité) : sa réponse.' }
     }
+  },
+
+  // PROPOSER_SUPERVISION — supervision et réemploi (Paul, 31/10/2026 ;
+  // zohshia/supervision-valeur/TECHNO.md). Léo propose de conserver, mesurer,
+  // améliorer, mutualiser, simplifier, suspendre ou retirer un objet d'Ultima
+  // (techno ZOH, dépôt Finubar, outil de Léo), preuves typées à l'appui ; le
+  // serveur pose ce qui se mesure et enchaîne trois sas avant la base. ORANGE
+  // (choix de Paul du 31/10) : un dossier de vingt champs rédigés par Léo n'est
+  // jamais mot pour mot dans la dictée, le vert n'aurait jamais joué ; Paul
+  // clique « Confirmer » pour SOUMETTRE — l'arbitrage, lui, n'a AUCUN outil :
+  // il vit au cockpit (api/supervision.js, action `arbitrer`).
+  // ⛔ `activation` : servi seulement si LEO_SUPERVISION vaut 'active'
+  // (supervision.mjs) — fermé tant que la migration et le cockpit ne sont pas là.
+  // Les bornes viennent d'ARGS_SUPERVISION : une seule vérité pour l'outil et la route.
+  proposer_supervision: {
+    quadrant: 'finubar',
+    anneau: 'orange',
+    activation: supervisionActive,
+    description: 'Proposer à l’arbitrage de Paul une décision de supervision sur un objet ' +
+      'd’Ultima — une techno ZOH (zoh:<id>), un dépôt Finubar (finubar:<propriétaire/dépôt>) ' +
+      'ou un de tes outils (leo:<nom>) : le conserver, le mesurer, l’améliorer, le ' +
+      'mutualiser, le simplifier, le suspendre ou proposer son retrait. Preuves = ' +
+      'identifiants zoh: ou finubar: du catalogue joint, jamais inventés. Tu proposes ; ' +
+      'Paul tranche — tu n’exécutes rien.',
+    args: Object.fromEntries(Object.entries(ARGS_SUPERVISION).map(([cle, spec]) => [cle, {
+      ...spec,
+      description: {
+        objet: 'L’objet visé, identifiant typé exact : zoh:<id>, finubar:<propriétaire/dépôt> ou leo:<outil>.',
+        recommandation: 'conserver, mesurer, ameliorer, mutualiser, simplifier, suspendre ou proposer_retrait.',
+        type_benefice: 'direct, indirect, protection ou personnel.',
+        besoin: 'Le besoin que l’objet sert, en une ou deux phrases.',
+        beneficiaire: 'Qui en bénéficie.',
+        constat: 'Ce qui est constaté aujourd’hui, appuyé sur les preuves.',
+        consequence: 'Ce qui arrive si l’on suit la recommandation.',
+        alternative_minimale: 'La plus petite alternative qui servirait le même besoin.',
+        gain_attendu: 'Le gain attendu, chiffré s’il l’est dans les preuves.',
+        preuve_attendue: 'Ce qui prouvera, après coup, que la décision était la bonne.',
+        preuves: 'Identifiants des preuves séparés par des espaces : zoh:<id> ou finubar:<propriétaire/dépôt>, tels qu’au catalogue.',
+        contrefactuel: 'Pour suspendre ou retirer : ce qui manquerait sans l’objet.',
+        preuve_dependances: 'Pour suspendre ou retirer : identifiant de la preuve des dépendances (zoh: ou finubar:).',
+        preuve_protections: 'Pour suspendre ou retirer : identifiant de la preuve des protections (zoh: ou finubar:).',
+        retour_arriere: 'Pour suspendre ou retirer : comment revenir en arrière.',
+        capacite_commune: 'Pour mutualiser : la capacité partagée.',
+        compatibilite_verifiee: 'Pour mutualiser : ce qui montre la compatibilité.',
+        reexamen_responsable: 'Qui réexaminera la décision.',
+        reexamen_declencheur: 'Quand ou sur quel signal la réexaminer.',
+        critere_poursuite: 'Le critère pour poursuivre.',
+        critere_arret: 'Le critère pour arrêter.'
+      }[cle]
+    }]))
   }
 };
 
@@ -399,7 +450,7 @@ export function normaliserQuadrant(quadrant) {
     : quadrant;
 }
 
-export const OUTILS_PAR_QUADRANT = { riven: [], bcp: [], adramelech: [], imladrik: [] };
+export const OUTILS_PAR_QUADRANT = { riven: [], bcp: [], adramelech: [], imladrik: [], finubar: [] };
 for (const nom of Object.keys(CATALOGUE)) {
   const outil = CATALOGUE[nom];
   const properties = {};
@@ -426,10 +477,23 @@ for (const nom of Object.keys(CATALOGUE)) {
   for (const q of [].concat(outil.quadrant)) OUTILS_PAR_QUADRANT[q].push(schema);
 }
 
+// Un outil derrière un interrupteur (`activation`) n'existe pour Léo que s'il
+// est ouvert. Lu dans le catalogue, jamais dans une seconde liste.
+export function outilActif(nomOutil, env = process.env) {
+  const outil = typeof nomOutil === 'string' && Object.prototype.hasOwnProperty.call(CATALOGUE, nomOutil)
+    ? CATALOGUE[nomOutil] : undefined;
+  if (!outil) return false;
+  return typeof outil.activation !== 'function' || outil.activation(env) === true;
+}
+
 // Outils d'un quadrant → tableau, ou null si le catalogue est vide/inconnu.
-export function outilsPour(quadrant) {
-  const liste = OUTILS_PAR_QUADRANT[quadrant];
-  return Array.isArray(liste) && liste.length > 0 ? liste : null;
+// Les outils coupés par leur interrupteur sont retirés.
+export function outilsPour(quadrant, env = process.env) {
+  const liste = Object.prototype.hasOwnProperty.call(OUTILS_PAR_QUADRANT, quadrant)
+    ? OUTILS_PAR_QUADRANT[quadrant] : undefined;
+  if (!Array.isArray(liste)) return null;
+  const servis = liste.filter((o) => outilActif(o.name, env));
+  return servis.length > 0 ? servis : null;
 }
 
 // Date au motif AAAA-MM-JJ ET réelle au calendrier (2026-13-40 → non).
@@ -555,10 +619,12 @@ export function autoriserEcriture(nomOutil, args, quadrant) {
   return { ok: true, anneau: decision.anneau, proposition: verdict.proposition };
 }
 
-export function validerProposition(nomOutil, args, quadrant) {
+export function validerProposition(nomOutil, args, quadrant, env = process.env) {
   const outil = typeof nomOutil === 'string'
     ? (Object.prototype.hasOwnProperty.call(CATALOGUE, nomOutil) ? CATALOGUE[nomOutil] : undefined)
     : undefined;
+  // Un outil coupé par son interrupteur est un outil inconnu (fail-closed).
+  if (outil && !outilActif(nomOutil, env)) return { ok: false };
   // Un outil transversal porte ses quadrants en liste ; un quadrant qui n'y
   // figure pas (NICOL BOLAS pour AMATSU) est refusé comme un outil inconnu.
   if (!outil || ![].concat(outil.quadrant).includes(quadrant)) return { ok: false };
@@ -654,6 +720,10 @@ export function reformulerProposition(proposition) {
     case 'proposer_lecture_amatsu':
       return 'Amatsu lit « ' + args.objet + ' » — plus libre ? « ' + args.bise +
         ' » · cohérent ? « ' + args.souffle + ' » · emporté ? « ' + args.ouragan + ' »';
+    case 'proposer_supervision':
+      return 'Soumettre à ton arbitrage : ' + args.recommandation + ' « ' + args.objet + ' » — ' +
+        args.constat + ' Gain attendu : « ' + args.gain_attendu + ' ». Preuves : ' + args.preuves +
+        '. Tu tranches au cockpit ; rien n’est exécuté.';
     case 'proposer_contact': {
       const coordonnees = [args.telephone, args.email, args.ville].filter(Boolean).join(' · ');
       return 'Ajouter « ' + args.nom + ' » (' + args.type + ') au réseau RIVEN' +
@@ -819,6 +889,22 @@ export function construireSysteme(quadrant, avecOutils) {
         's’il manque, demande-le en un mot avant d’appeler l’outil. Tu ' +
         'n’inventes ni numéro ni mail. Si Paul dit qui lui a donné le contact ' +
         '(« par Hugo »), c’est l’apporteur — pas une fiche à créer.'
+    );
+  }
+  // PROPOSER_SUPERVISION (31/10/2026) : sur FINUBAR, Léo sait proposer une
+  // décision de supervision — et sait qu'elle ne tranche ni n'exécute rien.
+  // Lu dans les outils SERVIS (interrupteur compris), jamais dans une seconde liste.
+  if (avecOutils && (outilsPour(quadrant) || []).some((o) => o.name === 'proposer_supervision')) {
+    reglesAction.push(
+      '- Supervision : quand Paul te demande s’il faut garder, mesurer, améliorer, ' +
+        'mutualiser, simplifier, suspendre ou retirer une techno ZOH, un dépôt ou un ' +
+        'de tes outils, appelle proposer_supervision. Les preuves sont des ' +
+        'identifiants zoh: ou finubar: présents dans le catalogue ou l’état joints — ' +
+        'n’en invente aucun ; si tu n’en as pas, dis-le au lieu d’appeler l’outil. ' +
+        'Pour suspendre ou retirer, donne le contrefactuel, la preuve des ' +
+        'dépendances, celle des protections et le retour arrière. Une preuve existe ' +
+        'ne veut pas dire qu’elle concerne l’objet : dis-le. Paul tranche au ' +
+        'cockpit ; tu n’as aucun moyen d’arbitrer.'
     );
   }
   return [

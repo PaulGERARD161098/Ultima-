@@ -30,8 +30,10 @@ const source = readFileSync(new URL('../api/_lib/leo.js', import.meta.url), 'utf
 const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name))];
 // ONZE depuis le 18/10 : dix + AMATSU, le dragon de l'air.
 // DOUZE depuis le 23/10 : + proposer_contact, la fiche réseau par la voix.
-verdicts.nonVacuite = tousLesOutils.length === 12 &&
-  Object.keys(OUTILS_PAR_QUADRANT).length === 4;
+// TREIZE depuis le 31/10 : + proposer_supervision, ORANGE, sur un CINQUIÈME
+// quadrant (FINUBAR, choix de Paul) — et coupé par défaut (LEO_SUPERVISION).
+verdicts.nonVacuite = tousLesOutils.length === 13 &&
+  Object.keys(OUTILS_PAR_QUADRANT).length === 5;
 
 // ---------- 1. Chaque outil porte un anneau EXPLICITE et reconnu ----------
 // Le défaut orange rattrape un champ manquant à l'exécution ; il ne dispense
