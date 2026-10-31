@@ -24,6 +24,7 @@
 // déjà. Les étiquettes d'état viennent du même module : l'écran et la voix
 // doivent nommer un état avec le même mot.
 import { ETIQUETTES, yeuxDeLeo } from './adaptateur-finubar.mjs';
+import { monterCockpit } from './supervision-cockpit.mjs';
 
 
 function el(nom, classe, texte) {
@@ -248,6 +249,10 @@ async function demarrer() {
       return;
     }
     rendre(charge.data);
+
+    // Le cockpit de supervision : après la table de marche, avec le même jeton.
+    // Son échec ne touche pas la table (il dit le sien dans sa section).
+    monterCockpit({ hote: document.getElementById('supervision-corps'), jeton: session.access_token });
 
     // La voix, une fois l'écran rendu : Léo voit ce que Paul voit, jamais plus.
     // Montée à la main (data-leo-manuel) parce qu'elle attend l'agrégat ; sans

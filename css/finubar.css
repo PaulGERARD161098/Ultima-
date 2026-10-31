@@ -158,6 +158,22 @@ h1 { font-variant: small-caps; font-weight: 600; font-size: clamp(1.9rem, 4.5vw,
 .provenance code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; }
 .etat-message { font-style: italic; color: var(--encre-claire); }
 
+/* ——— Supervision : les propositions de Léo à arbitrer (31/10/2026) ——— */
+.supervision-liste { display: flex; flex-direction: column; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
+.supervision-interrupteur { font-size: 0.9rem; color: var(--encre-claire); margin: 0 0 0.9rem; }
+.supervision-avertissement { font-style: italic; color: var(--encre-claire); font-size: 0.92rem; margin: 0.2rem 0 0.6rem; }
+.supervision-gestes { border-top: 1px solid var(--filet); margin-top: 0.8rem; padding-top: 0.8rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.supervision-note { font: inherit; color: inherit; background: transparent; border: 1px solid var(--encre-claire); padding: 0.4rem 0.6rem; width: 100%; box-sizing: border-box; resize: vertical; }
+.supervision-boutons { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.supervision-bouton {
+  font: inherit; font-variant: small-caps; letter-spacing: 0.1em; cursor: pointer;
+  color: inherit; background: transparent; border: 1px solid var(--encre-claire); padding: 0.35rem 0.9rem;
+}
+.supervision-bouton.arme { border-color: var(--cire); color: var(--cire); font-weight: 600; }
+.supervision-bouton:focus-visible, .supervision-note:focus-visible { outline: 2px solid var(--cire); outline-offset: 2px; }
+.supervision-bouton:disabled { opacity: 0.55; cursor: progress; }
+.supervision-annonce { min-height: 1.2em; margin: 0.6rem 0 0; color: var(--encre-claire); }
+
 @media (max-width: 560px) {
   .projet-depot { margin-left: 0; width: 100%; }
 }
