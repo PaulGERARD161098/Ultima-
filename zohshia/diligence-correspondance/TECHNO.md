@@ -33,3 +33,9 @@ Le rendu client reconnaît le format préparé, avec note professionnelle sépar
 Le contrôle HTTP direct du catalogue en production a été bloqué par l'authentification du déploiement. Le fonctionnement en session propriétaire reste donc non vérifié ; ne pas confondre ce blocage avec une recette applicative réussie.
 
 Pour la prochaine instance : résoudre le compte autorisé, sélectionner sa matrice, qualifier les sources, raccorder le consommateur, puis éprouver le document et la note sur un dossier réel sans envoi. La cible de délai doit être mesurée sur ce parcours complet avant d'être annoncée comme acquise.
+
+## 6. Retour d'usage confirmé le 29 octobre 2026
+
+Paul confirme l'utilisation du nouveau système et le bon fonctionnement des méthodes de création et de calcul redéfinies. Le délai de préparation reste à améliorer. Cette déclaration positive complète les preuves techniques du §5 ; elle ne certifie ni la qualification de chaque source de prix ni le raccord de tous les consommateurs ou la future extraction.
+
+Conserver le calcul éprouvé et mesurer le parcours complet avant de l'optimiser. Réutiliser le contexte déjà acquis et les preuves dont les dépendances n'ont pas changé ; limiter les relectures et recalculs aux éléments affectés. La rapidité ne doit pas supprimer la provenance, la note professionnelle ou le contrôle final. Le contrat de réception réutilisable est centralisé dans `zohshia/renodevis/TECHNO.md`, section « Retour d’usage du 29 octobre 2026 », repères R29-01 à R29-10 : il couvre aussi import, dossier multi-propositions, brouillon partagé et preuves d'envoi. Ces exigences restent à éprouver sur chaque version et chaque consommateur concernés.
