@@ -11,7 +11,22 @@ assert.deepEqual(verifierRegistre(NOEUDS, BLASONS, COEURS), []);
 assert.equal(parentDe('presentations-claires'), 'zohshia');
 assert.deepEqual(chemin('presentations-claires'), ['racine','omega','imladrik','constellation-dragons','zohshia','presentations-claires']);
 const sky = versCiel('imladrik', NOEUDS, { isole:'zohshia' });
-assert.equal(sky.noeuds.length, 4);
+// Vérification dans les deux sens : un catalogue agrandi ne peut plus rester
+// invisible derrière une ancienne liste de quatre étoiles.
+function verifierCouverture(etoiles, technos) {
+  assert.ok(etoiles.length > 0 && technos.length > 0, 'couverture vide');
+  const cibles = etoiles.map((n) => n.cible);
+  const attendues = technos.map((t) => 'zohshia.html#' + t.id);
+  assert.equal(new Set(cibles).size, cibles.length, 'étoile dupliquée');
+  assert.equal(new Set(attendues).size, attendues.length, 'technologie dupliquée');
+  assert.deepEqual([...cibles].sort(), [...attendues].sort(), 'catalogue et constellation divergent');
+}
+verifierCouverture(sky.noeuds, data.technos);
+// Contrôler le contrôleur avec les défauts connus, pas une copie du résultat vert.
+assert.throws(() => verifierCouverture(sky.noeuds.slice(0, -1), data.technos));
+assert.throws(() => verifierCouverture(sky.noeuds, data.technos.slice(0, -1)));
+assert.throws(() => verifierCouverture([...sky.noeuds, sky.noeuds[0]], data.technos));
+assert.throws(() => verifierCouverture([], []));
 assert.equal(sky.noeuds.filter((n) => n.id==='presentations-claires').length, 1);
 for (const star of sky.noeuds) {
   assert.equal(star.cible.split('#')[0], 'zohshia.html');
@@ -57,4 +72,5 @@ context.window.location.hash='#presentations-claires';
 context.document.getElementById=()=>null;
 context.ouvrirDepuisAncre();
 assert.equal(clicks,1,'une ancre ne révèle pas une fiche non reçue');
-console.log('UNIT-ZOHSHIA-NAVIGATION OK : arbre sain, quatre étoiles reliées, cinq onglets et garde éprouvée');
+console.log(`UNIT-ZOHSHIA-NAVIGATION OK : arbre sain, ${sky.noeuds.length} étoiles reliées à ${data.technos.length} fiches ; quatre défauts de couverture refusés`);
+

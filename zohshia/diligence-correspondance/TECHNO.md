@@ -19,6 +19,9 @@ Une similarité technique ne valide ni prix ni signature. La comparaison financi
 Le document client contient les lignes chiffrées et les mentions du professionnel. Les hypothèses, sources et différences historiques vont dans une note séparée. Un produit inconnu ou non chiffré empêche de déclarer le document complet. La génération ne constitue jamais une permission d'envoi. Après un incident constaté, corriger le code ou la procédure et éprouver un cas qui reproduit l'erreur.
 
 Le code neutre s'extrait du commit indiqué dans le manifeste : il n'est pas recopié dans ce dossier. Le collecteur vérifie le commit et les empreintes des fichiers exacts. Il ne certifie pas la vérité des sources métier. Les essais du moteur sont distincts de l'audit d'une instance et de l'activation des autres agents.
+
+La boucle reste ouverte tant qu'un contrôle requis manque, échoue ou s'appuie sur une donnée imprécise. Définir les critères avant l'exécution, vérifier que chaque contrôle s'exécute sur une entrée non vide et sur la version livrée, puis éprouver le contrôleur avec un défaut connu. Corriger la cause et rejouer les contrôles concernés avant de passer au dossier suivant. Un contrôle bloqué reste bloqué ; son absence ne devient jamais un succès. Consigner la cause, la dépendance à résoudre et la preuve attendue sans inventer de résultat ni contourner les droits.
+
 ## 5. État vérifié au 29 octobre 2026
 
 Le socle et son catalogue sont fusionnés dans les dépôts de référence : correction RenoDevis nº 435 et correction Ultima nº 426. Les déploiements de ces deux corrections sont prêts. Le manifeste conserve son commit source exact et ses empreintes ; une fusion ne justifie pas de modifier une extraction déjà vérifiée.

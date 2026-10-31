@@ -224,8 +224,8 @@ for (const [id, fichier] of DRAGONS) {
       === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
-// 25/10 : la fiche ZOH SHIA revient à son propre ciel, qui expose désormais
-// quatre technologies. On éprouve le lien au doigt et les quatre destinations.
+// 29/10 : la fiche ZOH SHIA revient à son propre ciel, qui expose désormais
+// six technologies. On éprouve le lien au doigt et les six destinations.
 {
   const retour = 'imladrik.html#zohshia';
   const liens = await sonder('zohshia', 'zohshia.html');
@@ -238,15 +238,22 @@ for (const [id, fichier] of DRAGONS) {
   verifier('zohshia.html : le retour est cliquable au doigt', r.suivi, r.raison);
   verifier('zohshia.html : le retour arrive sur le ciel ZOH SHIA',
     r.arrivee.endsWith('/' + retour), r.arrivee);
-  const attendues = ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires'].sort();
-  verifier('zohshia.html : le ciel affiche exactement les quatre étoiles technologiques',
-    r.etoiles.length === 4
+  const attendues = [
+    'zoh-devis',
+    'zoh-pilotage',
+    'zoh-approches-croisees',
+    'presentations-claires',
+    'zoh-pitch-commercial',
+    'zoh-diligence-correspondance',
+  ].sort();
+  verifier('zohshia.html : le ciel affiche exactement les six étoiles technologiques',
+    r.etoiles.length === 6
     && JSON.stringify(r.etoiles.map((e) => e.id).sort()) === JSON.stringify(attendues),
     JSON.stringify(r.etoiles.map((e) => e.id)));
 }
-// LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui
-// répondrait toujours trois : l'adresse SANS fragment ouvre le ciel à plat —
-// DEUX entrées (ARMES, DRAGONS), et aucun des six.
+// LE TÉMOIN, pour que « six étoiles » ne soit pas vert d'un instrument qui
+// répondrait toujours six : l'adresse SANS fragment ouvre le ciel à plat —
+// DEUX entrées (ARMES, DRAGONS), et aucune des six technologies.
 {
   const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
   const page = await contexte.newPage();
@@ -256,7 +263,7 @@ for (const [id, fichier] of DRAGONS) {
   const ids = await page.evaluate(() => [...document.querySelectorAll('g.ciel-etoile[data-noeud-id]')]
     .map((g) => g.getAttribute('data-noeud-id')));
   await contexte.close();
-  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (2 entrées, aucune des six étoiles)',
+  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (2 entrées, aucune des six technologies)',
     ids.length === 2 && ids.join() === 'constellation-armes,constellation-dragons'
     && !ids.some((i) => DRAGONS.map((d) => d[0]).includes(i)), ids.join(','));
 }
