@@ -324,7 +324,8 @@
   var ISSUES_SUPERVISION = {
     inseree: 'Proposition soumise à l’arbitrage de Paul.',
     deja_en_attente: 'Cette proposition attend déjà l’arbitrage de Paul : rien de nouveau.',
-    deja_tranchee: 'Paul a déjà tranché cette proposition. Elle ne revient qu’avec une preuve nouvelle.',
+    // Revue S1 du 31/10 : ne jamais suggérer d'ajouter une preuve pour faire revenir un refus.
+    deja_tranchee: 'Paul a déjà tranché cette proposition. Ne la repropose pas, et n’ajoute pas de preuve pour la faire revenir.',
     reouverte: 'Proposition retirée auparavant, de nouveau soumise à l’arbitrage.'
   };
   function messageSupervision(resultat) {
@@ -343,6 +344,9 @@
     }
     if (resultat && resultat.statut === 403) {
       return '[Supervision non activée : rien n’a été enregistré.]';
+    }
+    if (resultat && resultat.statut === 429) {
+      return '[Supervision : plafond de propositions atteint (50 par 24 h). Rien n’a été enregistré.]';
     }
     return messageEchecEcriture(resultat);
   }

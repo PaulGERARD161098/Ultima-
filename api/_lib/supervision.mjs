@@ -69,6 +69,8 @@ const VERS_REEXAMEN = {
   critere_poursuite: 'criterePoursuite', critere_arret: 'critereArret',
 };
 const MAX_PREUVES = 20;
+// Tabulation (\t), saut de ligne (\n) et retour chariot (\r) restent admis : on dicte des paragraphes.
+const CONTROLE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
 
 /** Arguments à plat → { ok, propres } ; même règle que validerProposition : rejet total. */
 export function validerArgs(args) {
@@ -77,10 +79,14 @@ export function validerArgs(args) {
   const propres = {};
   for (const cle of Object.keys(args)) {
     const spec = Object.hasOwn(ARGS_SUPERVISION, cle) ? ARGS_SUPERVISION[cle] : undefined;
-    if (!spec) { erreurs.push(`/${cle.slice(0, 64)} : champ non prévu`); continue; }
+    // Le nom d'un champ inconnu n'est pas recopié : c'est une valeur reçue (revue S du 31/10).
+    if (!spec) { erreurs.push('/ : champ non prévu'); continue; }
     const v = args[cle];
     if (typeof v !== 'string') { erreurs.push(`/${cle} : texte attendu`); continue; }
     if (v.length > spec.max) { erreurs.push(`/${cle} : texte trop long`); continue; }
+    // Caractères de contrôle (dont U+0000, que PostgreSQL refuse en 22P05) : refusés ICI,
+    // sinon la base répond en panne et le front croit l'écriture peut-être faite (revue S3).
+    if (CONTROLE.test(v)) { erreurs.push(`/${cle} : caractère interdit`); continue; }
     const net = v.trim();
     if (!net) continue;
     if (spec.enum && !spec.enum.includes(net)) { erreurs.push(`/${cle} : valeur hors liste`); continue; }

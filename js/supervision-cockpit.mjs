@@ -47,16 +47,19 @@ export function vueProposition(ligne) {
     titre: (propre(LIBELLES_RECOMMANDATION, ligne.recommandation) ? LIBELLES_RECOMMANDATION[ligne.recommandation] : 'Recommandation inconnue') +
       ' — ' + texte(ligne.objet_id, 140),
     lignes: [
-      ['Constat', texte(p.constat)], ['Besoin', texte(p.besoin)], ['Bénéficiaire', texte(p.beneficiaire)],
+      ['Constat', texte(p.constat)], ['Bénéfice', texte(p.typeBenefice, 20)], ['Besoin', texte(p.besoin)], ['Bénéficiaire', texte(p.beneficiaire)],
       ['Conséquence', texte(p.consequence)], ['Alternative minimale', texte(p.alternativeMinimale)],
       ['Gain attendu', texte(p.gainAttendu)], ['Preuve attendue', texte(p.preuveAttendue)],
-      ['Contrefactuel', texte(p.contrefactuel)], ['Retour arrière', texte(p.retourArriere)],
+      ['Contrefactuel', texte(p.contrefactuel)], ['Preuve des dépendances', texte(p.preuveDependancesId, 140)],
+      ['Preuve des protections', texte(p.preuveProtectionsId, 140)], ['Retour arrière', texte(p.retourArriere)],
       ['Capacité commune', texte(p.capaciteCommune)], ['Compatibilité', texte(p.compatibiliteVerifiee)],
       ['Réexamen', [texte(r.responsable, 120), texte(r.declencheur, 300)].filter(Boolean).join(' · ')],
       ['Poursuivre si', texte(r.criterePoursuite, 300)], ['Arrêter si', texte(r.critereArret, 300)],
       ['Notes de décision', texte(ligne.decision_notes)],
     ].filter(([, v]) => v),
     preuves,
+    // true : retrouvées au catalogue par le serveur ; false : introuvables ; null : non vérifié.
+    preuvesConnues: ligne.preuves_connues === true ? true : ligne.preuves_connues === false ? false : null,
     creeLe: typeof ligne.cree_le === 'string' ? ligne.cree_le.slice(0, 10) : '',
     trancheLe: typeof ligne.tranche_le === 'string' ? ligne.tranche_le.slice(0, 10) : '',
   };
@@ -64,7 +67,7 @@ export function vueProposition(ligne) {
 
 /** La réponse d'échec → le message dit à Paul (liste fermée). PUR. */
 export function messageEchec(statut, erreur) {
-  if (statut === 503 && erreur === 'Registre indisponible') {
+  if (statut === 503 && erreur === 'Registre absent') {
     return 'Le registre de supervision n’est pas encore en place : la migration est à appliquer.';
   }
   return MESSAGES_ECHEC[statut] || 'Le registre de supervision est indisponible pour le moment.';
@@ -139,7 +142,11 @@ export function monterCockpit({ hote, jeton, fetchImpl = (...a) => window.fetch(
       p.appendChild(document.createTextNode(v.preuves.join(' · ')));
       li.appendChild(p);
       li.appendChild(el('p', 'supervision-avertissement',
-        'Ces preuves existent ; leur pertinence pour l’objet reste à juger par toi.'));
+        v.preuvesConnues === true
+          ? 'Ces preuves existent au catalogue ; leur pertinence pour l’objet reste à juger par toi.'
+          : v.preuvesConnues === false
+            ? 'Preuve ou objet introuvable au catalogue : dossier non contrôlé par Ultima.'
+            : 'Existence des preuves non vérifiée : catalogue indisponible.'));
     }
     if (v.enAttente) li.appendChild(gestes(v));
     return li;

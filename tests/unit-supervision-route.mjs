@@ -209,13 +209,53 @@ assert.equal((await appeler({ corps: { action: 'arbitrer', id: '99999999-9999-49
     from: () => ({ select: () => ({ order: () => ({ limit: async () => ({ data: null, error: { code: '42P01', message: 'relation "supervision_decisions" does not exist' } }) }) }) }),
   } }) } });
   assert.equal(panne.statut, 503);
-  assert.equal(panne.error, 'Registre indisponible');
+  assert.equal(panne.error, 'Registre absent', 'migration absente : dite comme telle');
   assert.ok(!JSON.stringify(panne).includes('relation'));
+  const autre = await appeler({ methode: 'GET', opts: { makeClient: () => ({ status: 'ok', client: {
+    auth: { getUser: async () => ({ data: { user: { id: PAUL } }, error: null }) },
+    from: () => ({ select: () => ({ order: () => ({ limit: async () => ({ data: null, error: { code: '57014' } }) }) }) }),
+  } }) } });
+  assert.equal(autre.error, 'Registre indisponible', 'une panne quelconque n’est pas « migration absente »');
+}
+
+// ── Revue de sécurité du 31/10 : constats fermés ────────────────────────────
+// S3 — un caractère de contrôle (U+0000 → 22P05) est refusé AVANT la base, en 422.
+{
+  const avant = (await appeler({ methode: 'GET' })).data.propositions.length;
+  const r = await soumettre({ ...ARGS, constat: 'a\u0000b' });
+  assert.equal(r.statut, 422);
+  assert.equal(r.etape, 'arguments');
+  assert.deepEqual(r.erreurs, ['/constat : caractère interdit']);
+  assert.equal((await appeler({ methode: 'GET' })).data.propositions.length, avant, 'rien en base');
+  assert.equal((await soumettre({ ...ARGS, constat: 'ligne 1\nligne 2\tsuite' })).statut, 200, 'saut de ligne et tabulation admis');
+}
+// La clé inconnue n'est pas recopiée.
+assert.deepEqual((await soumettre({ ...ARGS, '<img src=x>': 'v' })).erreurs, ['/ : champ non prévu']);
+// S2 — une ligne entrée par la RPC directe (sas sautés) est signalée « introuvable ».
+{
+  await db.exec('reset role; set role authenticated;');
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)", [PAUL]);
+  await db.query("select public.supervision_soumettre('direct','leo:nimporte','conserver','{zoh:inventee}','{}'::jsonb)");
+  const l = (await appeler({ methode: 'GET' })).data.propositions;
+  const directe = l.find((x) => x.objet_id === 'leo:nimporte');
+  assert.equal(directe.preuves_connues, false, 'preuve inventée affirmée connue');
+  assert.ok(l.filter((x) => x.objet_id === 'zoh:renodevis').every((x) => x.preuves_connues === true));
+  const sansIndex = (await appeler({ methode: 'GET', opts: { index: () => { throw new Error('catalogue'); } } })).data.propositions;
+  assert.ok(sansIndex.every((x) => x.preuves_connues === null), 'index indisponible : rien n’est affirmé');
+}
+// S4 — la carte nomme les deux preuves qui entrent dans l'empreinte et annonce le reste.
+{
+  const t = reformulerProposition({ outil: 'proposer_supervision', args: { ...ARGS, recommandation: 'suspendre', preuve_dependances: 'zoh:dep', preuve_protections: 'zoh:prot', contrefactuel: 'c', retour_arriere: 'r' } });
+  assert.ok(t.includes('Dépendances : zoh:dep') && t.includes('Protections : zoh:prot'), t);
+  assert.ok(t.includes('(bénéfice direct)'));
+  assert.match(t, /\(\+ 11 champs, lisibles au cockpit\.\)/);
 }
 
 // ── 3. Ce que Léo apprend de l'issue (bulle + historique) ───────────────────
 assert.equal(messageSupervision({ httpOk: true, statut: 200, corps: { ok: true, data: { resultat: 'deja_tranchee' } } }),
-  '[Supervision : Paul a déjà tranché cette proposition. Elle ne revient qu’avec une preuve nouvelle.]');
+  '[Supervision : Paul a déjà tranché cette proposition. Ne la repropose pas, et n’ajoute pas de preuve pour la faire revenir.]');
+assert.ok(!/preuve nouvelle/.test(messageSupervision({ httpOk: true, statut: 200, corps: { ok: true, data: { resultat: 'deja_tranchee' } } })), 'S1 : le message ne suggère plus le contournement');
+assert.equal(messageSupervision({ httpOk: false, statut: 429, corps: { ok: false } }), '[Supervision : plafond de propositions atteint (50 par 24 h). Rien n’a été enregistré.]');
 assert.match(messageSupervision({ httpOk: false, statut: 422, corps: { ok: false, etape: 'matiere', erreurs: ['/sources/0/id : preuve introuvable'], reserves: [] } }),
   /^\[Supervision refusée \(matiere\) : \/sources\/0\/id : preuve introuvable\. Rien n’a été enregistré\.\]$/);
 assert.equal(messageSupervision({ httpOk: true, statut: 200, corps: { ok: true, data: { resultat: 'constructor' } } }).startsWith('[Supervision :'), false, 'résultat hors liste');

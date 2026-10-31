@@ -721,9 +721,20 @@ export function reformulerProposition(proposition) {
       return 'Amatsu lit « ' + args.objet + ' » — plus libre ? « ' + args.bise +
         ' » · cohérent ? « ' + args.souffle + ' » · emporté ? « ' + args.ouragan + ' »';
     case 'proposer_supervision':
-      return 'Soumettre à ton arbitrage : ' + args.recommandation + ' « ' + args.objet + ' » — ' +
+    {
+      // Revue S4 du 31/10 : les deux preuves qui entrent dans l'empreinte sont NOMMÉES, et le
+      // reste du dossier est annoncé — ce que Paul confirme ne se cache pas derrière la carte.
+      const nommes = ['recommandation', 'objet', 'constat', 'gain_attendu', 'preuves', 'type_benefice',
+        'preuve_dependances', 'preuve_protections'];
+      const reste = Object.keys(args).filter((k) => !nommes.includes(k) && args[k]).length;
+      return 'Soumettre à ton arbitrage : ' + args.recommandation + ' « ' + args.objet + ' »' +
+        (args.type_benefice ? ' (bénéfice ' + args.type_benefice + ')' : '') + ' — ' +
         args.constat + ' Gain attendu : « ' + args.gain_attendu + ' ». Preuves : ' + args.preuves +
-        '. Tu tranches au cockpit ; rien n’est exécuté.';
+        (args.preuve_dependances ? ' · Dépendances : ' + args.preuve_dependances : '') +
+        (args.preuve_protections ? ' · Protections : ' + args.preuve_protections : '') +
+        '. (+ ' + reste + ' champ' + (reste > 1 ? 's' : '') + ', lisibles au cockpit.) ' +
+        'Tu tranches au cockpit ; rien n’est exécuté.';
+    }
     case 'proposer_contact': {
       const coordonnees = [args.telephone, args.email, args.ville].filter(Boolean).join(' · ');
       return 'Ajouter « ' + args.nom + ' » (' + args.type + ') au réseau RIVEN' +

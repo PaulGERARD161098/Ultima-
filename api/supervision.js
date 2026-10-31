@@ -50,7 +50,9 @@ function echecBase(res, error, contexte) {
   logError(`supervision.${contexte}`, code || 'erreur');
   if (code === '42501') return fail(res, 401, 'Authentification requise');
   if (code === 'PT429') return fail(res, 429, 'Plafond de propositions atteint');
-  if (code === '22023') return fail(res, 422, 'Dossier refusé par la base');
+  if (code === '22023' || code === '22P05') return fail(res, 422, 'Dossier refusé par la base');
+  // Registre absent (migration non appliquée) : table ou fonction inconnues, en SQL ou PostgREST.
+  if (['42P01', '42883', 'PGRST202', 'PGRST205'].includes(code)) return fail(res, 503, 'Registre absent');
   if (code === 'P0002') return fail(res, 404, 'Proposition introuvable');
   if (code === 'P0001') return fail(res, 409, 'Proposition déjà tranchée');
   return fail(res, 503, 'Registre indisponible');
@@ -71,7 +73,19 @@ export default async function handler(req, res, options = {}) {
     const r = await client.from('supervision_decisions').select(COLONNES)
       .order('cree_le', { ascending: false }).limit(MAX_LIGNES);
     if (r.error || !Array.isArray(r.data)) return echecBase(res, r.error, 'lecture');
-    return ok(res, { propositions: r.data, soumission_active: supervisionActive(env) });
+    // S2 (revue du 31/10) : la base n'impose que le FORMAT des preuves — une ligne peut y
+    // entrer par la RPC directe, sas sautés. Le cockpit ne dit donc « ces preuves existent »
+    // que si le serveur les retrouve AUJOURD'HUI au catalogue ; index indisponible → null
+    // (rien n'est affirmé).
+    let index = null;
+    try { index = (options.index || indexActuel)(); } catch { index = null; }
+    const propositions = r.data.map((l) => ({
+      ...l,
+      preuves_connues: index && Array.isArray(l.preuves_ids)
+        ? l.preuves_ids.length > 0 && l.preuves_ids.every((id) => index.has(id)) && index.has(l.objet_id)
+        : null,
+    }));
+    return ok(res, { propositions, soumission_active: supervisionActive(env) });
   }
 
   const corps = await readJsonBody(req);

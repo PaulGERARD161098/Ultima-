@@ -23,7 +23,8 @@ const ligne = (statut = 'EN_ATTENTE') => ({
   id: ID, objet_id: 'zoh:renodevis', recommandation: 'suspendre', statut,
   preuves_ids: ['finubar:P/Ultima-', 'zoh:renodevis'], cree_le: '2026-10-31T10:00:00Z',
   tranche_le: statut === 'EN_ATTENTE' ? null : '2026-10-31T11:00:00Z', decision_notes: statut === 'EN_ATTENTE' ? null : 'Vu',
-  proposition: { constat: 'Constat ' + HOSTILE, besoin: 'Besoin', gainAttendu: '12 $ par mois', contrefactuel: 'Rien ne manque',
+  preuves_connues: true,
+  proposition: { constat: 'Constat ' + HOSTILE, besoin: 'Besoin', typeBenefice: 'protection', preuveDependancesId: 'zoh:dep', preuveProtectionsId: 'zoh:prot', gainAttendu: '12 $ par mois', contrefactuel: 'Rien ne manque',
     retourArriere: 'Réactiver', reexamen: { responsable: 'Paul', declencheur: 'Mensuel', criterePoursuite: 'Usage', critereArret: 'Aucun' } },
 });
 
@@ -56,12 +57,18 @@ async function ouvrir(api) {
 
 console.log('§1 — registre absent : la cause est dite, la table survit');
 {
-  const { page, journal } = await ouvrir({ lire: () => ({ status: 503, body: { ok: false, error: 'Registre indisponible' } }) });
+  const { page, journal } = await ouvrir({ lire: () => ({ status: 503, body: { ok: false, error: 'Registre absent' } }) });
   const t = await page.textContent('#supervision-corps');
   verifier('migration à appliquer nommée', /migration est à appliquer/.test(t), t);
   verifier('la table de marche est rendue quand même', /Ce matin/.test(await page.textContent('body')));
   verifier('aucun geste offert sans registre', (await page.locator('.supervision-bouton').count()) === 0);
   verifier('aucune requête externe', journal.externes.length === 0, journal.externes.join(' | '));
+  await page.close();
+}
+{
+  const { page } = await ouvrir({ lire: () => ({ status: 503, body: { ok: false, error: 'Registre indisponible' } }) });
+  const t = await page.textContent('#supervision-corps');
+  verifier('autre 503 : jamais « migration à appliquer »', !/migration/.test(t) && /indisponible/.test(t), t);
   await page.close();
 }
 
@@ -86,7 +93,8 @@ console.log('§3 — une proposition en attente, puis l’arbitrage');
   verifier('titre lisible', /Suspendre — zoh:renodevis/.test(await carte.textContent()));
   verifier('balise hostile restée texte', (await carte.textContent()).includes(HOSTILE) && (await page.locator('#supervision-corps img').count()) === 0);
   verifier('aucun script exécuté', (await page.evaluate(() => window.__pirate)) === undefined);
-  verifier('les preuves et l’avertissement de pertinence', /finubar:P\/Ultima- · zoh:renodevis/.test(await carte.textContent()) && /pertinence/.test(await carte.textContent()));
+  verifier('les preuves et l’avertissement de pertinence', /finubar:P\/Ultima- · zoh:renodevis/.test(await carte.textContent()) && /existent au catalogue.*pertinence/.test(await carte.textContent()));
+  verifier('bénéfice, preuve des dépendances et des protections nommés', /Bénéfice\s*protection/.test(await carte.textContent()) && /Preuve des dépendances\s*zoh:dep/.test(await carte.textContent()) && /Preuve des protections\s*zoh:prot/.test(await carte.textContent()));
   verifier('la note a une étiquette', (await page.locator(`label[for="note-${ID}"]`).count()) === 1);
   const [accepter, refuser] = [page.getByRole('button', { name: 'Accepter', exact: true }), page.getByRole('button', { name: 'Refuser', exact: true })];
   await accepter.click();
@@ -120,6 +128,22 @@ console.log('§3 — une proposition en attente, puis l’arbitrage');
   verifier('annonce de réussite', /Proposition refusée/.test(await page.textContent('.supervision-annonce')));
   verifier('aucune erreur console', journal.erreurs.length === 0, journal.erreurs.join(' | '));
   verifier('aucune requête externe', journal.externes.length === 0, journal.externes.join(' | '));
+  await page.close();
+}
+
+console.log('§3 bis — une ligne non contrôlée (entrée hors sas) est dite comme telle');
+{
+  const brute = { ...ligne(), preuves_connues: false };
+  const { page } = await ouvrir({ lire: () => ({ status: 200, body: { ok: true, data: { propositions: [brute], soumission_active: false } } }) });
+  const t = await page.textContent('#supervision-corps');
+  verifier('« introuvable au catalogue » affiché', /introuvable au catalogue : dossier non contrôlé/.test(t), t);
+  verifier('jamais « existent » pour elle', !/existent au catalogue/.test(t));
+  await page.close();
+}
+{
+  const inconnue = { ...ligne(), preuves_connues: undefined };
+  const { page } = await ouvrir({ lire: () => ({ status: 200, body: { ok: true, data: { propositions: [inconnue], soumission_active: false } } }) });
+  verifier('index indisponible : non vérifié', /non vérifiée/.test(await page.textContent('#supervision-corps')));
   await page.close();
 }
 
