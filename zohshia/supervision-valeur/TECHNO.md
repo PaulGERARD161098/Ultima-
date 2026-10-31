@@ -75,6 +75,14 @@ Moyens : une fonction SQL et le client Supabase déjà en place ; ni `pg` ni
 | `forme.mjs` | Le sas de forme sans dépendance |
 | `TECHNO.md` | Ce fichier |
 
+Côté hôte (Ultima), le sas de matière vit dans `api/_lib/supervision-preuves.mjs` :
+identifiants au format `type:nom` (128 caractères au plus, casse exacte),
+retrouvés dans le catalogue ZOH et le relevé Finubar versionnés ; un dépôt dont
+la collecte a échoué, ou dont la date de mesure est illisible, ne prouve rien ;
+une observation déclarée après le jour de mesure est refusée (fraîcheur
+inventée). Fraîcheur maximale initiale : 30 jours pour une fiche ZOH, 7 pour un
+grain Finubar — au-delà, réserve et non refus.
+
 Le dossier `zohshia/` n'est pas déployé. Le code servi en production en sera
 une copie générée sous `api/_lib/`, vérifiée octet pour octet par un test.
 
