@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-31",
-    "commit": "07841c4db82e044149aebfdd33d298b6fb6aec28",
-    "quoi": "Clôture ZOH : alerte de dérive vérifiée (le raccord 5297f5c était déjà dans main par #422, CI main verte sur c25259c) ; #427 fusionnée sur accord de Paul (30f6f1b) ; #428 reprise sur claude/ecstatic-bell-cpnynk au-dessus de main, seul conflit sur le fichier généré, réglé par publier.mjs. 81/81 unitaires, smoke-zohshia et smoke-retour-feuilles verts en local."
+    "commit": "8961c8c460bcb3245213dbeba85516b97efe60f8",
+    "quoi": "Supervision et réemploi construite sur branche (étapes 1 à 8, cadrage validé par Paul : preuves typées zoh:/finubar:, pas de purge, outil proposer_supervision ORANGE sur FINUBAR, coupé par LEO_SUPERVISION). Sas de forme sans Ajv, sas de matière, juge reçu tel quel, chaîne serveur, migration supervision_decisions éprouvée sur PGlite (non appliquée), route /api/supervision, cockpit d'arbitrage sous la table FINUBAR, scripts de vérification du gate ⑧. 87/87 suites, harnais navigateur Léo/FINUBAR/cockpit verts, sabotages tous rouges."
   },
-  "prochaine_action": "Lire la CI de la PR qui reprend #428 depuis claude/ecstatic-bell-cpnynk, puis obtenir l’accord de Paul sur son SHA exact avant fusion ; #425 et #418 (conflits réels) restent des boucles séparées.",
+  "prochaine_action": "Lire la CI et la revue de sécurité de la PR supervision ; puis gate ⑧ (Paul applique la migration et lance les deux vérifications de RUNBOOK-GATES.md), et seulement après, LEO_SUPERVISION=active.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -48,6 +48,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Supervision et réemploi : construite et éprouvée sur branche (PR à lire). Restent : revue de sécurité indépendante, CI, fusion sur accord de Paul, gate ⑧ (migration non appliquée), activation LEO_SUPERVISION. Fraîcheur des preuves : seul Ultima- a une mesure Finubar de moins de 7 jours au 31/10.",
+      "depuis": "2026-10-31"
+    },
     {
       "quoi": "Retour RenoDevis du 29/10 : leçons v111 et contrat R29 documentés sur branche, sans fusion ni activation. Sources : memoire/JOURNAL-DECISIONS.md et zohshia/renodevis/TECHNO.md, Retour d’usage du 29 octobre. Le calcul est confirmé fonctionnel par Paul ; restent rapidité mesurée, reprise partagée, manifeste multi-devis et preuve d’envoi à éprouver dans la V3. Extraction neutre inchangée, à rafraîchir après source stabilisée et réception. Copies des leçons non propagées aux autres dépôts. Les travaux antérieurs, dont les PR 417 et 427, gardent leurs boucles et leur mandat.",
       "depuis": "2026-10-29"
