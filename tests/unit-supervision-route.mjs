@@ -93,7 +93,7 @@ function clientPour(uid) {
     rpc: async (nom, p) => {
       await en();
       const ordre = { supervision_soumettre: ['p_proposition_id', 'p_objet_id', 'p_recommandation', 'p_preuves', 'p_proposition'],
-        supervision_arbitrer: ['p_id', 'p_decision', 'p_notes'], supervision_retirer: ['p_id'] }[nom];
+        supervision_arbitrer: ['p_id', 'p_decision', 'p_notes', 'p_prochain_reexamen'], supervision_retirer: ['p_id'] }[nom];
       assert.ok(ordre, `rpc inattendu : ${nom}`);
       assert.deepEqual(Object.keys(p).filter((k) => !ordre.includes(k)), [], `paramètre inattendu pour ${nom}`);
       const valeurs = ordre.map((k) => (k === 'p_proposition' ? JSON.stringify(p[k]) : p[k] ?? null));
@@ -195,12 +195,28 @@ assert.equal((await appeler({ corps: { action: 'arbitrer', id: '99999999-9999-49
   assert.equal((await soumettre()).data.resultat, 'deja_tranchee');
   assert.equal((await appeler({ corps: { action: 'retirer', id: s1.data.id } })).statut, 409, 'une décision tranchée ne se retire pas');
 }
+// Le refus tient même avec une preuve ajoutée (Paul, 31/10 ; revue S1).
+assert.equal((await soumettre({ ...ARGS, preuves: 'zoh:renodevis zoh:anti-pattern' })).data.resultat, 'deja_tranchee');
+// Date de réexamen : format, réalité, futur, borne à cinq ans — sinon 400, rien n'est tranché.
+{
+  const s3 = await soumettre({ ...ARGS, objet: 'zoh:anti-pattern', preuves: 'zoh:anti-pattern' });
+  assert.equal(s3.data.resultat, 'inseree');
+  for (const mauvaise of ['2026-10-30', '2026-10-31', '2026-02-30', '31/12/2026', '2026-11-01T00:00:00Z', '2040-01-01', 20261201, {}]) {
+    const r = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: mauvaise } });
+    assert.equal(r.statut, 400, `date admise : ${JSON.stringify(mauvaise)}`);
+  }
+  const ok = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: '2026-11-15' } });
+  assert.equal(ok.statut, 200, JSON.stringify(ok));
+  const l = (await appeler({ methode: 'GET' })).data.propositions.find((x) => x.id === s3.data.id);
+  assert.equal(l.prochain_reexamen_le.slice(0, 10), '2026-11-15');
+  assert.equal((await soumettre({ ...ARGS, objet: 'zoh:anti-pattern', preuves: 'zoh:anti-pattern zoh:renodevis' })).data.resultat, 'deja_tranchee');
+}
 // Retirer une proposition en attente, puis la resoumettre : rouverte.
 {
-  const s2 = await soumettre({ ...ARGS, preuves: 'zoh:renodevis zoh:anti-pattern' });
+  const s2 = await soumettre({ ...ARGS, recommandation: 'mesurer', preuves: 'zoh:renodevis zoh:anti-pattern' });
   assert.equal(s2.data.resultat, 'inseree');
   assert.equal((await appeler({ corps: { action: 'retirer', id: s2.data.id } })).data.statut, 'OBSOLETE');
-  assert.equal((await soumettre({ ...ARGS, preuves: 'zoh:renodevis zoh:anti-pattern' })).data.resultat, 'reouverte');
+  assert.equal((await soumettre({ ...ARGS, recommandation: 'mesurer', preuves: 'zoh:renodevis zoh:anti-pattern' })).data.resultat, 'reouverte');
 }
 // Base injoignable (migration non appliquée) : 503 générique, jamais le détail.
 {

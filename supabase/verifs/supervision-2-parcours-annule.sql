@@ -12,7 +12,7 @@ declare
   uid uuid;
   autre uuid;
   deja int;
-  r1 jsonb; r2 jsonb; r3 jsonb; r4 jsonb;
+  r1 jsonb; r2 jsonb; r3 jsonb; r4 jsonb; r5 jsonb;
   faux text := null;
   vu_par_autre int := null;
 begin
@@ -34,6 +34,8 @@ begin
     r2 := public.supervision_soumettre('verif-2', 'zoh:verif', 'conserver', array['zoh:verif'], '{"id":"verif-2"}'::jsonb);
     r3 := public.supervision_arbitrer((r1->>'id')::uuid, 'REFUSEE', 'vérification');
     r4 := public.supervision_soumettre('verif-3', 'zoh:verif', 'conserver', array['zoh:verif'], '{"id":"verif-3"}'::jsonb);
+    -- Revue S1 : une preuve ajoutée ne rouvre pas un refus (il tient jusqu'à son réexamen).
+    r5 := public.supervision_soumettre('verif-5', 'zoh:verif', 'conserver', array['zoh:verif', 'zoh:ajout'], '{"id":"verif-5"}'::jsonb);
   exception when others then
     raise exception 'ECHEC : erreur inattendue au parcours (SQLSTATE %, %)', sqlstate, sqlerrm;
   end;
@@ -51,11 +53,12 @@ begin
   reset role;
 
   if r1->>'resultat' = 'inseree' and r2->>'resultat' = 'deja_en_attente' and r2->>'id' = r1->>'id'
-     and r3->>'statut' = 'REFUSEE' and r4->>'resultat' = 'deja_tranchee' and faux = 'invalid_proof'
+     and r3->>'statut' = 'REFUSEE' and r4->>'resultat' = 'deja_tranchee' and r5->>'resultat' = 'deja_tranchee'
+     and faux = 'invalid_proof'
      and coalesce(vu_par_autre, 0) = 0 then
-    raise exception 'PARCOURS_OK : soumise, doublon reconnu, refusée, refus tenu, faux ID refusé (%)%  — transaction annulée, aucune ligne ne reste',
+    raise exception 'PARCOURS_OK : soumise, doublon reconnu, refusée, refus tenu même avec une preuve ajoutée, faux ID refusé (%)%  — transaction annulée, aucune ligne ne reste',
       faux, case when autre is null then ', cloisonnement non éprouvé (un seul compte)' else ', invisible pour un autre compte' end;
   end if;
-  raise exception 'ECHEC : r1=% r2=% r3=% r4=% faux=% vu_par_autre=%', r1, r2, r3, r4, coalesce(faux, 'aucun'), vu_par_autre;
+  raise exception 'ECHEC : r1=% r2=% r3=% r4=% r5=% faux=% vu_par_autre=%', r1, r2, r3, r4, r5, coalesce(faux, 'aucun'), vu_par_autre;
 end
 $$;

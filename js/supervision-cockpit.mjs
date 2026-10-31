@@ -56,11 +56,15 @@ export function vueProposition(ligne) {
       ['Réexamen', [texte(r.responsable, 120), texte(r.declencheur, 300)].filter(Boolean).join(' · ')],
       ['Poursuivre si', texte(r.criterePoursuite, 300)], ['Arrêter si', texte(r.critereArret, 300)],
       ['Notes de décision', texte(ligne.decision_notes)],
+      ['Refus valable jusqu’au', ligne.statut === 'REFUSEE'
+        ? (typeof ligne.prochain_reexamen_le === 'string' ? ligne.prochain_reexamen_le.slice(0, 10) : 'sans limite (aucune date de réexamen)')
+        : ''],
     ].filter(([, v]) => v),
     preuves,
     // true : retrouvées au catalogue par le serveur ; false : introuvables ; null : non vérifié.
     preuvesConnues: ligne.preuves_connues === true ? true : ligne.preuves_connues === false ? false : null,
     creeLe: typeof ligne.cree_le === 'string' ? ligne.cree_le.slice(0, 10) : '',
+    reexamenLe: typeof ligne.prochain_reexamen_le === 'string' ? ligne.prochain_reexamen_le.slice(0, 10) : '',
     trancheLe: typeof ligne.tranche_le === 'string' ? ligne.tranche_le.slice(0, 10) : '',
   };
 }
@@ -162,6 +166,15 @@ export function monterCockpit({ hote, jeton, fetchImpl = (...a) => window.fetch(
     note.rows = 2;
     bloc.appendChild(etiquette);
     bloc.appendChild(note);
+    // La date de réexamen : jusqu'à elle, un refus bloque le même objet et la même
+    // recommandation, quelles que soient les preuves (Paul, 31/10). Vide : sans limite.
+    const etiquetteDate = el('label', 'ligne-cle', 'Réexaminer à partir du (facultatif — sans date, un refus vaut sans limite)');
+    const date = el('input', 'supervision-date');
+    date.type = 'date';
+    date.id = 'reexamen-' + v.id;
+    etiquetteDate.htmlFor = date.id;
+    bloc.appendChild(etiquetteDate);
+    bloc.appendChild(date);
     const boutons = el('div', 'supervision-boutons');
     const definir = [
       ['Accepter', 'Confirmer : accepter', { action: 'arbitrer', decision: 'ACCEPTEE' }, 'Proposition acceptée.'],
@@ -184,6 +197,7 @@ export function monterCockpit({ hote, jeton, fetchImpl = (...a) => window.fetch(
         tous.forEach((autre) => { autre.bouton.disabled = true; });
         const envoi = { ...corps, id: v.id };
         if (corps.action === 'arbitrer' && note.value.trim()) envoi.notes = note.value.slice(0, 2000);
+        if (corps.action === 'arbitrer' && /^\d{4}-\d{2}-\d{2}$/.test(date.value)) envoi.reexamen_le = date.value;
         const r = await appeler('POST', envoi);
         await charger();
         annonce.textContent = r.ok ? reussite : messageEchec(r.statut, r.corps && r.corps.error);

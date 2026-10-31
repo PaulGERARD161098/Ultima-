@@ -32,12 +32,24 @@ const ALLOWED = ['GET', 'POST'];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const CLES = {
   soumettre: ['action', 'args'],
-  arbitrer: ['action', 'id', 'decision', 'notes'],
+  arbitrer: ['action', 'id', 'decision', 'notes', 'reexamen_le'],
   retirer: ['action', 'id'],
 };
 const DECISIONS = ['ACCEPTEE', 'REFUSEE'];
 const COLONNES = 'id, objet_id, recommandation, statut, preuves_ids, proposition, cree_le, tranche_le, decision_notes, prochain_reexamen_le';
 const MAX_LIGNES = 100;
+const JOUR = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+// 'AAAA-MM-JJ' réel (pas de 30 février) et postérieur à aujourd'hui (UTC) → ISO minuit UTC.
+export function dateReexamen(v, maintenant = Date.now()) {
+  const m = typeof v === 'string' ? JOUR.exec(v) : null;
+  if (!m) return null;
+  const t = Date.UTC(+m[1], +m[2] - 1, +m[3]);
+  const d = new Date(t);
+  if (d.getUTCFullYear() !== +m[1] || d.getUTCMonth() !== +m[2] - 1 || d.getUTCDate() !== +m[3]) return null;
+  if (t <= maintenant || t > maintenant + 5 * 366 * 86_400_000) return null;
+  return d.toISOString();
+}
 
 export function indexActuel() {
   const outils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name))];
@@ -117,7 +129,15 @@ export default async function handler(req, res, options = {}) {
     if (corps.notes !== undefined && corps.notes !== null &&
         (typeof corps.notes !== 'string' || corps.notes.length > 2000)) return fail(res, 400, 'Demande invalide');
     const notes = typeof corps.notes === 'string' && corps.notes.trim() ? corps.notes.trim() : null;
-    const r = await client.rpc('supervision_arbitrer', { p_id: corps.id, p_decision: corps.decision, p_notes: notes });
+    // La date de réexamen borne la durée d'un REFUS (Paul, 31/10) : sans elle, il tient
+    // indéfiniment. Future, réelle, à cinq ans au plus.
+    let reexamen = null;
+    if (corps.reexamen_le !== undefined && corps.reexamen_le !== null && corps.reexamen_le !== '') {
+      reexamen = dateReexamen(corps.reexamen_le, options.maintenant ?? Date.now());
+      if (!reexamen) return fail(res, 400, 'Demande invalide');
+    }
+    const r = await client.rpc('supervision_arbitrer', { p_id: corps.id, p_decision: corps.decision, p_notes: notes,
+      p_prochain_reexamen: reexamen });
     if (r.error || !r.data) return echecBase(res, r.error, 'arbitrer');
     return ok(res, { id: r.data.id, statut: r.data.statut });
   }

@@ -29,7 +29,7 @@ async function lancerParcours(db) {
   assert.equal(r.length, 12, 'nombre de vérifications');
   assert.deepEqual(r.filter((l) => l.ok !== true).map((l) => l.verif), []);
   const m = await lancerParcours(db);
-  assert.match(m, /^PARCOURS_OK : .*faux ID refusé \(invalid_proof\), invisible pour un autre compte/, m);
+  assert.match(m, /^PARCOURS_OK : .*refus tenu même avec une preuve ajoutée, faux ID refusé \(invalid_proof\), invisible pour un autre compte/, m);
   assert.equal((await db.query('select count(*)::int as n from public.supervision_decisions')).rows[0].n, 0, 'le parcours a laissé des lignes');
   // Rejouable : la base est revenue vide.
   assert.match(await lancerParcours(db), /^PARCOURS_OK/);
@@ -54,9 +54,10 @@ for (const [nom, a, b, ligne] of sabotages) {
   const faux = (await db.query(etat)).rows.filter((l) => l.ok !== true).map((l) => l.n);
   assert.ok(faux.includes(ligne), `${nom} : la ligne ${ligne} reste vraie (fausses : ${faux})`);
 }
-{ // le parcours voit un refus qui ne tient pas
-  const a = "if v_statut = 'OBSOLETE' then";
-  const db = await base(migration.replace(a, "if v_statut in ('OBSOLETE','REFUSEE') then"));
+{ // le parcours voit un refus qui ne tient pas (verrou S1 retiré, réouverture sans date)
+  const a = "      and d.statut = 'REFUSEE'\n      and (d.prochain_reexamen_le is null";
+  assert.ok(migration.includes(a), 'motif du verrou de refus absent');
+  const db = await base(migration.replace(a, "      and d.statut = 'JAMAIS'\n      and (d.prochain_reexamen_le is null"));
   assert.match(await lancerParcours(db), /^ECHEC/);
 }
 { // et une preuve inventée qui passerait

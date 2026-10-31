@@ -20,8 +20,8 @@ Elle traverse quatre sas, et le premier refus arrête tout :
    exigées par la recommandation. Seul le statut `presentable` continue.
 3. **Matière** — chaque identifiant de preuve est retrouvé dans une source que
    l'agent ne peut pas écrire.
-4. **Inertie** — une empreinte calculée par la base ; une proposition déjà
-   tranchée ne revient pas tant que ses preuves n'ont pas changé.
+4. **Inertie** — une empreinte calculée par la base ; un doublon est reconnu,
+   et un **refus tient jusqu'à sa date de réexamen** (voir §2).
 
 `presentable` veut dire **dossier complet**, jamais autorisation :
 `executionAutorisee` vaut toujours `false`. Aucune décision n'est exécutée par
@@ -34,8 +34,13 @@ cette techno.
 - **L'existence n'est pas la pertinence.** Le sas de matière prouve qu'une
   preuve existe, pas qu'elle concerne l'objet. Le responsable reste le seul juge,
   et la présentation le dit.
-- **Terminer les boucles.** Un refus bloque la même proposition ; un élément
-  nouveau (une preuve différente) la rouvre.
+- **Terminer les boucles.** Un refus bloque le même objet avec la même
+  recommandation, **quelles que soient les preuves**, jusqu'à la date de
+  réexamen que le responsable fixe en refusant ; sans date, il tient sans
+  limite. *(Décision de Paul du 31/10, après la revue S1 : la version reçue —
+  « une preuve différente la rouvre » — se contournait en ajoutant une preuve
+  sans rapport. Le cas « Déblocage » de la recette reçue est remplacé par
+  celui-ci.)* Une fois la date passée, la même proposition revient en attente.
 
 ## 3. Décisions du 31/10/2026
 
@@ -71,6 +76,7 @@ Moyens : une fonction SQL et le client Supabase déjà en place ; ni `pg` ni
 | 8 | Table sans propriétaire ni RLS | `owner_id` et RLS, comme toutes les tables de l'agent |
 | 9 | Contrôle et insertion séparés : course possible | Une seule fonction SQL, atomique |
 | 10 | Aucun client visé | Gain sur les coûts fixes ; indicateur : montant mensuel des suspensions acceptées |
+| 11 | « Une preuve différente rouvre un refus » : contournable par une preuve sans rapport (revue S1) | Le refus tient pour l'objet et la recommandation jusqu'à la date de réexamen |
 
 ## 5. Ce que contient ce dossier
 

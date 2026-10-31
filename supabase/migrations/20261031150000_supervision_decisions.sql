@@ -18,7 +18,10 @@
 --   · la réponse dit ce qui s'est passé (`inseree`, `deja_en_attente`,
 --     `deja_tranchee`, `reouverte`) : rien n'est écarté en silence ;
 --   · rien ne se supprime : `OBSOLETE` remplace la purge, sinon un refus
---     perdrait son empreinte et la proposition reviendrait.
+--     perdrait son empreinte et la proposition reviendrait ;
+--   · un REFUS bloque le même objet et la même recommandation, quelles que
+--     soient les preuves, jusqu'à la date de réexamen fixée par Paul (sans
+--     date : indéfiniment) — décision de Paul du 31/10, revue S1.
 --
 -- ⚠️ Ce que la base NE garantit PAS : que l'arbitrage vienne de Paul plutôt que
 -- de Léo. Les outils de Léo s'exécutent sous l'identité de Paul ; la base ne
@@ -101,6 +104,7 @@ declare
   v_empreinte text;
   v_id uuid;
   v_statut text;
+  v_reexamen timestamptz;
 begin
   if v_uid is null then
     raise exception using errcode = '42501', message = 'authentication_required';
@@ -123,18 +127,37 @@ begin
 
   v_empreinte := public.supervision_empreinte(p_objet_id, p_recommandation, v_preuves);
 
-  -- Le plafond de volume, sérialisé par propriétaire.
+  -- Sérialisé par propriétaire : verrou, refus, doublon et plafond se lisent ensemble.
   perform pg_catalog.pg_advisory_xact_lock(
     pg_catalog.hashtextextended('supervision:' || v_uid::text, 0));
-  if (select count(*) from public.supervision_decisions
-      where owner_id = v_uid and cree_le >= pg_catalog.now() - interval '24 hours') >= 50 then
-    raise exception using errcode = 'PT429', message = 'supervision_volume_exhausted';
+
+  -- LE REFUS TIENT JUSQU'À SA DATE DE RÉEXAMEN (Paul, 31/10/2026 ; revue S1) : un refus
+  -- bloque le même objet avec la même recommandation, QUELLES QUE SOIENT LES PREUVES —
+  -- sinon une preuve sans rapport suffirait à faire revenir ce que Paul a écarté. Sans
+  -- date de réexamen, il tient indéfiniment. Remplace le « déblocage par une preuve
+  -- nouvelle » de la recette reçue.
+  select d.id into v_id
+    from public.supervision_decisions d
+    where d.owner_id = v_uid and d.objet_id = p_objet_id and d.recommandation = p_recommandation
+      and d.statut = 'REFUSEE'
+      and (d.prochain_reexamen_le is null or d.prochain_reexamen_le > pg_catalog.now())
+    order by d.tranche_le desc
+    limit 1;
+  if v_id is not null then
+    return pg_catalog.jsonb_build_object('resultat', 'deja_tranchee', 'id', v_id, 'statut', 'REFUSEE');
   end if;
 
-  select d.id, d.statut into v_id, v_statut
+  select d.id, d.statut, d.prochain_reexamen_le into v_id, v_statut, v_reexamen
     from public.supervision_decisions d
     where d.owner_id = v_uid and d.empreinte_materielle = v_empreinte
     for update;
+
+  -- Le plafond ne compte que ce qui AJOUTE une ligne : un doublon garde sa réponse
+  -- explicite même plafond atteint (revue du 31/10).
+  if v_id is null and (select count(*) from public.supervision_decisions
+      where owner_id = v_uid and cree_le >= pg_catalog.now() - interval '24 hours') >= 50 then
+    raise exception using errcode = 'PT429', message = 'supervision_volume_exhausted';
+  end if;
 
   if v_id is null then
     -- Les contraintes de la table vérifient objet, recommandation et dossier.
@@ -145,11 +168,16 @@ begin
     return pg_catalog.jsonb_build_object('resultat', 'inseree', 'id', v_id, 'statut', 'EN_ATTENTE');
   end if;
 
-  if v_statut = 'OBSOLETE' then
-    -- Retirée par Léo avant arbitrage : la même proposition peut revenir.
+  -- Retirée avant arbitrage (OBSOLETE), ou refusée dont la date de réexamen est passée
+  -- (le bloc du refus l'aurait arrêtée sinon) : la même proposition revient en attente.
+  -- ⚠️ La décision précédente n'est pas conservée (unicité de l'empreinte) : limite dite.
+  -- La date est revérifiée ici : ce n'est pas au seul bloc du refus de garder la porte.
+  if v_statut = 'OBSOLETE'
+     or (v_statut = 'REFUSEE' and v_reexamen is not null and v_reexamen <= pg_catalog.now()) then
     update public.supervision_decisions
       set statut = 'EN_ATTENTE', proposition_id = p_proposition_id,
-          proposition = p_proposition, cree_le = pg_catalog.now()
+          proposition = p_proposition, cree_le = pg_catalog.now(),
+          tranche_le = null, decision_notes = null, prochain_reexamen_le = null
       where id = v_id;
     return pg_catalog.jsonb_build_object('resultat', 'reouverte', 'id', v_id, 'statut', 'EN_ATTENTE');
   end if;
@@ -177,7 +205,9 @@ begin
     raise exception using errcode = '42501', message = 'authentication_required';
   end if;
   if p_id is null or p_decision is null or p_decision not in ('ACCEPTEE', 'REFUSEE')
-     or (p_notes is not null and char_length(p_notes) > 2000) then
+     or (p_notes is not null and char_length(p_notes) > 2000)
+     -- Une date de réexamen est dans le futur : passée, elle rouvrirait le refus aussitôt.
+     or (p_prochain_reexamen is not null and p_prochain_reexamen <= pg_catalog.now()) then
     raise exception using errcode = '22023', message = 'invalid_request';
   end if;
   select d.statut into v_statut from public.supervision_decisions d

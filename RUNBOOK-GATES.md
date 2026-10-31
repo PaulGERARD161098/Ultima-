@@ -150,7 +150,9 @@ fonctionne avant elle : le cockpit dit « la migration est à appliquer », et l
 propositions de Léo. RLS en lecture pour le propriétaire, **aucun droit d'écriture direct** ;
 trois fonctions (`supervision_soumettre`, `supervision_arbitrer`, `supervision_retirer`),
 `security definer` à `search_path` vide ; empreinte calculée en base ; 50 propositions / 24 h
-/ compte. Éprouvée sur PGlite (62 vérifications, 18 sabotages rouges) ; les deux scripts
+/ compte ; un refus tient pour l'objet et la recommandation jusqu'à la date de réexamen fixée
+au cockpit (sans date : sans limite — décision du 31/10, revue S1). Éprouvée sur PGlite
+(70 vérifications, sabotages rouges) ; les deux scripts
 ci-dessous aussi (verts sur la migration, rouges sur ses sabotages : `tests/unit-supervision-verifs.mjs`).
 
 **Les 5 gestes** (≈ 5 min) — dashboard Supabase → projet **ultima** → **SQL Editor** → *New query* :
@@ -160,7 +162,7 @@ ci-dessous aussi (verts sur la migration, rouges sur ses sabotages : `tests/unit
    `ok = true`**. Une ligne à `false` nomme ce qui manque : ne rien activer, me la dire.
 3. Coller `supabase/verifs/supervision-2-parcours-annule.sql` → **Run**. ⚠️ **Le signal de
    réussite est une erreur rouge** qui commence par **`PARCOURS_OK`** : le script soumet,
-   reconnaît le doublon, refuse, vérifie que le refus tient et qu'un faux identifiant est
+   reconnaît le doublon, refuse, vérifie que le refus tient — même avec une preuve ajoutée — et qu'un faux identifiant est
    rejeté, puis annule tout (aucune ligne ne reste). `ECHEC …` = ne pas activer, me le dire.
 4. Me dire le résultat des étapes 2 et 3 (le texte ou une capture).
 5. **Seulement ensuite**, l'activation : Vercel → projet `ultima` → *Settings → Environment

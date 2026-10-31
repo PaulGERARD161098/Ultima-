@@ -34,8 +34,8 @@ async function soumettre(objet, rec, preuves, prop = dossier()) {
     [prop.id ?? 'p1', objet, rec, preuves, JSON.stringify(prop)]);
   return r.rows[0].r;
 }
-const arbitrer = async (id, decision, notes = null) =>
-  (await db.query('select public.supervision_arbitrer($1,$2,$3) as r', [id, decision, notes])).rows[0].r;
+const arbitrer = async (id, decision, notes = null, reexamen = null) =>
+  (await db.query('select public.supervision_arbitrer($1,$2,$3,$4) as r', [id, decision, notes, reexamen])).rows[0].r;
 const retirer = async (id) => (await db.query('select public.supervision_retirer($1) as r', [id])).rows[0].r;
 async function lignes(uid) {
   await superuser();
@@ -110,7 +110,7 @@ await superuser();
   v.separateursDistinguent = new Set([await e(...d1), await e(...d2), await e(...d3)]).size === 3;
 }
 
-// ── 4. Résilience aux refus, puis déblocage par un élément nouveau ──────────
+// ── 4. Le refus tient jusqu'à sa date de réexamen (Paul, 31/10 ; revue S1) ──
 await en(A);
 const ref = await arbitrer(r1.id, 'REFUSEE', 'Pas maintenant');
 v.arbitrageRefus = ref.statut === 'REFUSEE';
@@ -118,14 +118,39 @@ const apres = await soumettre('zoh:alpha', 'conserver', ['zoh:alpha', 'finubar:P
 v.refusTient = apres.resultat === 'deja_tranchee' && apres.statut === 'REFUSEE';
 const avant = await lignes(A);
 await en(A);
-const neuf = await soumettre('zoh:alpha', 'conserver', ['zoh:alpha', 'finubar:P/D', 'zoh:beta']);
-v.nouvellePreuveDebloque = neuf.resultat === 'inseree' && (await lignes(A)) === avant + 1;
+// Le contournement de la revue S1 : ajouter une preuve sans rapport. Il ne passe plus.
+const ajout = await soumettre('zoh:alpha', 'conserver', ['zoh:alpha', 'finubar:P/D', 'zoh:beta']);
+v.preuveAjouteeNeRouvrePas = ajout.resultat === 'deja_tranchee' && ajout.id === r1.id && (await lignes(A)) === avant;
 await en(A);
-v.memeObjetAutreRecommandation = (await soumettre('zoh:alpha', 'simplifier', ['zoh:alpha', 'finubar:P/D'])).resultat === 'inseree';
+v.preuvesToutesChangeesNeRouvrentPas = (await soumettre('zoh:alpha', 'conserver', ['zoh:gamma'])).resultat === 'deja_tranchee';
+await en(A);
+const neuf = await soumettre('zoh:alpha', 'simplifier', ['zoh:alpha', 'finubar:P/D']);
+v.memeObjetAutreRecommandation = neuf.resultat === 'inseree';
+await en(A);
+v.autreObjetMemeRecommandation = (await soumettre('zoh:omega', 'conserver', ['zoh:alpha'])).resultat === 'inseree';
+// Date de réexamen : passée → refusée à l'arbitrage ; future → le refus tient jusque-là.
+await en(A);
+const futur = await soumettre('zoh:delta', 'mesurer', ['zoh:alpha']);
+v.reexamenPasseRefuse = (await code(() => arbitrer(futur.id, 'REFUSEE', null, new Date(Date.now() - 86_400_000).toISOString()))) === '22023';
+await en(A);
+v.refusAvecDate = (await arbitrer(futur.id, 'REFUSEE', null, new Date(Date.now() + 10 * 86_400_000).toISOString())).statut === 'REFUSEE';
+await en(A);
+v.dateFutureTient = (await soumettre('zoh:delta', 'mesurer', ['zoh:beta'])).resultat === 'deja_tranchee';
+// La date arrive (simulée en base) : la même revient en attente, une autre peut naître.
+await superuser();
+await db.query("update public.supervision_decisions set prochain_reexamen_le = now() - interval '1 hour' where id = $1", [r1.id]);
+await en(A);
+const rouverte = await soumettre('zoh:alpha', 'conserver', ['zoh:alpha', 'finubar:P/D']);
+v.apresReexamenLaMemeRevient = rouverte.resultat === 'reouverte' && rouverte.id === r1.id && rouverte.statut === 'EN_ATTENTE';
+await superuser();
+{
+  const l = (await db.query('select tranche_le, decision_notes, prochain_reexamen_le from public.supervision_decisions where id=$1', [r1.id])).rows[0];
+  v.reouvertureRemetAZero = l.tranche_le === null && l.decision_notes === null && l.prochain_reexamen_le === null;
+}
 
 // ── 5. Arbitrage : une fois, une décision valide, rien d'autre ──────────────
 await en(A);
-v.doubleArbitrageRefuse = (await code(() => arbitrer(r1.id, 'ACCEPTEE'))) === 'P0001';
+v.doubleArbitrageRefuse = (await code(() => arbitrer(futur.id, 'ACCEPTEE'))) === 'P0001';
 v.decisionObsoleteRefusee = (await code(() => arbitrer(neuf.id, 'OBSOLETE'))) === '22023';
 v.decisionEnAttenteRefusee = (await code(() => arbitrer(neuf.id, 'EN_ATTENTE'))) === '22023';
 v.notesTropLongues = (await code(() => arbitrer(neuf.id, 'ACCEPTEE', 'x'.repeat(2001)))) === '22023';
@@ -206,6 +231,8 @@ for (let i = 0; i < 50; i += 1) {
 v.cinquanteSoumissions = passent && (await lignes(C)) === 50;
 await en(C);
 v.cinquanteEtUniemeRefusee = (await code(() => soumettre('zoh:a', 'mesurer', ['zoh:v50']))) === 'PT429' && (await lignes(C)) === 50;
+await en(C);
+v.doublonAuPlafondGardeSaReponse = (await soumettre('zoh:a', 'mesurer', ['zoh:v0'], dossier({ id: 'v0' }))).resultat === 'deja_en_attente';
 
 console.log(JSON.stringify(v, null, 2));
 const ok = Object.keys(v).length >= 50 && Object.values(v).every((x) => x === true);

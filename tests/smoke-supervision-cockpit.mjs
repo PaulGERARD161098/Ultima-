@@ -147,6 +147,28 @@ console.log('§3 bis — une ligne non contrôlée (entrée hors sas) est dite c
   await page.close();
 }
 
+console.log('§3 ter — refuser avec une date de réexamen');
+{
+  let etat = 'EN_ATTENTE'; let date = null;
+  const { page, journal } = await ouvrir({
+    lire: () => ({ status: 200, body: { ok: true, data: { propositions: [{ ...ligne(etat), prochain_reexamen_le: date }], soumission_active: true } } }),
+    ecrire: (c) => { etat = c.decision; date = c.reexamen_le ? c.reexamen_le + 'T00:00:00+00:00' : null; return { status: 200, body: { ok: true, data: { id: ID, statut: etat } } }; },
+  });
+  verifier('le champ de date a une étiquette', (await page.locator(`label[for="reexamen-${ID}"]`).count()) === 1);
+  await page.fill(`#reexamen-${ID}`, '2026-12-15');
+  await page.getByRole('button', { name: 'Refuser', exact: true }).click();
+  await page.getByRole('button', { name: 'Confirmer : refuser', exact: true }).click();
+  await page.waitForTimeout(400);
+  verifier('corps avec date exact', JSON.stringify(journal.posts[0]) === JSON.stringify({ action: 'arbitrer', decision: 'REFUSEE', id: ID, reexamen_le: '2026-12-15' }), JSON.stringify(journal.posts[0]));
+  verifier('« refus valable jusqu’au 2026-12-15 » affiché', /Refus valable jusqu’au\s*2026-12-15/.test(await page.textContent('#supervision-corps')));
+  await page.close();
+}
+{
+  const { page } = await ouvrir({ lire: () => ({ status: 200, body: { ok: true, data: { propositions: [{ ...ligne('REFUSEE'), prochain_reexamen_le: null }], soumission_active: true } } }) });
+  verifier('refus sans date : « sans limite »', /Refus valable jusqu’au\s*sans limite/.test(await page.textContent('#supervision-corps')));
+  await page.close();
+}
+
 console.log('§4 — un conflit (déjà tranchée ailleurs) se dit par sa cause');
 {
   const { page, journal } = await ouvrir({
