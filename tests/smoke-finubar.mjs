@@ -89,6 +89,11 @@ async function ouvrir({ client, api }, viewport = { width: 1280, height: 900 }) 
     if (url.includes('/api/finubar')) journal.appelsApi += 1;
   });
 
+  // /api/supervision (31/10/2026) : la page monte le cockpit de supervision sous
+  // la table. Liste vide par défaut ; son propre harnais est
+  // `smoke-supervision-cockpit.mjs`. Ici on vérifie seulement qu'il ne gêne pas.
+  await page.route('**/api/supervision', (r) => r.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { propositions: [], soumission_active: false } }) }));
   await page.route('**/api/finubar', (r) => (api
     ? r.fulfill({ status: api.status, contentType: 'application/json', body: JSON.stringify(api.body) })
     : r.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ ok: false, error: 'Erreur interne' }) })));

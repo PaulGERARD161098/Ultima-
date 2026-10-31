@@ -55,6 +55,12 @@
       <ul class="marche" id="marche"></ul>
     </section>
 
+    <!-- Supervision (31/10/2026) : les propositions de Léo, que Paul seul tranche.
+         Rendu par js/supervision-cockpit.mjs ; vide tant que la session n'est pas lue. -->
+    <section class="supervision-section" aria-labelledby="titre-supervision">
+      <h2 id="titre-supervision" class="colonne-titre">Propositions de Léo à arbitrer</h2>
+      <div id="supervision-corps"></div>
+    </section>
     <p class="provenance" id="provenance">
       Cette page lit un état <strong>figé au dernier commit</strong> : elle ne va
       rien chercher en direct. Pour la rafraîchir : <code>node finubar/collecter.mjs</code>,

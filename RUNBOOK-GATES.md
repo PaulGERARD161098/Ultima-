@@ -139,6 +139,45 @@ la migration est appliquée sans que le code de #400 soit fusionné ou s'il faut
 `drop table public.leo_appels;` puis `drop function leo_private.appels_plafond();`
 (la table emporte son trigger). Le code de #400 retombe de toute façon sur son repli local.
 
+## ⏳ Gate ⑧ — Migration `supervision_decisions` (supervision et réemploi) — OUVERTE le 31/10
+
+**Où en est-on** : ⏳ **écrite et éprouvée, NON appliquée.** Le code qui s'en sert
+(`api/supervision.js`, l'outil `proposer_supervision`, le cockpit sous la table FINUBAR)
+fonctionne avant elle : le cockpit dit « la migration est à appliquer », et l'outil reste
+**coupé** tant que `LEO_SUPERVISION` ne vaut pas exactement `active`.
+
+**Quoi** : `supabase/migrations/20261031150000_supervision_decisions.sql` — le registre des
+propositions de Léo. RLS en lecture pour le propriétaire, **aucun droit d'écriture direct** ;
+trois fonctions (`supervision_soumettre`, `supervision_arbitrer`, `supervision_retirer`),
+`security definer` à `search_path` vide ; empreinte calculée en base ; 50 propositions / 24 h
+/ compte ; un refus tient pour l'objet et la recommandation jusqu'à la date de réexamen fixée
+au cockpit (sans date : sans limite — décision du 31/10, revue S1). Éprouvée sur PGlite
+(70 vérifications, sabotages rouges) ; les deux scripts
+ci-dessous aussi (verts sur la migration, rouges sur ses sabotages : `tests/unit-supervision-verifs.mjs`).
+
+**Les 5 gestes** (≈ 5 min) — dashboard Supabase → projet **ultima** → **SQL Editor** → *New query* :
+1. Coller le contenu de `supabase/migrations/20261031150000_supervision_decisions.sql` → **Run**.
+   Attendu : « Success. No rows returned ».
+2. Coller `supabase/verifs/supervision-1-etat.sql` → **Run**. Attendu : **12 lignes, toutes
+   `ok = true`**. Une ligne à `false` nomme ce qui manque : ne rien activer, me la dire.
+3. Coller `supabase/verifs/supervision-2-parcours-annule.sql` → **Run**. ⚠️ **Le signal de
+   réussite est une erreur rouge** qui commence par **`PARCOURS_OK`** : le script soumet,
+   reconnaît le doublon, refuse, vérifie que le refus tient — même avec une preuve ajoutée — et qu'un faux identifiant est
+   rejeté, puis annule tout (aucune ligne ne reste). `ECHEC …` = ne pas activer, me le dire.
+4. Me dire le résultat des étapes 2 et 3 (le texte ou une capture).
+5. **Seulement ensuite**, l'activation : Vercel → projet `ultima` → *Settings → Environment
+   Variables* → `LEO_SUPERVISION` = `active` (Production), puis redéployer. C'est un geste
+   distinct : la migration peut rester appliquée avec l'outil coupé.
+
+**À savoir** : comme pour le gate ⑦, l'éditeur SQL n'inscrit pas la migration au registre
+`supabase_migrations` ; advisors à relire quand un connecteur verra `ultima`. La base ne
+distingue pas Paul de Léo : la séparation « Léo propose, Paul tranche » tient au code (aucun
+outil d'arbitrage, corps figé côté front), gardée par `tests/unit-supervision-route.mjs`.
+
+**Retour arrière** — ⛔ destructif (perd les propositions et leurs décisions), uniquement sur
+ton geste : couper d'abord `LEO_SUPERVISION`, puis
+`drop function public.supervision_soumettre(text,text,text,text[],jsonb), public.supervision_arbitrer(uuid,text,text,timestamptz), public.supervision_retirer(uuid), public.supervision_empreinte(text,text,text[]); drop table public.supervision_decisions;`
+
 ---
 
 *Rien dans ce runbook n'a été exécuté par Léo : gates dashboard = tes gestes ;

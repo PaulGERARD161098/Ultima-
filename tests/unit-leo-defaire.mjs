@@ -102,7 +102,9 @@ const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
 // Non-vacuité : le catalogue n'est pas vide, et il compte bien dix verts
 // (onze outils : neuf + l'enrichissement orange + AMATSU, 18/10/2026).
 // DOUZE / ONZE depuis le 23/10/2026 : proposer_contact (vert, défaire par suppression).
-verdicts.nonVacuiteCatalogue = tousLesOutils.length === 12 && verts.length === 11;
+// TREIZE / ONZE depuis le 31/10 : proposer_supervision est ORANGE — sans défaire :
+// une proposition en attente se retire au cockpit (supervision_retirer).
+verdicts.nonVacuiteCatalogue = tousLesOutils.length === 13 && verts.length === 11;
 verdicts.chaqueVertASonDefaire = verts.join(',') === Object.keys(DEFAIRES).sort().join(',');
 verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRES) &&
   anneauDe('proposer_enrichissement_idee') === 'orange';

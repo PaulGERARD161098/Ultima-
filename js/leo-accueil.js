@@ -317,6 +317,40 @@
     return '[Résultat de l’action inconnu : elle a peut-être été enregistrée. Vérifiez la cible avant toute nouvelle tentative ; si le doute persiste, ne rejouez pas l’action.]';
   }
 
+  // SUPERVISION (31/10/2026) : l'issue d'une soumission, dite à Léo et à Paul.
+  // ⛔ Liste FERMÉE des résultats de la base ; les refus de contrôle portent un
+  // chemin et une raison (jamais une valeur, voir api/supervision.js) — bornés
+  // ici à huit, 120 caractères chacun, pour que Léo sache quoi compléter.
+  var ISSUES_SUPERVISION = {
+    inseree: 'Proposition soumise à l’arbitrage de Paul.',
+    deja_en_attente: 'Cette proposition attend déjà l’arbitrage de Paul : rien de nouveau.',
+    // Revue S1 du 31/10 : ne jamais suggérer d'ajouter une preuve pour faire revenir un refus.
+    deja_tranchee: 'Paul a déjà tranché cette proposition. Ne la repropose pas, et n’ajoute pas de preuve pour la faire revenir.',
+    reouverte: 'Proposition retirée auparavant, de nouveau soumise à l’arbitrage.'
+  };
+  function messageSupervision(resultat) {
+    var corps = resultat && resultat.corps;
+    if (resultat && resultat.httpOk && corps && corps.ok === true && corps.data &&
+        Object.prototype.hasOwnProperty.call(ISSUES_SUPERVISION, corps.data.resultat)) {
+      return '[Supervision : ' + ISSUES_SUPERVISION[corps.data.resultat] + ']';
+    }
+    if (resultat && resultat.statut === 422 && corps && corps.ok === false) {
+      var motifs = [].concat(Array.isArray(corps.erreurs) ? corps.erreurs : [],
+        Array.isArray(corps.reserves) ? corps.reserves : [])
+        .filter(function (m) { return typeof m === 'string'; })
+        .slice(0, 8).map(function (m) { return m.slice(0, 120); });
+      return '[Supervision refusée' + (typeof corps.etape === 'string' ? ' (' + corps.etape.slice(0, 20) + ')' : '') +
+        (motifs.length ? ' : ' + motifs.join(' ; ') : '') + '. Rien n’a été enregistré.]';
+    }
+    if (resultat && resultat.statut === 403) {
+      return '[Supervision non activée : rien n’a été enregistré.]';
+    }
+    if (resultat && resultat.statut === 429) {
+      return '[Supervision : plafond de propositions atteint (50 par 24 h). Rien n’a été enregistré.]';
+    }
+    return messageEchecEcriture(resultat);
+  }
+
   // Les refus du serveur, dits à Paul. ⛔ Liste FERMÉE, alignée sur
   // `REFUS_DEFAIRE` (api/_lib/leo-execution.js) : un message inconnu tombe
   // sur la phrase prudente, jamais sur le texte brut du serveur.
@@ -510,6 +544,23 @@
       if (args.note) { notesContact.push(args.note); }
       if (notesContact.length) { corpsContact.notes = notesContact.join(' '); }
       return { ok: true, url: '/api/reseau/nodes', methode: 'POST', corps: corpsContact };
+    }
+
+    // ---- SUPERVISION (31/10/2026) : la soumission d'un dossier à l'arbitrage.
+    // ⛔ Le corps est FIGÉ : `action` vaut toujours 'soumettre' et les arguments
+    // voyagent dans `args`, jamais à la racine — aucune proposition de Léo ne
+    // peut fabriquer un `arbitrer` ou un `retirer` (api/supervision.js).
+    // Les contrôles (bornes, preuves, logique) sont tous côté serveur.
+    if (outil === 'proposer_supervision') {
+      // `args` brut : le repli `|| {}` du haut ferait passer un `null` pour un dossier vide.
+      args = proposition.args;
+      if (!args || typeof args !== 'object' || Array.isArray(args)) { return { ok: false, raison: 'invalide' }; }
+      var argsSupervision = {};
+      Object.keys(args).forEach(function (cle) {
+        if (typeof args[cle] === 'string') { argsSupervision[cle] = args[cle]; }
+      });
+      return { ok: true, url: '/api/supervision', methode: 'POST',
+        corps: { action: 'soumettre', args: argsSupervision } };
     }
 
     // ---- IMLADRIK (boucle ④, 2026-07-30) : les 3 caps. Mêmes règles que
@@ -1269,7 +1320,9 @@
               return { httpOk: false, corps: null };
             });
           }).then(function (resultat) {
-            if (resultat.httpOk && resultat.corps && resultat.corps.ok === true) {
+            if (proposition.outil === 'proposer_supervision') {
+              clore(messageSupervision(resultat));
+            } else if (resultat.httpOk && resultat.corps && resultat.corps.ok === true) {
               apresEcriture(proposition, plan, resultat.corps.data);
               if (typeof voix.notifier === 'function') {
                 try { voix.notifier('Action de Léo exécutée.'); } catch (e) { /* fail-soft */ }
@@ -1720,6 +1773,7 @@
     resoudreRef: resoudreRef,
     construirePlanExecution: construirePlanExecution,
     messageEchecEcriture: messageEchecEcriture,
+    messageSupervision: messageSupervision,
     // B1 ⑤ : la même phrase de refus pour la bulle et l'écran leo.html.
     messageRefusDefaire: messageRefusDefaire
   };

@@ -52,7 +52,7 @@
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -126,7 +126,7 @@
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -238,7 +238,7 @@
       "mesure_le": "2026-10-23",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.109Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -344,7 +344,7 @@
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -416,7 +416,7 @@
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -486,7 +486,7 @@
       "mesure_le": "2026-10-21",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -545,7 +545,7 @@
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -603,7 +603,7 @@
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -709,7 +709,7 @@
       "mesure_le": "2026-10-23",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-31T13:26:34.866Z",
+        "lecture_le": "2026-10-31T14:56:31.110Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -742,10 +742,10 @@
         },
         "dernier_arret": {
           "le": "2026-10-31",
-          "quoi": "Clôture ZOH : alerte de dérive vérifiée (le raccord 5297f5c était déjà dans main par #422, CI main verte sur c25259c) ; #427 fusionnée sur accord de Paul (30f6f1b) ; #428 reprise…",
-          "commit": "07841c4db82e044149aebfdd33d298b6fb6aec28"
+          "quoi": "Supervision et réemploi construite sur branche (étapes 1 à 8, cadrage validé par Paul : preuves typées zoh:/finubar:, pas de purge, outil proposer_supervision ORANGE sur FINUBAR…",
+          "commit": "8961c8c460bcb3245213dbeba85516b97efe60f8"
         },
-        "prochaine_action": "Lire la CI de la PR qui reprend #428 depuis claude/ecstatic-bell-cpnynk, puis obtenir l’accord de Paul sur son SHA exact avant fusion ; #425 et #418 (conflits réels) restent des…",
+        "prochaine_action": "Lire la CI et la revue de sécurité de la PR supervision ; puis gate ⑧ (Paul applique la migration et lance les deux vérifications de RUNBOOK-GATES.md), et seulement après…",
         "bloque_par": [
           "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en…",
           "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
@@ -758,6 +758,10 @@
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "Supervision et réemploi : construite et éprouvée sur branche (PR à lire). Restent : revue de sécurité indépendante, CI, fusion sur accord de Paul, gate ⑧ (migration non…",
+            "depuis": "2026-10-31"
+          },
           {
             "quoi": "Retour RenoDevis du 29/10 : leçons v111 et contrat R29 documentés sur branche, sans fusion ni activation. Sources : memoire/JOURNAL-DECISIONS.md et zohshia/renodevis/TECHNO.md…",
             "depuis": "2026-10-29"
@@ -793,10 +797,6 @@
           {
             "quoi": "LEÇONS v91 (12–13/10, quatre leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
             "depuis": "2026-10-12"
-          },
-          {
-            "quoi": "ZOH · plan et base à jour le 10/10 (CADRAGE-2026-10-10-zohshia-mise-a-jour.md). Série : 32 conflits, dont 25 dans les fichiers de J4 ; à rafraîchir juste après J4 de RenoDevis…",
-            "depuis": "2026-10-08"
           }
         ],
         "maj": "2026-10-25"
@@ -820,7 +820,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-31T13:26:34.865Z",
+        "lecture_le": "2026-10-31T14:56:31.109Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
