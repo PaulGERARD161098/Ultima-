@@ -1,5 +1,7 @@
 # FINUBAR — Ultima
 
+> **Décision de Paul — 01/11/2026 : Léo et Fin en pause sans date.** Les anciennes prochaines actions des agents sont différées. Capitalisation légère au fil des autres projets ; aucun développement ou automatisme nouveau. Référence : `zohshia/fin-controle-securite/TECHNO.md` §8–9. État documentaire sur la branche de la PR #432, non fusionnée.
+
 > **Finubar** est l'index de pilotage de tous les projets de Paul : *où on en est,
 > où on s'est arrêté, par quoi on reprend, et vers quoi*. Ce fichier est le **grain
 > de ce dépôt** — un seul par dépôt, huit en tout.
@@ -24,18 +26,18 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md",
+  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md · zohshia/fin-controle-securite/TECHNO.md",
   "etat": "en_cours",
   "jalon": {
-    "nom": "Léo et FINUBAR — activation du site et des commandes",
+    "nom": "En pause — Léo et Fin, conservation des acquis",
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-31",
-    "commit": "8961c8c460bcb3245213dbeba85516b97efe60f8",
-    "quoi": "Supervision et réemploi construite sur branche (étapes 1 à 8, cadrage validé par Paul : preuves typées zoh:/finubar:, pas de purge, outil proposer_supervision ORANGE sur FINUBAR, coupé par LEO_SUPERVISION). Sas de forme sans Ajv, sas de matière, juge reçu tel quel, chaîne serveur, migration supervision_decisions éprouvée sur PGlite (non appliquée), route /api/supervision, cockpit d'arbitrage sous la table FINUBAR, scripts de vérification du gate ⑧. 87/87 suites, harnais navigateur Léo/FINUBAR/cockpit verts, sabotages tous rouges."
+    "le": "2026-11-01",
+    "commit": "ac4f0f40de5a89c9601dc71cc6c9763d9fdd09f8",
+    "quoi": "Paul met les agents en pause sans date. Rôles Léo/Fin et capitalisation future cadrés dans ZOH ; aucune activation. PR #432 brouillon."
   },
-  "prochaine_action": "Lire la CI et la revue de sécurité de la PR supervision ; puis gate ⑧ (Paul applique la migration et lance les deux vérifications de RUNBOOK-GATES.md), et seulement après, LEO_SUPERVISION=active.",
+  "prochaine_action": "Respecter la pause des agents. Capitaliser les apports utiles pendant les autres projets. Reprise seulement sur instruction explicite de Paul.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -48,6 +50,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Agents en pause sans date ; capitalisation légère : leçons, failles, périmètre, coordination, apports sourcés. Détail : zohshia/fin-controle-securite/TECHNO.md §8–9.",
+      "depuis": "2026-11-01"
+    },
     {
       "quoi": "Supervision et réemploi : construite et éprouvée sur branche (PR à lire). Restent : revue de sécurité indépendante, CI, fusion sur accord de Paul, gate ⑧ (migration non appliquée), activation LEO_SUPERVISION. Fraîcheur des preuves : seul Ultima- a une mesure Finubar de moins de 7 jours au 31/10.",
       "depuis": "2026-10-31"
@@ -210,6 +216,13 @@
 ```
 
 <!-- finubar:fin -->
+
+## 2026-11-01 — Pause des agents et capitalisation future
+
+Décision de Paul : manque de temps et de bande passante ; aucune date de reprise fixée. Le développement de Léo et Fin est différé. Préserver les leçons, failles, périmètres, coordination et apports utiles des autres projets par références canoniques, sans nouvelle collecte permanente ni transfert de droits. La fiche ZOH §8–9 porte les règles détaillées. PR #432 demeure un brouillon ; aucun état de service modifié ou vérifié ici.
+
+Le point d’arrêt précédent est conservé comme preuve historique, sans nouvelle exécution : 2026-10-31, commit 8961c8c460bcb3245213dbeba85516b97efe60f8 — Supervision et réemploi construite sur branche (étapes 1 à 8, cadrage validé par Paul : preuves typées zoh:/finubar:, pas de purge, outil proposer_supervision ORANGE sur FINUBAR, coupé par LEO_SUPERVISION). Sas de forme sans Ajv, sas de matière, juge reçu tel quel, chaîne serveur, migration supervision_decisions éprouvée sur PGlite (non appliquée), route /api/supervision, cockpit d'arbitrage sous la table FINUBAR, scripts de vérification du gate ⑧. 87/87 suites, harnais navigateur Léo/FINUBAR/cockpit verts, sabotages tous rouges.
+
 
 ## Journal de reprise
 
