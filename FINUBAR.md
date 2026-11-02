@@ -1,3 +1,9 @@
+# 2 novembre 2026 — socle vierge paiement artisan préparé
+
+Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur déterministe, recette isolée, badge et publication par le générateur existant. Six tests moteur reçus et publication vérifiée. Aucun compte, fournisseur, taux commercial ou donnée professionnelle. Préparation sur main `f7fe2100d92644cac11c9b0dafe6282c69697ff6`. Aucun agent activé. Prochaine action : recevoir l’intégration du badge avant choix et raccordement d’un prestataire.
+
+---
+
 # FINUBAR — Ultima
 
 > **Décision de Paul — 01/11/2026 : Léo et Fin en pause sans date.** Les anciennes prochaines actions des agents sont différées. Capitalisation légère au fil des autres projets ; aucun développement ou automatisme nouveau. Référence : `zohshia/fin-controle-securite/TECHNO.md` §8–9. État documentaire sur la branche de la PR #432, non fusionnée.

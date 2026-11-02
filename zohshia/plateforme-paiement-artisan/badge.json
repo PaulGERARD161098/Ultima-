@@ -1,0 +1,10 @@
+{
+ "ordre": 7,
+ "badge": "Plateforme de paiement pour artisan",
+ "etat": "Socle vierge — aucun prestataire activé",
+ "onglets": [
+  {"id":"techno","titre":"Ce que fait la techno","source":"TECHNO.md"},
+  {"id":"checklist","titre":"Préparer un artisan","source":"MISE-EN-SERVICE.md","sections":["## 1.","## 2."]},
+  {"id":"service","titre":"Recette et activation","source":"MISE-EN-SERVICE.md","sections":["## 3.","## 4."]}
+ ]
+}

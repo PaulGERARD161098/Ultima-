@@ -59,3 +59,7 @@ l'écran (pas d'« extraire » en ligne).
 ## Diligence et correspondance documentaire
 
 `diligence-correspondance/` porte la recherche sourcée, le classement explicite de précédents, la comparaison financière séparée et la livraison avec note professionnelle. Le code neutre s'extrait d'un commit et d'empreintes vérifiés ; les paramètres et dossiers restent dans chaque instance. Le badge décrit un socle à raccorder, sans activation automatique des agents.
+
+## Plateforme de paiement pour artisan
+
+`plateforme-paiement-artisan/` porte un socle vierge : modes virement direct et plateforme, ventilation en centimes éprouvée, contrat de preuve, contrôle des coûts et guide de réception. Aucun prestataire ou compte activé ; les paramètres et données des professionnels restent dans les instances. Son badge est publié par le générateur existant, derrière le contrôle propriétaire habituel.

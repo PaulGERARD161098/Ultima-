@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-31",
+ "publie_le": "2026-11-02",
  "technos": [
   {
    "id": "renodevis",
@@ -10131,6 +10131,463 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "plateforme-paiement-artisan",
+   "ordre": 7,
+   "badge": "Plateforme de paiement pour artisan",
+   "etat": "Socle vierge — aucun prestataire activé",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "État et périmètre",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Socle vierge réutilisable, créé le 2 novembre 2026. Aucun compte professionnel, aucune identité, coordonnée bancaire, donnée client, clé, règle commerciale particulière ou fournisseur sélectionné. Aucun encaissement, mandat, connexion bancaire ou surveillance n'est activé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le socle contient un calcul déterministe de ventilation en centimes et son adaptateur volontairement fermé. Il ne constitue pas une plateforme de paiement opérationnelle ou un agrément. Les contrats et la recette préparent son raccordement ultérieur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Trois flux à distinguer",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Flux",
+          ""
+         ]
+        ],
+        [
+         [
+          "Fonction",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve attendue",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Client vers artisan",
+           ""
+          ]
+         ],
+         [
+          [
+           "Acompte, total ou solde du document accepté",
+           ""
+          ]
+         ],
+         [
+          [
+           "Reçu prestataire vérifié, rapprochement bancaire ou déclaration humaine explicitement qualifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Commission due",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dette commerciale définie par le contrat du professionnel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Assiette, taux, fiscalité, date et règle versionnés",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Commission reçue",
+           ""
+          ]
+         ],
+         [
+          [
+           "Somme réellement attribuée ou réglée à la plateforme",
+           ""
+          ]
+         ],
+         [
+          [
+           "Reçu d'attribution ou encaissement rapproché, distinct de la dette",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un paiement déclaré par le client n'est jamais un encaissement confirmé. Une réception déclarée par le professionnel n'est jamais une preuve bancaire indépendante. Une commission due n'est jamais une commission encaissée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Modes interchangeables",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Virement direct : fonds sur le compte du professionnel ; suivi déclaratif ou rapprochement autorisé ; commission réglée séparément. Aucune ventilation automatique annoncée.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Plateforme de paiement : prestataire habilité, compte professionnel vérifié ; ventilation déclarée avant l'encaissement. La plateforme applicative ne reçoit pas les fonds de tiers sur son compte courant.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le choix est paramétré par professionnel et par environnement. Aucun repli silencieux d'un mode vers l'autre, d'un professionnel vers un autre ou du test vers le réel. Un paiement déjà ouvert reste rattaché à son bénéficiaire et son mode d'origine.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Moteur et raccords",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "moteur.mjs",
+         "c"
+        ],
+        [
+         " reçoit des montants validés en centimes entiers : total accepté, reçu avant le paiement, montant courant, commission totale TTC due et commission déjà prélevée. La fiscalité et l'assiette sont résolues en amont ; aucun taux, taxe ou acompte par défaut n'est imposé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La fonction ",
+         ""
+        ],
+        [
+         "ventiler",
+         "c"
+        ],
+        [
+         " vérifie les bornes et conserve la somme des parts. En mode plateforme, elle consomme la commission restant due dans la limite de l'encaissement et rend le reliquat explicite. Quand toute la commission est déjà prélevée, le solde revient entièrement au professionnel. En virement direct, aucune commission n'est prélevée par le moteur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "ouvrirPaiement",
+         "c"
+        ],
+        [
+         " est fermé tant qu'un adaptateur validé n'est pas explicitement activé. Le dépôt ne contient pas d'adaptateur externe factice pouvant être confondu avec une connexion réelle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Réemployer dans l'application d'accueil ses moteurs de montant, identité, signature, autorisation, journal et idempotence. Ce socle ne remplace ni le moteur documentaire ni la facturation. Il ne s'installe dans aucune instance par sa simple présence dans le catalogue.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Contrats de sécurité et de pilotage",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Les montants et le bénéficiaire viennent du serveur et du document accepté ; aucune valeur financière du navigateur ne fait foi.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une réservation atomique précède l'appel au fournisseur ; référence idempotente stable, reprise après délai sans second paiement.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Signature des notifications, montant, devise, compte, mode réel ou test, statut et identifiant externe sont rapprochés avant effet métier.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Paiements partiels, doublons, remboursements, contestations, frais et événements en retard ont des états distincts. Le remboursement de la commission n'est jamais supposé.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Autorisations par professionnel, journal privé non effaçable depuis le formulaire client ; séparation des coordonnées bancaires et du socle neutre.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le cockpit de l'outil hôte montre reçu, restant, commission due/reçue, anomalies, dernière synchronisation et actions humaines nécessaires. Sans preuve actuelle, l'état est inconnu et une alerte remplace le statut payé.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Choisir un fournisseur",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Comparer coût total sur un même scénario : abonnement, minimum mensuel, frais d'encaissement et plafond éventuel, ventilation, versement bancaire, compte actif, remboursement, incident, intégration et exploitation. Un prix inconnu reste inconnu, jamais zéro. Les tarifs sont datés et vérifiés à la sélection ; aucun fournisseur n'est désigné comme le moins cher par ce socle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Preuves et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La recette locale du moteur utilise uniquement des données synthétiques, sans réseau ni clé. Elle couvre acompte puis solde, commission insuffisamment couverte, virement direct, montants invalides et adaptateur fermé. Elle ne prouve ni conformité fiscale de l'instance, ni acceptation fournisseur, ni réception bancaire réelle.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "checklist",
+     "titre": "Préparer un artisan",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Contrat du professionnel",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Identifier le vendeur contractuel, le bénéficiaire légal des fonds, le titulaire bancaire et la personne habilitée à accepter les conditions. Définir l'acompte, l'assiette de commission HT ou TTC, sa TVA, sa date d'exigibilité, les remboursements et le traitement des règlements hors circuit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Faire confirmer ces règles dans l'instance. Aucune donnée du professionnel ne doit être copiée dans cette techno neutre.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Moyen et coût",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir virement direct ou plateforme. En mode direct, préciser qui constate la réception et comment la commission est réglée. En mode plateforme, obtenir le tarif complet, vérifier les capacités et les comptes autorisés, puis isoler test et production.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Vérifier que le cockpit hôte existe et que les états inconnus, désynchronisés et bloqués sont visibles. Une maquette de cockpit ne vaut pas contrôle utilisable.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Recette et activation",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Recette isolée",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lancer ",
+         ""
+        ],
+        [
+         "node --test zohshia/plateforme-paiement-artisan/moteur.test.mjs",
+         "c"
+        ],
+        [
+         ". Puis éprouver l'adaptateur choisi en environnement fournisseur d'essai : signature documentaire, acompte, commission, solde, double clic, interruption réseau, même notification reçue deux fois, faux reçu, autre professionnel, changement de bénéficiaire, montant partiel, remboursement et contestation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Comparer les montants attendus, reçus par le fournisseur et enregistrés dans l'application. Une demande acceptée ou un retour navigateur ne prouve pas que l'argent est reçu. L'échec d'une lecture empêche une nouvelle instruction automatique.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Activation et reprise",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant le réel, réunir compte fournisseur vérifié, titulaire bancaire confirmé, contrat commercial, permissions, preuve de recette, accord précis de bascule et contrôle des coûts. Aucun envoi, dépense, migration ou transaction réelle n'est autorisé par ce document.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Activer un seul professionnel d'abord. Conserver la version de configuration et les références de chaque tentative. Prévoir l'arrêt des nouvelles demandes sans supprimer les paiements en cours, la réconciliation des notifications tardives et une reprise manuelle traçable. La recette réelle et le premier versement bancaire restent à recevoir après raccordement.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
@@ -10147,6 +10604,9 @@ export default {
   "pitch-commercial/TECHNO.md": "bb55a381cf40ff2bed27a5c9918001fd75bfb4c072a6716983df43d0870f759f",
   "pitch-commercial/OSSATURE.md": "98e3592525077747112a59f1733f7392117c842225486bde3bab7d4bea52e213",
   "pitch-commercial/MISE-EN-SERVICE.md": "56ea24e91d128ef50c4adf50e0abe7e6603ca80662404eb4b6104b42f4483ed5",
+  "plateforme-paiement-artisan/badge.json": "406ff833278716b7cad396d28e295024f3caccdbf636150abb4bb9ecbe5f475a",
+  "plateforme-paiement-artisan/TECHNO.md": "81f4f7d8e901402587ff817128a556e6506ca5fcd6f285cf73dac84a5418bcf7",
+  "plateforme-paiement-artisan/MISE-EN-SERVICE.md": "88f23f9d3ea7ae7e0cc79010aaf763561b6c8866ba920fedede79be5d95f149c",
   "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
   "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
   "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
