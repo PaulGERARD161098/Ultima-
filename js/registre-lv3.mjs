@@ -397,7 +397,7 @@ export const NOEUDS = {
     legende: 'les technologies',
     enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires',
       'zoh-pitch-commercial', 'zoh-diligence-correspondance', 'zoh-generateur-devis',
-      'zoh-journal-apprentissages'],
+      'zoh-journal-apprentissages', 'zoh-paiement-artisan'],
   },
   'zoh-devis': {
     nom: 'CRÉATION DE DEVIS',
@@ -434,6 +434,13 @@ export const NOEUDS = {
     blason: 'plume',
     cible: 'zohshia.html#pitch-commercial',
     resume: 'Préparer un discours adapté au prospect, avec ses preuves et ses limites.',
+  },
+  'zoh-paiement-artisan': {
+    nom: 'PAIEMENT ARTISAN',
+    etat: 'Socle vierge ; aucun prestataire activé',
+    blason: 'portail',
+    cible: 'zohshia.html#plateforme-paiement-artisan',
+    resume: 'Préparer le règlement, la ventilation et le suivi ; choisir un prestataire selon son coût total.',
   },
   'zoh-diligence-correspondance': {
     nom: 'DILIGENCE DOCUMENTAIRE',

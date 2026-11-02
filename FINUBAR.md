@@ -1,3 +1,9 @@
+# 2 novembre 2026 — socle vierge paiement artisan préparé
+
+Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur déterministe, recette isolée, badge et publication par le générateur existant. Six tests moteur reçus et publication vérifiée. Aucun compte, fournisseur, taux commercial ou donnée professionnelle. Préparation sur main `f7fe2100d92644cac11c9b0dafe6282c69697ff6`. Aucun agent activé. Prochaine action : recevoir l’intégration du badge avant choix et raccordement d’un prestataire.
+
+---
+
 # FINUBAR — Ultima
 
 > **Décision de Paul — 01/11/2026 : Léo et Fin en pause sans date.** Les anciennes prochaines actions des agents sont différées. Capitalisation légère au fil des autres projets ; aucun développement ou automatisme nouveau. Référence : `zohshia/fin-controle-securite/TECHNO.md` §8–9. État documentaire sur la branche de la PR #432, non fusionnée.
@@ -51,7 +57,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Ménage des PR ZOH (02/11) : #364, #381, #417 et #418 regroupées sur claude/trusting-gates-91ao5h, conflits résolus, données ZOH régénérées, 89/89 suites unitaires et smoke-zohshia vert (224 contrôles) en local. Attend le go de fusion de Paul sur le SHA de la PR ; ensuite fermer les quatre PR d'origine comme absorbées. Hors regroupement : #425 (empreintes du catalogue de skills introuvables dans l'historique, son test échoue sur sa propre branche), #433 (ouverte le jour même), #365 et #351 (gelées par la pause). #428 est déjà absorbée dans main.",
+      "quoi": "Consolidation ZOH (02/11) sur la PR #434 (claude/trusting-gates-91ao5h) : #364, #381, #417, #418 et #433 intégrées, main 707d319 fusionné ; 9 technos, ordres 1 à 9 sans doublon ; stock ZOH lu par Léo à 7976 caractères (plafond 9000) ; test du journal sur journal fictif, isolation de memoire/ inchangée ; attentes carto alignées sur ADR-011. Attend : CI verte sur la tête, puis go de fusion de Paul ; ensuite fermer les cinq PR absorbées et renseigner dernier_arret.commit avec le SHA de main. Hors consolidation : #425 (9 empreintes preuve_ultima introuvables, blocage documenté sur la PR), #365 et #351 (pause de Léo), RenoDevis #463.",
       "depuis": "2026-11-02"
     },
     {
