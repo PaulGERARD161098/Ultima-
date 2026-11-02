@@ -226,6 +226,29 @@ Le point d’arrêt précédent est conservé comme preuve historique, sans nouv
 
 ## Journal de reprise
 
+### 2026-10-23 — deux prototypes de devis, activation Léo/FINUBAR maintenue
+
+Mandat de Paul : capitaliser dans la techno existante et faire progresser les
+deux prototypes ensemble. Cible et recette : `zohshia/renodevis/TECHNO.md` §9.
+Le prototype neutre doit devenir pré-opérationnel : tous raccordements éprouvés
+avec données fictives, puis seules données/configurations du pro à importer.
+Les quarante tests locaux de la bibliothèque ne prouvent pas ce parcours.
+Leçons : `memoire/LECONS.md`, entrée « Un prototype d'agent ne prouve que la
+couche réellement éprouvée ». Propagation inter-dépôts non effectuée dans ce lot.
+
+Ordre de reprise : inventorier les contrats/outils existants et les raccords
+manquants ; éprouver le prototype neutre et le canal existant sur les mêmes cas ;
+partager chaque régression puis mesurer le parcours vocal réel et son coût.
+Un moteur métier commun reste la cible ; les orchestrations sont comparées.
+
+Léo/FINUBAR demeure un chantier actif distinct : réconcilier `leo/ACTIVATION.md`,
+le §11 canonique de `CADRAGE-2026-09-22-leo-pilote-tout.md` et les preuves de
+production récentes ci-dessus. Ne pas refaire les fonctions déjà fusionnées.
+Prochaine preuve : parcours propriétaire sur le déploiement identifié, trace
+avant acte, résultat et défaire ; pour l'exécution permanente, réceptionner le
+contrôle extérieur, les identités séparées, l'arrêt durable et la reprise sans
+doublon avant activation. Cette note n'active aucun agent ni nouveau budget.
+
 ### 2026-10-19 — la CI bloquée vient de la facture ; Ultima- en est le premier poste
 
 Paul lit Billing : budget Actions de l'organisation à 100 %, autorisation de paiement
@@ -752,3 +775,4 @@ RenoDevis conserve ses condensats de sources. Aucun accès au contrôle privé R
 [RESTANT] Fusion de cette version avec accord explicite ; la règle n’est pas
 annoncée publiée sur main avant cette fusion. Côté ArtiDispo : inventaire et
 maquette de l’onglet administrateur, puis parcours allégé du compte Matthieu.
+

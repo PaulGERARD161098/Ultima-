@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v111 2026-10-29 sha256:836706dd7447 -->
+<!-- lecons:empreinte v112 2026-11-02 sha256:fd07e42e1b22 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1871,6 +1871,24 @@ Production ».
 
 ## 4. Conduire une boucle
 
+**UN PROTOTYPE D'AGENT NE PROUVE QUE LA COUCHE RÉELLEMENT ÉPROUVÉE**
+*(2026-10-23, RenoDevis, comparaison des prototypes).* Un PDF fabriqué par
+script temporaire a d'abord tenu lieu d'état de chantier ; la première
+correction a imposé de reconstruire cet état. Les revues ont ensuite découvert
+un ancien prix conservé après changement de référence et une invalidation qui
+s'arrêtait aux dépendants directs. Une bibliothèque corrigée et quarante tests
+réussis ont sécurisé ces cas ; ils n'ont pas raccordé le vocal, le catalogue,
+la configuration professionnelle ou le stockage partagé.
+*Ce que cela a coûté* : des reprises de génération et plusieurs tours de
+corrections avant de pouvoir comparer les deux prototypes sur une base stable.
+La reprise doit identifier séparément modèle, outils métier, hébergement,
+stockage et canal, puis éprouver le parcours complet. « Prêt à recevoir un pro »
+signifie que les raccordements sont déjà testés avec des données fictives et
+que seules les données et configurations réelles restent à importer. Chaque
+défaut reproduit devient un cas commun ; une comparaison conserve les mêmes
+entrées et indique si les modèles diffèrent. La cible et la recette vivent dans
+`Ultima-/zohshia/renodevis/TECHNO.md` §9 ; elles ne certifient pas une mise en ligne.
+
 **LA COMPILATION PEUT ÉMETTRE MÊME SI L'APPLICATION N'A PAS DE TÉLÉMÉTRIE CONFIGURÉE**
 *(2026-10-23, mon-dpe.fr).* Malgré la télémétrie du framework désactivée et les
 sources non envoyées, l'extension de compilation gardait sa propre télémétrie active.
@@ -2707,4 +2725,5 @@ paramètre d'outil. L'écrire par un outil d'écriture distante aurait fait
 transiter 22 Ko **sept fois**, pour un fichier qu'aucun de nous n'avait besoin
 de relire. *Un octet qui passe par le fil coûte ; un octet que `git` déplace de
 disque à disque ne coûte rien.*
+
 

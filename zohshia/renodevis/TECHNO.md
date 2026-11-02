@@ -246,6 +246,66 @@ et sur l'écran Finubar. Il INDIQUE quand rafraîchir ; seule l'extraction prouv
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
 `outils/zohshia/renodevis/`, hors du dossier, comme la liste des noms propres.
 
+## 9. Agent de devis neutre — cible pré-opérationnelle (23/10/2026)
+
+**Mandat confirmé :** produire depuis une description vocale un brouillon précis,
+avec produits et prestations, en moins de dix minutes. Le logiciel est préparé
+avant l'arrivée du professionnel ; son intégration apporte ses données et sa
+configuration, sans réécriture du moteur. Ce paragraphe fixe une cible, pas une
+réception acquise ni une actualisation de l'inventaire du §4.
+
+### Séparation des responsabilités
+
+- Le modèle comprend, rapproche les besoins et pose les questions groupées.
+- Les outils contrôlés recherchent les références, valident les corrections,
+  calculent, enregistrent et génèrent le document depuis l'état enregistré.
+- La configuration versionnée fournit identité, catalogues produits et
+  prestations, prix, paramètres commerciaux et présentation propres au pro.
+- Le canal reçoit le vocal et remet le brouillon au professionnel authentifié.
+  L'environnement de développement, l'hébergement du modèle, le serveur de
+  l'application et le stockage sont identifiés séparément.
+
+### Critère de livraison avant les données réelles
+
+| Capacité | Preuve requise avec une configuration fictive |
+|---|---|
+| Configuration | Import, validation, version et diagnostic des champs manquants ; aucun prix ou règle professionnelle codé en dur |
+| Voix et compréhension | Vocal réel traité ; produits, prestations, quantités et contraintes retrouvés ; consignes jamais facturées |
+| Catalogue | Références et prix sourcés ; écarts de puissance explicités ; absence ou ambiguïté jamais masquée par une substitution |
+| Corrections | Cible stable, état conservé, invalidation des prix et dépendances concernés ; impacts visibles |
+| État durable | Réouverture après nouvelle session ou redémarrage ; écriture atomique sous révision ; rejeu sans doublon et conflit de contenu refusé |
+| Cloisonnement | Identité résolue par l'application ; lectures et écritures entre deux professionnels fictifs refusées côté serveur |
+| Calcul et document | Calcul déterministe au centime avec paramètres fournis ; inconnu distinct de zéro ; totaux partiels explicités ; aucune TVA ou TTC complet sans règles disponibles ; PDF relu en texte et en image |
+| Exploitation | Erreurs actionnables, limites d'appels et coût observables, arrêt et reprise éprouvés ; brouillon marqué, aucun envoi au client automatique |
+
+**État du prototype local communiqué et vérifié le 23/10 :** bibliothèque d'état
+et génération PDF, quarante tests réussis sur l'archive identifiée dans la
+transmission. Cela ne prouve ni raccordement du catalogue, ni transcription,
+ni stockage externe concurrent, ni isolation applicative, ni livraison en ligne.
+Un dossier réservé à la configuration ne constitue pas son implémentation.
+
+### Deux prototypes qui s'améliorent mutuellement
+
+1. Répertorier les outils déjà présents avant tout remplacement. Conserver une
+   seule vérité de chantier et un seul contrat de calcul, indépendants du modèle.
+2. Raccorder le prototype neutre aux contrats nécessaires en environnement
+   d'essai ; adapter les outils existants quand ils répondent au contrat.
+3. Comparer les deux orchestrations avec les mêmes transcriptions, données
+   fictives et résultats attendus : cas normal, répétition, correction ciblée,
+   référence absente, prix inconnu, dépendance invalidée, rejeu et concurrence.
+4. Mesurer ensuite le parcours vocal réel jusqu'au PDF : temps écoulé depuis le
+   premier vocal, temps de traitement séparé de l'attente humaine, questions,
+   exactitude des produits et prestations, corrections manuelles et coût par
+   brouillon conforme. Conserver versions du code, prompts, modèles et données ;
+   distinguer comparaison des systèmes complets et comparaison à modèle égal.
+5. Transformer chaque défaut reproduit en cas partagé. Réutiliser le composant
+   gagnant ; deux moteurs commerciaux divergents ne sont pas une cible.
+
+Les leçons de méthode restent dans `Ultima-/memoire/LECONS.md`, entrée
+« Un prototype d'agent ne prouve que la couche réellement éprouvée ».
+Le contrôle d'exploitation suit `../pilotage-back-office/TECHNO.md` : chaque
+outil a son cockpit local ; un écran central ne remplace pas ses contrôles.
+
 ## Retour d'usage du 29 octobre 2026 et réception de la prochaine extraction
 
 **Déclaré par Paul :** le nouveau système est utilisé et les méthodes de création et de calcul redéfinies fonctionnent bien. Le délai reste trop long. Cette confirmation d'usage est à conserver ; elle ne vaut ni mesure de performance, ni validation de toutes les sources métier, ni recette de la prochaine extraction neutre. Les inventaires, commits et preuves historiques du §8 restent inchangés.
