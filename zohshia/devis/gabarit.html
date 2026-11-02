@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<!-- ZOH SHIA · générateur de devis. Gabarit NEUTRE : aucune valeur, que des champs entre doubles accolades
+     remplis et échappés par zohshia/devis/generer.mjs. Dérivé du gabarit de facture. -->
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Poppins", sans-serif; font-size: 9pt; color: #21303f;
+         margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+  .name  { color: #6d8ba6; font-size: 11.5pt; }
+
+  table.top { width: 100%; border-collapse: collapse; }
+  table.top td { vertical-align: top; }
+  td.logo { width: 52%; padding-top: 14px; }
+  td.logo img { width: 175px; }
+  .idblock { line-height: 1.42; }
+  .idblock .lbl { color: #9aa3ab; font-size: 9pt; }
+  .idblock .l2 { color: #56636f; }
+
+  .facture-title { color: #9aa3ab; font-size: 14pt; margin: 40px 0 6px 0; }
+  table.fmeta { border-collapse: collapse; }
+  table.fmeta td { padding: 2px 0; font-size: 9.5pt; }
+  table.fmeta td.k { color: #21303f; padding-right: 34px; }
+  table.fmeta td.v { color: #56636f; }
+
+  table.lines { width: 100%; border-collapse: collapse; margin-top: 26px; }
+  table.lines th { background: #f2f3f5; color: #56636f; font-weight: 400; font-size: 9pt;
+                   padding: 6px 8px; text-align: right; }
+  table.lines th:first-child { text-align: left; }
+  table.lines td { padding: 7px 8px 0 8px; text-align: right; font-size: 9.5pt; }
+  table.lines td:first-child { text-align: left; }
+  table.lines td.detail { padding: 1px 8px 8px 8px; color: #9aa3ab; font-size: 9pt; }
+
+  table.mid { width: 100%; border-collapse: collapse; margin-top: 22px; }
+  table.mid > tbody > tr > td { vertical-align: top; width: 50%; }
+  .sect { color: #9aa3ab; font-size: 12pt; margin-bottom: 6px; }
+  table.tva { width: 94%; border-collapse: collapse; font-size: 9.5pt; }
+  table.tva th { font-weight: 400; color: #21303f; text-align: right; padding: 0 0 2px 0; }
+  table.tva th:first-child { text-align: left; }
+  table.tva td { color: #56636f; text-align: right; padding: 0; }
+  table.tva td:first-child { text-align: left; }
+  table.recap { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  table.recap td { padding: 2px 8px 2px 0; }
+  table.recap td.k { color: #21303f; padding-left: 8px; }
+  table.recap td.v { text-align: right; color: #56636f; }
+  table.recap tr.ttc td { background: #f2f3f5; padding-top: 5px; padding-bottom: 5px; }
+  table.recap tr.ttc td.k, table.recap tr.ttc td.v { color: #21303f; }
+  .spacer-ttc td { height: 6px; padding: 0; }
+
+  .pay-box { width: 47%; background: #f5f6f7; padding: 14px 16px 16px 16px; margin-top: 60px; }
+  .pay-box .sect { margin-bottom: 8px; }
+  table.pay { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  table.pay td { padding: 2px 0; vertical-align: top; }
+  table.pay td.k { color: #21303f; width: 42%; padding-right: 8px; }
+  table.pay td.v { color: #56636f; }
+  .pay-note { color: #56636f; font-size: 8.5pt; line-height: 1.45; margin-top: 12px; }
+
+  .legal { margin-top: 16px; font-size: 8.5pt; color: #56636f; line-height: 1.5; }
+  .legal b { color: #21303f; font-weight: 500; }
+  .page { position: relative; height: 342mm; }
+  .foot { position: absolute; bottom: 0; left: 0; right: 0; font-size: 7.5pt; color: #56636f; }
+  .foot .r { float: right; }
+
+  {{POLICES_CSS}}
+  @page { size: A4; margin: 16mm 13mm 12mm 13mm; }
+  .page { zoom: 0.786; }
+  table.recap tr.ac td { padding-top: 8px; }
+  .row2 { display: flex; justify-content: space-between; margin-top: 60px; }
+  .row2 .pay-box { margin-top: 0; }
+  .sign-box { width: 47%; border: 1px solid #d5d9de; padding: 14px 16px 16px 16px; }
+  .sign-box .hint { color: #56636f; font-size: 8.5pt; line-height: 1.45; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<table class="top">
+  <tr>
+    <td class="logo">{{LOGO}}</td>
+    <td>
+      <div class="idblock">
+        <div class="lbl">Émetteur ou Émettrice</div>
+        <div class="name">{{EMETTEUR_NOM}}</div>
+        <div class="l2">{{EMETTEUR_ADRESSE}}</div>
+        <div class="l2">{{EMETTEUR_VILLE}}</div>
+      </div>
+      <div class="idblock" style="margin-top:16px">
+        <div class="lbl">Client ou Cliente</div>
+        <div class="name">{{CLIENT_NOM}}</div>
+        <div class="l2">{{CLIENT_SIREN}}</div>
+        <div class="l2">{{CLIENT_ADRESSE}}</div>
+        <div class="l2">{{CLIENT_VILLE}}</div>
+{{CLIENT_TVA_LIGNE}}      </div>
+    </td>
+  </tr>
+</table>
+
+<div class="facture-title">Devis</div>
+<table class="fmeta">
+  <tr><td class="k">Numéro</td><td class="v">{{NUMERO}}</td></tr>
+  <tr><td class="k">Date d'émission</td><td class="v">{{DATE_EMISSION}}</td></tr>
+  <tr><td class="k">Date de validité</td><td class="v">{{DATE_VALIDITE}}</td></tr>
+  <tr><td class="k">Type de vente</td><td class="v">{{TYPE_VENTE}}</td></tr>
+</table>
+
+<table class="lines">
+  <thead>
+    <tr>
+      <th style="width:38%">Produits</th><th>Qté</th><th>Prix u. HT</th>
+      <th>TVA (%)</th><th>Total HT</th><th>Total TTC</th>
+    </tr>
+  </thead>
+  <tbody>
+{{LIGNES}}
+  </tbody>
+</table>
+
+<table class="mid">
+  <tr>
+    <td>
+      <div class="sect">Détails TVA</div>
+      <table class="tva">
+        <tr><th>Taux</th><th>Montant TVA</th><th>Base HT</th></tr>
+        <tr><td>{{TAUX_TVA}}</td><td>{{TOTAL_TVA}}</td><td>{{TOTAL_HT}}</td></tr>
+      </table>
+    </td>
+    <td>
+      <div class="sect">Récapitulatif</div>
+      <table class="recap">
+        <tr><td class="k">Total HT</td><td class="v">{{TOTAL_HT}}</td></tr>
+        <tr><td class="k">Total TVA</td><td class="v">{{TOTAL_TVA}}</td></tr>
+        <tr class="spacer-ttc"><td colspan="2"></td></tr>
+        <tr class="ttc"><td class="k">Total TTC</td><td class="v">{{TOTAL_TTC}}</td></tr>
+        <tr class="ac"><td class="k">Acompte {{ACOMPTE_PCT}} % à la signature</td><td class="v">{{ACOMPTE}}</td></tr>
+        <tr><td class="k">Solde à la remise</td><td class="v">{{SOLDE}}</td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<div class="row2">
+<div class="pay-box">
+  <div class="sect">Paiement</div>
+  <table class="pay">
+    <tr><td class="k">Moyen de paiement</td><td class="v">{{MOYEN_PAIEMENT}}</td></tr>
+    <tr><td class="k">Établissement</td><td class="v">{{EMETTEUR_NOM}}</td></tr>
+    <tr><td class="k">IBAN</td><td class="v">{{IBAN}}</td></tr>
+    <tr><td class="k">BIC</td><td class="v">{{BIC}}</td></tr>
+    <tr><td class="k">Référence</td><td class="v">{{REF_PAIEMENT}}</td></tr>
+  </table>
+  <div class="pay-note">L'acompte de {{ACOMPTE_PCT}} % ({{ACOMPTE}} TTC) déclenche le démarrage de la mission. Merci d'inclure la référence dans le libellé de votre virement pour que votre paiement soit correctement identifié.</div>
+</div>
+<div class="sign-box">
+  <div class="sect">Bon pour accord</div>
+  <div class="hint">Date, nom, signature et cachet du client,<br>précédés de la mention « Bon pour accord ».</div>
+</div>
+</div>
+
+<div class="legal">
+  <b>Validité du devis</b> : jusqu'au {{DATE_VALIDITE}}.<br>
+  <b>Conditions de règlement</b> : acompte de {{ACOMPTE_PCT}} % à la signature, solde à la remise.<br>
+{{CONDITIONS}}
+  <b>Pénalités de retard</b> : trois fois le taux annuel d'intérêt légal en vigueur calculé depuis la date d'échéance jusqu'à complet paiement du prix.<br>
+  <b>Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement</b> : 40 €<br>
+  <b>Escompte</b> : Pas d'escompte
+</div>
+
+
+
+<div class="foot">{{MENTIONS_LEGALES}}<span class="r">1 / 1</span></div>
+</div>
+</body>
+</html>

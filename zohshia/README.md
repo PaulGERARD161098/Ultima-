@@ -12,6 +12,7 @@
 |---|---|
 | `renodevis/` | Le plan de la techno RénoDevis (`TECHNO.md`), le guide et la check-list pour la mettre en service chez un pro (`AJOUTER-UN-ARTISAN.md`), l'inventaire mesuré (`inventaire.json`), l'extraction du code neutre (`extraire.mjs`) et la base neuve prouvée (`base/`) |
 | `pilotage-back-office/` | Règle transversale : chaque système a un cockpit ou un moyen de pilotage utilisable ; contrat neutre, couverture par fonction, guide de recette et contrôle des attestations privées |
+| `devis/` | **Deuxième étoile (08/10/2026) — le générateur de devis** : un gabarit neutre dans la forme des factures (`gabarit.html`), le générateur qui valide, calcule au centime, échappe et imprime en PDF (`generer.mjs`), la forme des paramètres sans valeur (`exemple.parametres.json`) et le plan (`TECHNO.md`) |
 
 ## Présentations claires
 
