@@ -45,7 +45,7 @@ verdicts.regroupementCorrect = chaqueIdeeBienPlacee &&
 // Thème pour les quatre premières).
 const parLabel = Object.fromEntries(archipels.map((a) => [a.label, a.idees.map((i) => i.id)]));
 verdicts.archipelsAttendus =
-  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005', 'ADR-009', 'ADR-010']) &&
+  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005', 'ADR-009', 'ADR-010', 'ADR-011']) &&
   JSON.stringify(parLabel['Commercial']) === JSON.stringify(['ADR-004']);
 
 // ---------- 4. Idée sans thème → archipel « À classer » (fixture en mémoire) ----------
@@ -103,7 +103,9 @@ verdicts.bienFormeeOk = !echoue(fixtureSansTheme) && parseRegistre(md).length ==
 // ---------- 6. Ponts : synergies ADR↔ADR détectées (non orientées, dédupliquées) ----------
 const ponts = detecterPonts(idees);
 const cles = new Set(ponts.map((p) => `${p.a}|${p.b}`));
-verdicts.pontsDetectes = ponts.length === 28 &&
+// ADR-011 SOS matériel (2026-11-02, thème bâtiment) : un seul pont, avec ADR-003
+// (la fiche le relie explicitement à la préparation du chantier) → 28 → 29.
+verdicts.pontsDetectes = ponts.length === 29 && cles.has('ADR-003|ADR-011') &&
   cles.has('ADR-001|ADR-002') && cles.has('ADR-001|ADR-003') &&
   cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004') &&
   cles.has('ADR-002|ADR-005') && cles.has('ADR-003|ADR-005') &&
