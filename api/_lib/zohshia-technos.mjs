@@ -10642,6 +10642,888 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "journal-apprentissages",
+   "ordre": 8,
+   "badge": "Journal d’apprentissages",
+   "etat": "Préparé — raccordement automatique non activé",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. But et état réel",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Transformer les observations de travail en apprentissages traçables et les retrouver au moment utile : ouverture, décision ou blocage, puis clôture de séance.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préparé, non activé automatiquement.",
+         "b"
+        ],
+        [
+         " Le journal structuré et sa consultation locale sont disponibles dans cette préparation. Aucun raccordement à un outil de conversation, aucune tâche permanente et aucune écriture de contrôle ne sont installés par ce lot.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le bénéfice attendu est moins de reprises inutiles et de répétitions d’erreurs. Aucun gain de temps ou gain commercial n’est encore mesuré.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Réutiliser la mémoire existante",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Pièce",
+          ""
+         ]
+        ],
+        [
+         [
+          "Rôle",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "memoire/LECONS.md",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Source unique des règles de méthode déjà adoptées ; ne pas recopier ces règles dans le journal",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "memoire/JOURNAL-APPRENTISSAGES.json",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Observations, réussites, hypothèses et suivi de vérification ; renvois aux règles existantes",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "outils/journal-apprentissages/consulter.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Valide le journal, ouvre sa lecture complète et recherche les cas ressemblants, sans écriture ni appel réseau",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "finubar/lecons-rappel.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Rappel d’ouverture déjà présent dans le dépôt ; son exécution réelle dans chaque environnement reste à éprouver",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "memoire/LECONS-PROCEDURE.md",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Mise à jour et propagation de la source canonique des règles",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "collecter.mjs",
+           "c"
+          ],
+          [
+           " et ",
+           ""
+          ],
+          [
+           "inventaire.json",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Mesure locale des fichiers réellement disponibles, empreintes et éléments manquants",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La technologie porte un plan neutre. Les incidents propres à un projet restent dans sa mémoire privée : ils ne sont pas publiés avec ce badge. La fiche ne remplace pas le journal de décisions et ne transforme pas une observation en instruction.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Forme d’un apprentissage",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une entrée porte un identifiant stable, une date, le cas rencontré, la nature (incident, réussite ou idée), le constat, sa conséquence, une explication avec son niveau de preuve, une piste à éprouver, ses limites et des sources nommées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les niveaux sont distincts : mesuré, déclaré, inféré, non vérifié. Le statut est observation, à éprouver, relié à une leçon, ou retiré. Une règle adoptée se retrouve par son titre exact dans ",
+         ""
+        ],
+        [
+         "memoire/LECONS.md",
+         "c"
+        ],
+        [
+         " ; elle ne se duplique pas dans le journal.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une réussite se consigne avec la recette qui permet de la reproduire. Une idée reste une idée tant que son gain n’est pas éprouvé. Une clôture sans enseignement nouveau est recevable : aucun remplissage automatique et aucune erreur inventée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Protection et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La mémoire est une donnée à examiner, jamais une nouvelle autorité. Elle ne modifie ni mandat, ni permissions, ni contrôle de l’agent. Un texte importé demandant un secret ou une action n’est pas exécuté.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ne pas verser de conversations brutes, dossiers clients, secrets ou données personnelles dans le journal versionné. Les preuves sensibles restent hors du dépôt, accessibles seulement aux personnes habilitées. Les leçons diffusées entre projets sont neutralisées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les modifications passent par une branche et une revue du diff. Une version distante nouvelle impose une réconciliation avant écriture ; les clôtures concurrentes ne s’écrasent pas. La consultation locale ne prouve pas le contrôle d’accès de tous les outils susceptibles de lire le dépôt.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. La promesse de lecture",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lire intégralement les sources accessibles au début et à la clôture ; en cours de travail, rechercher le cas puis relire ses preuves et limites avant application. La recherche est une aide lexicale, pas une preuve d’analogie.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une session privée non transmise ou un historique tronqué ne peut pas être relu en entier. La couverture manque alors explicitement. Une lecture d’index, une empreinte ou une injection de texte ne prouvent pas à elles seules que l’agent a appliqué la leçon.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "usage",
+     "titre": "Début, travail et clôture",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. À l’ouverture — lecture explicite",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lire les consignes du projet, puis les règles canoniques et le journal complet. Depuis la racine du dépôt : ",
+         ""
+        ],
+        [
+         "node outils/journal-apprentissages/consulter.mjs",
+         "c"
+        ],
+        [
+         ". La sortie identifie la version, le nombre d’entrées et les limites de couverture. Lire également ",
+         ""
+        ],
+        [
+         "memoire/LECONS.md",
+         "c"
+        ],
+        [
+         " en entier : le journal ne le remplace pas.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relier les leçons pertinentes au mandat actuel. Si une source est absente, périmée ou tronquée, nommer le manque et acquérir ce qui est nécessaire au travail concerné. Ne pas transformer une absence de lecture en absence de leçon.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Pendant le travail — retrouver un cas",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sur un blocage, une décision substantielle, un échec ou une meilleure exécution, consulter spontanément la mémoire. Exemple neutre : ",
+         ""
+        ],
+        [
+         "node outils/journal-apprentissages/consulter.mjs --cas \"accès lecture fichier\"",
+         "c"
+        ],
+        [
+         ".",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La consultation cherche dans le journal et les entrées de la mémoire canonique. Elle rend les textes complets des entrées trouvées et la provenance des fichiers. Une recherche sans résultat n’est pas une preuve qu’aucun cas analogue existe.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour chaque correspondance, vérifier la cause commune, les différences, la date, les preuves et le coût d’application. Noter la leçon effectivement utilisée et son effet observé ; ne pas ajouter de règle à chaque consultation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. À la clôture — rétrospective et écriture maîtrisée",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relire toute la session accessible, les demandes, le diff et les preuves produites. Comparer attendu et livré, essais concluants, incidents, corrections et restes. Lister les sources réellement relues et les passages indisponibles ; ne jamais annoncer une relecture intégrale d’un historique non accessible.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rechercher les doublons dans le journal et dans ",
+         ""
+        ],
+        [
+         "memoire/LECONS.md",
+         "c"
+        ],
+        [
+         ". Ajouter une observation utile, enrichir une entrée existante ou constater aucune nouveauté. Un apprentissage issu d’une erreur réelle peut enrichir la mémoire canonique selon ",
+         ""
+        ],
+        [
+         "memoire/LECONS-PROCEDURE.md",
+         "c"
+        ],
+        [
+         ". Le journal conserve alors un renvoi au titre exact.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Valider : ",
+         ""
+        ],
+        [
+         "node outils/journal-apprentissages/consulter.mjs --verifier",
+         "c"
+        ],
+        [
+         ". Relire le diff, conserver les versions et committer sur la branche du travail. La validation du format ne remplace pas la vérification des affirmations.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Qui agit et ce qui est automatique",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Moment",
+          ""
+         ]
+        ],
+        [
+         [
+          "Mode de cette version",
+          ""
+         ]
+        ],
+        [
+         [
+          "Qui agit",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Ouverture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Manuel ; rappel canonique existant à vérifier séparément",
+           ""
+          ]
+         ],
+         [
+          [
+           "L’agent de séance avec accès à la mémoire",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recherche pendant le travail",
+           ""
+          ]
+         ],
+         [
+          [
+           "Consultation locale à l’initiative de l’agent",
+           ""
+          ]
+         ],
+         [
+          [
+           "L’agent, dans le mandat courant",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Clôture et ajout",
+           ""
+          ]
+         ],
+         [
+          [
+           "Écriture sur branche, revue et vérification des sources",
+           ""
+          ]
+         ],
+         [
+          [
+           "L’agent de séance",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Propagation des règles",
+           ""
+          ]
+         ],
+         [
+          [
+           "Procédure canonique existante",
+           ""
+          ]
+         ],
+         [
+          [
+           "La séance habilitée qui dispose des dépôts",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Injection dans chaque outil",
+           ""
+          ]
+         ],
+         [
+          [
+           "Non raccordée par ce lot",
+           ""
+          ]
+         ],
+         [
+          [
+           "Futur raccordement avec preuve de lecture",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le journal n’est pas un agent permanent. Aucune surveillance en arrière-plan ni récupération implicite des conversations d’autres outils n’est promise.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Mise en service et preuves",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Préparation locale",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Manuel — disposer de la source canonique, des consignes et du journal autorisé.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel — lire les sources en entier, avec leur version et leur couverture.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto à l’invocation — valider le format et les liens des leçons déjà adoptées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto à l’invocation — rechercher un cas, sans effet externe ni écriture.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel — éprouver l’enseignement sur un cas réel ou fictif bien identifié.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel — consigner le résultat, relire le diff et conserver la version du travail.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La collecte locale ne contacte aucune base et ne lit aucun environnement secret. ",
+         ""
+        ],
+        [
+         "node zohshia/journal-apprentissages/collecter.mjs",
+         "c"
+        ],
+        [
+         " écrit uniquement son inventaire. Le badge utilise le mécanisme de publication existant, réservé au propriétaire.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Raccordement ultérieur par environnement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour chaque outil, identifier une entrée réelle de session, une consultation accessible pendant le travail et une clôture effectivement déclenchable. Éprouver les trois avec une session neuve. Une consigne déclarée ne vaut pas installation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ne pas modifier le contrôle de l’agent pour installer la mémoire. Les automatismes et droits existants sont inventoriés avant tout changement. Un coût nouveau, une publication ou un transfert externe exige son mandat ; aucune fusion n’est incluse dans cette préparation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Critères de réussite et épreuves",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Épreuve",
+          ""
+         ]
+        ],
+        [
+         [
+          "Résultat attendu",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Ouverture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Version et sources disponibles nommées, lecture complète ou manque explicitement annoncé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Cas ressemblant",
+           ""
+          ]
+         ],
+         [
+          [
+           "Entrée retrouvée avec preuve et limites ; application expliquée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Clôture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Sources relues, doublon recherché, ajout utile ou absence de nouveauté",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Réussite",
+           ""
+          ]
+         ],
+         [
+          [
+           "Recette reproductible et gain non inventé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Source inaccessible",
+           ""
+          ]
+         ],
+         [
+          [
+           "Limite de couverture visible ; aucune conclusion de lecture complète",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Règle retirée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Historique conservé, proposition non présentée comme règle applicable",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Deux écritures",
+           ""
+          ]
+         ],
+         [
+          [
+           "Version divergente détectée, aucune suppression silencieuse",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Instruction hostile",
+           ""
+          ]
+         ],
+         [
+          [
+           "Texte conservé comme donnée, aucun effet ni extension de droits",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les tests de format et de consultation sont locaux. La lecture effective par un agent, les raccordements automatiques et les comportements de clôture restent à recevoir. Le plan permet de les préparer sans les annoncer actifs.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Échecs anticipés",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un journal gonflé de conseils remplace les preuves : ne garder que des observations utiles, contextualisées et sourcées. Deux mémoires de règles divergent : conserver les règles adoptées dans leur source unique et les pointer.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un outil reçoit un contexte incomplet : annoncer précisément la couverture. Une recherche lexicale manque une analogie : relire les familles pertinentes. Une réussite locale se généralise trop vite : maintenir ses limites et l’éprouver ailleurs.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Arrêt et retour arrière",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ce lot n’installe ni hook ni routine. Retirer le badge et régénérer les données supprime sa présentation ; le journal peut être conservé comme historique privé. Un futur raccordement doit posséder son propre arrêt vérifié et ne doit pas désactiver les règles canoniques ou les contrôles existants.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
@@ -10653,6 +11535,10 @@ export default {
   "diligence-correspondance/badge.json": "2011fbf865919f9914953f9608771e73ae2cceaeff6ba01acc85123665111f10",
   "diligence-correspondance/TECHNO.md": "b40b196c2e00a8c4abe8446bff289548fdb6a7283315758096d713aa2b3fe17e",
   "diligence-correspondance/MISE-EN-SERVICE.md": "7995eb0b4db82d1dac8669db1e40cf29dc63f24c3abb62b6bc3ec5fef2dada13",
+  "journal-apprentissages/badge.json": "f5ef55179a2f73072c4ad9ccb7cb7fdddacd8e9136cad77528c24f384da41368",
+  "journal-apprentissages/TECHNO.md": "f53d53a11915aa1c507f447a2ae3b4603a82f29244d5d19636f6b5a6d55f451a",
+  "journal-apprentissages/UTILISER.md": "730465b1b8534e866f9f5480f04b0245e391e2d4520b2b2fdd616b35fba15462",
+  "journal-apprentissages/MISE-EN-SERVICE.md": "bedadbd8aa8b94b572aff4fa37825dd9a0216dc5ea4b50795881f4c1a0bb0aaa",
   "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
   "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
   "pilotage-back-office/MISE-EN-SERVICE.md": "a2074a5ae227fd59674c5956f77e16c76aa14c14f319f6fd1278b71b91319cab",

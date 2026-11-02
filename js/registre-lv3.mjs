@@ -396,7 +396,8 @@ export const NOEUDS = {
     coeur: 'kalamn',
     legende: 'les technologies',
     enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires',
-      'zoh-pitch-commercial', 'zoh-diligence-correspondance', 'zoh-generateur-devis'],
+      'zoh-pitch-commercial', 'zoh-diligence-correspondance', 'zoh-generateur-devis',
+      'zoh-journal-apprentissages'],
   },
   'zoh-devis': {
     nom: 'CRÉATION DE DEVIS',
@@ -447,6 +448,13 @@ export const NOEUDS = {
     blason: 'portail',
     cible: 'zohshia.html#devis',
     resume: 'Un devis neutre d’une page : paramètres validés, montants au centime, PDF imprimé.',
+  },
+  'zoh-journal-apprentissages': {
+    nom: 'JOURNAL D’APPRENTISSAGES',
+    etat: 'Préparé ; raccord non activé',
+    blason: 'registre',
+    cible: 'zohshia.html#journal-apprentissages',
+    resume: 'Ce qu’une séance apprend, consulté à l’ouverture et consigné à la clôture.',
   },
   // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026). Étoile d'attente, le même geste
   // que ZOH SHIA le 04/10 et qu'IFULVIN : nom, épithète, les mots de Paul — AUCUNE

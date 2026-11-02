@@ -215,6 +215,33 @@ for (const width of [1280, 390]) {
   await page.close();
 }
 
+// Les autres badges sont vérifiés indépendamment, sans supposer leur rang.
+{
+  const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL });
+  const index = donnee.technos.findIndex(t => t.id === 'journal-apprentissages');
+  verifier('le journal est publié', index >= 0);
+  if (index >= 0) {
+    const techno = donnee.technos[index];
+    const panneau = page.locator(`#techno-${index}`);
+    const badge = page.locator('.badge-techno').nth(index);
+    verifier('le badge journal porte son nom et son état préparé',
+      (await badge.textContent()).includes('Journal d’apprentissages')
+      && (await badge.textContent()).includes('non activé'));
+    await badge.click();
+    verifier('les onglets du journal sont ceux du plan',
+      (await panneau.locator('.onglet').allTextContents()).join('|') === techno.onglets.map(o => o.titre).join('|'));
+    for (const onglet of techno.onglets) {
+      await panneau.locator('.onglet', { hasText: onglet.titre }).click();
+      verifier(`journal : ${onglet.titre} se rend`, (await panneau.locator('.contenu > *').count()) >= 3);
+    }
+    await page.setViewportSize({ width: 390, height: 800 });
+    verifier('journal mobile sans débordement',
+      await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth) <= 1);
+  }
+  verifier('journal sans erreur ni requête externe', !journal.erreurs.length && !journal.externes.length);
+  await page.close();
+}
+
 console.log('§3 — 390 px : lisible, sans défilement horizontal de la page');
 {
   const { page } = await ouvrir({ client: 'connecte', api: PAUL }, { width: 390, height: 800 });
