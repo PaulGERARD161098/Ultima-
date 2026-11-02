@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "mis_a_jour_le": "2099-01-01",
+  "source_regles": "memoire/LECONS.md",
+  "couverture": {
+    "relues": [
+      "Fixture fictive construite pour les tests"
+    ],
+    "manquantes": [
+      "Tout le réel : le journal privé n'est pas lu par ce test"
+    ],
+    "limite": "Données fictives, aucune valeur probante sur le journal réel."
+  },
+  "entrees": [
+    {
+      "id": "JA-20990101-001",
+      "le": "2099-01-01",
+      "nature": "incident",
+      "statut": "observation",
+      "cas": "Cas fictif d'accès incomplet à un fichier",
+      "mots_cles": [
+        "accès",
+        "lecture",
+        "fichier"
+      ],
+      "constat": "CONSTAT_FICTIF_ACCES_FICHIER",
+      "consequence": "Conséquence fictive de test.",
+      "explication": {
+        "niveau": "inféré",
+        "texte": "Explication fictive de test."
+      },
+      "piste": "Piste fictive de test.",
+      "limites": "Entrée fictive : ne décrit aucune séance réelle.",
+      "sources": [
+        {
+          "type": "document",
+          "reference": "Fixture de test, aucune source réelle",
+          "niveau": "non vérifié"
+        }
+      ],
+      "lecon_canonique": null,
+      "verification_suivante": "Aucune : entrée fictive."
+    },
+    {
+      "id": "JA-20990101-002",
+      "le": "2099-01-01",
+      "nature": "reussite",
+      "statut": "a_eprouver",
+      "cas": "Cas fictif de livraison par tranche",
+      "mots_cles": [
+        "livraison",
+        "tranche",
+        "preuve"
+      ],
+      "constat": "CONSTAT_FICTIF_LIVRAISON",
+      "consequence": "Conséquence fictive de test.",
+      "explication": {
+        "niveau": "inféré",
+        "texte": "Explication fictive de test."
+      },
+      "piste": "Piste fictive de test.",
+      "limites": "Entrée fictive : ne décrit aucune séance réelle.",
+      "sources": [
+        {
+          "type": "document",
+          "reference": "Fixture de test, aucune source réelle",
+          "niveau": "non vérifié"
+        }
+      ],
+      "lecon_canonique": null,
+      "verification_suivante": "Aucune : entrée fictive."
+    },
+    {
+      "id": "JA-20990101-003",
+      "le": "2099-01-01",
+      "nature": "incident",
+      "statut": "observation",
+      "cas": "Cas fictif de reprise après interruption",
+      "mots_cles": [
+        "webhook",
+        "durable",
+        "interruption"
+      ],
+      "constat": "CONSTAT_FICTIF_REPRISE",
+      "consequence": "Conséquence fictive de test.",
+      "explication": {
+        "niveau": "inféré",
+        "texte": "Explication fictive de test."
+      },
+      "piste": "Piste fictive de test.",
+      "limites": "Entrée fictive : ne décrit aucune séance réelle.",
+      "sources": [
+        {
+          "type": "document",
+          "reference": "Fixture de test, aucune source réelle",
+          "niveau": "non vérifié"
+        }
+      ],
+      "lecon_canonique": null,
+      "verification_suivante": "Aucune : entrée fictive."
+    },
+    {
+      "id": "JA-20990101-004",
+      "le": "2099-01-01",
+      "nature": "idee",
+      "statut": "a_eprouver",
+      "cas": "Cas fictif de lecture à l'ouverture",
+      "mots_cles": [
+        "ouverture",
+        "clôture",
+        "hook"
+      ],
+      "constat": "CONSTAT_FICTIF_OUVERTURE",
+      "consequence": "Conséquence fictive de test.",
+      "explication": {
+        "niveau": "inféré",
+        "texte": "Explication fictive de test."
+      },
+      "piste": "Piste fictive de test.",
+      "limites": "Entrée fictive : ne décrit aucune séance réelle.",
+      "sources": [
+        {
+          "type": "document",
+          "reference": "Fixture de test, aucune source réelle",
+          "niveau": "non vérifié"
+        }
+      ],
+      "lecon_canonique": null,
+      "verification_suivante": "Aucune : entrée fictive."
+    }
+  ]
+}
