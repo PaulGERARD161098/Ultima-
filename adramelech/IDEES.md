@@ -465,6 +465,74 @@ parce qu'il manquait **l'aile de recouvrement** — une seule pièce absente et
 tout le chantier est foutu. C'est exactement ce que le matching doit rendre
 impossible : le manquant se voit **avant** le jour de pose, pas dessus.
 
+
+### Cadrage commun avec SOS matériel — 02/11/2026
+
+**But.** Préserver les heures de pose et la marge du chantier : anticiper les
+manquants puis traiter les imprévus sans déplacer inutilement l'équipe.
+Ce sont deux capacités complémentaires, utilisables séparément.
+
+| | Préparer son chantier sans manquant — ADR-003 | SOS matériel — ADR-011 |
+|---|---|---|
+| Utilisateur | Artisan ou responsable qui prépare le chantier | Artisan sur chantier et opérateur chargé de la livraison |
+| Déclencheur | Chantier prévu, besoin ajouté, réception ou réassort | Fourniture manquante ou inutilisable, demande explicite de dépannage |
+| Travail | Rapprocher besoins, stock réellement disponible et commandes ; contrôler références, quantités, dates et réception ; repérer fournisseurs et replis | Qualifier la demande, confirmer stock et retrait, proposer coût et délai, organiser retrait et livraison après accord, contrôler réception |
+| Résultat | Liste fiable des fournitures disponibles, attendues et manquantes, avec responsable et prochaine action | Bonne fourniture reçue et acceptée sur chantier ; liste commune mise à jour |
+| Limite | Ne garantit pas l'absence absolue de manque ; une commande n'est pas une réception | Ne remplace pas la préparation ; ne garantit ni stock ni délai non confirmés |
+
+**Données communes, sans ressaisie.** Une fiche chantier et une liste des
+besoins : identifiant de ligne, description, référence confirmée ou à préciser,
+caractéristiques et quantité/unité, quantité manquante, date de besoin,
+disponibilité vérifiée et horodatée, responsable. Le volet livraison ajoute
+point de retrait, destinataire et accès chantier, coût détaillé, délai estimé,
+accord et preuve de réception. Les données restent cloisonnées par professionnel ;
+seules les informations utiles à la course sont transmises au livreur choisi.
+
+**Passage entre les deux.**
+1. La préparation détecte un manque, ou l'artisan le signale en cours de pose.
+2. Le responsable choisit le recours : réassort habituel, livraison fournisseur,
+   apport par le patron, retrait groupé ou SOS matériel. Aucun appel payant automatique.
+3. La demande SOS reprend la ligne existante ; une photo aide à identifier,
+   mais ne suffit pas à confirmer une compatibilité. Référence, quantité et
+   stock sont confirmés avant déplacement.
+4. Le professionnel accepte le matériel proposé, le coût total et le délai
+   estimé avant engagement. Une substitution demande un nouvel accord.
+5. La réception clôt la course uniquement pour la quantité conforme acceptée.
+   Un reliquat, une pièce erronée ou abîmée reste à traiter ; une demande
+   annulée ne devient pas une commande. Une seconde demande sur la même ligne
+   est rapprochée de la première pour éviter un double achat.
+6. Le manque et sa cause alimentent le réassort et la préparation suivante ;
+   aucune modification automatique de seuil ou de devis sur une seule observation.
+
+**Moyens et périmètre.** Réutiliser la fiche chantier, les listes et la
+logistique fournisseurs existantes ; un premier essai peut être coordonné
+manuellement, sans créer une application, un entrepôt ou une flotte.
+Les raccords réels à RenoDevis, RenoBoost et ArtiDispo seront vérifiés dans
+une boucle d'implémentation distincte. Cette note n'en prouve pas la présence.
+
+**Contrôles croisés avant décision.**
+- Artisan : le service évite-t-il réellement une interruption, avec la bonne pièce ?
+- Opérateur : stock, retrait, livreur et accès sont-ils confirmés dans le créneau utile ?
+- Temps et dépendances : comparer le délai de livraison à celui du recours habituel ;
+  le chantier peut-il continuer pendant l'attente ?
+- Risques et économie : refuser une compatibilité incertaine, un doublon ou un prix
+  non accepté ; comparer le coût complet de la course au temps et au trajet évités.
+  Ni tarif, ni gain, ni rentabilité n'est mesuré à ce stade.
+
+**Réussite vérifiable d'un futur essai.** Un chantier préparé avec contrôle
+physique ; si un manque apparaît, une demande tracée, sans double achat,
+une référence et quantité conformes réceptionnées, temps de pose interrompu,
+trajets imprévus, coût complet et délai relevés. Les coûts incluent coordination,
+retrait, attente, trajet et livraison ; comparer aux alternatives réelles.
+Tester aussi indisponibilité, mauvaise référence, reliquat et annulation
+avant de conclure que le parcours est prêt à être proposé.
+
+**Hors de cette boucle.** Développement, commandes, réservations, dépenses,
+livraisons réelles, recrutement, tarifs commerciaux et garanties de délai.
+
+**État.** Cadrage documentaire terminé ; faisabilité commerciale et opérationnelle
+à éprouver. Idées en réserve, sans changement des priorités de travail.
+
 ### Enrichissement (pistes pour rendre l'idée exécutable)
 
 - Ce n'est « pas la mer à boire » (dixit Paul) : le noyau v1 est une
@@ -483,10 +551,10 @@ impossible : le manquant se voit **avant** le jour de pose, pas dessus.
 ### Liens inter-segments
 
 - **[SOS matériel — ADR-011](#adr-011--sos-matériel)** : complément en cours de pose. La préparation rapproche besoins, commandes et stock avant le départ ; SOS matériel fait livrer les fournitures manquantes sur chantier. Réutiliser la même liste et la même fiche chantier, avec référence et quantité confirmées.
-- **RIVEN** : les chantiers sont déjà des nœuds du réseau — l'préparation du chantier sans manquant
+- **RIVEN** : les chantiers sont déjà des nœuds du réseau — la préparation du chantier sans manquant
   pourrait s'adosser à une fiche chantier existante plutôt que créer un
   silo ; les fournisseurs sont des contacts.
-- **ADR-001 récupération et réemploi des matériaux** : les surplus de chantier détectés par l'préparation du chantier sans manquant
+- **ADR-001 récupération et réemploi des matériaux** : les surplus de chantier détectés par la préparation du chantier sans manquant
   (lignes commandées non posées) sont exactement la matière que récupération et réemploi des matériaux
   collecte et revalorise.
 - **NICOL BOLAS** : chaque commande est une charge — le rapprochement commande/facture
@@ -1816,6 +1884,10 @@ Un **service de livraison de matériel directement sur chantier** lorsqu'une
 fourniture manque, pour que l'installateur puisse continuer à travailler au
 lieu de quitter le chantier et de faire la tournée des fournisseurs.
 
+### Articulation et cadre de fonctionnement
+
+Le [cadrage commun dans ADR-003](#cadrage-commun-avec-sos-matériel--02112026) définit les rôles, données partagées, accords, contrôles, critères d'essai et exclusions. SOS matériel peut recevoir une demande directement ; la préparation peut fonctionner sans service de livraison.
+
 ### Origine terrain
 
 Retour de Paul sur sa première journée de chantier avec SOLA : manque de
@@ -1837,7 +1909,7 @@ Ce parcours est une piste d'enrichissement, pas un dispositif opérationnel.
 
 ### Liens avec l'existant
 
-- **[Préparer son chantier sans manquant — ADR-003](#adr-003--préparer-son-chantier-sans-manquant)** : complément direct. préparation du chantier sans manquant anticipe les
+- **[Préparer son chantier sans manquant — ADR-003](#adr-003--préparer-son-chantier-sans-manquant)** : complément direct. La préparation du chantier sans manquant anticipe les
   manquants ; SOS MATÉRIEL traite ceux qui apparaissent pendant la pose.
   Réutiliser les besoins et la fiche chantier plutôt que ressaisir.
 - **RIVEN / RenoBoost / ArtiDispo** : rapprochement possible avec la logistique
