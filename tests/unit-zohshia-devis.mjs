@@ -29,6 +29,22 @@ dit('centimesSansFlottant', centimes('0.29', 'x') === 29 && centimes('1,1', 'x')
 dit('arrondiDemiSuperieur', appliquer(5, 5000) === 3 && appliquer(4, 5000) === 2 && appliquer(33333, 2000) === 6667);
 const impair = montants({ ...base(), lignes: [{ libelle: 'x', quantite: 3, pu_ht: '111.11' }] });
 dit('acomptePlusSoldeEgaleTTC', impair.acompte + impair.solde === impair.ttc && impair.ht === 33333 && impair.tva === 6667 && impair.ttc === 40000);
+// Revue Codex de #434 (02/11/2026) : les TTC affichés par ligne s'additionnent au
+// total TTC, et la TVA reste celle du total HT (2 × 10,03 € HT à 20 % → TVA 4,01 €).
+const deuxLignes = montants({ ...base(), lignes: [
+  { libelle: 'a', quantite: 1, pu_ht: '10.03' }, { libelle: 'b', quantite: 1, pu_ht: '10.03' }] });
+dit('lignesTTCEgalentTotal', deuxLignes.ht === 2006 && deuxLignes.tva === 401 && deuxLignes.ttc === 2407
+  && deuxLignes.lignes.reduce((s, l) => s + l.ttc, 0) === deuxLignes.ttc);
+// Balayage : sur 200 devis de 1 à 6 lignes aux prix et taux variés, jamais d'écart.
+let ecarts = 0;
+for (let k = 0; k < 200; k++) {
+  const n = 1 + (k % 6), tauxK = ['20', '10', '5,5', '2,1', '0'][k % 5];
+  const ls = Array.from({ length: n }, (_, j) => ({ libelle: 'l' + j, quantite: 1 + ((k + j) % 3),
+    pu_ht: (((k * 37 + j * 101) % 9999) / 100 + 0.01).toFixed(2) }));
+  const r = montants({ ...base(), taux_tva: tauxK, lignes: ls });
+  if (r.lignes.reduce((s, l) => s + l.ttc, 0) !== r.ttc || r.tva !== appliquer(r.ht, r.tvaBp)) ecarts += 1;
+}
+dit('balayageSansEcart', ecarts === 0);
 dit('tauxDecimal', montants({ ...base(), taux_tva: '5,5' }).tva === 2750);
 dit('formatEuros', euros(123456789) === '1 234 567,89 €' && euros(5) === '0,05 €');
 

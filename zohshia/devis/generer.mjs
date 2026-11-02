@@ -61,10 +61,21 @@ export function montants(p) {
     if (!Number.isInteger(q) || q < 1 || q > 10000) throw new ErreurDevis(`lignes[${i}].quantite : entier de 1 à 10 000`);
     const pu = centimes(l.pu_ht, `lignes[${i}].pu_ht`);
     const ht = pu * q;
-    return { ...l, q, pu, ht, ttc: ht + appliquer(ht, tvaBp) };
+    return { ...l, q, pu, ht };
   });
   const ht = lignes.reduce((s, l) => s + l.ht, 0);
+  // La TVA se calcule sur le TOTAL HT (le montant que le client peut vérifier :
+  // taux × total HT, arrondi au demi supérieur). Ses centimes se répartissent
+  // ensuite sur les lignes aux plus forts restes : la somme des TTC affichés par
+  // ligne vaut exactement le total TTC. Arrondir chaque ligne séparément donnait
+  // un document qui se contredit (2 × 10,03 € HT à 20 % : 2 × 12,04 € par ligne,
+  // 24,07 € au total — revue Codex de #434, 02/11/2026).
   const tva = appliquer(ht, tvaBp);
+  const parts = lignes.map((l, i) => ({ i, plancher: Math.floor((l.ht * tvaBp) / 10000), reste: (l.ht * tvaBp) % 10000 }));
+  let manque = tva - parts.reduce((s, x) => s + x.plancher, 0);
+  [...parts].sort((a, b) => b.reste - a.reste || a.i - b.i).forEach((x) => { if (manque > 0) { x.plancher += 1; manque -= 1; } });
+  if (manque !== 0) throw new ErreurDevis('montants : répartition de la TVA incohérente');
+  lignes.forEach((l, i) => { l.tva = parts[i].plancher; l.ttc = l.ht + l.tva; });
   const ttc = ht + tva;
   const acompte = appliquer(ttc, acBp);
   return { tvaBp, acBp, lignes, ht, tva, ttc, acompte, solde: ttc - acompte };
