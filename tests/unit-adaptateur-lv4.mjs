@@ -252,7 +252,8 @@ dit('isoleDragonsGardeLesCiblesDesPages',
     === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,amatsu'
   && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech,zohshia'
   && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3
-  && NOEUDS.zohshia.enfants.length === 6);
+  // 6 → 8 le 02/11/2026 : générateur de devis (#364) et journal d'apprentissages (#381).
+  && NOEUDS.zohshia.enfants.length === 8);
 // INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
 // désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
 // `tao` y reste : il n'est plus nulle part.

@@ -2,7 +2,11 @@
 // Seul l'aperçu des capacités est extrait ; aucun guide complet ni empreinte.
 import stock from './zohshia-technos.mjs';
 
-export const MAX_STOCK_ZOH_CHARS = 7000;
+// 7000 → 9000 le 02/11/2026 : huit technos publiées pèsent 7134 caractères, le
+// catalogue se déclarait « partielle » et en taisait une. 9000 laisse la place
+// d'environ deux technos de plus ; coût : environ 550 tokens de plus par lecture
+// du stock, et seulement quand Léo lit ce stock (Léo est en pause depuis le 01/11).
+export const MAX_STOCK_ZOH_CHARS = 9000;
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const texte = (s, max) => typeof s === 'string' && s.trim().length > 0 && s.length <= max;
 

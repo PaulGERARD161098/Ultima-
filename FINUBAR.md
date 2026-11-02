@@ -51,6 +51,10 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
+      "quoi": "Ménage des PR ZOH (02/11) : #364, #381, #417 et #418 regroupées sur claude/trusting-gates-91ao5h, conflits résolus, données ZOH régénérées, 89/89 suites unitaires et smoke-zohshia vert (224 contrôles) en local. Attend le go de fusion de Paul sur le SHA de la PR ; ensuite fermer les quatre PR d'origine comme absorbées. Hors regroupement : #425 (empreintes du catalogue de skills introuvables dans l'historique, son test échoue sur sa propre branche), #433 (ouverte le jour même), #365 et #351 (gelées par la pause). #428 est déjà absorbée dans main.",
+      "depuis": "2026-11-02"
+    },
+    {
       "quoi": "Agents en pause sans date ; capitalisation légère : leçons, failles, périmètre, coordination, apports sourcés. Détail : zohshia/fin-controle-securite/TECHNO.md §8–9.",
       "depuis": "2026-11-01"
     },
@@ -211,7 +215,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-25"
+  "maj": "2026-11-02"
 }
 ```
 
