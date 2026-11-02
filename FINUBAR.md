@@ -57,7 +57,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Consolidation ZOH (02/11) sur la PR #434 (claude/trusting-gates-91ao5h) : #364, #381, #417, #418 et #433 intégrées, main 707d319 fusionné ; 9 technos, ordres 1 à 9 sans doublon ; stock ZOH lu par Léo à 7976 caractères (plafond 9000) ; test du journal sur journal fictif, isolation de memoire/ inchangée ; attentes carto alignées sur ADR-011. Attend : CI verte sur la tête, puis go de fusion de Paul ; ensuite fermer les cinq PR absorbées et renseigner dernier_arret.commit avec le SHA de main. Hors consolidation : #425 (9 empreintes preuve_ultima introuvables, blocage documenté sur la PR), #365 et #351 (pause de Léo), RenoDevis #463.",
+      "quoi": "Consolidation ZOH (02/11) sur la PR #434 (claude/trusting-gates-91ao5h) : #364, #381, #417, #418 et #433 intégrées, main 707d319 fusionné ; 9 technos, ordres 1 à 9 sans doublon, rangées en trois sous-constellations (DEVIS & PAIEMENT, MÉTHODES, VENTE — choix de Paul du 02/11, une couronne de quatre étoiles au plus par écran) ; stock ZOH lu par Léo à 7976 caractères (plafond 9000) ; test du journal sur journal fictif, isolation de memoire/ inchangée ; attentes carto alignées sur ADR-011. Attend : CI verte sur la tête, puis go de fusion de Paul ; ensuite fermer les cinq PR absorbées et renseigner dernier_arret.commit avec le SHA de main. Hors consolidation : #425 (9 empreintes preuve_ultima introuvables, blocage documenté sur la PR), #365 et #351 (pause de Léo), RenoDevis #463.",
       "depuis": "2026-11-02"
     },
     {
