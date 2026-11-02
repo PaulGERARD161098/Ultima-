@@ -1843,3 +1843,63 @@ vendre : c'est une **conversation**, et la fiche la capture comme telle.
 > décisives ont leurs réponses. D'ici là, ce qui est acquis est **la nature de
 > l'idée** (multiplicateur par acquisition, voie alternative de PROTÉE, contenue
 > par VERTUMNE) — pas son rang.
+
+---
+
+## ADR-011 — SOS MATÉRIEL
+
+- **Capturée le** : 2026-11-02 (demande explicite de Paul)
+- **Type** : business · service
+- **Thème** : bâtiment · logistique de chantier · livraison de dépannage
+- **Statut** : à raffiner — idée en stock, aucun lancement engagé
+
+### L'idée
+
+Un **service de livraison de matériel directement sur chantier** lorsqu'une
+fourniture manque, pour que l'installateur puisse continuer à travailler au
+lieu de quitter le chantier et de faire la tournée des fournisseurs.
+
+### Origine terrain
+
+Retour de Paul sur sa première journée de chantier avec SOLA : manque de
+petit matériel (feuillard, vis dites « de 35 », réserve faible de colliers
+plastiques), déplacements auprès de trois fournisseurs et recours possible
+au patron pour apporter des fournitures. Temps perdu déclaré, non chronométré ;
+aucun coût ou volume de demande mesuré à ce stade.
+
+### Parcours envisagé — à éprouver
+
+1. L'artisan transmet la référence ou une photo, la quantité et le chantier.
+2. Le service fait préciser les caractéristiques manquantes, vérifie le stock
+   réel du fournisseur et confirme la bonne référence.
+3. Le prix du matériel, le coût de livraison et le délai sont présentés avant
+   engagement ; aucun remplacement de produit sans accord.
+4. Le matériel est retiré puis livré au chantier, avec contrôle de réception.
+
+Ce parcours est une piste d'enrichissement, pas un dispositif opérationnel.
+
+### Liens avec l'existant
+
+- **INTENDANT (ADR-003)** : complément direct. INTENDANT anticipe les
+  manquants ; SOS MATÉRIEL traite ceux qui apparaissent pendant la pose.
+  Réutiliser les besoins et la fiche chantier plutôt que ressaisir.
+- **RIVEN / RenoBoost / ArtiDispo** : rapprochement possible avec la logistique
+  locale des chantiers et les fournisseurs repérés ; intégration non décidée.
+
+### Ce qui reste à vérifier
+
+- **Intérêt artisan** : fréquence des manques, minutes de pose récupérées et
+  prix qu'un professionnel accepterait réellement de payer.
+- **Exécution** : rayon viable, disponibilité d'un livreur, attente au comptoir,
+  accès chantier et fiabilité de l'identification des pièces.
+- **Rentabilité** : coût complet de chaque course et marge réelle, notamment
+  pour les petits paniers ; aucun tarif ou revenu inventé.
+- **Alternative à comparer** : livraison fournisseur, apport par le patron,
+  retrait groupé et prévention par réassort. Ne pas présumer qu'un nouveau
+  service est préférable à ces moyens.
+- **Premier essai futur** : une demande réelle, une bonne référence livrée,
+  coût complet et délai relevés, puis comparaison avec le déplacement évité.
+
+**Périmètre de cette capture** : conserver l'idée et son origine terrain.
+Aucun achat, recrutement, développement, dépense ou lancement autorisé par
+cette seule fiche. Aucun délai de livraison garanti.
