@@ -97,5 +97,17 @@ ok(b, 'recette : bilan absent');
 const exec = Object.values(tally).reduce((a, c) => a + c, 0);
 assert.deepEqual(b.slice(1).map(Number), [exec, ATTENDUS.length, tally.CONFORME || 0, tally.PARTIEL || 0, tally['NON CONFORME'] || 0], 'recette : bilan ≠ tableau'); n++;
 ok(readme.includes('recette-2026-11-03/RECETTE.md'), 'README : la recette n\'est pas pointée');
+// Rejeux après l'alignement de la charte : verdict connu, preuve propre non vide.
+const rejeux = recette.split('\n').filter((l) => /^\| T\d{2} \(rejeu\) \|/.test(l));
+ok(rejeux.length > 0, 'recette : aucun rejeu noté'); // verrou de non-vacuité
+for (const l of rejeux) {
+  const [, id, verdict, preuve] = l.split('|').map((c) => c.trim());
+  const t = id.slice(0, 3);
+  ok(ATTENDUS.includes(t), `${id} : scénario inconnu`);
+  ok(VERDICTS.includes(verdict), `${id} : verdict inconnu « ${verdict} »`);
+  ok(preuve === `reponses/${t}-rejeu.md`, `${id} : preuve mal référencée`);
+  const p = join(racine, DOSSIER, preuve);
+  ok(existsSync(p) && readFileSync(p, 'utf8').trim().length >= 200, `${id} : preuve absente ou vide`);
+}
 
 console.log(`unit-leo-complements : ${n} vérifications vertes`);
