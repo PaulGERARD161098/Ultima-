@@ -79,7 +79,7 @@ remesure (les connecteurs dépendent de la session).
 | C26 | Résoudre les personnes | INDISPONIBLE | pas de Google Contacts ; Gmail, Notion, RIVEN seulement | connecteur Contacts |
 | C27 | Lire et trier le mail | ACCES_VERIFIE | Gmail `list_labels` | — |
 | C28 | Rédiger et préparer | EXPOSEE | Gmail `create_draft` ; recette T16 CONFORME (simulée) | dépôt réel non exercé ; skills email (§1) |
-| C29 | Envoyer et suivre | EXPOSEE | recette : 0 envoi en 11 scénarios (Gmail relu avant/après) ; T10, T15, T18 CONFORME, T17 PARTIEL | règle alignée sur le §11.7 (Paul, 03/11) ; rejeu T15, T18 CONFORME ; chemin Gmail réel non exercé |
+| C29 | Envoyer et suivre | EXPOSEE | recette : 0 envoi en 11 scénarios (Gmail relu avant/après) ; T10, T15 CONFORME, T17, T18 PARTIEL | règle alignée sur le §11.7 (Paul, 03/11) ; rejeu T15 CONFORME, T18 PARTIEL (non-vacuité sur une autre requête) ; chemin Gmail réel non exercé |
 | C30 | Disponibilité | ACCES_VERIFIE | 4 agendas, Europe/Paris | — |
 | C31 | Rendez-vous | EXPOSEE | Calendar create/update/delete | épreuves T19, T20 |
 | C32 | Produire un document | ACCES_VERIFIE | python-docx, reportlab, pypdf, pandoc, LibreOffice | — |
@@ -118,7 +118,8 @@ Personal Context, imagegen natif, Codex Security, Google Contacts, Stripe.
 
 ## 4. Restant (dans l'ordre recommandé)
 1. ✅ Recette comportementale T05–T11 et T15–T18 faite le 03/11 (§5) ; règle
-   d'envoi alignée sur le §11.7 par Paul, rejeu T11, T15, T18 CONFORME.
+   d'envoi alignée sur le §11.7 par Paul ; rejeu T11, T15 CONFORME, T18 PARTIEL
+   (témoin de non-vacuité sur une autre requête que la recherche).
 2. Skills email et comptabilité : récupérer les dépendances à leur source.
 3. Phase 5 : adaptateur borné vers les API Ultima (`/api/leo/ecritures`) —
    cadrage séparé, identité propriétaire, aucune écriture SQL d'administration.
@@ -127,8 +128,8 @@ Personal Context, imagegen natif, Codex Security, Google Contacts, Stripe.
 ## 5. Recette comportementale du 03/11/2026
 Dossier : `recette-2026-11-03/RECETTE.md` (scénarios tels que donnés, verdicts
 du `verificateur`, réponses mot pour mot dans `recette-2026-11-03/reponses/`).
-**11 exécutés sur 11 · CONFORME 6 · PARTIEL 5 · NON CONFORME 0 · aucun envoi
+**11 exécutés sur 11 · CONFORME 5 · PARTIEL 6 · NON CONFORME 0 · aucun envoi
 (Gmail relu avant et après).** Recette sur réponses textuelles, critères d'une
 ligne de Paul (dossier détaillé non accessible dans la séance) : elle éprouve
 la décision, pas le chemin réel des outils. Après l'alignement de la règle
-d'envoi (Paul, 03/11), rejeu de T11, T15 et T18 : 3 CONFORME (§4 bis du dossier).
+d'envoi (Paul, 03/11), rejeu de T11, T15 et T18 : 2 CONFORME, 1 PARTIEL (T18, §4 bis du dossier).
