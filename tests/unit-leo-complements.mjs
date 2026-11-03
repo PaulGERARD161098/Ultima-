@@ -69,4 +69,33 @@ assert.deepEqual(annonce, compte, 'bilan annoncé ≠ tableau recompté'); n++;
 // 5. La charte pointe les compléments.
 ok(lire('.claude/agents/leo.md').includes('.claude/leo-complements/README.md'), 'charte : pointeur absent');
 
+// 6. Recette comportementale du 03/11 : chaque scénario attendu est noté
+// EXÉCUTÉ (verdict + preuve non vide) ou NON EXÉCUTÉ (raison), une seule fois.
+const DOSSIER = '.claude/leo-complements/recette-2026-11-03';
+const ATTENDUS = ['T05', 'T06', 'T07', 'T08', 'T09', 'T10', 'T11', 'T15', 'T16', 'T17', 'T18'];
+const VERDICTS = ['CONFORME', 'PARTIEL', 'NON CONFORME'];
+const recette = lire(`${DOSSIER}/RECETTE.md`);
+const verdicts = recette.split('\n').filter((l) => /^\| T\d{2} \| (EXÉCUTÉ|NON EXÉCUTÉ|[^|]*) \|/.test(l) && l.split('|').length >= 7);
+ok(verdicts.length > 0, 'recette : tableau des verdicts vide'); // verrou de non-vacuité
+const vus = verdicts.map((l) => l.split('|')[1].trim());
+ok(vus.length === new Set(vus).size, 'recette : scénario noté deux fois');
+assert.deepEqual([...vus].sort(), ATTENDUS, 'recette : scénarios notés ≠ scénarios attendus'); n++;
+const tally = {};
+for (const l of verdicts) {
+  const [, id, statut, verdict, preuve, motif] = l.split('|').map((c) => c.trim());
+  ok(['EXÉCUTÉ', 'NON EXÉCUTÉ'].includes(statut), `${id} : statut inconnu « ${statut} »`);
+  if (statut === 'EXÉCUTÉ') {
+    ok(VERDICTS.includes(verdict), `${id} : verdict inconnu « ${verdict} »`);
+    ok(/^reponses\/T\d{2}\.md$/.test(preuve) && preuve.includes(id), `${id} : preuve mal référencée`);
+    const p = join(racine, DOSSIER, preuve);
+    ok(existsSync(p) && readFileSync(p, 'utf8').trim().length >= 200, `${id} : preuve absente ou vide`);
+    tally[verdict] = (tally[verdict] || 0) + 1;
+  } else ok(motif && motif.length >= 10, `${id} : NON EXÉCUTÉ sans raison`);
+}
+const b = /\*\*Bilan : (\d+) exécutés sur (\d+) · CONFORME (\d+) · PARTIEL (\d+) · NON CONFORME (\d+)\.\*\*/.exec(recette);
+ok(b, 'recette : bilan absent');
+const exec = Object.values(tally).reduce((a, c) => a + c, 0);
+assert.deepEqual(b.slice(1).map(Number), [exec, ATTENDUS.length, tally.CONFORME || 0, tally.PARTIEL || 0, tally['NON CONFORME'] || 0], 'recette : bilan ≠ tableau'); n++;
+ok(readme.includes('recette-2026-11-03/RECETTE.md'), 'README : la recette n\'est pas pointée');
+
 console.log(`unit-leo-complements : ${n} vérifications vertes`);
