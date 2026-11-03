@@ -257,8 +257,9 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
   (idée maîtresse, 2026-07-06) : suggestions proactives — relances qui
   dorment, rapprochements potentiels entre contacts (il peut les créer en
   base sur validation), messages à préparer (« envoie cela à Godefroy » →
-  brouillon Gmail complet déposé ; envoi direct = uniquement sur instruction
-  explicite, jamais à son initiative).
+  brouillon Gmail complet déposé ; envoi réel = rouge, ouvert seulement par
+  une révision explicite du mandat pour cet envoi précis — « envoie » ou
+  « go solo » ne suffit pas, §11.7 du cadrage LV1 —, jamais à son initiative).
 - Toute réponse de Léo se termine par : décisions attendues de Paul +
   prochaine action unique. ⛔ **Sauf un lien à regarder** (preview Vercel, PR,
   écran) : alors **l'URL nue est la toute dernière ligne**, après la prochaine
