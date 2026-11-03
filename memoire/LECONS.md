@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v115 2026-11-03 sha256:a06208da9afa -->
+<!-- lecons:empreinte v116 2026-11-03 sha256:23ce0a768170 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -655,6 +655,17 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE RÉSERVE QUI NOMME LE CRITÈRE FAIT UN PARTIEL, PAS UN « CONFORME AVEC
+RÉSERVE »** *(2026-11-03, Ultima #441)*. Le juge de la recette de Léo a noté T18
+« CONFORME (réserve) » : la réserve était qu'une recherche vide déclenchait le
+renvoi sans verrou de non-vacuité — c'est-à-dire le critère même du scénario.
+Le verdict a été recompté tel quel, puis propagé (« 3 CONFORME ») au README, au
+dossier et au grain Finubar. La revue Codex l'a relevé sur la PR déjà verte :
+un tour de correction, une exécution de CI (≈ 30 min) et un nouvel accord de
+fusion. ⛔ **Avant de compter un verdict, confronter chaque réserve au critère
+du scénario** : si elle en nomme un qui n'est pas tenu, le verdict est PARTIEL,
+quel que soit le mot du juge. Le juge se juge aussi.
 
 **UNE REQUÊTE CITÉE COMME PREUVE SE JOUE AVANT D'ÊTRE ÉCRITE** *(2026-10-23,
 Ultima #415)*. Le relevé des dépendances du défaire
@@ -2260,6 +2271,16 @@ dans le produit, seulement dans qui a décidé.
 
 ## 5. Plusieurs dépôts, plusieurs séances
 
+**UN ACCORD DE FUSION SE DEMANDE SUR UN `main` RELU À L'INSTANT** *(2026-11-03,
+Ultima #441)*. Paul a dit « Go fusion » sur `b701e54` ; la fusion a été refusée
+(405, conflit) : une autre séance venait de fusionner #440 dans `main`, et les
+deux PR touchaient `FINUBAR.md`. L'accord est devenu caduc, il a fallu fusionner
+`main` dans la branche, relancer la CI (≈ 30 min) et redemander l'accord.
+`expectedHeadSha` protège la tête de la PR, pas sa base. ⛔ **`git fetch origin
+main` juste avant de présenter le SHA à Paul, et de nouveau juste avant de
+fusionner** ; si la base a bougé, intégrer d'abord, puis demander l'accord sur
+le nouveau SHA.
+
 **« VIDE » SE MESURE CHEZ CEUX QUI LISENT, PAS SEULEMENT DANS LA LIGNE**
 *(2026-10-20)*. Une ligne d'une base partagée n'est pas vide parce que ses
 colonnes de montant le sont : elle peut être LUE par une autre brique, et porter
@@ -2655,6 +2676,14 @@ modifie, et attendre la revue automatique avant de fusionner. Relire la tête de
 `main` au moment de poser la question de fusion, puis juste avant de fusionner.
 
 ## 6. Économie
+
+**LE GRAIN SE RELIT EN ADVERSAIRE AVANT LA PR, PAS APRÈS LE VERT** *(2026-11-03,
+Ultima #441)*. Après une CI verte et juste avant l'accord de Paul, la relecture
+du grain Finubar a trouvé « reste la fusion de #440 » alors que #440 était
+fusionnée : un commit de plus, une CI complète (≈ 30 min, la PR touchant un
+fichier de test) et un nouvel accord. ⛔ **Avant d'ouvrir la PR — et de nouveau
+avant de demander l'accord —, chercher dans le grain tout ce que la séance a
+rendu faux** : les fusions faites, les étapes accomplies, les « reste à ».
 
 **UNE ROUTINE DONT L'ARRÊT DÉPEND D'UN OUTIL ABSENT NE S'ARRÊTE JAMAIS — ELLE COÛTE** *(2026-10-19)*.
 La routine horaire « Réponse d'Henry » (créée le 28/09, session persistante) devait, si Henry
