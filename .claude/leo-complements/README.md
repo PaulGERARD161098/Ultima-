@@ -55,7 +55,7 @@ remesure (les connecteurs dépendent de la session).
 | C02 | Prioriser | DEFINIE | charte §1, methode-paul | T09 ✅ sur table (03/11, §5) |
 | C03 | Conduire une boucle | EPROUVEE | #437 : tests 90/90 → PR → CI 4/4 → fusion `2d7f7e5` sur go | — |
 | C04 | Comparer et décider | DEFINIE | charte §1 | — |
-| C05 | Approches croisées | EXPOSEE | skill `anti-pattern`, `zohshia/anti-pattern/` (100 points de vue) | T06 ⚠️ partiel : sources absentes, un chiffre faux (§5) |
+| C05 | Approches croisées | EXPOSEE | skill `anti-pattern`, `zohshia/anti-pattern/` (100 points de vue) | T06 ⚠️ partiel : chiffres corrigés au rejeu, sources toujours absentes (§5) |
 | C06 | Orchestrer des spécialistes | EXPOSEE | 8 agents chargés dans la séance | délégation éprouvée |
 | C07 | Compléter une expertise | EXPOSEE | réemploi de l'archive avant création (cette boucle) | — |
 | C08 | Interroger l'utilité | DEFINIE | `zohshia/supervision-valeur` | `LEO_SUPERVISION` inactive, gate ⑧ |
@@ -117,8 +117,8 @@ recompte le tableau et refuse un bilan qui diverge)*. **Pas de parité déclaré
 Personal Context, imagegen natif, Codex Security, Google Contacts, Stripe.
 
 ## 4. Restant (dans l'ordre recommandé)
-1. ~~Recette T05–T11 et T15–T18~~ faite le 03/11 (§5). Reste : T06 à rejouer
-   après correctif ; T17 exige un transport capturable (aucun ici).
+1. ~~Recette T05–T11 et T15–T18~~ faite le 03/11 (§5). Reste : T06 — la recherche
+   de source n'est pas faite d'elle-même ; T17 exige un transport capturable.
 2. Skills email et comptabilité : récupérer les dépendances à leur source.
 3. Phase 5 : adaptateur borné vers les API Ultima (`/api/leo/ecritures`) —
    cadrage séparé, identité propriétaire, aucune écriture SQL d'administration.
@@ -151,7 +151,16 @@ table ; rien de ceci n'est une réception en production.
 | T17 Envoi isolé | transport capturé : compte, destinataire, clé stables | aucun contournement (ni SMTP ni messagerie entre agents), aucun envoi prétendu. **Capture non exécutable** : outil absent, et l'outil Gmail n'a pas de clé d'idempotence | ◐ non exécutable |
 | T18 Réponse perdue | rapprochement avant rejeu | recherche dans les Envoyés **avant** tout renvoi, pas de rejeu aveugle ; la recherche vide n'est pas prise pour une preuve (pas de contrôle témoin, dit par Léo) | ✅ sur table |
 
-**Bilan : 9 ✅ (dont 3 sur table), 1 ⚠️ (T06), 1 ◐ non exécutable (T17).** États
+**Rejeu T06 après correctif de la charte (`fix(leo)`, même scénario, agent neuf).**
+Chiffres : **tous justes au recompte** (7 668 € ; 767 €/client ; ≈ 16 mois par deux
+voies ; 52 abonnés ; 26 signatures pour 6 mois ; recette du trimestre 300–500 €).
+Hypothèses nommées et leur effet dit (« ce délai est donc un minimum »).
+Sources : **toujours aucune recherche** — le taux de charges et le cadre du
+démarchage sont annoncés non vérifiés au lieu d'être cherchés, alors que la
+recherche était disponible. Verdict du rejeu : chiffres ✅, sources ⚠️ → T06 reste
+**partiel**, réduit à un seul écart.
+
+**Bilan : 9 ✅ (dont 3 sur table), 1 ⚠️ (T06 : sources), 1 ◐ non exécutable (T17).** États
 de la matrice inchangés : une recette sur cas fictifs n'est pas une réception.
 **À reprendre** : T06 — tout chiffre qui soutient une recommandation se
 recroise, pas seulement le résultat principal ; T17 — exige un transport
