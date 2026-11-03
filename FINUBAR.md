@@ -40,12 +40,12 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "06f0aa5cd74c4bfc11922e5e902852d505f779bb",
-    "quoi": "#434 fusionnée sur go de Paul (tête c731449, CI 9/9 verte dont Léo LV1) : #364, #381, #417, #418 et #433 absorbées et fermées ; neuf technos ZOH en trois sous-constellations (DEVIS & PAIEMENT, MÉTHODES, VENTE). Agents toujours en pause ; journal non ingéré ; paiement inactif."
+    "commit": "e52d0db0d51663b0dddc3709dbb7156b4ed5e21b",
+    "quoi": "Vérification de Léo dans Claude Code (lecture seule) : chargement par /leo, GitHub, Gmail, Agenda, Drive, Notion, Supabase Ultima et Vercel lus ; tests 90/90 après npm ci. Décisions de Paul : séance ouverte sur Ultima-, dépôt de travail rattaché ensuite (pas de copie de /leo) ; /leo cite six directives ; charte §5 : envoi Gmail raccordé, interdit sans instruction. Journal : memoire/JOURNAL-DECISIONS.md, 03/11."
   },
   "prochaine_action": "Respecter la pause des agents. Capitaliser les apports utiles pendant les autres projets. Reprise seulement sur instruction explicite de Paul.",
   "bloque_par": [
-    "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
+    "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
