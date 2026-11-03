@@ -40,10 +40,10 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "e52d0db0d51663b0dddc3709dbb7156b4ed5e21b",
-    "quoi": "Vérification de Léo dans Claude Code (lecture seule) : chargement par /leo, GitHub, Gmail, Agenda, Drive, Notion, Supabase Ultima et Vercel lus ; tests 90/90 après npm ci. Décisions de Paul : séance ouverte sur Ultima-, dépôt de travail rattaché ensuite (pas de copie de /leo) ; /leo cite six directives ; charte §5 : envoi Gmail raccordé, interdit sans instruction. Journal : memoire/JOURNAL-DECISIONS.md, 03/11."
+    "commit": "2d7f7e51316ab0413874a61027875a8c03f31dfc",
+    "quoi": "Vérification de Léo dans Claude Code (lecture seule) : chargement par /leo, GitHub, Gmail, Agenda, Drive, Notion, Supabase Ultima et Vercel lus ; tests 90/90 après npm ci. Décisions de Paul : séance ouverte sur Ultima-, dépôt de travail rattaché ensuite (pas de copie de /leo) ; /leo cite six directives ; charte §5 : envoi Gmail raccordé, interdit sans instruction. Journal : memoire/JOURNAL-DECISIONS.md, 03/11. — Même jour, séance ZOH : #434 (consolidation ZOH) et #435 (grain) fusionnées sur go de Paul. Recette mobile de Paul : écran ZOH SHIA bon ; DEVIS & PAIEMENT illisible (étoile sur un nom, noms empilés, nom coupé) → #436 : harnais complété (noms, cadre iPhone 390 × 664) puis libellés courts (choix de Paul). Leçon v114 consignée. Agents toujours en pause."
   },
-  "prochaine_action": "Respecter la pause des agents. Capitaliser les apports utiles pendant les autres projets. Reprise seulement sur instruction explicite de Paul.",
+  "prochaine_action": "Respecter la pause des agents. Prochaine boucle de code, sur instruction de Paul : CADRAGE DU CIEL SUR MOBILE (maquette d'abord, voir boucles_ouvertes). Capitaliser les apports utiles pendant les autres projets.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -57,7 +57,11 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (main 06f0aa5), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR, aucune preuve fabriquée ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463. Recette visuelle de Paul à faire : ZOH SHIA sur mobile, trois groupes.",
+      "quoi": "CADRAGE DU CIEL SUR MOBILE — boucle décidée par Paul le 03/11, NON OUVERTE (maquette à valider avant code). Constat sur son iPhone (aperçu de #436) : noms lisibles, mais constellation tassée en bas, ~180 px vides sous le cartouche, dernier nom au ras du bord. Cause : le cadrage du moteur commun (js/ciel.js, margesUtiles fournies par js/ciel-noeud.mjs), pas les noms. Même vide mesuré sur ZOH SHIA et DRAGONS (~200 px). Plan : maquette 390 × 664 et 390 × 740 avec et sans barre Léo → validation de Paul → deux contrôles au harnais (vide maximal sous le cartouche, marge basse minimale), étalonnés sur sa capture → correctif du moteur sur tous les écrans du ciel.",
+      "depuis": "2026-11-03"
+    },
+    {
+      "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (06f0aa5), #435 fusionnée (e52d0db), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463.",
       "depuis": "2026-11-02"
     },
     {
