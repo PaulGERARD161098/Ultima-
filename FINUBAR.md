@@ -39,9 +39,9 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-01",
-    "commit": "ac4f0f40de5a89c9601dc71cc6c9763d9fdd09f8",
-    "quoi": "Paul met les agents en pause sans date. Rôles Léo/Fin et capitalisation future cadrés dans ZOH ; aucune activation. PR #432 brouillon."
+    "le": "2026-11-03",
+    "commit": "06f0aa5cd74c4bfc11922e5e902852d505f779bb",
+    "quoi": "#434 fusionnée sur go de Paul (tête c731449, CI 9/9 verte dont Léo LV1) : #364, #381, #417, #418 et #433 absorbées et fermées ; neuf technos ZOH en trois sous-constellations (DEVIS & PAIEMENT, MÉTHODES, VENTE). Agents toujours en pause ; journal non ingéré ; paiement inactif."
   },
   "prochaine_action": "Respecter la pause des agents. Capitaliser les apports utiles pendant les autres projets. Reprise seulement sur instruction explicite de Paul.",
   "bloque_par": [
@@ -57,7 +57,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Consolidation ZOH (02/11) sur la PR #434 (claude/trusting-gates-91ao5h) : #364, #381, #417, #418 et #433 intégrées, main 707d319 fusionné ; 9 technos, ordres 1 à 9 sans doublon, rangées en trois sous-constellations (DEVIS & PAIEMENT, MÉTHODES, VENTE — choix de Paul du 02/11, une couronne de quatre étoiles au plus par écran) ; stock ZOH lu par Léo à 7976 caractères (plafond 9000) ; test du journal sur journal fictif, isolation de memoire/ inchangée ; attentes carto alignées sur ADR-011. Attend : CI verte sur la tête, puis go de fusion de Paul ; ensuite fermer les cinq PR absorbées et renseigner dernier_arret.commit avec le SHA de main. Hors consolidation : #425 (9 empreintes preuve_ultima introuvables, blocage documenté sur la PR), #365 et #351 (pause de Léo), RenoDevis #463.",
+      "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (main 06f0aa5), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR, aucune preuve fabriquée ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463. Recette visuelle de Paul à faire : ZOH SHIA sur mobile, trois groupes.",
       "depuis": "2026-11-02"
     },
     {
@@ -221,7 +221,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-11-02"
+  "maj": "2026-11-03"
 }
 ```
 
