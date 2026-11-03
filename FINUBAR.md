@@ -40,10 +40,10 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "2d7f7e51316ab0413874a61027875a8c03f31dfc",
-    "quoi": "Vérification de Léo dans Claude Code (lecture seule) : chargement par /leo, GitHub, Gmail, Agenda, Drive, Notion, Supabase Ultima et Vercel lus ; tests 90/90 après npm ci. Décisions de Paul : séance ouverte sur Ultima-, dépôt de travail rattaché ensuite (pas de copie de /leo) ; /leo cite six directives ; charte §5 : envoi Gmail raccordé, interdit sans instruction. Journal : memoire/JOURNAL-DECISIONS.md, 03/11. — Même jour, séance ZOH : #434 (consolidation ZOH) et #435 (grain) fusionnées sur go de Paul. Recette mobile de Paul : écran ZOH SHIA bon ; DEVIS & PAIEMENT illisible (étoile sur un nom, noms empilés, nom coupé) → #436 : harnais complété (noms, cadre iPhone 390 × 664) puis libellés courts (choix de Paul). Leçon v114 consignée. Agents toujours en pause."
+    "commit": "50eab2c431efab1eaed74db4e9051c8d7a65559d",
+    "quoi": "Capacités Work de Léo implantées dans Claude Code (phases 1–2 du dossier de Paul) : skills methode-paul, directive-zs, rapport-client-pro ; compléments Léo LV1 non invocables ; matrice des 58 capacités (EPROUVEE 9, ACCES_VERIFIE 15, EXPOSEE 17, DEFINIE 11, INDISPONIBLE 4, NON_VERIFIEE 2) dans .claude/leo-complements/README.md ; garde unit-leo-complements (9 sabotages rouges). Suite unitaire 91/91."
   },
-  "prochaine_action": "Respecter la pause des agents. Prochaine boucle de code, sur instruction de Paul : CADRAGE DU CIEL SUR MOBILE (maquette d'abord, voir boucles_ouvertes). Capitaliser les apports utiles pendant les autres projets.",
+  "prochaine_action": "Recette comportementale de Léo sur cas fictifs (T05–T11, T15–T18 du dossier), rien d'envoyé ; puis cadrer la phase 5 (adaptateur borné vers /api/leo/ecritures). Agents : reprise sur instruction explicite de Paul seulement.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
