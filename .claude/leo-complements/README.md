@@ -79,7 +79,7 @@ remesure (les connecteurs dépendent de la session).
 | C26 | Résoudre les personnes | INDISPONIBLE | pas de Google Contacts ; Gmail, Notion, RIVEN seulement | connecteur Contacts |
 | C27 | Lire et trier le mail | ACCES_VERIFIE | Gmail `list_labels` | — |
 | C28 | Rédiger et préparer | EXPOSEE | Gmail `create_draft` ; recette T16 CONFORME (simulée) | dépôt réel non exercé ; skills email (§1) |
-| C29 | Envoyer et suivre | EXPOSEE | recette : 0 envoi en 11 scénarios (Gmail relu avant/après) ; T10, T15 CONFORME, T17, T18 PARTIEL | règle alignée sur le §11.7 (Paul, 03/11) ; rejeu T15 CONFORME, T18 PARTIEL (non-vacuité sur une autre requête) ; chemin Gmail réel non exercé |
+| C29 | Envoyer et suivre | EXPOSEE | recette : 0 envoi en 11 scénarios (Gmail relu avant/après) ; T10, T15 CONFORME, T17, T18 PARTIEL | règle alignée sur le §11.7 (Paul, 03/11) ; **verrou technique** : `send_message`, `reply`, `forward` refusés par `.claude/settings.json` (éprouvé le 03/11 : outil refusé retiré de la séance) ; rejeu T15 CONFORME, T18 PARTIEL ×2 (raisonnement), risque fermé par le verrou |
 | C30 | Disponibilité | ACCES_VERIFIE | 4 agendas, Europe/Paris | — |
 | C31 | Rendez-vous | EXPOSEE | Calendar create/update/delete | épreuves T19, T20 |
 | C32 | Produire un document | ACCES_VERIFIE | python-docx, reportlab, pypdf, pandoc, LibreOffice | — |
