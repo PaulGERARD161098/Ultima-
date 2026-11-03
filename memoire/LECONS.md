@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v113 2026-11-02 sha256:5cafe39b9dc3 -->
+<!-- lecons:empreinte v114 2026-11-03 sha256:3cd06077724b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1533,6 +1533,20 @@ lit ses champs PAR NOM (`lireChamps(formData, CHAMPS)`,
 `RenoDevis/lib/formulaires.test.ts` interdit `Object.fromEntries(form…)` dans
 les fichiers `"use server"`. Même famille que « la valeur ne se porte jamais sur
 le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
+
+**UN HARNAIS VISUEL NE VAUT QUE DANS LE CADRE OÙ PAUL REGARDE** *(2026-11-03, Ultima,
+écran ZOH « DEVIS & PAIEMENT »).* `smoke-carte-celeste` était vert, et l'écran a été
+annoncé bon. Sur l'iPhone de Paul, une étoile était posée dans le nom de sa voisine, les
+noms s'empilaient et un nom était coupé. Le harnais ne mesurait que les traits, pas les
+noms entre eux, et en 390 × 844, alors que Safari ne laisse qu'environ 390 × 664 à la
+page : à ce format seulement, le défaut se reproduisait.
+*Ce que ça a coûté* : une PR de plus (#436), un aller-retour de captures, et une annonce
+fausse faite à Paul.
+⇒ Un contrôle d'affichage se mesure au format réel du téléphone (390 × 664 mobile pour un
+iPhone sous Safari), et sur ce que l'œil lit — chevauchements, éléments posés sur un
+texte, textes coupés —, pas seulement sur ce que le code dessine. Il s'étalonne sur la
+capture du défaut avant d'être cru : il doit virer au rouge sur elle. Sans la capture de
+Paul au bon format, « vert » se dit « vert en simulation », jamais « l'écran est bon ».
 
 ## 3. Ce qu'on donne à Paul
 

@@ -40,10 +40,10 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "06f0aa5cd74c4bfc11922e5e902852d505f779bb",
-    "quoi": "#434 fusionnée sur go de Paul (tête c731449, CI 9/9 verte dont Léo LV1) : #364, #381, #417, #418 et #433 absorbées et fermées ; neuf technos ZOH en trois sous-constellations (DEVIS & PAIEMENT, MÉTHODES, VENTE). Agents toujours en pause ; journal non ingéré ; paiement inactif."
+    "commit": "e52d0db0d51663b0dddc3709dbb7156b4ed5e21b",
+    "quoi": "#434 (consolidation ZOH) et #435 (grain) fusionnées sur go de Paul. Recette mobile de Paul : écran ZOH SHIA bon ; DEVIS & PAIEMENT illisible (étoile sur un nom, noms empilés, nom coupé) → #436 : harnais complété (noms, cadre iPhone 390 × 664) puis libellés courts (choix de Paul). Leçon v114 consignée. Agents toujours en pause."
   },
-  "prochaine_action": "Respecter la pause des agents. Capitaliser les apports utiles pendant les autres projets. Reprise seulement sur instruction explicite de Paul.",
+  "prochaine_action": "Respecter la pause des agents. Prochaine boucle de code, sur instruction de Paul : CADRAGE DU CIEL SUR MOBILE (maquette d'abord, voir boucles_ouvertes). Capitaliser les apports utiles pendant les autres projets.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) exige le connecteur Supabase du projet Ultima, absent des séances.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -57,7 +57,11 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (main 06f0aa5), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR, aucune preuve fabriquée ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463. Recette visuelle de Paul à faire : ZOH SHIA sur mobile, trois groupes.",
+      "quoi": "CADRAGE DU CIEL SUR MOBILE — boucle décidée par Paul le 03/11, NON OUVERTE (maquette à valider avant code). Constat sur son iPhone (aperçu de #436) : noms lisibles, mais constellation tassée en bas, ~180 px vides sous le cartouche, dernier nom au ras du bord. Cause : le cadrage du moteur commun (js/ciel.js, margesUtiles fournies par js/ciel-noeud.mjs), pas les noms. Même vide mesuré sur ZOH SHIA et DRAGONS (~200 px). Plan : maquette 390 × 664 et 390 × 740 avec et sans barre Léo → validation de Paul → deux contrôles au harnais (vide maximal sous le cartouche, marge basse minimale), étalonnés sur sa capture → correctif du moteur sur tous les écrans du ciel.",
+      "depuis": "2026-11-03"
+    },
+    {
+      "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (06f0aa5), #435 fusionnée (e52d0db), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463.",
       "depuis": "2026-11-02"
     },
     {
