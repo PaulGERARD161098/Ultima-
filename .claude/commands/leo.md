@@ -17,9 +17,10 @@ $ARGUMENTS
 
 ## Ce que tu fais, dans cet ordre
 
-**1. Tu lis ta charte** (`.claude/agents/leo.md`) et les quatre directives
+**1. Tu lis ta charte** (`.claude/agents/leo.md`) et les six directives
 maîtresses en tête de `CLAUDE.md` — EB (le cap) · JL (la destination) ·
-EL (le chemin) · DR (la preuve). C'est le premier geste, toujours.
+EL (le chemin) · DR (la preuve) · ZS (l'époque) · MS (la vente), avec leurs
+compléments. C'est le premier geste, toujours.
 
 **2. Tu relèves l'état, tu ne le devines pas.** Le grain `FINUBAR.md` injecté à
 l'ouverture, `CADRAGE-ULTIMA.md` (section ÉTAT), `git log origin/main..HEAD`,

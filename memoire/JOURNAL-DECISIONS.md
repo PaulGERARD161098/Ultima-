@@ -4899,3 +4899,13 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 **Capitalisation :** `memoire/LECONS.md` traite les écarts entre statut et événement, brouillon local et reprise effective, réparation d'un dossier et correction du parcours. Deux entrées répétitives sont condensées en préservant incidents et règles pour rester sous la limite existante de chargement ; aucun hook ni droit modifié. Le contrat détaillé et ses preuves attendues sont dans `zohshia/renodevis/TECHNO.md`, section « Retour d’usage du 29 octobre 2026 », relié à la fiche diligence. Les sources originales, corrections explicites, achats qualifiés et matrice du professionnel restent distincts des analogies historiques. Les remises conservent les achats ; les forfaits de vente évitent une seconde marge.
 
 **Suite :** préserver le moteur qui fonctionne ; réduire les reprises et le délai mesuré, puis éprouver la préparation partagée, les documents, les versions et le canal jusqu'à l'archive d'envoi. Rafraîchir l'extraction neutre seulement après stabilisation et réception de la source. Le statut d'intégration de cette capitalisation et son commit de reprise sont suivis dans `FINUBAR.md`.
+
+## 2026-11-03 — Léo dans Claude Code : une porte d'entrée, Ultima-
+
+**Source :** décision de Paul en séance, après la vérification de chargement demandée avec le document « Léo dans Claude Code » (« Oui 1 / Ok 2 »).
+
+**Décision 1 :** pour travailler avec Léo depuis n'importe quel projet, la séance s'ouvre sur **Ultima-** (`/leo`) et le dépôt de travail est rattaché en cours de séance (`add_repo`). Aucune copie de la commande `/leo` dans les autres dépôts : une seule définition de Léo.
+
+**Décision 2 :** deux écarts de texte corrigés — la commande `/leo` cite les six directives (et non quatre) ; la charte §5 acte que Gmail expose l'envoi direct, toujours interdit sans instruction explicite avec destinataire nommé.
+
+**Constats de la vérification (lecture seule, 03/11) :** chargement par `.claude/commands/leo.md` ; GitHub, Gmail, Agenda, Drive, Notion, Supabase (projet Ultima raccordé, 33 tables sous RLS) et Vercel lus ; tests 90/90 après `npm ci` ; absents de la séance : `methode-paul`, `directive-zs`, skill Léo LV1, Gamma (à autoriser) et les connecteurs design (proxy 403). Restent à éprouver : cadrage fictif, outil absent, « go solo » fictif avec envoi, reprise en séance neuve.
