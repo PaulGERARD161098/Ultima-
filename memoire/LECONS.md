@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v114 2026-11-03 sha256:3cd06077724b -->
+<!-- lecons:empreinte v115 2026-11-03 sha256:a06208da9afa -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1052,6 +1052,13 @@ ce que la v21 a payé. Aucune des deux n'est « la bonne » : pour « ce qu'une
 personne lit », on lit les éléments RENDUS, scripts et styles retirés ; pour « ce
 qu'un lecteur d'écran reçoit », c'est `textContent` du contenu seul. La question
 décide de la vue, jamais l'habitude.
+*Rechute du 2026-11-03 (Artidispo)* : un contrôle d'**absence** (« le mot X n'est plus sur la
+page ») lisait `innerText` — qui ne voit pas le contenu d'un `<details>` replié. La FAQ
+fermée pouvait donc garder le mot interdit, contrôle vert. Corrigé en `textContent` : pour
+« ce texte n'est nulle part », la vue est celle qui voit tout, replié compris. Même séance,
+un **détecteur** (expression régulière des ombres décalées) aurait laissé passer toutes les
+ombres réelles : il n'a été cru qu'après avoir été passé sur des cas dont la réponse était
+connue (une ombre décalée → rouge, une ombre floue → vert).
 
 **UN GARDE-FOU QUI CESSE DE FONCTIONNER DOIT LE DIRE** *(2026-08-21)*. Un test
 absent de la chaîne d'intégration, un filtre qui écarte en silence, une garde
@@ -1094,6 +1101,22 @@ rouge PLUSIEURS fois — un sabotage qui ne vire pas au rouge à tous les coups 
 ⚠️ Corollaire : un test qui ne tourne pas dans `run-unit.mjs` ne tourne pas dans la CI ;
 la partie du harnais que PGlite peut prouver (refus du 101ᵉ, droits, unicité) vit donc aussi
 dans `Ultima-/tests/unit-leo-appels-sql.mjs`, le reste (la course) restant au harnais réel.
+
+**UN ROUGE QUI VA ET VIENT EST UN DÉFAUT JUSQU'À PREUVE DU CONTRAIRE** *(2026-11-03, Artidispo)*.
+Deux contrôles du tunnel d'inscription viraient au rouge « une fois sur plusieurs » : ⑱a
+(photos) et ⑯b (saisie du nom). Le premier a d'abord été déclaré instable, dans une PR, et
+la relance est passée au vert. Les deux étaient de vrais défauts du produit, que seul le
+hasard du calendrier révélait : le bouton « Continuer » se réactivait pendant l'envoi d'une
+photo (`majStatutBrouillon` ignorait l'envoi en cours), et un redessin de l'écran, déclenché
+par la réponse du registre, réécrivait le champ avec la valeur nettoyée — l'espace tapé
+entre deux mots disparaissait. Un artisan au doigt rapide les aurait rencontrés tous les
+deux. ⛔ Un rouge intermittent ne se relance pas pour obtenir un vert : on cherche **l'ordre
+d'arrivée** qui le produit, on écrit le contrôle qui **force** cet ordre (⑯f : espace, puis
+réponse du registre, puis suite de la frappe), on exige qu'il soit rouge à chaque fois sur
+le code fautif, puis on corrige. Si l'on ne trouve pas d'ordre, on le dit — « instable » est
+une conclusion, pas un diagnostic. *Ce que ça a coûté : un commentaire public à corriger sur
+la PR, et un défaut de saisie qui aurait atteint la production sous l'étiquette « test
+fragile ».*
 
 **UN RENVOI MORT SE LIT EXACTEMENT COMME UN RENVOI VALIDE** *(2026-09-07)*. Un
 « §11.8 » était cité cinq fois dans les documents d'Artidispo pour une section
@@ -1632,6 +1655,11 @@ je ne **peux** pas la vérifier, je le dis **avant** la valeur ; je ne la sais
 pas, je cherche. *Incident fondateur : un nom de projet Vercel transformé en URL
 de production et donné comme vérifié, alors que le vrai domaine était écrit à
 quatre endroits du dépôt.*
+*Rechute du 2026-11-03 (Artidispo)* : une adresse d'aperçu Vercel a été **composée** à partir
+du nom de la branche (`artidispo-git-<branche>-…vercel.app`) et donnée à Paul. Vercel
+tronque et hache les noms longs (`…git-claude-parcours-p-31a286-…`) : le lien menait nulle
+part. ⛔ L'adresse d'un aperçu se **lit** dans le commentaire du bot Vercel sur la PR ou dans
+`list_deployments`, jamais en recollant des morceaux qui ont l'air d'en faire une.
 
 **TOUJOURS LES LIENS DE CE QU'IL Y A À VÉRIFIER** *(2026-08-17)*. Dès qu'un
 travail est poussé, donner **la liste des liens cliquables** de tout ce que Paul
