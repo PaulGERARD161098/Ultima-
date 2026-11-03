@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "mis_a_jour_le": "2026-10-11",
+  "source_regles": "memoire/LECONS.md",
+  "couverture": {
+    "relues": ["Échanges transmis dans la session de préparation du pilote et du journal, les 10 et 11 octobre 2026", "PR RenoDevis #332 et lecture ciblée du webhook et du canal au commit dede99988815fb1ed8e2910a2d2f63b31f3a9cfd", "Sources de mémoire et de ZOH SHIA dans Ultima au commit 88b58fbb9ff6181e0fe313c8dbdcfae774251658"],
+    "manquantes": ["Conversations privées non transmises des autres outils", "Historique antérieur disponible seulement sous forme de résumé", "Recette réelle WhatsApp et exécution de tous les hooks de mémoire"],
+    "limite": "Rétrospective des éléments accessibles, pas lecture de tous les projets ni audit complet du pilote."
+  },
+  "entrees": [
+    {
+      "id": "JA-20261011-001",
+      "le": "2026-10-11",
+      "nature": "incident",
+      "statut": "observation",
+      "cas": "Déléguer une réalisation avec un accès annoncé mais incomplet",
+      "mots_cles": ["accès", "lecture", "fichier", "délégation", "capacité", "contexte"],
+      "constat": "L’assistant d’hébergement annonçait un accès GitHub mais signalait ensuite des extraits ou du Base64 non transférable à son environnement. Plusieurs retransmissions documentaires ont précédé le transfert du code à l’environnement du dépôt.",
+      "consequence": "Échanges répétés sans code ni test livré par cet assistant ; aucun temps perdu chiffré.",
+      "explication": { "niveau": "inféré", "texte": "La préparation documentaire ne résolvait pas la capacité d’exécution manquante." },
+      "piste": "Avant délégation, vérifier lecture d’un fichier complet, modification sur branche et exécution d’un test ; transférer si ces capacités manquent.",
+      "limites": "Cette session ne compare pas globalement la qualité des outils. Ne pas conclure qu’un fournisseur est toujours incapable.",
+      "sources": [{ "type": "declaration", "reference": "Session transmise du 10–11 octobre 2026 : réponses successives sur pièces jointes et limites d’accès", "niveau": "déclaré" }],
+      "lecon_canonique": null,
+      "verification_suivante": "Au prochain transfert, relever les capacités démontrées avant les échanges de dossiers."
+    },
+    {
+      "id": "JA-20261011-002",
+      "le": "2026-10-11",
+      "nature": "reussite",
+      "statut": "a_eprouver",
+      "cas": "Livrer une tranche métier bornée avec une relecture croisée",
+      "mots_cles": ["pilote", "livraison", "relecture", "tranche", "objectif", "preuve"],
+      "constat": "Après transfert à l’environnement du dépôt, une PR de pilote transforme une demande en brouillon. La PR #332 existe et sa fusion a été vérifiée. Les revues ciblées ont nommé des défauts de reprise et de réponse.",
+      "consequence": "Passage d’un cadrage documentaire à du code révisable. Aucun agent opérationnel sur WhatsApp ni gain économique n’est prouvé par cette observation.",
+      "explication": { "niveau": "inféré", "texte": "Le périmètre borné, le réemploi du moteur et la séparation entre réalisation et relecture ont aidé la livraison." },
+      "piste": "Définir un parcours observable, confier sa réalisation à l’environnement complet, puis relire le diff sur les risques concrets.",
+      "limites": "Une PR fusionnée et des tests rapportés ne prouvent pas la recette utilisateur. Reproduire sur une autre tâche avant généralisation.",
+      "sources": [{ "type": "depot", "reference": "https://github.com/PaulGERARD161098/RenoDevis/pull/332", "niveau": "mesuré" }, { "type": "declaration", "reference": "Rapports de tests et revue transmis dans la session ; tests non réexécutés par Codex", "niveau": "déclaré" }],
+      "lecon_canonique": null,
+      "verification_suivante": "Relier la correction des constats à un essai utilisateur réel et relever les preuves, sans attribuer le succès à un outil seul."
+    },
+    {
+      "id": "JA-20261011-003",
+      "le": "2026-10-11",
+      "nature": "incident",
+      "statut": "observation",
+      "cas": "Accuser réception avant d’avoir enregistré le travail",
+      "mots_cles": ["webhook", "reprise", "durable", "interruption", "réponse", "doublon"],
+      "constat": "Au commit dede999, le webhook programme un traitement après réponse et l’enregistrement intervient dans ce traitement. La réponse sortante peut échouer alors que le message est ensuite marqué terminé.",
+      "consequence": "Risque identifié statiquement de travail perdu avant enregistrement et de réponse non reprise. Aucune perte réelle de message client n’a été constatée.",
+      "explication": { "niveau": "mesuré", "texte": "Lecture ciblée de route.ts, whatsappCanal.ts et whatsappAgent.ts ; pas épreuve d’interruption exécutée dans cette session." },
+      "piste": "Éprouver la réception durable et séparer l’avancement métier de la réponse sortante ; traiter aussi une issue d’envoi inconnue.",
+      "limites": "Observation épinglée à une version ancienne possible. Lire le nouveau SHA avant d’affirmer que le défaut existe encore ; ne pas garantir exactement un envoi sans mécanisme adéquat.",
+      "sources": [{ "type": "depot", "reference": "https://github.com/PaulGERARD161098/RenoDevis/blob/dede99988815fb1ed8e2910a2d2f63b31f3a9cfd/app/api/whatsapp/webhook/route.ts", "niveau": "mesuré" }, { "type": "depot", "reference": "https://github.com/PaulGERARD161098/RenoDevis/blob/dede99988815fb1ed8e2910a2d2f63b31f3a9cfd/lib/whatsappAgent.ts", "niveau": "mesuré" }],
+      "lecon_canonique": null,
+      "verification_suivante": "Sur la PR corrective, vérifier des arrêts injectés et une reprise sans renvoi manuel."
+    },
+    {
+      "id": "JA-20261011-004",
+      "le": "2026-10-11",
+      "nature": "idee",
+      "statut": "a_eprouver",
+      "cas": "Une injection de mémoire est présente sans preuve d’application",
+      "mots_cles": ["mémoire", "lecture", "ouverture", "clôture", "hook", "preuve"],
+      "constat": "Le dépôt possède une mémoire canonique, un rappel d’ouverture et une procédure de propagation. Leur présence a été lue ; leur fonctionnement dans chaque environnement et l’usage effectif des leçons ne sont pas reçus.",
+      "consequence": "La technologie doit distinguer code disponible, rappel exécuté, texte lu et apprentissage appliqué.",
+      "explication": { "niveau": "inféré", "texte": "Le chargement technique ne suffit pas à établir un changement de conduite." },
+      "piste": "En session neuve, retrouver une leçon, expliciter son application puis consigner un résultat à la clôture avec la couverture des sources.",
+      "limites": "Aucun raccordement automatique supplémentaire n’est activé par cette préparation ; les règles adoptées restent dans leur source unique.",
+      "sources": [{ "type": "depot", "reference": "https://github.com/PaulGERARD161098/Ultima-/blob/88b58fbb9ff6181e0fe313c8dbdcfae774251658/finubar/lecons-rappel.mjs", "niveau": "mesuré" }],
+      "lecon_canonique": null,
+      "verification_suivante": "Éprouver ouverture, consultation spontanée et clôture dans chaque environnement autorisé."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-31",
+ "publie_le": "2026-11-02",
  "technos": [
   {
    "id": "renodevis",
@@ -616,10 +616,288 @@ export default {
        ]
       },
       {
+       "t": "h3",
+       "r": [
+        [
+         "Contrat de livraison de l'agent et portabilité",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le résultat de l'agent est un parcours complet reçu par le professionnel, pas une somme de correctifs ou un compteur de tests. La demande neuve, sa compréhension validée, les références et prix sourcés, les contrôles et le PDF doivent être éprouvés ensemble sur la même version. Un document où des postes essentiels ne sont pas chiffrés reste une estimation partielle ; il ne ferme pas la recette d'un devis complet.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Mesurer séparément les interventions du professionnel, les messages de l'agent, les questions redondantes, les omissions et conflits détectés, les appels externes et le délai jusqu'à réception du document. Les seuils relèvent du dossier d'implantation. Une correction invalide les choix et documents dépendants sans effacer les autres besoins. Les propositions uniques peuvent être présentées et confirmées ensemble ; toute ambiguïté garde une décision explicite et le serveur recontrôle les références au clic.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une issue d'envoi inconnue est conservée durablement avant tout rejeu possible. Une acceptation certaine, un refus certain et une absence de preuve sont des états distincts. L'issue inconnue exige un rapprochement opérateur et ne repart pas automatiquement. L'arrêt, la rétention et les compteurs gardent leur rôle ; une purge n'est pas un accusé de réception.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La technologie conserve les mécanismes génériques ; identité, catalogue, règles de vente, forfaits, contexte fiscal, modèle de document et autorisations viennent du compte. La check-list d'implantation détaille les entrées et les preuves. Tant qu'un chemin du moteur dépend d'une identité d'instance, il reste à paramétrer ou à neutraliser : un contrat documenté n'annonce pas une portabilité déjà reçue. Ne pas emporter de données réelles dans la technologie, ses exemples ou ses tests génériques.",
+         ""
+        ]
+       ]
+      },
+      {
        "t": "h2",
        "r": [
         [
          "3. Les mécanismes qui tiennent la techno",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Contrat du parcours vocal — révision du 24/10/2026",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Exigences validées, réception applicative à établir.",
+         "b"
+        ],
+        [
+         " Ce contrat complète le parcours commun aux canaux conversationnels ; il ne transforme pas la présence du plan en fonctionnalité implantée, en catalogue vérifié ou en extraction neutre à jour. Les états mesurés et datés du §8 restent distincts.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Étape",
+          ""
+         ]
+        ],
+        [
+         [
+          "Comportement attendu",
+          ""
+         ]
+        ],
+        [
+         [
+          "Garde de réception",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Dictée terminée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Une note vocale envoyée constitue une dictée terminée. Pour une saisie en plusieurs messages, attendre la fin annoncée, puis proposer un titre court de chantier et une synthèse complète : équipements, références, quantités, puissances, pose, accessoires, main-d'œuvre, contraintes et exclusions.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Le titre ne remplace jamais le détail ; aucune référence, quantité ou valeur incertaine n'est corrigée silencieusement par la transcription. Aucun fragment ne lance la recherche avant validation de la synthèse.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Validation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Le pro confirme une fois la synthèse ou la corrige ; les informations déjà connues de son compte sont réutilisées.",
+           ""
+          ]
+         ],
+         [
+          [
+           "La recherche métier commence après l'accord sur la version courante ; aucune nouvelle question pour une donnée déjà fournie et non contradictoire.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recherche",
+           ""
+          ]
+         ],
+         [
+          [
+           "Conserver les références précises dictées. Lorsqu'un modèle manque ou reste approximatif, rechercher un candidat dans les devis passés du pro ; à défaut de candidat compatible, rechercher directement dans son catalogue.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Un précédent est une piste de sélection, jamais une preuve de compatibilité ni un tarif actuel. Les données restent cloisonnées par compte.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Vérification",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vérifier la combinaison, les limites et les accessoires sur les données techniques du constructeur, puis vérifier l'achat dans le catalogue fournisseur daté et appliquer les règles de vente du pro.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Distinguer qualification technique, prix vérifié et hypothèse ; une longueur totale ne prouve pas les longueurs individuelles de chaque branche.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Clarifications",
+           ""
+          ]
+         ],
+         [
+          [
+           "Contrôles en arrière-plan ; regrouper les seuls manques indispensables à l'estimation et les incompatibilités qui exigent un choix.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Une réserve ou un contrôle impossible reste visible dans le résultat ; aucun remplacement de produit sans accord. Les détails de pose pouvant attendre ne deviennent pas des questions obligatoires pour une première estimation.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Estimation et PDF",
+           ""
+          ]
+         ],
+         [
+          [
+           "Remettre rapidement une estimation provisoire, même si des points restent à confirmer, avec postes estimés, sources autorisées, réserves et exclusions explicites.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Aucun montant inventé. Sans base de prix autorisée, le poste reste non chiffré et le total connu n'est pas présenté comme un total global. Aucune fiabilité chiffrée déduite de la seule tolérance du pro à l'approximation.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Correction",
+           ""
+          ]
+         ],
+         [
+          [
+           "Conserver les faits et choix non modifiés ; revérifier uniquement les dépendances touchées, y compris la configuration et les raccordements lors d'un ajout d'appareil.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Invalider les anciens résultats dépendants et refuser leur retour tardif ; le PDF désigne la dernière version validée. Une modification sans rapport ne retire pas les références déjà retenues.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Progression",
+           ""
+          ]
+         ],
+         [
+          [
+           "Montrer les étapes réellement exécutées : recherche, vérification, calcul, préparation du document, résultat prêt. Adapter l'indicateur aux capacités éprouvées du canal.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Pas de faux pourcentage, de fausse activité ou de progression en boucle ; attente, interruption et échec sont annoncés avec une reprise possible sans perte ni doublon.",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Prix et forfaits :",
+         "b"
+        ],
+        [
+         " distinguer achats à transformer selon la règle du pro et forfaits déjà exprimés en prix de vente final. Ne pas majorer à nouveau un forfait final ; ne pas facturer deux fois un accessoire couvert par ce forfait. Une durée dictée demeure la prescription du pro, sans réévaluation automatique au seul motif d'un changement de configuration.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Preuve attendue :",
+         "b"
+        ],
+        [
+         " jouer le même scénario fictif et ses corrections sur les canaux concernés, avec un cas de référence précise, un modèle manquant, un prix absent, une incompatibilité, un résultat périmé et une interruption. Mesurer séparément le temps actif de traitement et le temps d'attente du pro. La cible vocal vers PDF en moins de dix minutes est un objectif à chronométrer, pas une performance acquise. Aucune réception, activation, nouvelle dépense ou autorisation d'envoi client ne découle de ce contrat.",
          ""
         ]
        ]
@@ -2591,6 +2869,290 @@ export default {
        "t": "h2",
        "r": [
         [
+         "9. Agent de devis neutre — cible pré-opérationnelle (23/10/2026)",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Mandat confirmé :",
+         "b"
+        ],
+        [
+         " produire depuis une description vocale un brouillon précis, avec produits et prestations, en moins de dix minutes. Le logiciel est préparé avant l'arrivée du professionnel ; son intégration apporte ses données et sa configuration, sans réécriture du moteur. Ce paragraphe fixe une cible, pas une réception acquise ni une actualisation de l'inventaire du §4.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Séparation des responsabilités",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Le modèle comprend, rapproche les besoins et pose les questions groupées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Les outils contrôlés recherchent les références, valident les corrections, calculent, enregistrent et génèrent le document depuis l'état enregistré.",
+          ""
+         ]
+        ],
+        [
+         [
+          "La configuration versionnée fournit identité, catalogues produits et prestations, prix, paramètres commerciaux et présentation propres au pro.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le canal reçoit le vocal et remet le brouillon au professionnel authentifié. L'environnement de développement, l'hébergement du modèle, le serveur de l'application et le stockage sont identifiés séparément.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Critère de livraison avant les données réelles",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Capacité",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve requise avec une configuration fictive",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Configuration",
+           ""
+          ]
+         ],
+         [
+          [
+           "Import, validation, version et diagnostic des champs manquants ; aucun prix ou règle professionnelle codé en dur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Voix et compréhension",
+           ""
+          ]
+         ],
+         [
+          [
+           "Vocal réel traité ; produits, prestations, quantités et contraintes retrouvés ; consignes jamais facturées",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Catalogue",
+           ""
+          ]
+         ],
+         [
+          [
+           "Références et prix sourcés ; écarts de puissance explicités ; absence ou ambiguïté jamais masquée par une substitution",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Corrections",
+           ""
+          ]
+         ],
+         [
+          [
+           "Cible stable, état conservé, invalidation des prix et dépendances concernés ; impacts visibles",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "État durable",
+           ""
+          ]
+         ],
+         [
+          [
+           "Réouverture après nouvelle session ou redémarrage ; écriture atomique sous révision ; rejeu sans doublon et conflit de contenu refusé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Cloisonnement",
+           ""
+          ]
+         ],
+         [
+          [
+           "Identité résolue par l'application ; lectures et écritures entre deux professionnels fictifs refusées côté serveur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Calcul et document",
+           ""
+          ]
+         ],
+         [
+          [
+           "Calcul déterministe au centime avec paramètres fournis ; inconnu distinct de zéro ; totaux partiels explicités ; aucune TVA ou TTC complet sans règles disponibles ; PDF relu en texte et en image",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Exploitation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Erreurs actionnables, limites d'appels et coût observables, arrêt et reprise éprouvés ; brouillon marqué, aucun envoi au client automatique",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "État du prototype local communiqué et vérifié le 23/10 :",
+         "b"
+        ],
+        [
+         " bibliothèque d'état et génération PDF, quarante tests réussis sur l'archive identifiée dans la transmission. Cela ne prouve ni raccordement du catalogue, ni transcription, ni stockage externe concurrent, ni isolation applicative, ni livraison en ligne. Un dossier réservé à la configuration ne constitue pas son implémentation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Deux prototypes qui s'améliorent mutuellement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Répertorier les outils déjà présents avant tout remplacement. Conserver une seule vérité de chantier et un seul contrat de calcul, indépendants du modèle.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Raccorder le prototype neutre aux contrats nécessaires en environnement d'essai ; adapter les outils existants quand ils répondent au contrat.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Comparer les deux orchestrations avec les mêmes transcriptions, données fictives et résultats attendus : cas normal, répétition, correction ciblée, référence absente, prix inconnu, dépendance invalidée, rejeu et concurrence.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Mesurer ensuite le parcours vocal réel jusqu'au PDF : temps écoulé depuis le premier vocal, temps de traitement séparé de l'attente humaine, questions, exactitude des produits et prestations, corrections manuelles et coût par brouillon conforme. Conserver versions du code, prompts, modèles et données ; distinguer comparaison des systèmes complets et comparaison à modèle égal.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Transformer chaque défaut reproduit en cas partagé. Réutiliser le composant gagnant ; deux moteurs commerciaux divergents ne sont pas une cible.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les leçons de méthode restent dans ",
+         ""
+        ],
+        [
+         "Ultima-/memoire/LECONS.md",
+         "c"
+        ],
+        [
+         ", entrée « Un prototype d'agent ne prouve que la couche réellement éprouvée ». Le contrôle d'exploitation suit ",
+         ""
+        ],
+        [
+         "../pilotage-back-office/TECHNO.md",
+         "c"
+        ],
+        [
+         " : chaque outil a son cockpit local ; un écran central ne remplace pas ses contrôles.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
          "Retour d'usage du 29 octobre 2026 et réception de la prochaine extraction",
          ""
         ]
@@ -3650,6 +4212,39 @@ export default {
        ]
       },
       {
+       "t": "p",
+       "r": [
+        [
+         "Pour le parcours vocal (",
+         ""
+        ],
+        [
+         "TECHNO.md",
+         "c"
+        ],
+        [
+         " §3, contrat du 24/10/2026), relever aussi la distinction entre ",
+         ""
+        ],
+        [
+         "achat à transformer",
+         "b"
+        ],
+        [
+         " et ",
+         ""
+        ],
+        [
+         "forfait de vente final",
+         "b"
+        ],
+        [
+         ", les accessoires couverts par chaque forfait et les bases de prix de secours explicitement autorisées. Ces paramètres appartiennent au compte du pro : aucun tarif ni règle d'une autre instance ne sert de valeur par défaut. Un forfait final ne reçoit pas de seconde majoration ; un accessoire inclus ne devient pas une seconde ligne facturée. La présence de cette check-list ne prouve pas que ces paramètres sont déjà raccordés au moteur.",
+         ""
+        ]
+       ]
+      },
+      {
        "t": "h3",
        "r": [
         [
@@ -3836,6 +4431,15 @@ export default {
            ""
           ]
          ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le pro peut dicter directement ses références. En cas de référence manquante ou approximative, un devis passé fournit un candidat ; sans candidat compatible, la recherche directe dans son catalogue est permise. Obtenir les documents constructeur permettant de vérifier combinaisons, limites et accessoires, distincts de la source fournisseur qui établit le prix d'achat actuel. Un prix ou une référence retrouvée ne prouve pas la conformité de l'installation.",
+         ""
         ]
        ]
       },
@@ -4212,6 +4816,307 @@ export default {
            ""
           ]
          ]
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "1.9 Dossier d'implantation de l'agent devis",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le dossier est privé, rattaché au compte du professionnel, et reste hors de cette technologie neutre. Collecter les pièces existantes avant de poser des questions ; rendre une liste unique des manques. Chaque donnée comporte sa source, sa date, son périmètre et sa validation. Une case remplie n'est pas une preuve de bon raccordement.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Bloc à obtenir",
+          ""
+         ]
+        ],
+        [
+         [
+          "Contenu propre au professionnel",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve avant ouverture",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Identité et responsables",
+           ""
+          ]
+         ],
+         [
+          [
+           "Identité légale, coordonnées, établissements, utilisateurs autorisés, valideur métier et opérateur",
+           ""
+          ]
+         ],
+         [
+          [
+           "Compte testé, bon émetteur dans le PDF, accès étranger refusé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Bibliothèque commerciale",
+           ""
+          ]
+         ],
+         [
+          [
+           "Catalogue et achats datés, références exactes, conditionnements, unités, quantités, écoparticipations et prix fixes ; devis passés pertinents si disponibles",
+           ""
+          ]
+         ],
+         [
+          [
+           "Références retrouvées et prix rapprochés des pièces ; aucun prix d'un autre compte",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Calculs et prestations",
+           ""
+          ]
+         ],
+         [
+          [
+           "Méthode de vente, arrondis, assiette de marge, traitement de l'apport, forfaits et leur contenu, main-d'œuvre et déplacements, validité des prix et règles de remises",
+           ""
+          ]
+         ],
+         [
+          [
+           "Calcul direct puis contrôle inverse sur un chantier accepté ; aucun défaut repris d'une autre instance",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Faits techniques",
+           ""
+          ]
+         ],
+         [
+          [
+           "Caractéristiques et compatibilités, références liées aux documents et pages, exclusions, équivalences expressément permises, limites de prestation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Besoin et faits fabricant distincts ; conflit bloqué, source absente nommée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Document et fiscalité",
+           ""
+          ]
+         ],
+         [
+          [
+           "Modèle de devis, logo, mentions, garanties, conditions de règlement, contexte fiscal et règles datées",
+           ""
+          ]
+         ],
+         [
+          [
+           "PDF relu avec totaux, réserves et mentions ; estimation partielle distincte du devis complet",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Canal et raccords",
+           ""
+          ]
+         ],
+         [
+          [
+           "Canal choisi, comptes et numéros autorisés si nécessaires, transcription/compréhension, accès aux dossiers, stockage, génération et transport du PDF",
+           ""
+          ]
+         ],
+         [
+          [
+           "Parcours réel depuis une demande neuve jusqu'au document reçu ; clés posées par un moyen sécurisé, jamais dans ce dossier",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Exploitation",
+           ""
+          ]
+         ],
+         [
+          [
+           "Droits de validation et d'envoi, budget et quotas, fenêtre pilote, arrêt, journal, cockpit, traitement des envois d'issue inconnue et rétention",
+           ""
+          ]
+         ],
+         [
+          [
+           "Refus au dépassement, arrêt effectif et reprise sans renvoi automatique d'une issue inconnue",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recette du professionnel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Chantiers représentatifs, résultats attendus acceptés, plafond d'interventions et durée cible, cas négatifs et responsable de réception",
+           ""
+          ]
+         ],
+         [
+          [
+           "Mesure de l'effort, de la qualité et du temps réels ; verdict sur la version exacte",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "À distinguer à chaque implantation :",
+         "b"
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Paramétrage",
+          "b"
+         ],
+         [
+          " : les données, règles, documents, accès et limites de ce professionnel.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Raccordement",
+          "b"
+         ],
+         [
+          " : les fonctions qui doivent réellement lire ce paramétrage et utiliser son canal, son stockage et son modèle. Une configuration écrite ne prouve pas que le moteur la consomme.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Capacité manquante",
+          "b"
+         ],
+         [
+          " : toute branche encore réservée à l'instance de référence, extraction non reçue ou connecteur absent. L'implanter et la tester avant de dire « il suffit de charger les données ».",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La comparaison entre deux agents emploie la même demande, les mêmes sources et règles, les mêmes corrections et le même résultat attendu. Mesurer interventions, questions répétées, postes conservés, erreurs détectées, prix justifiés, coût et temps jusqu'au PDF reçu. Le temps local et le chronométrage du canal réel restent séparés.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une confirmation groupée est permise pour plusieurs propositions uniques et tarifées, présentées explicitement. Elle conserve le besoin, les quantités et les valeurs demandées ; chaque référence est à nouveau contrôlée au clic sur la banque et la version courantes. Un candidat parmi plusieurs n'est pas choisi par son rang. Un choix périmé, une source manquante ou une ambiguïté ne devient pas un accord implicite.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "1.10 État de préparation, sans raccourci",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La voie A n'exige pas une extraction, mais exige le contrôle du bon compte et des capacités effectivement disponibles pour lui. La voie B exige toujours extraction neutre et base neuve éprouvées. Les constats historiques du plan ne prouvent pas l'état actuel de l'extraction. Le contrat vocal préparé et les évolutions du moteur doivent être intégrés à la série de neutralisation, puis extraits et éprouvés, avant de déclarer la voie B prête.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Chaque dossier d'implantation donne pour chaque bloc : ",
+         ""
+        ],
+        [
+         "fourni · vérifié · à raccorder · bloqué",
+         "b"
+        ],
+        [
+         ", avec la preuve et son responsable. Ne pas exiger les clients existants, le paiement en ligne, les relances ou la synchronisation de messagerie lorsqu'ils sont hors du périmètre de l'agent demandé. Ne pas ouvrir un canal ni créer une infrastructure facturée pour compléter une case.",
+         ""
         ]
        ]
       }
@@ -5318,6 +6223,66 @@ export default {
           " : en émet-il ? Si oui, étape 13.",
           ""
          ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Recette du parcours vocal, à effectuer avant de l'annoncer opérationnel :",
+         "b"
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Note vocale envoyée ou fin annoncée d'une dictée en plusieurs messages : titre et synthèse complète relus une fois, puis lancement de la recherche après accord. Pas de redemande des valeurs connues ; les questions indispensables sont regroupées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Référence précise conservée ; modèle manquant recherché puis vérifié ; incompatibilité expliquée sans remplacement silencieux. La somme des longueurs n'est pas une preuve de chaque branche.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Prix vérifiés séparément de la technique ; forfait final non majoré, accessoires non doublés. Prix absent : provision seulement sur une base autorisée, sinon exclusion visible et total connu qualifié comme partiel.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Correction ciblée : données non modifiées conservées, configuration dépendante revérifiée, ancien résultat tardif refusé ; PDF rattaché à la dernière version validée.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Progression fondée sur les événements réellement exécutés et éprouvée dans chaque canal ; interruption et reprise sans faux état « prêt » ni doublon.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Même scénario fictif sur les canaux concernés ; mesure du délai vocal vers PDF et de l'attente du pro. Le contrat est adopté ; les résultats réels, le raccord des canaux et la performance restent à prouver par version.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Cette recette ne remplace ni la qualification technique ni les gates de mise en service. Elle n'autorise aucun envoi client, aucune activation ni dépense.",
+         ""
         ]
        ]
       },
@@ -10131,15 +11096,1871 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "devis",
+   "ordre": 7,
+   "badge": "Générateur de devis",
+   "etat": "En service",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Ce que fait la techno",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un ",
+         ""
+        ],
+        [
+         "fichier de paramètres",
+         "b"
+        ],
+        [
+         " (JSON) et un ",
+         ""
+        ],
+        [
+         "gabarit",
+         "b"
+        ],
+        [
+         " (",
+         ""
+        ],
+        [
+         "gabarit.html",
+         "c"
+        ],
+        [
+         ") donnent un ",
+         ""
+        ],
+        [
+         "devis PDF d'une page",
+         "b"
+        ],
+        [
+         ", dans la mise en page des factures : logo, bloc émetteur et client, tableau des lignes, détails TVA, récapitulatif, encart de paiement, mentions de retard, pied de page légal.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ce qui distingue le devis de la facture, et que le gabarit porte en dur :",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Facture",
+          ""
+         ]
+        ],
+        [
+         [
+          "Devis",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "« Facture »",
+           ""
+          ]
+         ],
+         [
+          [
+           "« Devis »",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Date d'échéance",
+           ""
+          ]
+         ],
+         [
+          [
+           "Date de validité",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Total TTC",
+           ""
+          ]
+         ],
+         [
+          [
+           "Total TTC, puis ",
+           ""
+          ],
+          [
+           "acompte à la signature",
+           "b"
+          ],
+          [
+           " et ",
+           ""
+          ],
+          [
+           "solde à la remise",
+           "b"
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Encart de paiement seul",
+           ""
+          ]
+         ],
+         [
+          [
+           "Encart de paiement ",
+           ""
+          ],
+          [
+           "et",
+           "b"
+          ],
+          [
+           " cadre « Bon pour accord »",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Mentions de retard",
+           ""
+          ]
+         ],
+         [
+          [
+           "Validité, conditions de règlement, conditions propres au devis, puis mentions de retard",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Fichier",
+          ""
+         ]
+        ],
+        [
+         [
+          "Rôle",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "gabarit.html",
+           "c"
+          ]
+         ],
+         [
+          [
+           "La mise en page, neutre : que des champs entre doubles accolades",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "generer.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Valide les paramètres, calcule, échappe, remplit, imprime en PDF (Chromium sans tête)",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "exemple.parametres.json",
+           "c"
+          ]
+         ],
+         [
+          [
+           "La forme des paramètres, sans aucune valeur réelle",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "tests/unit-zohshia-devis.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Les calculs, l'échappement, les refus — dans la suite unitaire",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Les règles de calcul",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Tout en centimes entiers",
+          "b"
+         ],
+         [
+          ", jamais en flottant. Arrondi au demi-centime supérieur.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ligne : HT = prix unitaire HT × quantité ; TTC de ligne = HT + TVA de la ligne.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Totaux : TVA = arrondi(total HT × taux) ; TTC = total HT + TVA.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Acompte = arrondi(TTC × pourcentage)",
+          "b"
+         ],
+         [
+          " ; ",
+          ""
+         ],
+         [
+          "solde = TTC − acompte",
+          "b"
+         ],
+         [
+          ". Le solde se déduit, il ne se recalcule pas : acompte + solde = TTC, toujours.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Un seul taux de TVA par devis — celui des factures de prestation.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "faire",
+     "titre": "Faire un devis",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Faire un devis",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Copier ",
+          ""
+         ],
+         [
+          "exemple.parametres.json",
+          "c"
+         ],
+         [
+          " ",
+          ""
+         ],
+         [
+          "hors du dépôt",
+          "b"
+         ],
+         [
+          " et le remplir : numéro, dates, émetteur, client, lignes, taux de TVA, pourcentage d'acompte, conditions. Les chemins du logo et des polices sont relatifs à ce fichier.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Lancer ",
+          ""
+         ],
+         [
+          "node zohshia/devis/generer.mjs --parametres <devis.json> --sortie <dossier>",
+          "c"
+         ],
+         [
+          ". La ligne rendue donne HT, TVA, TTC, acompte et solde : ",
+          ""
+         ],
+         [
+          "les relire",
+          "b"
+         ],
+         [
+          " avant d'ouvrir le PDF.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ouvrir le PDF et vérifier la page unique, le nom exact du client et le numéro.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le ranger avec ses paramètres dans le dossier de facturation de Paul.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "--html-seulement",
+         "c"
+        ],
+        [
+         " s'arrête au HTML (aperçu sans navigateur). Le navigateur se choisit par la variable ",
+         ""
+        ],
+        [
+         "ZOH_CHROMIUM",
+         "c"
+        ],
+        [
+         ", sinon le Chromium de Playwright.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Ce qui ne vit pas ici",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Aucune valeur",
+          "b"
+         ],
+         [
+          " : ni identité d'émetteur, ni IBAN, ni client, ni montant. Tout arrive par les paramètres, qui ne se versionnent pas.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ni logo, ni police",
+          "b"
+         ],
+         [
+          " : ce sont des fichiers de l'émetteur, passés par chemin et embarqués dans le PDF au moment du rendu.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Pas de numérotation automatique",
+          "b"
+         ],
+         [
+          " : le numéro se donne. Un compteur sans registre des devis émis fabriquerait des doublons.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Les gates",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Envoyer un devis",
+          "b"
+         ],
+         [
+          " à un client est un effet métier réel : mandat précis de Paul, jamais à l'initiative de l'agent. Préparer un brouillon est permis.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une valeur client inconnue",
+          "b"
+         ],
+         [
+          " (raison sociale exacte, numéro de TVA) se demande ; elle ne se déduit pas. Un champ facultatif vide vaut mieux qu'un champ plausible.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le générateur ",
+          ""
+         ],
+         [
+          "refuse",
+          "b"
+         ],
+         [
+          " plutôt que de produire un devis à trou : champ obligatoire vide, montant ou taux mal formé, IBAN hors format, champ du gabarit sans valeur.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "journal-apprentissages",
+   "ordre": 8,
+   "badge": "Journal d’apprentissages",
+   "etat": "Préparé — raccordement automatique non activé",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. But et état réel",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Transformer les observations de travail en apprentissages traçables et les retrouver au moment utile : ouverture, décision ou blocage, puis clôture de séance.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préparé, non activé automatiquement.",
+         "b"
+        ],
+        [
+         " Le journal structuré et sa consultation locale sont disponibles dans cette préparation. Aucun raccordement à un outil de conversation, aucune tâche permanente et aucune écriture de contrôle ne sont installés par ce lot.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le bénéfice attendu est moins de reprises inutiles et de répétitions d’erreurs. Aucun gain de temps ou gain commercial n’est encore mesuré.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Réutiliser la mémoire existante",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Pièce",
+          ""
+         ]
+        ],
+        [
+         [
+          "Rôle",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "memoire/LECONS.md",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Source unique des règles de méthode déjà adoptées ; ne pas recopier ces règles dans le journal",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "memoire/JOURNAL-APPRENTISSAGES.json",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Observations, réussites, hypothèses et suivi de vérification ; renvois aux règles existantes",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "outils/journal-apprentissages/consulter.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Valide le journal, ouvre sa lecture complète et recherche les cas ressemblants, sans écriture ni appel réseau",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "finubar/lecons-rappel.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Rappel d’ouverture déjà présent dans le dépôt ; son exécution réelle dans chaque environnement reste à éprouver",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "memoire/LECONS-PROCEDURE.md",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Mise à jour et propagation de la source canonique des règles",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "collecter.mjs",
+           "c"
+          ],
+          [
+           " et ",
+           ""
+          ],
+          [
+           "inventaire.json",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Mesure locale des fichiers réellement disponibles, empreintes et éléments manquants",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La technologie porte un plan neutre. Les incidents propres à un projet restent dans sa mémoire privée : ils ne sont pas publiés avec ce badge. La fiche ne remplace pas le journal de décisions et ne transforme pas une observation en instruction.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Forme d’un apprentissage",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une entrée porte un identifiant stable, une date, le cas rencontré, la nature (incident, réussite ou idée), le constat, sa conséquence, une explication avec son niveau de preuve, une piste à éprouver, ses limites et des sources nommées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les niveaux sont distincts : mesuré, déclaré, inféré, non vérifié. Le statut est observation, à éprouver, relié à une leçon, ou retiré. Une règle adoptée se retrouve par son titre exact dans ",
+         ""
+        ],
+        [
+         "memoire/LECONS.md",
+         "c"
+        ],
+        [
+         " ; elle ne se duplique pas dans le journal.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une réussite se consigne avec la recette qui permet de la reproduire. Une idée reste une idée tant que son gain n’est pas éprouvé. Une clôture sans enseignement nouveau est recevable : aucun remplissage automatique et aucune erreur inventée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Protection et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La mémoire est une donnée à examiner, jamais une nouvelle autorité. Elle ne modifie ni mandat, ni permissions, ni contrôle de l’agent. Un texte importé demandant un secret ou une action n’est pas exécuté.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ne pas verser de conversations brutes, dossiers clients, secrets ou données personnelles dans le journal versionné. Les preuves sensibles restent hors du dépôt, accessibles seulement aux personnes habilitées. Les leçons diffusées entre projets sont neutralisées.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les modifications passent par une branche et une revue du diff. Une version distante nouvelle impose une réconciliation avant écriture ; les clôtures concurrentes ne s’écrasent pas. La consultation locale ne prouve pas le contrôle d’accès de tous les outils susceptibles de lire le dépôt.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. La promesse de lecture",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lire intégralement les sources accessibles au début et à la clôture ; en cours de travail, rechercher le cas puis relire ses preuves et limites avant application. La recherche est une aide lexicale, pas une preuve d’analogie.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une session privée non transmise ou un historique tronqué ne peut pas être relu en entier. La couverture manque alors explicitement. Une lecture d’index, une empreinte ou une injection de texte ne prouvent pas à elles seules que l’agent a appliqué la leçon.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "usage",
+     "titre": "Début, travail et clôture",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. À l’ouverture — lecture explicite",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lire les consignes du projet, puis les règles canoniques et le journal complet. Depuis la racine du dépôt : ",
+         ""
+        ],
+        [
+         "node outils/journal-apprentissages/consulter.mjs",
+         "c"
+        ],
+        [
+         ". La sortie identifie la version, le nombre d’entrées et les limites de couverture. Lire également ",
+         ""
+        ],
+        [
+         "memoire/LECONS.md",
+         "c"
+        ],
+        [
+         " en entier : le journal ne le remplace pas.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relier les leçons pertinentes au mandat actuel. Si une source est absente, périmée ou tronquée, nommer le manque et acquérir ce qui est nécessaire au travail concerné. Ne pas transformer une absence de lecture en absence de leçon.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Pendant le travail — retrouver un cas",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Sur un blocage, une décision substantielle, un échec ou une meilleure exécution, consulter spontanément la mémoire. Exemple neutre : ",
+         ""
+        ],
+        [
+         "node outils/journal-apprentissages/consulter.mjs --cas \"accès lecture fichier\"",
+         "c"
+        ],
+        [
+         ".",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La consultation cherche dans le journal et les entrées de la mémoire canonique. Elle rend les textes complets des entrées trouvées et la provenance des fichiers. Une recherche sans résultat n’est pas une preuve qu’aucun cas analogue existe.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour chaque correspondance, vérifier la cause commune, les différences, la date, les preuves et le coût d’application. Noter la leçon effectivement utilisée et son effet observé ; ne pas ajouter de règle à chaque consultation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. À la clôture — rétrospective et écriture maîtrisée",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Relire toute la session accessible, les demandes, le diff et les preuves produites. Comparer attendu et livré, essais concluants, incidents, corrections et restes. Lister les sources réellement relues et les passages indisponibles ; ne jamais annoncer une relecture intégrale d’un historique non accessible.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Rechercher les doublons dans le journal et dans ",
+         ""
+        ],
+        [
+         "memoire/LECONS.md",
+         "c"
+        ],
+        [
+         ". Ajouter une observation utile, enrichir une entrée existante ou constater aucune nouveauté. Un apprentissage issu d’une erreur réelle peut enrichir la mémoire canonique selon ",
+         ""
+        ],
+        [
+         "memoire/LECONS-PROCEDURE.md",
+         "c"
+        ],
+        [
+         ". Le journal conserve alors un renvoi au titre exact.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Valider : ",
+         ""
+        ],
+        [
+         "node outils/journal-apprentissages/consulter.mjs --verifier",
+         "c"
+        ],
+        [
+         ". Relire le diff, conserver les versions et committer sur la branche du travail. La validation du format ne remplace pas la vérification des affirmations.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Qui agit et ce qui est automatique",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Moment",
+          ""
+         ]
+        ],
+        [
+         [
+          "Mode de cette version",
+          ""
+         ]
+        ],
+        [
+         [
+          "Qui agit",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Ouverture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Manuel ; rappel canonique existant à vérifier séparément",
+           ""
+          ]
+         ],
+         [
+          [
+           "L’agent de séance avec accès à la mémoire",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recherche pendant le travail",
+           ""
+          ]
+         ],
+         [
+          [
+           "Consultation locale à l’initiative de l’agent",
+           ""
+          ]
+         ],
+         [
+          [
+           "L’agent, dans le mandat courant",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Clôture et ajout",
+           ""
+          ]
+         ],
+         [
+          [
+           "Écriture sur branche, revue et vérification des sources",
+           ""
+          ]
+         ],
+         [
+          [
+           "L’agent de séance",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Propagation des règles",
+           ""
+          ]
+         ],
+         [
+          [
+           "Procédure canonique existante",
+           ""
+          ]
+         ],
+         [
+          [
+           "La séance habilitée qui dispose des dépôts",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Injection dans chaque outil",
+           ""
+          ]
+         ],
+         [
+          [
+           "Non raccordée par ce lot",
+           ""
+          ]
+         ],
+         [
+          [
+           "Futur raccordement avec preuve de lecture",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le journal n’est pas un agent permanent. Aucune surveillance en arrière-plan ni récupération implicite des conversations d’autres outils n’est promise.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Mise en service et preuves",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Préparation locale",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Manuel — disposer de la source canonique, des consignes et du journal autorisé.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel — lire les sources en entier, avec leur version et leur couverture.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto à l’invocation — valider le format et les liens des leçons déjà adoptées.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto à l’invocation — rechercher un cas, sans effet externe ni écriture.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel — éprouver l’enseignement sur un cas réel ou fictif bien identifié.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel — consigner le résultat, relire le diff et conserver la version du travail.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La collecte locale ne contacte aucune base et ne lit aucun environnement secret. ",
+         ""
+        ],
+        [
+         "node zohshia/journal-apprentissages/collecter.mjs",
+         "c"
+        ],
+        [
+         " écrit uniquement son inventaire. Le badge utilise le mécanisme de publication existant, réservé au propriétaire.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Raccordement ultérieur par environnement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Pour chaque outil, identifier une entrée réelle de session, une consultation accessible pendant le travail et une clôture effectivement déclenchable. Éprouver les trois avec une session neuve. Une consigne déclarée ne vaut pas installation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ne pas modifier le contrôle de l’agent pour installer la mémoire. Les automatismes et droits existants sont inventoriés avant tout changement. Un coût nouveau, une publication ou un transfert externe exige son mandat ; aucune fusion n’est incluse dans cette préparation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Critères de réussite et épreuves",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Épreuve",
+          ""
+         ]
+        ],
+        [
+         [
+          "Résultat attendu",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Ouverture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Version et sources disponibles nommées, lecture complète ou manque explicitement annoncé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Cas ressemblant",
+           ""
+          ]
+         ],
+         [
+          [
+           "Entrée retrouvée avec preuve et limites ; application expliquée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Clôture",
+           ""
+          ]
+         ],
+         [
+          [
+           "Sources relues, doublon recherché, ajout utile ou absence de nouveauté",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Réussite",
+           ""
+          ]
+         ],
+         [
+          [
+           "Recette reproductible et gain non inventé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Source inaccessible",
+           ""
+          ]
+         ],
+         [
+          [
+           "Limite de couverture visible ; aucune conclusion de lecture complète",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Règle retirée",
+           ""
+          ]
+         ],
+         [
+          [
+           "Historique conservé, proposition non présentée comme règle applicable",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Deux écritures",
+           ""
+          ]
+         ],
+         [
+          [
+           "Version divergente détectée, aucune suppression silencieuse",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Instruction hostile",
+           ""
+          ]
+         ],
+         [
+          [
+           "Texte conservé comme donnée, aucun effet ni extension de droits",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les tests de format et de consultation sont locaux. La lecture effective par un agent, les raccordements automatiques et les comportements de clôture restent à recevoir. Le plan permet de les préparer sans les annoncer actifs.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Échecs anticipés",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un journal gonflé de conseils remplace les preuves : ne garder que des observations utiles, contextualisées et sourcées. Deux mémoires de règles divergent : conserver les règles adoptées dans leur source unique et les pointer.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un outil reçoit un contexte incomplet : annoncer précisément la couverture. Une recherche lexicale manque une analogie : relire les familles pertinentes. Une réussite locale se généralise trop vite : maintenir ses limites et l’éprouver ailleurs.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Arrêt et retour arrière",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ce lot n’installe ni hook ni routine. Retirer le badge et régénérer les données supprime sa présentation ; le journal peut être conservé comme historique privé. Un futur raccordement doit posséder son propre arrêt vérifié et ne doit pas désactiver les règles canoniques ou les contrôles existants.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "plateforme-paiement-artisan",
+   "ordre": 9,
+   "badge": "Plateforme de paiement pour artisan",
+   "etat": "Socle vierge — aucun prestataire activé",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "État et périmètre",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Socle vierge réutilisable, créé le 2 novembre 2026. Aucun compte professionnel, aucune identité, coordonnée bancaire, donnée client, clé, règle commerciale particulière ou fournisseur sélectionné. Aucun encaissement, mandat, connexion bancaire ou surveillance n'est activé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le socle contient un calcul déterministe de ventilation en centimes et son adaptateur volontairement fermé. Il ne constitue pas une plateforme de paiement opérationnelle ou un agrément. Les contrats et la recette préparent son raccordement ultérieur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Trois flux à distinguer",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Flux",
+          ""
+         ]
+        ],
+        [
+         [
+          "Fonction",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuve attendue",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Client vers artisan",
+           ""
+          ]
+         ],
+         [
+          [
+           "Acompte, total ou solde du document accepté",
+           ""
+          ]
+         ],
+         [
+          [
+           "Reçu prestataire vérifié, rapprochement bancaire ou déclaration humaine explicitement qualifiée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Commission due",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dette commerciale définie par le contrat du professionnel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Assiette, taux, fiscalité, date et règle versionnés",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Commission reçue",
+           ""
+          ]
+         ],
+         [
+          [
+           "Somme réellement attribuée ou réglée à la plateforme",
+           ""
+          ]
+         ],
+         [
+          [
+           "Reçu d'attribution ou encaissement rapproché, distinct de la dette",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un paiement déclaré par le client n'est jamais un encaissement confirmé. Une réception déclarée par le professionnel n'est jamais une preuve bancaire indépendante. Une commission due n'est jamais une commission encaissée.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Modes interchangeables",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Virement direct : fonds sur le compte du professionnel ; suivi déclaratif ou rapprochement autorisé ; commission réglée séparément. Aucune ventilation automatique annoncée.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Plateforme de paiement : prestataire habilité, compte professionnel vérifié ; ventilation déclarée avant l'encaissement. La plateforme applicative ne reçoit pas les fonds de tiers sur son compte courant.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le choix est paramétré par professionnel et par environnement. Aucun repli silencieux d'un mode vers l'autre, d'un professionnel vers un autre ou du test vers le réel. Un paiement déjà ouvert reste rattaché à son bénéficiaire et son mode d'origine.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Moteur et raccords",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "moteur.mjs",
+         "c"
+        ],
+        [
+         " reçoit des montants validés en centimes entiers : total accepté, reçu avant le paiement, montant courant, commission totale TTC due et commission déjà prélevée. La fiscalité et l'assiette sont résolues en amont ; aucun taux, taxe ou acompte par défaut n'est imposé.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La fonction ",
+         ""
+        ],
+        [
+         "ventiler",
+         "c"
+        ],
+        [
+         " vérifie les bornes et conserve la somme des parts. En mode plateforme, elle consomme la commission restant due dans la limite de l'encaissement et rend le reliquat explicite. Quand toute la commission est déjà prélevée, le solde revient entièrement au professionnel. En virement direct, aucune commission n'est prélevée par le moteur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "ouvrirPaiement",
+         "c"
+        ],
+        [
+         " est fermé tant qu'un adaptateur validé n'est pas explicitement activé. Le dépôt ne contient pas d'adaptateur externe factice pouvant être confondu avec une connexion réelle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Réemployer dans l'application d'accueil ses moteurs de montant, identité, signature, autorisation, journal et idempotence. Ce socle ne remplace ni le moteur documentaire ni la facturation. Il ne s'installe dans aucune instance par sa simple présence dans le catalogue.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Contrats de sécurité et de pilotage",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Les montants et le bénéficiaire viennent du serveur et du document accepté ; aucune valeur financière du navigateur ne fait foi.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une réservation atomique précède l'appel au fournisseur ; référence idempotente stable, reprise après délai sans second paiement.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Signature des notifications, montant, devise, compte, mode réel ou test, statut et identifiant externe sont rapprochés avant effet métier.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Paiements partiels, doublons, remboursements, contestations, frais et événements en retard ont des états distincts. Le remboursement de la commission n'est jamais supposé.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Autorisations par professionnel, journal privé non effaçable depuis le formulaire client ; séparation des coordonnées bancaires et du socle neutre.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le cockpit de l'outil hôte montre reçu, restant, commission due/reçue, anomalies, dernière synchronisation et actions humaines nécessaires. Sans preuve actuelle, l'état est inconnu et une alerte remplace le statut payé.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Choisir un fournisseur",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Comparer coût total sur un même scénario : abonnement, minimum mensuel, frais d'encaissement et plafond éventuel, ventilation, versement bancaire, compte actif, remboursement, incident, intégration et exploitation. Un prix inconnu reste inconnu, jamais zéro. Les tarifs sont datés et vérifiés à la sélection ; aucun fournisseur n'est désigné comme le moins cher par ce socle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "Preuves et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La recette locale du moteur utilise uniquement des données synthétiques, sans réseau ni clé. Elle couvre acompte puis solde, commission insuffisamment couverte, virement direct, montants invalides et adaptateur fermé. Elle ne prouve ni conformité fiscale de l'instance, ni acceptation fournisseur, ni réception bancaire réelle.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "checklist",
+     "titre": "Préparer un artisan",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Contrat du professionnel",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Identifier le vendeur contractuel, le bénéficiaire légal des fonds, le titulaire bancaire et la personne habilitée à accepter les conditions. Définir l'acompte, l'assiette de commission HT ou TTC, sa TVA, sa date d'exigibilité, les remboursements et le traitement des règlements hors circuit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Faire confirmer ces règles dans l'instance. Aucune donnée du professionnel ne doit être copiée dans cette techno neutre.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Moyen et coût",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Choisir virement direct ou plateforme. En mode direct, préciser qui constate la réception et comment la commission est réglée. En mode plateforme, obtenir le tarif complet, vérifier les capacités et les comptes autorisés, puis isoler test et production.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Vérifier que le cockpit hôte existe et que les états inconnus, désynchronisés et bloqués sont visibles. Une maquette de cockpit ne vaut pas contrôle utilisable.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Recette et activation",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Recette isolée",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Lancer ",
+         ""
+        ],
+        [
+         "node --test zohshia/plateforme-paiement-artisan/moteur.test.mjs",
+         "c"
+        ],
+        [
+         ". Puis éprouver l'adaptateur choisi en environnement fournisseur d'essai : signature documentaire, acompte, commission, solde, double clic, interruption réseau, même notification reçue deux fois, faux reçu, autre professionnel, changement de bénéficiaire, montant partiel, remboursement et contestation.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Comparer les montants attendus, reçus par le fournisseur et enregistrés dans l'application. Une demande acceptée ou un retour navigateur ne prouve pas que l'argent est reçu. L'échec d'une lecture empêche une nouvelle instruction automatique.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Activation et reprise",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant le réel, réunir compte fournisseur vérifié, titulaire bancaire confirmé, contrat commercial, permissions, preuve de recette, accord précis de bascule et contrôle des coûts. Aucun envoi, dépense, migration ou transaction réelle n'est autorisé par ce document.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Activer un seul professionnel d'abord. Conserver la version de configuration et les références de chaque tentative. Prévoir l'arrêt des nouvelles demandes sans supprimer les paiements en cours, la réconciliation des notifications tardives et une reprise manuelle traçable. La recette réelle et le premier versement bancaire restent à recevoir après raccordement.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
   "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
   "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
   "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",
+  "devis/badge.json": "04db54dea1f3bdefc698f5d92ece124d982f5944fb70c00b0e09de8ac6afc08f",
+  "devis/TECHNO.md": "eda7b156afc4e22ba7c117afe2536a7ad4c9d543b27aceb736e77def8b30d871",
   "diligence-correspondance/badge.json": "2011fbf865919f9914953f9608771e73ae2cceaeff6ba01acc85123665111f10",
   "diligence-correspondance/TECHNO.md": "b40b196c2e00a8c4abe8446bff289548fdb6a7283315758096d713aa2b3fe17e",
   "diligence-correspondance/MISE-EN-SERVICE.md": "7995eb0b4db82d1dac8669db1e40cf29dc63f24c3abb62b6bc3ec5fef2dada13",
+  "journal-apprentissages/badge.json": "f5ef55179a2f73072c4ad9ccb7cb7fdddacd8e9136cad77528c24f384da41368",
+  "journal-apprentissages/TECHNO.md": "f53d53a11915aa1c507f447a2ae3b4603a82f29244d5d19636f6b5a6d55f451a",
+  "journal-apprentissages/UTILISER.md": "730465b1b8534e866f9f5480f04b0245e391e2d4520b2b2fdd616b35fba15462",
+  "journal-apprentissages/MISE-EN-SERVICE.md": "bedadbd8aa8b94b572aff4fa37825dd9a0216dc5ea4b50795881f4c1a0bb0aaa",
   "pilotage-back-office/badge.json": "98968dd3835594efc11d996b58f026f4c2f7eccaae8313859aa3796b07a1fcbb",
   "pilotage-back-office/TECHNO.md": "67390bd2d0adfb89e01eea4aad0db900c87bf35905f217836396da8bb63620f7",
   "pilotage-back-office/MISE-EN-SERVICE.md": "a2074a5ae227fd59674c5956f77e16c76aa14c14f319f6fd1278b71b91319cab",
@@ -10147,6 +12968,9 @@ export default {
   "pitch-commercial/TECHNO.md": "bb55a381cf40ff2bed27a5c9918001fd75bfb4c072a6716983df43d0870f759f",
   "pitch-commercial/OSSATURE.md": "98e3592525077747112a59f1733f7392117c842225486bde3bab7d4bea52e213",
   "pitch-commercial/MISE-EN-SERVICE.md": "56ea24e91d128ef50c4adf50e0abe7e6603ca80662404eb4b6104b42f4483ed5",
+  "plateforme-paiement-artisan/badge.json": "86a848530f6087968dc60ff61ec4a2c62724c1f946c37275a73cf88b4a010e2a",
+  "plateforme-paiement-artisan/TECHNO.md": "81f4f7d8e901402587ff817128a556e6506ca5fcd6f285cf73dac84a5418bcf7",
+  "plateforme-paiement-artisan/MISE-EN-SERVICE.md": "88f23f9d3ea7ae7e0cc79010aaf763561b6c8866ba920fedede79be5d95f149c",
   "presentations-claires/badge.json": "11ecaae35ca6c5ee6e543f32fd5682269365ce02561ab5586ce737283e6fa282",
   "presentations-claires/TECHNO.md": "b622c1c5e641300bee9cccb986ab418758e164f36842fe0b9187c284c433e4e0",
   "presentations-claires/references/GRAMMAIRE.md": "343047605a16e4781017c013fc2c1df0ed0ad30d68f354ce7ed21af1773fe358",
@@ -10154,7 +12978,7 @@ export default {
   "presentations-claires/../../.claude/skills/pitch-source/SKILL.md": "0e61ae12858e83ea40b94068710e1b7155aec2eea2e3d44460a95814744dc06f",
   "presentations-claires/MISE-EN-SERVICE.md": "0d8b5e72958663a287cb81f9e7e9590bdd02584dce516ab28e887bbfa6bfd09d",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "1fd94acf4e4a8a166f02c9a8a0dd0f794fefe21600aa17a786cb969a5232d4cd",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "renodevis/TECHNO.md": "2b13a9c5be4079af7cc1a01d8cf62e2213d43cee589c3216029fa566936e2083",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "c5a40c76c57aed9a6e44c333581563e0181514a9631c5c8acef14a1c87b4f42f"
  }
 };

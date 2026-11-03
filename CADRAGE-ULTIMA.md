@@ -2,6 +2,18 @@
 
 ## ÉTAT (mise à jour du 2026-09-28 ; historique conservé)
 
+> **11/10 — Journal d’apprentissages, préparation sur branche.** Demande de Paul :
+> lecture à l’ouverture, consultation spontanée pendant le travail, rétrospective
+> des sources accessibles et enrichissement à la clôture. Fiche neutre et badge :
+> `zohshia/journal-apprentissages/TECHNO.md`. Observations :
+> `memoire/JOURNAL-APPRENTISSAGES.json` ; règles adoptées : `memoire/LECONS.md`,
+> source inchangée. Consultation locale et validation préparées ; aucun hook,
+> routine, droit ou contrôle modifié. Raccordements automatiques et recette agent
+> en session neuve restent à réaliser. ZS : réutilisation du journal versionné et
+> du badge existant, aucune base ou dépendance supplémentaire. MS : faciliter les
+> prochaines livraisons métier ; gain de temps et gain commercial non mesurés.
+
+
 > **29/09 — ✅ OMEGA fait (commits sur `claude/omega-imladrik-macro`)** : Ultima→OMEGA, GRIMA/NAGA supprimés, IMLADRIK macro-projet (+ADRAMELECH +TAO). ⏭ **IFULVIN cadré, non codé** (`CADRAGE-IFULVIN.md`) : bloqué sur un choix produit (voir « Actions humaines » du rapport).
 
 > **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
@@ -2271,3 +2283,4 @@ externe, pas de PII en logs (le réseau commercial EST de la PII : noms, adresse
 téléphones → logs = IDs uniquement).
 Fin de chaque livraison : blocs 🔒 Retour sécurité + ⚡ Retour optimisation +
 `/verify` sur les flux touchés.
+

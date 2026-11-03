@@ -120,6 +120,8 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
 {
   const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL });
   const badges = page.locator('.badge-techno');
+  // Une techno par badge : chaque vérification se cible sur SON badge (#techno-N).
+  const t0 = page.locator('#techno-0');
   verifier('autant de badges que de technos publiées (verrou : au moins une)',
     donnee.technos.length >= 1 && (await badges.count()) === donnee.technos.length);
   verifier('le libellé exact du premier badge', ((await page.locator('.badge-nom').first().textContent()) || '').trim()
@@ -146,6 +148,15 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
     [cBadge, cTable, cTexte].every((c) => Number.isFinite(c) && c >= 4.5), [cBadge, cTable, cTexte].map((c) => c.toFixed(2)).join(' · '));
   verifier('aucune erreur, aucune requête externe', !journal.erreurs.length && !journal.externes.length,
     [...journal.erreurs, ...journal.externes].join(' | '));
+  const devis = donnee.technos.findIndex((t) => t.id === 'devis');
+  verifier('la deuxième étoile est publiée : le générateur de devis', devis >= 0);
+  if (devis >= 0) {
+    const tD = page.locator(`#techno-${devis}`);
+    await badges.nth(devis).click();
+    verifier('son badge porte le libellé exact', ((await badges.nth(devis).locator('.badge-nom').textContent()) || '').trim() === 'Générateur de devis');
+    verifier('ses deux onglets', (await tD.locator('.onglet').allTextContents()).join('|') === 'Ce que fait la techno|Faire un devis');
+    verifier('son plan se rend, règles de calcul comprises', /centimes entiers/.test((await tD.locator('.contenu').textContent()) || ''));
+  }
   verifier('le retour mène aux technologies de ZOH SHIA',
     (await page.locator('a.retour-ultima').getAttribute('href')) === 'imladrik.html#zohshia');
   await page.close();
@@ -204,10 +215,38 @@ for (const width of [1280, 390]) {
   await page.close();
 }
 
+// Les autres badges sont vérifiés indépendamment, sans supposer leur rang.
+{
+  const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL });
+  const index = donnee.technos.findIndex(t => t.id === 'journal-apprentissages');
+  verifier('le journal est publié', index >= 0);
+  if (index >= 0) {
+    const techno = donnee.technos[index];
+    const panneau = page.locator(`#techno-${index}`);
+    const badge = page.locator('.badge-techno').nth(index);
+    verifier('le badge journal porte son nom et son état préparé',
+      (await badge.textContent()).includes('Journal d’apprentissages')
+      && (await badge.textContent()).includes('non activé'));
+    await badge.click();
+    verifier('les onglets du journal sont ceux du plan',
+      (await panneau.locator('.onglet').allTextContents()).join('|') === techno.onglets.map(o => o.titre).join('|'));
+    for (const onglet of techno.onglets) {
+      await panneau.locator('.onglet', { hasText: onglet.titre }).click();
+      verifier(`journal : ${onglet.titre} se rend`, (await panneau.locator('.contenu > *').count()) >= 3);
+    }
+    await page.setViewportSize({ width: 390, height: 800 });
+    verifier('journal mobile sans débordement',
+      await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth) <= 1);
+  }
+  verifier('journal sans erreur ni requête externe', !journal.erreurs.length && !journal.externes.length);
+  await page.close();
+}
+
 console.log('§3 — 390 px : lisible, sans défilement horizontal de la page');
 {
   const { page } = await ouvrir({ client: 'connecte', api: PAUL }, { width: 390, height: 800 });
   await page.locator('.badge-techno').first().click();
+  const t0 = page.locator('#techno-0');
   for (const titre of ['Ce que fait la techno', 'Check-list du pro', 'Mise en service']) {
     await page.locator('#techno-0 .onglet', { hasText: titre }).click();
     const deborde = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

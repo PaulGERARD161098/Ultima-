@@ -23,6 +23,7 @@
 //      Paul regarde, pas un cas d'école.
 import { versCiel, cheminVers, descendDe } from '../js/adaptateur-lv4.mjs';
 import { NOEUDS } from '../js/registre-lv3.mjs';
+import ZOH_TECHNOS from '../api/_lib/zohshia-technos.mjs';
 
 const verdicts = {};
 const dit = (nom, valeur) => { verdicts[nom] = valeur; };
@@ -252,7 +253,11 @@ dit('isoleDragonsGardeLesCiblesDesPages',
     === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,amatsu'
   && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech,zohshia'
   && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3
-  && NOEUDS.zohshia.enfants.length === 6);
+  // Une étoile par techno publiée, sans compte en dur (02/11/2026) : les feuilles des
+  // sous-constellations de ZOH SHIA suivent le catalogue, et un ajout ne casse plus
+  // ce test. La correspondance cible par cible est exigée par unit-zohshia-navigation.
+  && NOEUDS.zohshia.enfants.flatMap((g) => NOEUDS[g].enfants || []).length === ZOH_TECHNOS.technos.length
+  && ZOH_TECHNOS.technos.length >= 1);
 // INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
 // désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
 // `tao` y reste : il n'est plus nulle part.

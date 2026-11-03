@@ -84,6 +84,12 @@ const ECRANS = [
   { nom: 'DRAGONS', fil: 'DRAGONS', page: 'imladrik.html#constellation-dragons',
     deuxRangs: true, sansFigure: true },
   { nom: 'ZOH SHIA', fil: 'ZOH SHIA', page: 'imladrik.html#zohshia', deuxRangs: false },
+  // LES SOUS-CONSTELLATIONS DE ZOH SHIA (02/11/2026) : c'est sur ces écrans que vivent
+  // les technos, et c'est là que la couronne a cédé à neuf étoiles. Chacune est
+  // mesurée comme les autres écrans — traits, noms, cibles, encre.
+  { nom: 'DEVIS & PAIEMENT', fil: 'DEVIS & PAIEMENT', page: 'imladrik.html#zoh-groupe-devis', deuxRangs: false },
+  { nom: 'MÉTHODES', fil: 'MÉTHODES', page: 'imladrik.html#zoh-groupe-methodes', deuxRangs: false },
+  { nom: 'VENTE', fil: 'VENTE', page: 'imladrik.html#zoh-groupe-vente', deuxRangs: false },
 ];
 const TAILLES = [[390, 844], [1280, 800]];
 // VERROU DE COHÉRENCE : `deuxRangs` se lit dans le registre, il ne se croit pas.
@@ -92,7 +98,8 @@ const TAILLES = [[390, 844], [1280, 800]];
 {
   const { NOEUDS } = await import('../js/registre-lv3.mjs');
   const FOYER = { OMEGA: 'omega', IMLADRIK: 'imladrik', 'NICOL BOLAS': 'nicol-bolas',
-    DRAGONS: 'constellation-dragons', 'ZOH SHIA': 'zohshia' };
+    DRAGONS: 'constellation-dragons', 'ZOH SHIA': 'zohshia', 'DEVIS & PAIEMENT': 'zoh-groupe-devis',
+    'MÉTHODES': 'zoh-groupe-methodes', VENTE: 'zoh-groupe-vente' };
   for (const e of ECRANS.filter((x) => FOYER[x.nom])) {
     const caps = NOEUDS[FOYER[e.nom]].enfants;
     const tetes = caps.filter((id) => (NOEUDS[id].enfants || []).length > 0).length;

@@ -8,9 +8,20 @@ import { versCiel } from '../js/adaptateur-lv4.mjs';
 import data from '../api/_lib/zohshia-technos.mjs';
 const read = (p) => readFileSync(new URL('../'+p, import.meta.url), 'utf8');
 assert.deepEqual(verifierRegistre(NOEUDS, BLASONS, COEURS), []);
-assert.equal(parentDe('presentations-claires'), 'zohshia');
-assert.deepEqual(chemin('presentations-claires'), ['racine','omega','imladrik','constellation-dragons','zohshia','presentations-claires']);
-const sky = versCiel('imladrik', NOEUDS, { isole:'zohshia' });
+// Depuis le 02/11/2026, ZOH SHIA porte trois SOUS-CONSTELLATIONS ; chaque techno
+// est une feuille d'un groupe. Les étoiles des technos se lisent donc groupe par
+// groupe, chacune sur son propre écran (une couronne par écran).
+assert.equal(parentDe('presentations-claires'), 'zoh-groupe-vente');
+assert.deepEqual(chemin('presentations-claires'), ['racine','omega','imladrik','constellation-dragons','zohshia','zoh-groupe-vente','presentations-claires']);
+const ecranZoh = versCiel('imladrik', NOEUDS, { isole:'zohshia' });
+assert.deepEqual(ecranZoh.noeuds.map((n) => n.id), NOEUDS.zohshia.enfants);
+assert.ok(ecranZoh.noeuds.every((n) => n.cible === null && (NOEUDS[n.id].enfants || []).length >= 2),
+  'un groupe est une constellation sans page, d\'au moins deux technos');
+// Une couronne lisible à 390 px : quatre étoiles au plus par écran (au-delà, les
+// traits ont traversé les noms — smoke-carte-celeste, 02/11).
+for (const g of NOEUDS.zohshia.enfants) assert.ok(NOEUDS[g].enfants.length <= 4, g + ' : plus de quatre étoiles');
+assert.ok(NOEUDS.zohshia.enfants.length <= 4, 'ZOH SHIA : plus de quatre groupes');
+const sky = { noeuds: NOEUDS.zohshia.enfants.flatMap((g) => versCiel('imladrik', NOEUDS, { isole: g }).noeuds) };
 // Vérification dans les deux sens : un catalogue agrandi ne peut plus rester
 // invisible derrière une ancienne liste de quatre étoiles.
 function verifierCouverture(etoiles, technos) {
@@ -41,7 +52,7 @@ for (const skill of ['composition-editoriale','pitch-source']) {
 }
 // Contre-épreuve : un raccordement orphelin ne passe pas le contrôleur.
 const broken=structuredClone(NOEUDS);
-broken.zohshia.enfants=broken.zohshia.enfants.filter((n) => n!=='presentations-claires');
+broken['zoh-groupe-vente'].enfants=broken['zoh-groupe-vente'].enfants.filter((n) => n!=='presentations-claires');
 assert.ok(verifierRegistre(broken,BLASONS,COEURS).some((a) => a.includes('presentations-claires')));
 const js=read('js/zohshia.js');
 assert.match(js,/function ouvrirDepuisAncre/);

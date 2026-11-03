@@ -67,6 +67,15 @@ case vide reste vide, et l'écran le montre.
 La **TVA** n'est pas à fournir : elle se calcule par la règle légale datée
 (`TECHNO.md`), sur les conditions relevées au chantier.
 
+Pour le parcours vocal (`TECHNO.md` §3, contrat du 24/10/2026), relever aussi
+la distinction entre **achat à transformer** et **forfait de vente final**, les
+accessoires couverts par chaque forfait et les bases de prix de secours
+explicitement autorisées. Ces paramètres appartiennent au compte du pro :
+aucun tarif ni règle d'une autre instance ne sert de valeur par défaut. Un
+forfait final ne reçoit pas de seconde majoration ; un accessoire inclus ne
+devient pas une seconde ligne facturée. La présence de cette check-list ne
+prouve pas que ces paramètres sont déjà raccordés au moteur.
+
 ### 1.4 Ses produits et ses fournisseurs
 
 | Information | Où | Obligatoire |
@@ -77,6 +86,13 @@ La **TVA** n'est pas à fournir : elle se calcule par la règle légale datée
 | Ses prix fixes (kits, forfaits sans prix d'achat) | `banques_reno.banque` · prix fixes | facultatif |
 | Ses prestations (main-d'œuvre, mise en service, déplacement, maintenance, dépose) et leurs prix de vente | `banques_reno.banque` · prestations | recommandé |
 | Ses devis passés (PDF) et leur issue (signé, en attente, refusé) | corpus (`corpus_devis`, `corpus_lignes`) — seul l'identifiant client traverse | facultatif — c'est ce qui rend le premier devis « déjà presque prêt » |
+
+Le pro peut dicter directement ses références. En cas de référence manquante ou
+approximative, un devis passé fournit un candidat ; sans candidat compatible,
+la recherche directe dans son catalogue est permise. Obtenir les documents
+constructeur permettant de vérifier combinaisons, limites et accessoires,
+distincts de la source fournisseur qui établit le prix d'achat actuel. Un prix
+ou une référence retrouvée ne prouve pas la conformité de l'installation.
 
 ### 1.5 Ses clients existants (facultatif)
 
@@ -108,6 +124,36 @@ La **TVA** n'est pas à fournir : elle se calcule par la règle légale datée
 | Le vendeur de référence, client par client : lui, ou la plateforme | `clients.origine` (vide = lui) |
 | Son taux de commission (% du HT) | `artisans.commission_pct` — ⛔ sans valeur par défaut : un taux absent se voit |
 | Son compte de paiement connecté | créé par lui, sur invitation (`STRIPE_INVITE_ENABLED`) |
+
+### 1.9 Dossier d'implantation de l'agent devis
+
+Le dossier est privé, rattaché au compte du professionnel, et reste hors de cette technologie neutre. Collecter les pièces existantes avant de poser des questions ; rendre une liste unique des manques. Chaque donnée comporte sa source, sa date, son périmètre et sa validation. Une case remplie n'est pas une preuve de bon raccordement.
+
+| Bloc à obtenir | Contenu propre au professionnel | Preuve avant ouverture |
+|---|---|---|
+| Identité et responsables | Identité légale, coordonnées, établissements, utilisateurs autorisés, valideur métier et opérateur | Compte testé, bon émetteur dans le PDF, accès étranger refusé |
+| Bibliothèque commerciale | Catalogue et achats datés, références exactes, conditionnements, unités, quantités, écoparticipations et prix fixes ; devis passés pertinents si disponibles | Références retrouvées et prix rapprochés des pièces ; aucun prix d'un autre compte |
+| Calculs et prestations | Méthode de vente, arrondis, assiette de marge, traitement de l'apport, forfaits et leur contenu, main-d'œuvre et déplacements, validité des prix et règles de remises | Calcul direct puis contrôle inverse sur un chantier accepté ; aucun défaut repris d'une autre instance |
+| Faits techniques | Caractéristiques et compatibilités, références liées aux documents et pages, exclusions, équivalences expressément permises, limites de prestation | Besoin et faits fabricant distincts ; conflit bloqué, source absente nommée |
+| Document et fiscalité | Modèle de devis, logo, mentions, garanties, conditions de règlement, contexte fiscal et règles datées | PDF relu avec totaux, réserves et mentions ; estimation partielle distincte du devis complet |
+| Canal et raccords | Canal choisi, comptes et numéros autorisés si nécessaires, transcription/compréhension, accès aux dossiers, stockage, génération et transport du PDF | Parcours réel depuis une demande neuve jusqu'au document reçu ; clés posées par un moyen sécurisé, jamais dans ce dossier |
+| Exploitation | Droits de validation et d'envoi, budget et quotas, fenêtre pilote, arrêt, journal, cockpit, traitement des envois d'issue inconnue et rétention | Refus au dépassement, arrêt effectif et reprise sans renvoi automatique d'une issue inconnue |
+| Recette du professionnel | Chantiers représentatifs, résultats attendus acceptés, plafond d'interventions et durée cible, cas négatifs et responsable de réception | Mesure de l'effort, de la qualité et du temps réels ; verdict sur la version exacte |
+
+**À distinguer à chaque implantation :**
+- **Paramétrage** : les données, règles, documents, accès et limites de ce professionnel.
+- **Raccordement** : les fonctions qui doivent réellement lire ce paramétrage et utiliser son canal, son stockage et son modèle. Une configuration écrite ne prouve pas que le moteur la consomme.
+- **Capacité manquante** : toute branche encore réservée à l'instance de référence, extraction non reçue ou connecteur absent. L'implanter et la tester avant de dire « il suffit de charger les données ».
+
+La comparaison entre deux agents emploie la même demande, les mêmes sources et règles, les mêmes corrections et le même résultat attendu. Mesurer interventions, questions répétées, postes conservés, erreurs détectées, prix justifiés, coût et temps jusqu'au PDF reçu. Le temps local et le chronométrage du canal réel restent séparés.
+
+Une confirmation groupée est permise pour plusieurs propositions uniques et tarifées, présentées explicitement. Elle conserve le besoin, les quantités et les valeurs demandées ; chaque référence est à nouveau contrôlée au clic sur la banque et la version courantes. Un candidat parmi plusieurs n'est pas choisi par son rang. Un choix périmé, une source manquante ou une ambiguïté ne devient pas un accord implicite.
+
+### 1.10 État de préparation, sans raccourci
+
+La voie A n'exige pas une extraction, mais exige le contrôle du bon compte et des capacités effectivement disponibles pour lui. La voie B exige toujours extraction neutre et base neuve éprouvées. Les constats historiques du plan ne prouvent pas l'état actuel de l'extraction. Le contrat vocal préparé et les évolutions du moteur doivent être intégrés à la série de neutralisation, puis extraits et éprouvés, avant de déclarer la voie B prête.
+
+Chaque dossier d'implantation donne pour chaque bloc : **fourni · vérifié · à raccorder · bloqué**, avec la preuve et son responsable. Ne pas exiger les clients existants, le paiement en ligne, les relances ou la synchronisation de messagerie lorsqu'ils sont hors du périmètre de l'agent demandé. Ne pas ouvrir un canal ni créer une infrastructure facturée pour compléter une case.
 
 ## 2. Voie A — il rejoint la plateforme existante
 
@@ -160,6 +206,18 @@ extraction d'un commit et une base d'un autre ne se mélangent pas.
 - **Son expéditeur** : son nom sur le domaine de la plateforme, ou son domaine.
 - **Son paiement en ligne** : oui ou non, et son taux de commission.
 - **Ses devis entre professionnels** : en émet-il ? Si oui, étape 13.
+
+**Recette du parcours vocal, à effectuer avant de l'annoncer opérationnel :**
+
+- Note vocale envoyée ou fin annoncée d'une dictée en plusieurs messages : titre et synthèse complète relus une fois, puis lancement de la recherche après accord. Pas de redemande des valeurs connues ; les questions indispensables sont regroupées.
+- Référence précise conservée ; modèle manquant recherché puis vérifié ; incompatibilité expliquée sans remplacement silencieux. La somme des longueurs n'est pas une preuve de chaque branche.
+- Prix vérifiés séparément de la technique ; forfait final non majoré, accessoires non doublés. Prix absent : provision seulement sur une base autorisée, sinon exclusion visible et total connu qualifié comme partiel.
+- Correction ciblée : données non modifiées conservées, configuration dépendante revérifiée, ancien résultat tardif refusé ; PDF rattaché à la dernière version validée.
+- Progression fondée sur les événements réellement exécutés et éprouvée dans chaque canal ; interruption et reprise sans faux état « prêt » ni doublon.
+- Même scénario fictif sur les canaux concernés ; mesure du délai vocal vers PDF et de l'attente du pro. Le contrat est adopté ; les résultats réels, le raccord des canaux et la performance restent à prouver par version.
+
+Cette recette ne remplace ni la qualification technique ni les gates de mise en
+service. Elle n'autorise aucun envoi client, aucune activation ni dépense.
 
 ## 5. Ce qui reste manuel — à automatiser
 
@@ -233,3 +291,5 @@ marquées comme telles dans le code : elles se remplacent par les règles du pro
 
 Chacune pose un **battement** dans `sentinelle_etat` : la requête d'empreinte dit
 si elle tourne, et si elle tourne à vide.
+
+

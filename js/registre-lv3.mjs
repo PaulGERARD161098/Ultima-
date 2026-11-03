@@ -395,8 +395,52 @@ export const NOEUDS = {
     invite: 'Choisis une technologie — son contenu s’ouvre dans le catalogue privé.',
     coeur: 'kalamn',
     legende: 'les technologies',
-    enfants: ['zoh-devis', 'zoh-pilotage', 'zoh-approches-croisees', 'presentations-claires',
-      'zoh-pitch-commercial', 'zoh-diligence-correspondance'],
+    // TROIS SOUS-CONSTELLATIONS (Paul, 02/11/2026) : à neuf technos, la couronne
+    // d'un seul écran ne tenait plus à 390 px (traits à travers les noms,
+    // smoke-carte-celeste). Chaque écran garde SA couronne, quatre étoiles au plus :
+    // on descend d'un cran par clic, comme partout ailleurs.
+    enfants: ['zoh-groupe-devis', 'zoh-groupe-methodes', 'zoh-groupe-vente'],
+  },
+  'zoh-groupe-devis': {
+    nom: 'DEVIS & PAIEMENT',
+    etat: 'Constellation',
+    blason: 'portail',
+    cible: null,
+    resume: 'Chiffrer, documenter et encaisser : le socle de devis, le générateur, '
+      + 'la diligence documentaire et le paiement artisan.',
+    titre: 'Devis et paiement',
+    surligne: 'ZOH SHIA — devis et paiement',
+    invite: 'Choisis une technologie — son contenu s’ouvre dans le catalogue privé.',
+    coeur: 'kalamn',
+    legende: 'devis et paiement',
+    enfants: ['zoh-devis', 'zoh-generateur-devis', 'zoh-diligence-correspondance', 'zoh-paiement-artisan'],
+  },
+  'zoh-groupe-methodes': {
+    nom: 'MÉTHODES',
+    etat: 'Constellation',
+    blason: 'bifurcation',
+    cible: null,
+    resume: 'Les méthodes de travail réutilisables : pilotage, approches croisées '
+      + 'et journal d’apprentissages.',
+    titre: 'Les méthodes',
+    surligne: 'ZOH SHIA — méthodes',
+    invite: 'Choisis une méthode — son contenu s’ouvre dans le catalogue privé.',
+    coeur: 'kalamn',
+    legende: 'les méthodes',
+    enfants: ['zoh-pilotage', 'zoh-approches-croisees', 'zoh-journal-apprentissages'],
+  },
+  'zoh-groupe-vente': {
+    nom: 'VENTE',
+    etat: 'Constellation',
+    blason: 'plume',
+    cible: null,
+    resume: 'Convaincre un prospect : présentations claires et pitch commercial.',
+    titre: 'La vente',
+    surligne: 'ZOH SHIA — vente',
+    invite: 'Choisis un support — son contenu s’ouvre dans le catalogue privé.',
+    coeur: 'kalamn',
+    legende: 'la vente',
+    enfants: ['presentations-claires', 'zoh-pitch-commercial'],
   },
   'zoh-devis': {
     nom: 'CRÉATION DE DEVIS',
@@ -434,12 +478,33 @@ export const NOEUDS = {
     cible: 'zohshia.html#pitch-commercial',
     resume: 'Préparer un discours adapté au prospect, avec ses preuves et ses limites.',
   },
+  'zoh-paiement-artisan': {
+    nom: 'PAIEMENT ARTISAN',
+    etat: 'Socle vierge ; aucun prestataire activé',
+    blason: 'portail',
+    cible: 'zohshia.html#plateforme-paiement-artisan',
+    resume: 'Préparer le règlement, la ventilation et le suivi ; choisir un prestataire selon son coût total.',
+  },
   'zoh-diligence-correspondance': {
     nom: 'DILIGENCE DOCUMENTAIRE',
     etat: 'Socle testé ; raccord requis',
     blason: 'bifurcation',
     cible: 'zohshia.html#diligence-correspondance',
     resume: 'Rapprocher les précédents sourcés, contrôler les écarts et séparer le document de sa note.',
+  },
+  'zoh-generateur-devis': {
+    nom: 'GÉNÉRATEUR DE DEVIS',
+    etat: 'Outil disponible',
+    blason: 'portail',
+    cible: 'zohshia.html#devis',
+    resume: 'Un devis neutre d’une page : paramètres validés, montants au centime, PDF imprimé.',
+  },
+  'zoh-journal-apprentissages': {
+    nom: 'JOURNAL D’APPRENTISSAGES',
+    etat: 'Préparé ; raccord non activé',
+    blason: 'registre',
+    cible: 'zohshia.html#journal-apprentissages',
+    resume: 'Ce qu’une séance apprend, consulté à l’ouverture et consigné à la clôture.',
   },
   // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026). Étoile d'attente, le même geste
   // que ZOH SHIA le 04/10 et qu'IFULVIN : nom, épithète, les mots de Paul — AUCUNE

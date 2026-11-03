@@ -1,3 +1,9 @@
+# 2 novembre 2026 — socle vierge paiement artisan préparé
+
+Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur déterministe, recette isolée, badge et publication par le générateur existant. Six tests moteur reçus et publication vérifiée. Aucun compte, fournisseur, taux commercial ou donnée professionnelle. Préparation sur main `f7fe2100d92644cac11c9b0dafe6282c69697ff6`. Aucun agent activé. Prochaine action : recevoir l’intégration du badge avant choix et raccordement d’un prestataire.
+
+---
+
 # FINUBAR — Ultima
 
 > **Décision de Paul — 01/11/2026 : Léo et Fin en pause sans date.** Les anciennes prochaines actions des agents sont différées. Capitalisation légère au fil des autres projets ; aucun développement ou automatisme nouveau. Référence : `zohshia/fin-controle-securite/TECHNO.md` §8–9. État documentaire sur la branche de la PR #432, non fusionnée.
@@ -50,6 +56,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Consolidation ZOH (02/11) sur la PR #434 (claude/trusting-gates-91ao5h) : #364, #381, #417, #418 et #433 intégrées, main 707d319 fusionné ; 9 technos, ordres 1 à 9 sans doublon, rangées en trois sous-constellations (DEVIS & PAIEMENT, MÉTHODES, VENTE — choix de Paul du 02/11, une couronne de quatre étoiles au plus par écran) ; stock ZOH lu par Léo à 7976 caractères (plafond 9000) ; test du journal sur journal fictif, isolation de memoire/ inchangée ; attentes carto alignées sur ADR-011. Attend : CI verte sur la tête, puis go de fusion de Paul ; ensuite fermer les cinq PR absorbées et renseigner dernier_arret.commit avec le SHA de main. Hors consolidation : #425 (9 empreintes preuve_ultima introuvables, blocage documenté sur la PR), #365 et #351 (pause de Léo), RenoDevis #463.",
+      "depuis": "2026-11-02"
+    },
     {
       "quoi": "Agents en pause sans date ; capitalisation légère : leçons, failles, périmètre, coordination, apports sourcés. Détail : zohshia/fin-controle-securite/TECHNO.md §8–9.",
       "depuis": "2026-11-01"
@@ -211,7 +221,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-25"
+  "maj": "2026-11-02"
 }
 ```
 
@@ -225,6 +235,29 @@ Le point d’arrêt précédent est conservé comme preuve historique, sans nouv
 
 
 ## Journal de reprise
+
+### 2026-10-23 — deux prototypes de devis, activation Léo/FINUBAR maintenue
+
+Mandat de Paul : capitaliser dans la techno existante et faire progresser les
+deux prototypes ensemble. Cible et recette : `zohshia/renodevis/TECHNO.md` §9.
+Le prototype neutre doit devenir pré-opérationnel : tous raccordements éprouvés
+avec données fictives, puis seules données/configurations du pro à importer.
+Les quarante tests locaux de la bibliothèque ne prouvent pas ce parcours.
+Leçons : `memoire/LECONS.md`, entrée « Un prototype d'agent ne prouve que la
+couche réellement éprouvée ». Propagation inter-dépôts non effectuée dans ce lot.
+
+Ordre de reprise : inventorier les contrats/outils existants et les raccords
+manquants ; éprouver le prototype neutre et le canal existant sur les mêmes cas ;
+partager chaque régression puis mesurer le parcours vocal réel et son coût.
+Un moteur métier commun reste la cible ; les orchestrations sont comparées.
+
+Léo/FINUBAR demeure un chantier actif distinct : réconcilier `leo/ACTIVATION.md`,
+le §11 canonique de `CADRAGE-2026-09-22-leo-pilote-tout.md` et les preuves de
+production récentes ci-dessus. Ne pas refaire les fonctions déjà fusionnées.
+Prochaine preuve : parcours propriétaire sur le déploiement identifié, trace
+avant acte, résultat et défaire ; pour l'exécution permanente, réceptionner le
+contrôle extérieur, les identités séparées, l'arrêt durable et la reprise sans
+doublon avant activation. Cette note n'active aucun agent ni nouveau budget.
 
 ### 2026-10-19 — la CI bloquée vient de la facture ; Ultima- en est le premier poste
 
@@ -752,3 +785,4 @@ RenoDevis conserve ses condensats de sources. Aucun accès au contrôle privé R
 [RESTANT] Fusion de cette version avec accord explicite ; la règle n’est pas
 annoncée publiée sur main avant cette fusion. Côté ArtiDispo : inventaire et
 maquette de l’onglet administrateur, puis parcours allégé du compte Matthieu.
+

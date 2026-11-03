@@ -225,7 +225,8 @@ for (const [id, fichier] of DRAGONS) {
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
 // 29/10 : la fiche ZOH SHIA revient à son propre ciel, qui expose désormais
-// six technologies. On éprouve le lien au doigt et les six destinations.
+// ses technologies — rangées depuis le 02/11 en sous-constellations. On éprouve
+// le lien au doigt et les groupes affichés.
 {
   const retour = 'imladrik.html#zohshia';
   const liens = await sonder('zohshia', 'zohshia.html');
@@ -238,22 +239,17 @@ for (const [id, fichier] of DRAGONS) {
   verifier('zohshia.html : le retour est cliquable au doigt', r.suivi, r.raison);
   verifier('zohshia.html : le retour arrive sur le ciel ZOH SHIA',
     r.arrivee.endsWith('/' + retour), r.arrivee);
-  const attendues = [
-    'zoh-devis',
-    'zoh-pilotage',
-    'zoh-approches-croisees',
-    'presentations-claires',
-    'zoh-pitch-commercial',
-    'zoh-diligence-correspondance',
-  ].sort();
-  verifier('zohshia.html : le ciel affiche exactement les six étoiles technologiques',
-    r.etoiles.length === 6
+  // 02/11 : le ciel ZOH SHIA montre ses SOUS-CONSTELLATIONS, lues dans le registre
+  // (aucune liste recopiée) ; un verrou exige au moins deux groupes.
+  const attendues = [...NOEUDS.zohshia.enfants].sort();
+  verifier('zohshia.html : le ciel affiche exactement les sous-constellations de ZOH SHIA',
+    attendues.length >= 2 && r.etoiles.length === attendues.length
     && JSON.stringify(r.etoiles.map((e) => e.id).sort()) === JSON.stringify(attendues),
     JSON.stringify(r.etoiles.map((e) => e.id)));
 }
-// LE TÉMOIN, pour que « six étoiles » ne soit pas vert d'un instrument qui
+// LE TÉMOIN, pour que « les groupes » ne soient pas verts d'un instrument qui
 // répondrait toujours six : l'adresse SANS fragment ouvre le ciel à plat —
-// DEUX entrées (ARMES, DRAGONS), et aucune des six technologies.
+// DEUX entrées (ARMES, DRAGONS), et aucun groupe de ZOH SHIA.
 {
   const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
   const page = await contexte.newPage();
@@ -263,9 +259,9 @@ for (const [id, fichier] of DRAGONS) {
   const ids = await page.evaluate(() => [...document.querySelectorAll('g.ciel-etoile[data-noeud-id]')]
     .map((g) => g.getAttribute('data-noeud-id')));
   await contexte.close();
-  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (2 entrées, aucune des six technologies)',
+  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (2 entrées, aucun groupe de ZOH SHIA)',
     ids.length === 2 && ids.join() === 'constellation-armes,constellation-dragons'
-    && !ids.some((i) => DRAGONS.map((d) => d[0]).includes(i)), ids.join(','));
+    && !ids.some((i) => DRAGONS.map((d) => d[0]).includes(i) || NOEUDS.zohshia.enfants.includes(i)), ids.join(','));
 }
 
 // Le parent attendu existe bel et bien (un retour vers une page absente serait

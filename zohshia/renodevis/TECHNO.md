@@ -45,7 +45,49 @@ Le relevé historique ci-dessous décrit le cycle d'**un devis**, qui naît brou
 | **Facture** | Une facture client **miroir** du devis se prépare dès sa création et devient définitive après signature, sur action du pro. Les **factures fournisseurs** se rattachent à chaque devis émis (pièce déposée, montant d'achat). |
 | **Assistant** | Un assistant conversationnel répond au pro sur ses dossiers, et recueille ses retours. |
 
+### Contrat de livraison de l'agent et portabilité
+
+Le résultat de l'agent est un parcours complet reçu par le professionnel, pas une somme de correctifs ou un compteur de tests. La demande neuve, sa compréhension validée, les références et prix sourcés, les contrôles et le PDF doivent être éprouvés ensemble sur la même version. Un document où des postes essentiels ne sont pas chiffrés reste une estimation partielle ; il ne ferme pas la recette d'un devis complet.
+
+Mesurer séparément les interventions du professionnel, les messages de l'agent, les questions redondantes, les omissions et conflits détectés, les appels externes et le délai jusqu'à réception du document. Les seuils relèvent du dossier d'implantation. Une correction invalide les choix et documents dépendants sans effacer les autres besoins. Les propositions uniques peuvent être présentées et confirmées ensemble ; toute ambiguïté garde une décision explicite et le serveur recontrôle les références au clic.
+
+Une issue d'envoi inconnue est conservée durablement avant tout rejeu possible. Une acceptation certaine, un refus certain et une absence de preuve sont des états distincts. L'issue inconnue exige un rapprochement opérateur et ne repart pas automatiquement. L'arrêt, la rétention et les compteurs gardent leur rôle ; une purge n'est pas un accusé de réception.
+
+La technologie conserve les mécanismes génériques ; identité, catalogue, règles de vente, forfaits, contexte fiscal, modèle de document et autorisations viennent du compte. La check-list d'implantation détaille les entrées et les preuves. Tant qu'un chemin du moteur dépend d'une identité d'instance, il reste à paramétrer ou à neutraliser : un contrat documenté n'annonce pas une portabilité déjà reçue. Ne pas emporter de données réelles dans la technologie, ses exemples ou ses tests génériques.
+
 ## 3. Les mécanismes qui tiennent la techno
+
+### Contrat du parcours vocal — révision du 24/10/2026
+
+**Exigences validées, réception applicative à établir.** Ce contrat complète le
+parcours commun aux canaux conversationnels ; il ne transforme pas la présence
+du plan en fonctionnalité implantée, en catalogue vérifié ou en extraction
+neutre à jour. Les états mesurés et datés du §8 restent distincts.
+
+| Étape | Comportement attendu | Garde de réception |
+|---|---|---|
+| Dictée terminée | Une note vocale envoyée constitue une dictée terminée. Pour une saisie en plusieurs messages, attendre la fin annoncée, puis proposer un titre court de chantier et une synthèse complète : équipements, références, quantités, puissances, pose, accessoires, main-d'œuvre, contraintes et exclusions. | Le titre ne remplace jamais le détail ; aucune référence, quantité ou valeur incertaine n'est corrigée silencieusement par la transcription. Aucun fragment ne lance la recherche avant validation de la synthèse. |
+| Validation | Le pro confirme une fois la synthèse ou la corrige ; les informations déjà connues de son compte sont réutilisées. | La recherche métier commence après l'accord sur la version courante ; aucune nouvelle question pour une donnée déjà fournie et non contradictoire. |
+| Recherche | Conserver les références précises dictées. Lorsqu'un modèle manque ou reste approximatif, rechercher un candidat dans les devis passés du pro ; à défaut de candidat compatible, rechercher directement dans son catalogue. | Un précédent est une piste de sélection, jamais une preuve de compatibilité ni un tarif actuel. Les données restent cloisonnées par compte. |
+| Vérification | Vérifier la combinaison, les limites et les accessoires sur les données techniques du constructeur, puis vérifier l'achat dans le catalogue fournisseur daté et appliquer les règles de vente du pro. | Distinguer qualification technique, prix vérifié et hypothèse ; une longueur totale ne prouve pas les longueurs individuelles de chaque branche. |
+| Clarifications | Contrôles en arrière-plan ; regrouper les seuls manques indispensables à l'estimation et les incompatibilités qui exigent un choix. | Une réserve ou un contrôle impossible reste visible dans le résultat ; aucun remplacement de produit sans accord. Les détails de pose pouvant attendre ne deviennent pas des questions obligatoires pour une première estimation. |
+| Estimation et PDF | Remettre rapidement une estimation provisoire, même si des points restent à confirmer, avec postes estimés, sources autorisées, réserves et exclusions explicites. | Aucun montant inventé. Sans base de prix autorisée, le poste reste non chiffré et le total connu n'est pas présenté comme un total global. Aucune fiabilité chiffrée déduite de la seule tolérance du pro à l'approximation. |
+| Correction | Conserver les faits et choix non modifiés ; revérifier uniquement les dépendances touchées, y compris la configuration et les raccordements lors d'un ajout d'appareil. | Invalider les anciens résultats dépendants et refuser leur retour tardif ; le PDF désigne la dernière version validée. Une modification sans rapport ne retire pas les références déjà retenues. |
+| Progression | Montrer les étapes réellement exécutées : recherche, vérification, calcul, préparation du document, résultat prêt. Adapter l'indicateur aux capacités éprouvées du canal. | Pas de faux pourcentage, de fausse activité ou de progression en boucle ; attente, interruption et échec sont annoncés avec une reprise possible sans perte ni doublon. |
+
+**Prix et forfaits :** distinguer achats à transformer selon la règle du pro et
+forfaits déjà exprimés en prix de vente final. Ne pas majorer à nouveau un
+forfait final ; ne pas facturer deux fois un accessoire couvert par ce forfait.
+Une durée dictée demeure la prescription du pro, sans réévaluation automatique
+au seul motif d'un changement de configuration.
+
+**Preuve attendue :** jouer le même scénario fictif et ses corrections sur les
+canaux concernés, avec un cas de référence précise, un modèle manquant, un prix
+absent, une incompatibilité, un résultat périmé et une interruption. Mesurer
+séparément le temps actif de traitement et le temps d'attente du pro. La cible
+vocal vers PDF en moins de dix minutes est un objectif à chronométrer, pas une
+performance acquise. Aucune réception, activation, nouvelle dépense ou
+autorisation d'envoi client ne découle de ce contrat.
 
 ### Les règles de prix — l'ossature commune, les détails au pro
 
@@ -245,6 +287,66 @@ et sur l'écran Finubar. Il INDIQUE quand rafraîchir ; seule l'extraction prouv
 ⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
 `outils/zohshia/renodevis/`, hors du dossier, comme la liste des noms propres.
+
+## 9. Agent de devis neutre — cible pré-opérationnelle (23/10/2026)
+
+**Mandat confirmé :** produire depuis une description vocale un brouillon précis,
+avec produits et prestations, en moins de dix minutes. Le logiciel est préparé
+avant l'arrivée du professionnel ; son intégration apporte ses données et sa
+configuration, sans réécriture du moteur. Ce paragraphe fixe une cible, pas une
+réception acquise ni une actualisation de l'inventaire du §4.
+
+### Séparation des responsabilités
+
+- Le modèle comprend, rapproche les besoins et pose les questions groupées.
+- Les outils contrôlés recherchent les références, valident les corrections,
+  calculent, enregistrent et génèrent le document depuis l'état enregistré.
+- La configuration versionnée fournit identité, catalogues produits et
+  prestations, prix, paramètres commerciaux et présentation propres au pro.
+- Le canal reçoit le vocal et remet le brouillon au professionnel authentifié.
+  L'environnement de développement, l'hébergement du modèle, le serveur de
+  l'application et le stockage sont identifiés séparément.
+
+### Critère de livraison avant les données réelles
+
+| Capacité | Preuve requise avec une configuration fictive |
+|---|---|
+| Configuration | Import, validation, version et diagnostic des champs manquants ; aucun prix ou règle professionnelle codé en dur |
+| Voix et compréhension | Vocal réel traité ; produits, prestations, quantités et contraintes retrouvés ; consignes jamais facturées |
+| Catalogue | Références et prix sourcés ; écarts de puissance explicités ; absence ou ambiguïté jamais masquée par une substitution |
+| Corrections | Cible stable, état conservé, invalidation des prix et dépendances concernés ; impacts visibles |
+| État durable | Réouverture après nouvelle session ou redémarrage ; écriture atomique sous révision ; rejeu sans doublon et conflit de contenu refusé |
+| Cloisonnement | Identité résolue par l'application ; lectures et écritures entre deux professionnels fictifs refusées côté serveur |
+| Calcul et document | Calcul déterministe au centime avec paramètres fournis ; inconnu distinct de zéro ; totaux partiels explicités ; aucune TVA ou TTC complet sans règles disponibles ; PDF relu en texte et en image |
+| Exploitation | Erreurs actionnables, limites d'appels et coût observables, arrêt et reprise éprouvés ; brouillon marqué, aucun envoi au client automatique |
+
+**État du prototype local communiqué et vérifié le 23/10 :** bibliothèque d'état
+et génération PDF, quarante tests réussis sur l'archive identifiée dans la
+transmission. Cela ne prouve ni raccordement du catalogue, ni transcription,
+ni stockage externe concurrent, ni isolation applicative, ni livraison en ligne.
+Un dossier réservé à la configuration ne constitue pas son implémentation.
+
+### Deux prototypes qui s'améliorent mutuellement
+
+1. Répertorier les outils déjà présents avant tout remplacement. Conserver une
+   seule vérité de chantier et un seul contrat de calcul, indépendants du modèle.
+2. Raccorder le prototype neutre aux contrats nécessaires en environnement
+   d'essai ; adapter les outils existants quand ils répondent au contrat.
+3. Comparer les deux orchestrations avec les mêmes transcriptions, données
+   fictives et résultats attendus : cas normal, répétition, correction ciblée,
+   référence absente, prix inconnu, dépendance invalidée, rejeu et concurrence.
+4. Mesurer ensuite le parcours vocal réel jusqu'au PDF : temps écoulé depuis le
+   premier vocal, temps de traitement séparé de l'attente humaine, questions,
+   exactitude des produits et prestations, corrections manuelles et coût par
+   brouillon conforme. Conserver versions du code, prompts, modèles et données ;
+   distinguer comparaison des systèmes complets et comparaison à modèle égal.
+5. Transformer chaque défaut reproduit en cas partagé. Réutiliser le composant
+   gagnant ; deux moteurs commerciaux divergents ne sont pas une cible.
+
+Les leçons de méthode restent dans `Ultima-/memoire/LECONS.md`, entrée
+« Un prototype d'agent ne prouve que la couche réellement éprouvée ».
+Le contrôle d'exploitation suit `../pilotage-back-office/TECHNO.md` : chaque
+outil a son cockpit local ; un écran central ne remplace pas ses contrôles.
 
 ## Retour d'usage du 29 octobre 2026 et réception de la prochaine extraction
 

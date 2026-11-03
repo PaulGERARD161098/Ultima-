@@ -1,6 +1,6 @@
 ---
 name: zohshia
-description: ZOH SHIA, le dragon de la technologie — la techno de Paul à l'état pur, à invoquer. Premier élément : RénoDevis. Sur « j'intègre un nouvel artisan », ZOH SHIA fournit le code neutre extrait et prouvé (typage, tests, build), la base neuve reconstruite et validée contre la référence, et la check-list des informations à obtenir du pro. À charger aussi quand Paul veut savoir de quoi la techno est faite. Couvre la recollecte mesurée, la dérive, l'extraction, le rejeu de la base, le guide et ses gates. Aucun nom d'artisan, aucune valeur.
+description: ZOH SHIA, le dragon de la technologie — la techno de Paul à l'état pur, à invoquer. Premier élément : RénoDevis ; deuxième : le générateur de devis. Sur « j'intègre un nouvel artisan », ZOH SHIA fournit le code neutre extrait et prouvé (typage, tests, build), la base neuve reconstruite et validée contre la référence, et la check-list des informations à obtenir du pro. À charger aussi quand Paul veut savoir de quoi la techno est faite. Couvre la recollecte mesurée, la dérive, l'extraction, le rejeu de la base, le guide et ses gates. Aucun nom d'artisan, aucune valeur.
 ---
 
 # ZOH SHIA — invoquer la techno
@@ -65,6 +65,15 @@ d'artisan, de client, de fournisseur ni de marque, et sans aucune valeur propre
 ## Approches croisées
 
 Le dossier `zohshia/anti-pattern/` porte une méthode transversale, sans base ni moteur métier : `TECHNO.md`, `MISE-EN-SERVICE.md`, `collecter.mjs` et un badge. Charger `.claude/skills/anti-pattern/SKILL.md` pour l'appliquer. Le collecteur vérifie la structure des déclarations, sans certifier leur vérité ; ne pas présenter son résultat comme une preuve métier.
+
+## Deuxième étoile — le générateur de devis (08/10/2026)
+
+Sur « fais-moi un devis » : `zohshia/devis/TECHNO.md` §2. Les paramètres (JSON)
+se remplissent HORS du dépôt, puis
+`node zohshia/devis/generer.mjs --parametres <devis.json> --sortie <dossier>`.
+Relire la ligne des montants, ouvrir le PDF, vérifier la page unique. Une valeur
+client inconnue se demande à Paul ; envoyer le devis à un client est un effet
+métier réel (mandat précis).
 
 ## Ajouter un élément à ZOH SHIA
 
