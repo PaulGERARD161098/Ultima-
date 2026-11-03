@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -131,7 +131,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -243,7 +243,7 @@ export default {
       "mesure_le": "2026-11-03",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -349,7 +349,7 @@ export default {
       "mesure_le": "2026-11-03",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -455,7 +455,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -527,7 +527,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -603,7 +603,7 @@ export default {
       "mesure_le": "2026-11-03",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -662,7 +662,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -720,7 +720,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T16:27:03.164Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -754,10 +754,11 @@ export default {
         "dernier_arret": {
           "le": "2026-11-03",
           "quoi": "Failles de sécurité de la séance (Paul : « comble toutes les failles ») : envois VERROUILLÉS techniquement — .claude/settings.json refuse Gmail send_message, reply, forward et…",
-          "commit": "a4ccd5e"
+          "commit": "27ea29fd3406304d77f20c68677b3d126df06de1"
         },
-        "prochaine_action": "Fusion de la PR de séance (branche claude/zoh-mobile-framing-atk74b) sur accord de Paul portant sur le SHA, CI verte. Puis : Deux gestes de Paul dans le tableau de bord Supabase…",
+        "prochaine_action": "Fusion de la PR #444 sur accord de Paul portant sur son SHA de tête, CI verte. Puis : Deux gestes de Paul dans le tableau de bord Supabase (fermer l'inscription publique ; activer…",
         "bloque_par": [
+          "Leçons v118 (sceau 036a5f4c5b36, v116 de #443 + entrées du 03/11 de cette séance) scellées dans Ultima le 03/11, NON propagées aux neuf autres dépôts : la propagation…",
           "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en…",
           "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
           "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 puis REMESURÉE OUVERTE le 03/11 (GET /auth/v1/settings : disable_signup = false ; fournisseurs e-mail + Google) — geste de…",
@@ -775,7 +776,7 @@ export default {
             "depuis": "2026-11-03"
           },
           {
-            "quoi": "LEÇONS v117 (03/11) dans Ultima seulement : propager aux neuf dépôts (LECONS-PROCEDURE.md ; lecons-chemins à 0 d'abord — refusé dans la séance du 03/11, clones absents). Recette…",
+            "quoi": "LEÇONS v118 (03/11) dans Ultima seulement : propager aux neuf dépôts (LECONS-PROCEDURE.md ; lecons-chemins à 0 d'abord — refusé dans la séance du 03/11, clones absents). Recette…",
             "depuis": ""
           },
           {
@@ -832,7 +833,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-11-03T16:27:03.163Z",
+        "lecture_le": "2026-11-03T16:50:10.689Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -1053,6 +1054,10 @@ export default {
       {
         "projet": "DATA RÉNO",
         "geste": "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Leçons v118 (sceau 036a5f4c5b36, v116 de #443 + entrées du 03/11 de cette séance) scellées dans Ultima le 03/11, NON propagées aux neuf autres dépôts : la propagation…"
       },
       {
         "projet": "Ultima",
