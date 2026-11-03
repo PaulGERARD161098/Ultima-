@@ -98,16 +98,35 @@ const exec = Object.values(tally).reduce((a, c) => a + c, 0);
 assert.deepEqual(b.slice(1).map(Number), [exec, ATTENDUS.length, tally.CONFORME || 0, tally.PARTIEL || 0, tally['NON CONFORME'] || 0], 'recette : bilan ≠ tableau'); n++;
 ok(readme.includes('recette-2026-11-03/RECETTE.md'), 'README : la recette n\'est pas pointée');
 // Rejeux après l'alignement de la charte : verdict connu, preuve propre non vide.
-const rejeux = recette.split('\n').filter((l) => /^\| T\d{2} \(rejeu\) \|/.test(l));
+const rejeux = recette.split('\n').filter((l) => /^\| T\d{2} \(rejeu( \d)?\) \|/.test(l));
 ok(rejeux.length > 0, 'recette : aucun rejeu noté'); // verrou de non-vacuité
 for (const l of rejeux) {
   const [, id, verdict, preuve] = l.split('|').map((c) => c.trim());
   const t = id.slice(0, 3);
   ok(ATTENDUS.includes(t), `${id} : scénario inconnu`);
   ok(VERDICTS.includes(verdict), `${id} : verdict inconnu « ${verdict} »`);
-  ok(preuve === `reponses/${t}-rejeu.md`, `${id} : preuve mal référencée`);
+  const rang = (/\(rejeu (\d)\)/.exec(id) || [])[1] || '';
+  ok(preuve === `reponses/${t}-rejeu${rang}.md`, `${id} : preuve mal référencée`);
   const p = join(racine, DOSSIER, preuve);
   ok(existsSync(p) && readFileSync(p, 'utf8').trim().length >= 200, `${id} : preuve absente ou vide`);
 }
+
+// 7. Verrou technique des envois (Paul, 03/11 : « comble les failles ») : les
+// outils qui font partir un message sont refusés par la configuration du dépôt ;
+// le brouillon (vert) reste permis. Éprouvé en séance : un outil refusé est
+// retiré de la session sans redémarrage.
+const reglages = JSON.parse(lire('.claude/settings.json'));
+const refuses = reglages.permissions?.deny || [];
+ok(refuses.length > 0, 'settings : aucune règle de refus'); // verrou de non-vacuité
+const ENVOIS = ['mcp__Gmail__send_message', 'mcp__Gmail__reply', 'mcp__Gmail__forward',
+  'mcp__Calendly__meetings-create_invitee', 'mcp__Calendly__meetings-cancel_event',
+  'mcp__Calendly__organizations-create_organization_invitation'];
+for (const outil of ENVOIS) ok(refuses.includes(outil), `settings : envoi non verrouillé ${outil}`);
+for (const vert of ['mcp__Gmail__create_draft', 'mcp__Gmail', 'mcp__Gmail__*']) {
+  ok(!refuses.includes(vert), `settings : sur-blocage de ${vert}`);
+}
+ok(!(reglages.permissions?.allow || []).some((r) => ENVOIS.includes(r) || /^mcp__Gmail(__\*)?$/.test(r)),
+  'settings : un envoi est autorisé en même temps que refusé');
+ok(lire('.claude/agents/leo.md').includes('.claude/settings.json'), 'charte : le verrou des envois n\'est pas pointé');
 
 console.log(`unit-leo-complements : ${n} vérifications vertes`);

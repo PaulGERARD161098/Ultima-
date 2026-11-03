@@ -9,6 +9,14 @@
       "mcp__Supabase__get_project",
       "mcp__Supabase__get_project_url",
       "mcp__Supabase__list_extensions"
+    ],
+    "deny": [
+      "mcp__Gmail__send_message",
+      "mcp__Gmail__reply",
+      "mcp__Gmail__forward",
+      "mcp__Calendly__meetings-create_invitee",
+      "mcp__Calendly__meetings-cancel_event",
+      "mcp__Calendly__organizations-create_organization_invitation"
     ]
   },
   "hooks": {
