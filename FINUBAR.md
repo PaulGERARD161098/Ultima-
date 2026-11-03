@@ -57,7 +57,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "CADRAGE DU CIEL SUR MOBILE — recette VALIDÉE par Paul le 03/11 sur l'aperçu de 5dd6c2c ; reste la fusion de #440 sur son accord (SHA). Constat reproduit en simulant Safari iOS (vh 740 / dvh 664) : marge basse −34 à +18 px, dernier nom coupé ou au ras du bord. Cause : `min-height: 100vh` du plateau (css/ciel-noeud.css), pas le moteur js/ciel.js. Correctif : `height: 100vh; height: 100dvh`. Preuve : smoke-carte-celeste bloc « Safari iOS », rouge avant / vert après. Reste : capture de Paul (critère de sortie), puis PR. Le vide restant sous le cartouche (50–65 px, ≈ 150–195 px sur une capture ×3) vient de la largeur des noms : le réduire déformerait la figure, non retenu.",
+      "quoi": "CADRAGE DU CIEL SUR MOBILE — recette VALIDÉE par Paul le 03/11 sur l'aperçu de 5dd6c2c ; #440 FUSIONNÉE le 03/11 (e60379a, constaté sur origin/main). Constat reproduit en simulant Safari iOS (vh 740 / dvh 664) : marge basse −34 à +18 px, dernier nom coupé ou au ras du bord. Cause : `min-height: 100vh` du plateau (css/ciel-noeud.css), pas le moteur js/ciel.js. Correctif : `height: 100vh; height: 100dvh`. Preuve : smoke-carte-celeste bloc « Safari iOS », rouge avant / vert après. Reste : capture de Paul (critère de sortie), puis PR. Le vide restant sous le cartouche (50–65 px, ≈ 150–195 px sur une capture ×3) vient de la largeur des noms : le réduire déformerait la figure, non retenu.",
       "depuis": "2026-11-03"
     },
     {
