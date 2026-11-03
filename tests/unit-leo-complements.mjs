@@ -110,4 +110,22 @@ for (const l of rejeux) {
   ok(existsSync(p) && readFileSync(p, 'utf8').trim().length >= 200, `${id} : preuve absente ou vide`);
 }
 
+// 7. Verrou technique des envois (Paul, 03/11 : « comble les failles ») : les
+// outils qui font partir un message sont refusés par la configuration du dépôt ;
+// le brouillon (vert) reste permis. Éprouvé en séance : un outil refusé est
+// retiré de la session sans redémarrage.
+const reglages = JSON.parse(lire('.claude/settings.json'));
+const refuses = reglages.permissions?.deny || [];
+ok(refuses.length > 0, 'settings : aucune règle de refus'); // verrou de non-vacuité
+const ENVOIS = ['mcp__Gmail__send_message', 'mcp__Gmail__reply', 'mcp__Gmail__forward',
+  'mcp__Calendly__meetings-create_invitee', 'mcp__Calendly__meetings-cancel_event',
+  'mcp__Calendly__organizations-create_organization_invitation'];
+for (const outil of ENVOIS) ok(refuses.includes(outil), `settings : envoi non verrouillé ${outil}`);
+for (const vert of ['mcp__Gmail__create_draft', 'mcp__Gmail', 'mcp__Gmail__*']) {
+  ok(!refuses.includes(vert), `settings : sur-blocage de ${vert}`);
+}
+ok(!(reglages.permissions?.allow || []).some((r) => ENVOIS.includes(r) || /^mcp__Gmail(__\*)?$/.test(r)),
+  'settings : un envoi est autorisé en même temps que refusé');
+ok(lire('.claude/agents/leo.md').includes('.claude/settings.json'), 'charte : le verrou des envois n\'est pas pointé');
+
 console.log(`unit-leo-complements : ${n} vérifications vertes`);
