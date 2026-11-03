@@ -114,6 +114,7 @@
       return aire - dx * dy;
     }
     var caches = 0;
+    var plusHaut = null, plusBas = 0; // marges de hauteur mesurées une fois (voir plus bas)
     // L'ordre compte : les étoiles les plus entourées se nomment d'abord, tant
     // qu'il reste des places libres autour d'elles ; les isolées trouvent
     // toujours une place ensuite.
@@ -133,16 +134,35 @@
       tx.setAttribute('y', e.y.toFixed(2));
       if (courant && courant._sansEvitement) { return; } // sabotage réservé au harnais
       var w = tx.getComputedTextLength() || t * 8;
+      // LA HAUTEUR D'UN NOM SE MESURE AUSSI (03/11/2026). Les boîtes ci-dessous
+      // supposaient 0,9 em au-dessus de la ligne de base et 0,3 em dessous. Avec
+      // Inter (et les polices système de l'iPhone), la boîte réelle est plus
+      // haute : deux noms empilés se touchaient de 1 à 1,6 px
+      // (`smoke-riven-nebuleuses`, maquette 300 fiches à 390 px). On lit donc la
+      // boîte peinte, et chaque bord ne s'ÉLARGIT que si la police l'exige —
+      // jamais plus étroit qu'avant.
+      // Police et taille sont communes à tous les noms du passage : UNE mesure
+      // suffit. Une par nom forçait un recalcul de mise en page à chaque nom, et
+      // l'approche dépassait 50 ms (même harnais, `approcheSansTacheDePlusDe50ms`).
+      if (plusHaut === null) {
+        var bb = null;
+        try { bb = tx.getBBox(); } catch (_) { bb = null; }
+        plusHaut = bb && bb.height > 0 ? Math.max(0, (e.y - bb.y) - t * 0.95) : 0;
+        plusBas = bb && bb.height > 0 ? Math.max(0, (bb.y + bb.height - e.y) - t * 0.2) : 0;
+      }
+      function boite(x0, x1, base, haut, bas) {
+        return [x0, x1, base - haut - plusHaut, base + bas + plusBas];
+      }
       var places = [
-        ['middle', e.x, e.y + t * 1.45, [e.x - w / 2, e.x + w / 2, e.y + t * 0.55, e.y + t * 1.7]],
-        ['middle', e.x, e.y - t * 0.85, [e.x - w / 2, e.x + w / 2, e.y - t * 1.75, e.y - t * 0.55]],
-        ['start', e.x + t * 0.8, e.y + t * 0.35, [e.x + t * 0.7, e.x + t * 0.8 + w, e.y - t * 0.6, e.y + t * 0.55]],
-        ['end', e.x - t * 0.8, e.y + t * 0.35, [e.x - t * 0.8 - w, e.x - t * 0.7, e.y - t * 0.6, e.y + t * 0.55]],
+        ['middle', e.x, e.y + t * 1.45, boite(e.x - w / 2, e.x + w / 2, e.y + t * 1.45, t * 0.9, t * 0.25)],
+        ['middle', e.x, e.y - t * 0.85, boite(e.x - w / 2, e.x + w / 2, e.y - t * 0.85, t * 0.9, t * 0.3)],
+        ['start', e.x + t * 0.8, e.y + t * 0.35, boite(e.x + t * 0.7, e.x + t * 0.8 + w, e.y + t * 0.35, t * 0.95, t * 0.2)],
+        ['end', e.x - t * 0.8, e.y + t * 0.35, boite(e.x - t * 0.8 - w, e.x - t * 0.7, e.y + t * 0.35, t * 0.95, t * 0.2)],
         // Les diagonales, en dernier recours avant de cacher le nom.
-        ['start', e.x + t * 0.5, e.y + t * 1.3, [e.x + t * 0.4, e.x + t * 0.5 + w, e.y + t * 0.45, e.y + t * 1.6]],
-        ['end', e.x - t * 0.5, e.y + t * 1.3, [e.x - t * 0.5 - w, e.x - t * 0.4, e.y + t * 0.45, e.y + t * 1.6]],
-        ['start', e.x + t * 0.5, e.y - t * 0.75, [e.x + t * 0.4, e.x + t * 0.5 + w, e.y - t * 1.65, e.y - t * 0.45]],
-        ['end', e.x - t * 0.5, e.y - t * 0.75, [e.x - t * 0.5 - w, e.x - t * 0.4, e.y - t * 1.65, e.y - t * 0.45]]
+        ['start', e.x + t * 0.5, e.y + t * 1.3, boite(e.x + t * 0.4, e.x + t * 0.5 + w, e.y + t * 1.3, t * 0.85, t * 0.3)],
+        ['end', e.x - t * 0.5, e.y + t * 1.3, boite(e.x - t * 0.5 - w, e.x - t * 0.4, e.y + t * 1.3, t * 0.85, t * 0.3)],
+        ['start', e.x + t * 0.5, e.y - t * 0.75, boite(e.x + t * 0.4, e.x + t * 0.5 + w, e.y - t * 0.75, t * 0.9, t * 0.3)],
+        ['end', e.x - t * 0.5, e.y - t * 0.75, boite(e.x - t * 0.5 - w, e.x - t * 0.4, e.y - t * 0.75, t * 0.9, t * 0.3)]
       ];
       var meilleure = null, score = Infinity;
       places.forEach(function (p) {
