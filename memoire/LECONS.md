@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v115 2026-11-03 sha256:a06208da9afa -->
+<!-- lecons:empreinte v117 2026-11-03 sha256:22bbbfa7eb44 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1571,6 +1571,17 @@ texte, textes coupés —, pas seulement sur ce que le code dessine. Il s'étalo
 capture du défaut avant d'être cru : il doit virer au rouge sur elle. Sans la capture de
 Paul au bon format, « vert » se dit « vert en simulation », jamais « l'écran est bon ».
 
+*Rechute du 2026-11-03 (Ultima, #440)* : le format réel du téléphone, c'est aussi **ses
+unités**. À 390 × 664, Chromium donne `100vh` = `100dvh` ; Safari iOS, barres déployées,
+donne `100vh` ≈ 740 px (grand viewport) pour 664 visibles. Un `min-height: 100vh` du
+plateau l'emportait sur `height: 100dvh` : le ciel débordait sous la barre, dernier nom
+coupé — invisible au harnais vert de #436. La note de reprise accusait le cadrage de
+`Ultima-/js/ciel.js` : diagnostic écrit avant la mesure, et faux. *Ce que ça a coûté* : une PR de
+plus et un diagnostic à refaire. ⇒ Simuler Safari en **substituant ses unités dans les
+vraies feuilles** (vh/lvh → grand viewport, dvh/svh → visible), comme le bloc « Safari
+iOS » de `Ultima-/tests/smoke-carte-celeste.mjs` ; une cause écrite dans un prompt de reprise est une
+hypothèse tant qu'elle n'est pas reproduite.
+
 ## 3. Ce qu'on donne à Paul
 
 **UN BROUILLON PRÊT CHEZ L'AGENT N'EST PAS PRÊT CHEZ PAUL**
@@ -2374,6 +2385,17 @@ récupération, son apport était identique à l'octet sur un fichier et moins �
 jour sur l'autre. ⚠️ **Cause racine, et elle n'est pas le bail** : deux séances
 travaillent sur la même branche désignée — troisième incident en trois jours,
 après deux `v55` et deux `v57`.
+
+**AVANT UN TRAVAIL COÛTEUX, RELIRE `main` ET LES PR OUVERTES — PAS SEULEMENT À
+L'OUVERTURE DE LA SÉANCE** *(2026-11-03, Ultima)*. Deux séances ont joué **la même
+recette de Léo** (T05–T18, onze agents chacune) le même matin sans le savoir : la
+mienne avait vérifié `main` à l'ouverture, l'autre a démarré ensuite et a fusionné
+avant moi (#441). *Ce que ça a coûté* : ≈ 1 million de jetons dépensés deux fois, et
+une fusion à réconcilier en fin de séance. ⇒ Avant d'engager un lot coûteux (agents en
+parallèle, harnais complets, recette), refaire `git fetch origin main` + liste des PR
+ouvertes, et chercher le sujet dans les titres ; un travail déjà en cours se rejoint
+ou se complète, il ne se refait pas. Le recoupement a quand même servi (variance
+mesurée, `Ultima-/.claude/leo-complements/recette-2026-11-03/RECETTE.md` §7) — c'est un bénéfice constaté, pas une méthode.
 
 **UN CLONE SUPERFICIEL NE SUIT QUE `main`, ET `--force-with-lease` REFUSE ALORS
 TOUT** *(2026-09-11)*. `git clone --depth 1 -b main` écrit un refspec réduit :
