@@ -68,5 +68,12 @@ assert.deepEqual(annonce, compte, 'bilan annoncé ≠ tableau recompté'); n++;
 
 // 5. La charte pointe les compléments.
 ok(lire('.claude/agents/leo.md').includes('.claude/leo-complements/README.md'), 'charte : pointeur absent');
+// 6. Leçon de la recette T06 (03/11/2026) : les chiffres secondaires se recroisent,
+// les faits évolutifs se sourcent ou s'annoncent « hypothèse non sourcée ».
+{
+  const charte = lire('.claude/agents/leo.md');
+  ok(/Chaque chiffre qui porte la recommandation se recroise/.test(charte), 'charte : règle T06 (recroiser chaque chiffre) absente');
+  ok(charte.includes('hypothèse non sourcée'), 'charte : règle T06 (fait non sourcé annoncé) absente');
+}
 
 console.log(`unit-leo-complements : ${n} vérifications vertes`);
