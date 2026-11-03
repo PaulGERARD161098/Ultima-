@@ -40,10 +40,10 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "2d7f7e51316ab0413874a61027875a8c03f31dfc",
-    "quoi": "Vérification de Léo dans Claude Code (lecture seule) : chargement par /leo, GitHub, Gmail, Agenda, Drive, Notion, Supabase Ultima et Vercel lus ; tests 90/90 après npm ci. Décisions de Paul : séance ouverte sur Ultima-, dépôt de travail rattaché ensuite (pas de copie de /leo) ; /leo cite six directives ; charte §5 : envoi Gmail raccordé, interdit sans instruction. Journal : memoire/JOURNAL-DECISIONS.md, 03/11. — Même jour, séance ZOH : #434 (consolidation ZOH) et #435 (grain) fusionnées sur go de Paul. Recette mobile de Paul : écran ZOH SHIA bon ; DEVIS & PAIEMENT illisible (étoile sur un nom, noms empilés, nom coupé) → #436 : harnais complété (noms, cadre iPhone 390 × 664) puis libellés courts (choix de Paul). Leçon v114 consignée. Agents toujours en pause."
+    "commit": "50eab2c431efab1eaed74db4e9051c8d7a65559d",
+    "quoi": "Boucle CADRAGE DU CIEL SUR MOBILE : maquette validée par Paul (« go »), correctif posé sur la branche claude/zoh-mobile-framing-atk74b. Cause réelle mesurée : non pas le cadrage de js/ciel.js, mais css/ciel-noeud.css — `min-height: 100vh` l'emportait sur `height: 100dvh` ; sur Safari iOS barres déployées (vh ≈ 740 > dvh ≈ 664), le plateau débordait sous la barre. Remplacé par `height: 100vh; height: 100dvh`. Harnais smoke-carte-celeste, bloc « Safari iOS » (unités substituées dans les vraies feuilles) : 22 rouges sur la tête 50eab2c, verts après ; marge basse 50–110 px, vide sous le cartouche 50–98 px sur ZOH SHIA, DEVIS & PAIEMENT, MÉTHODES, VENTE, DRAGONS, avec et sans barre Léo."
   },
-  "prochaine_action": "Respecter la pause des agents. Prochaine boucle de code, sur instruction de Paul : CADRAGE DU CIEL SUR MOBILE (maquette d'abord, voir boucles_ouvertes). Capitaliser les apports utiles pendant les autres projets.",
+  "prochaine_action": "Capture iPhone de Paul sur l'aperçu de la branche claude/zoh-mobile-framing-atk74b (quatre écrans ZOH) : si elle confirme, PR et fusion sur accord portant sur le SHA. Ensuite, respecter la pause des agents.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -57,7 +57,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "CADRAGE DU CIEL SUR MOBILE — boucle décidée par Paul le 03/11, NON OUVERTE (maquette à valider avant code). Constat sur son iPhone (aperçu de #436) : noms lisibles, mais constellation tassée en bas, ~180 px vides sous le cartouche, dernier nom au ras du bord. Cause : le cadrage du moteur commun (js/ciel.js, margesUtiles fournies par js/ciel-noeud.mjs), pas les noms. Même vide mesuré sur ZOH SHIA et DRAGONS (~200 px). Plan : maquette 390 × 664 et 390 × 740 avec et sans barre Léo → validation de Paul → deux contrôles au harnais (vide maximal sous le cartouche, marge basse minimale), étalonnés sur sa capture → correctif du moteur sur tous les écrans du ciel.",
+      "quoi": "CADRAGE DU CIEL SUR MOBILE — OUVERTE le 03/11, correctif sur branche, en attente de la capture de Paul. Constat reproduit en simulant Safari iOS (vh 740 / dvh 664) : marge basse −34 à +18 px, dernier nom coupé ou au ras du bord. Cause : `min-height: 100vh` du plateau (css/ciel-noeud.css), pas le moteur js/ciel.js. Correctif : `height: 100vh; height: 100dvh`. Preuve : smoke-carte-celeste bloc « Safari iOS », rouge avant / vert après. Reste : capture de Paul (critère de sortie), puis PR. Le vide restant sous le cartouche (50–65 px, ≈ 150–195 px sur une capture ×3) vient de la largeur des noms : le réduire déformerait la figure, non retenu.",
       "depuis": "2026-11-03"
     },
     {

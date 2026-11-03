@@ -398,6 +398,80 @@ for (const ecran of ECRANS) {
   }
 }
 
+// ---- SAFARI iOS : LE CIEL TIENT DANS CE QUE L'ÉCRAN MONTRE (03/11/2026) ----
+// Capture de Paul sur son iPhone : constellation tassée en bas, dernier nom au ras du
+// bord. Chromium ne le reproduit pas : chez lui `100vh` = `100dvh`. Sur Safari, barres
+// déployées, `vh` compte le GRAND viewport (≈ 740 px) et `dvh` le visible (≈ 664 px) ;
+// une règle `min-height: 100vh` gonflait alors le plateau au-delà de l'écran, et le
+// centre du ciel descendait sous ce qu'on voit.
+// LA SIMULATION : les unités de Safari sont SUBSTITUÉES dans les VRAIES feuilles de la
+// page (vh/lvh → 7,40 px, dvh/svh → 6,64 px), qui remplacent leurs <link>. C'est donc la
+// cascade du produit qui décide de la hauteur, pas le harnais.
+// ⛔ Vu ROUGE sur la tête d'avant (50eab2c, `min-height: 100vh`) : marge basse −34 à
+// +18 px. Étalonné sur la maquette validée par Paul le 03/11.
+// Seuils : marge basse ≥ 40 px (un nom ne colle pas au bord ni à la barre de Léo) ; vide
+// sous le cartouche ≤ max(100, marge basse + 20) — le ciel n'est pas tassé en bas.
+{
+  const SAFARI = { visible: 664, grand: 740 };
+  const ecransSafari = [...ECRANS.filter((e) => e.iphone), ECRANS.find((e) => e.nom === 'DRAGONS')];
+  verifier('Safari iOS : verrou — cinq écrans éprouvés (quatre ZOH + DRAGONS)', ecransSafari.length === 5 && ecransSafari.every(Boolean),
+    ecransSafari.map((e) => e && e.nom).join(','));
+  for (const ecran of ecransSafari) {
+    for (const leo of [false, true]) {
+      const cle = `${ecran.nom}@Safari ${SAFARI.visible}/${SAFARI.grand}${leo ? ' + Léo' : ''}`;
+      const { page, contexte } = await ouvrir(ecran, [390, SAFARI.visible], { isMobile: true, hasTouch: true });
+      const m = await page.evaluate(async ({ visible, grand, leo }) => {
+        const liens = [...document.querySelectorAll('link[rel="stylesheet"]')]
+          .filter((l) => new URL(l.href).origin === location.origin);
+        let substitutions = 0;
+        for (const l of liens) {
+          const texte = await (await fetch(l.href)).text();
+          const remplace = texte.replace(/(-?\d*\.?\d+)(dvh|svh|lvh|vh)\b/g, (_, n, u) => {
+            substitutions += 1;
+            return (+n * (u === 'dvh' || u === 'svh' ? visible : grand) / 100) + 'px';
+          });
+          const style = document.createElement('style');
+          style.textContent = remplace;
+          l.after(style);
+          l.disabled = true;
+        }
+        if (leo && !document.getElementById('leo-dock')) {
+          const nav = await import('/js/leo-navigation.mjs');
+          const bouton = document.createElement('button');
+          document.body.appendChild(bouton);
+          nav.monterNavigationLeo({ bouton, ouvrirLeo() {} });
+        }
+        dispatchEvent(new Event('resize'));
+        await new Promise((r) => setTimeout(r, 1800));
+        const boite = (el) => el && el.getBoundingClientRect();
+        const hauts = ['.console-entete', '.console-retour', '.ciel-fil:not([hidden])']
+          .map((sel) => boite(document.querySelector(sel))).filter((b) => b && b.height > 0);
+        const dock = boite(document.getElementById('leo-dock'));
+        const etoiles = [...document.querySelectorAll('#ciel-noeud-scene g.ciel-etoile[data-noeud-id]')]
+          .map((g) => g.getBoundingClientRect()).filter((b) => b.height > 0);
+        if (!etoiles.length || !hauts.length) { return { etoiles: etoiles.length, substitutions }; }
+        const haut = Math.max(...hauts.map((b) => b.bottom));
+        const bas = dock ? dock.top : innerHeight;
+        return {
+          etoiles: etoiles.length, substitutions, dock: !!dock,
+          plateau: Math.round(document.getElementById('ciel-noeud-plateau').getBoundingClientRect().height),
+          vide: Math.round(Math.min(...etoiles.map((b) => b.top)) - haut),
+          margeBasse: Math.round(bas - Math.max(...etoiles.map((b) => b.bottom))),
+        };
+      }, { ...SAFARI, leo });
+      await contexte.close();
+      chiffres[cle] = m;
+      // Verrous de non-vacuité : des unités ont bien été substituées, la scène est
+      // peinte, la barre de Léo est là quand on la demande.
+      verifier(`${cle} : verrou — unités Safari substituées, ciel peint${leo ? ', barre de Léo posée' : ''}`,
+        m.substitutions >= 1 && m.etoiles >= 2 && (!leo || m.dock === true), JSON.stringify(m));
+      verifier(`${cle} : le plateau tient dans l'écran visible`, m.plateau === SAFARI.visible, `${m.plateau} px`);
+      verifier(`${cle} : marge basse ≥ 40 px`, m.margeBasse >= 40, `${m.margeBasse} px`);
+      verifier(`${cle} : pas de grand vide sous le cartouche`, m.vide <= Math.max(100, m.margeBasse + 20), `vide ${m.vide} px`);
+    }
+  }
+}
+
 // ---- ALPHA, SESSION OUVERTE : le seul écran où le rang dit quelque chose de neuf ----
 // RENOBOOST IA ne devient une tête qu'une fois la greffe Finubar posée (ses
 // dépôts). On ouvre donc la racine avec l'agrégat de la maquette (contenu
