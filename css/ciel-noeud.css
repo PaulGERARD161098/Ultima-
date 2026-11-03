@@ -86,8 +86,14 @@ body.ciel-noeud {
   display: flex;
   flex-direction: column;
   width: 100vw;
+  /* Le repli se pose AVANT, dans la même propriété : un navigateur sans dvh
+     garde 100vh, les autres le remplacent. ⛔ Jamais en `min-height: 100vh` :
+     sur Safari iOS, barres déployées, 100vh (grand viewport ≈ 740 px) dépasse
+     100dvh (≈ 664 px), le minimum l'emportait, le plateau débordait sous la
+     barre et le centre du ciel descendait — capture de Paul du 03/11, dernier
+     nom au ras du bord. `smoke-carte-celeste`, bloc « Safari iOS ». */
+  height: 100vh;
   height: 100dvh;
-  min-height: 100vh; /* repli pour un navigateur sans dvh */
 }
 .ciel-noeud-plateau > .ciel-scene {
   flex: 1;
