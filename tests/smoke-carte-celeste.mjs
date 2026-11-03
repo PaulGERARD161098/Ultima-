@@ -83,13 +83,13 @@ const ECRANS = [
   // rang, elle est mesurée par smoke-lv5-plein-ecran.)
   { nom: 'DRAGONS', fil: 'DRAGONS', page: 'imladrik.html#constellation-dragons',
     deuxRangs: true, sansFigure: true },
-  { nom: 'ZOH SHIA', fil: 'ZOH SHIA', page: 'imladrik.html#zohshia', deuxRangs: false },
+  { nom: 'ZOH SHIA', fil: 'ZOH SHIA', page: 'imladrik.html#zohshia', deuxRangs: false, iphone: true },
   // LES SOUS-CONSTELLATIONS DE ZOH SHIA (02/11/2026) : c'est sur ces écrans que vivent
   // les technos, et c'est là que la couronne a cédé à neuf étoiles. Chacune est
   // mesurée comme les autres écrans — traits, noms, cibles, encre.
-  { nom: 'DEVIS & PAIEMENT', fil: 'DEVIS & PAIEMENT', page: 'imladrik.html#zoh-groupe-devis', deuxRangs: false },
-  { nom: 'MÉTHODES', fil: 'MÉTHODES', page: 'imladrik.html#zoh-groupe-methodes', deuxRangs: false },
-  { nom: 'VENTE', fil: 'VENTE', page: 'imladrik.html#zoh-groupe-vente', deuxRangs: false },
+  { nom: 'DEVIS & PAIEMENT', fil: 'DEVIS & PAIEMENT', page: 'imladrik.html#zoh-groupe-devis', deuxRangs: false, iphone: true },
+  { nom: 'MÉTHODES', fil: 'MÉTHODES', page: 'imladrik.html#zoh-groupe-methodes', deuxRangs: false, iphone: true },
+  { nom: 'VENTE', fil: 'VENTE', page: 'imladrik.html#zoh-groupe-vente', deuxRangs: false, iphone: true },
 ];
 const TAILLES = [[390, 844], [1280, 800]];
 // VERROU DE COHÉRENCE : `deuxRangs` se lit dans le registre, il ne se croit pas.
@@ -205,6 +205,41 @@ function mesurer(page, tetesImposees = null) {
         if (dedans) { traitsNoms += 1; }
       }
     }
+    // LES NOMS ENTRE EUX (03/11/2026, capture de Paul sur DEVIS & PAIEMENT à 390 px :
+    // une étoile posée dans le nom de sa voisine, des noms empilés, un nom coupé).
+    // « Aucun trait à travers un nom » était vert sur cet écran : il ne regardait que
+    // les traits. Trois mesures de plus, sur les noms PEINTS de chaque étoile.
+    const peints = etoiles.map((g) => {
+      const n = g.querySelector('.ciel-nom');
+      const c = g.querySelector('circle[fill="#ffffff"]');
+      const visible = n && +(n.getAttribute('opacity') || getComputedStyle(n).opacity) > 0.05;
+      const bc = c ? c.getBoundingClientRect() : null;
+      return { id: g.dataset.noeudId, nom: visible ? n.getBoundingClientRect() : null,
+        texte: visible ? (n.textContent || '').trim() : '',
+        x: bc ? bc.left + bc.width / 2 : NaN, y: bc ? bc.top + bc.height / 2 : NaN };
+    });
+    const avecNom = peints.filter((p) => p.nom && p.nom.width > 0);
+    let etoilesSurNom = 0, nomsChevauches = 0;
+    const detailsNoms = [];
+    for (const p of peints) {
+      for (const q of avecNom) {
+        if (q.id === p.id || !Number.isFinite(p.x)) continue;
+        const b = q.nom;
+        if (p.x > b.left - 2 && p.x < b.right + 2 && p.y > b.top - 2 && p.y < b.bottom + 2) {
+          etoilesSurNom += 1; detailsNoms.push(`${p.id} sur le nom de ${q.id}`);
+        }
+      }
+    }
+    for (let i = 0; i < avecNom.length; i++) {
+      for (let j = i + 1; j < avecNom.length; j++) {
+        const a = avecNom[i].nom, b = avecNom[j].nom;
+        const ix = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+        const iy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+        // Écart vertical de moins de 4 px = noms empilés (capture du 03/11 : 3 px).
+        if (ix > 1 && iy > -4) { nomsChevauches += 1; detailsNoms.push(`${avecNom[i].id} × ${avecNom[j].id}`); }
+      }
+    }
+    const nomsTronques = avecNom.filter((p) => p.texte.endsWith('…')).map((p) => p.id);
     // LE RANG : lu dans le REGISTRE, comme le moteur (`rang()`), jamais deviné
     // de la taille qu'on veut mesurer.
     const rayons = etoiles.map((g) => ({
@@ -226,6 +261,7 @@ function mesurer(page, tetesImposees = null) {
       etoiles: etoiles.length, groupes: amas.length, traits: lignes.length, visibles: visibles.length,
       groupeFigure: !!groupe, traitsFigure: svg.querySelectorAll('.ciel-trait-figure').length,
       orphelins, traitsNoms, traitsPrenants, traitsSondes,
+      nomsPeints: avecNom.length, etoilesSurNom, nomsChevauches, nomsTronques, detailsNoms,
       encre: groupe ? (groupe.getAttribute('stroke') || '').toLowerCase() : '',
       muet: groupe ? groupe.getAttribute('aria-hidden') : '',
       tetes: tetes.length, feuilles: feuilles.length,
@@ -271,6 +307,14 @@ function juger(cle, m, ecran) {
     verifier(`${cle} : encre parchemin, pas l'or`, m.encre === ENCRE, m.encre || 'aucun groupe');
     verifier(`${cle} : la figure est muette au lecteur d'écran`, m.muet === 'true', String(m.muet));
   }
+  // Les noms se lisent : verrou de non-vacuité d'abord (des noms sont peints), puis
+  // aucune étoile dans le nom d'une autre, aucun nom sur un autre, aucun nom coupé.
+  verifier(`${cle} : verrou — des noms sont peints`, m.nomsPeints >= 2, `${m.nomsPeints}`);
+  verifier(`${cle} : aucune étoile posée sur le nom d'une autre`, m.nomsPeints >= 2 && m.etoilesSurNom === 0,
+    `${m.etoilesSurNom} ${m.detailsNoms.filter((d) => d.includes(' sur ')).join(' · ')}`);
+  verifier(`${cle} : aucun nom sur un autre ni collé à moins de 4 px`, m.nomsPeints >= 2 && m.nomsChevauches === 0,
+    `${m.nomsChevauches} ${m.detailsNoms.filter((d) => d.includes(' × ')).join(' · ')}`);
+  verifier(`${cle} : aucun nom coupé (…)`, m.nomsPeints >= 2 && m.nomsTronques.length === 0, m.nomsTronques.join(', ') || '0');
   // ⛔ LE RANG CHANGE L'ÉCLAT, JAMAIS LA CIBLE DU DOIGT. Premier jet : la zone
   // de captation suivait le rayon, donc une feuille rapetissée devenait plus
   // dure à toucher — TAO passé de 45 à 30 px au bureau. Trouvé par `smoke-tao`
@@ -311,10 +355,16 @@ function juger(cle, m, ecran) {
 }
 
 // ===========================================================================
+// LE CADRE D'UN IPHONE (03/11/2026) : Safari laisse environ 390 × 664 px à la page.
+// La capture de Paul sur DEVIS & PAIEMENT n'était reproduite QU'À ce format (étoile de
+// PAIEMENT ARTISAN posée dans « GÉNÉRATEUR DE DEVIS ») ; en 390 × 844 tout passait.
+// Appliqué aux écrans ZOH, ceux dont cette capture a révélé le défaut.
+const IPHONE = [390, 664, 'iphone'];
 for (const ecran of ECRANS) {
-  for (const taille of TAILLES) {
-    const cle = `${ecran.nom}@${taille[0]}`;
-    const { page, contexte } = await ouvrir(ecran, taille);
+  for (const taille of (ecran.iphone ? [...TAILLES, IPHONE] : TAILLES)) {
+    const cle = taille[2] ? `${ecran.nom}@${taille[0]}x${taille[1]}` : `${ecran.nom}@${taille[0]}`;
+    const { page, contexte } = await ouvrir(ecran, taille.slice(0, 2),
+      taille[2] ? { isMobile: true, hasTouch: true, deviceScaleFactor: 3 } : {});
     const m = await mesurer(page);
     if (!m) { await contexte.close(); verifier(`${cle} : la scène est peinte`, false, 'aucun .ciel-svg'); continue; }
     chiffres[cle] = { etoiles: m.etoiles, groupes: m.groupes, traits: `${m.visibles}/${m.traits}`,
@@ -323,7 +373,7 @@ for (const ecran of ECRANS) {
     // L'EXTINCTION : l'état isolant éteint étoiles, liens et noms d'amas ; la
     // figure doit s'éteindre avec eux. Éprouvé sur la classe réelle, posée à la
     // main — l'état est transitoire (0,22 s) et un clic le raterait.
-    if (taille[0] === 390) {
+    if (taille[0] === 390 && !taille[2]) {
       const op = await page.evaluate(async () => {
         const scene = document.getElementById('ciel-noeud-scene');
         const g = scene.querySelector('.ciel-asterisme');
