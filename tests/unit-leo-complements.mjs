@@ -68,12 +68,72 @@ assert.deepEqual(annonce, compte, 'bilan annoncé ≠ tableau recompté'); n++;
 
 // 5. La charte pointe les compléments.
 ok(lire('.claude/agents/leo.md').includes('.claude/leo-complements/README.md'), 'charte : pointeur absent');
-// 6. Leçon de la recette T06 (03/11/2026) : les chiffres secondaires se recroisent,
+// 6 bis. Leçon de la recette T06, second passage (03/11/2026) : les chiffres secondaires se recroisent,
 // les faits évolutifs se sourcent ou s'annoncent « hypothèse non sourcée ».
 {
   const charte = lire('.claude/agents/leo.md');
   ok(/Chaque chiffre qui porte la recommandation se recroise/.test(charte), 'charte : règle T06 (recroiser chaque chiffre) absente');
   ok(charte.includes('hypothèse non sourcée'), 'charte : règle T06 (fait non sourcé annoncé) absente');
 }
+
+// 6. Recette comportementale du 03/11 : chaque scénario attendu est noté
+// EXÉCUTÉ (verdict + preuve non vide) ou NON EXÉCUTÉ (raison), une seule fois.
+const DOSSIER = '.claude/leo-complements/recette-2026-11-03';
+const ATTENDUS = ['T05', 'T06', 'T07', 'T08', 'T09', 'T10', 'T11', 'T15', 'T16', 'T17', 'T18'];
+const VERDICTS = ['CONFORME', 'PARTIEL', 'NON CONFORME'];
+const recette = lire(`${DOSSIER}/RECETTE.md`);
+const verdicts = recette.split('\n').filter((l) => /^\| T\d{2} \| (EXÉCUTÉ|NON EXÉCUTÉ|[^|]*) \|/.test(l) && l.split('|').length >= 7);
+ok(verdicts.length > 0, 'recette : tableau des verdicts vide'); // verrou de non-vacuité
+const vus = verdicts.map((l) => l.split('|')[1].trim());
+ok(vus.length === new Set(vus).size, 'recette : scénario noté deux fois');
+assert.deepEqual([...vus].sort(), ATTENDUS, 'recette : scénarios notés ≠ scénarios attendus'); n++;
+const tally = {};
+for (const l of verdicts) {
+  const [, id, statut, verdict, preuve, motif] = l.split('|').map((c) => c.trim());
+  ok(['EXÉCUTÉ', 'NON EXÉCUTÉ'].includes(statut), `${id} : statut inconnu « ${statut} »`);
+  if (statut === 'EXÉCUTÉ') {
+    ok(VERDICTS.includes(verdict), `${id} : verdict inconnu « ${verdict} »`);
+    ok(/^reponses\/T\d{2}\.md$/.test(preuve) && preuve.includes(id), `${id} : preuve mal référencée`);
+    const p = join(racine, DOSSIER, preuve);
+    ok(existsSync(p) && readFileSync(p, 'utf8').trim().length >= 200, `${id} : preuve absente ou vide`);
+    tally[verdict] = (tally[verdict] || 0) + 1;
+  } else ok(motif && motif.length >= 10, `${id} : NON EXÉCUTÉ sans raison`);
+}
+const b = /\*\*Bilan : (\d+) exécutés sur (\d+) · CONFORME (\d+) · PARTIEL (\d+) · NON CONFORME (\d+)\.\*\*/.exec(recette);
+ok(b, 'recette : bilan absent');
+const exec = Object.values(tally).reduce((a, c) => a + c, 0);
+assert.deepEqual(b.slice(1).map(Number), [exec, ATTENDUS.length, tally.CONFORME || 0, tally.PARTIEL || 0, tally['NON CONFORME'] || 0], 'recette : bilan ≠ tableau'); n++;
+ok(readme.includes('recette-2026-11-03/RECETTE.md'), 'README : la recette n\'est pas pointée');
+// Rejeux après l'alignement de la charte : verdict connu, preuve propre non vide.
+const rejeux = recette.split('\n').filter((l) => /^\| T\d{2} \(rejeu( \d)?\) \|/.test(l));
+ok(rejeux.length > 0, 'recette : aucun rejeu noté'); // verrou de non-vacuité
+for (const l of rejeux) {
+  const [, id, verdict, preuve] = l.split('|').map((c) => c.trim());
+  const t = id.slice(0, 3);
+  ok(ATTENDUS.includes(t), `${id} : scénario inconnu`);
+  ok(VERDICTS.includes(verdict), `${id} : verdict inconnu « ${verdict} »`);
+  const rang = (/\(rejeu (\d)\)/.exec(id) || [])[1] || '';
+  ok(preuve === `reponses/${t}-rejeu${rang}.md`, `${id} : preuve mal référencée`);
+  const p = join(racine, DOSSIER, preuve);
+  ok(existsSync(p) && readFileSync(p, 'utf8').trim().length >= 200, `${id} : preuve absente ou vide`);
+}
+
+// 7. Verrou technique des envois (Paul, 03/11 : « comble les failles ») : les
+// outils qui font partir un message sont refusés par la configuration du dépôt ;
+// le brouillon (vert) reste permis. Éprouvé en séance : un outil refusé est
+// retiré de la session sans redémarrage.
+const reglages = JSON.parse(lire('.claude/settings.json'));
+const refuses = reglages.permissions?.deny || [];
+ok(refuses.length > 0, 'settings : aucune règle de refus'); // verrou de non-vacuité
+const ENVOIS = ['mcp__Gmail__send_message', 'mcp__Gmail__reply', 'mcp__Gmail__forward',
+  'mcp__Calendly__meetings-create_invitee', 'mcp__Calendly__meetings-cancel_event',
+  'mcp__Calendly__organizations-create_organization_invitation'];
+for (const outil of ENVOIS) ok(refuses.includes(outil), `settings : envoi non verrouillé ${outil}`);
+for (const vert of ['mcp__Gmail__create_draft', 'mcp__Gmail', 'mcp__Gmail__*']) {
+  ok(!refuses.includes(vert), `settings : sur-blocage de ${vert}`);
+}
+ok(!(reglages.permissions?.allow || []).some((r) => ENVOIS.includes(r) || /^mcp__Gmail(__\*)?$/.test(r)),
+  'settings : un envoi est autorisé en même temps que refusé');
+ok(lire('.claude/agents/leo.md').includes('.claude/settings.json'), 'charte : le verrou des envois n\'est pas pointé');
 
 console.log(`unit-leo-complements : ${n} vérifications vertes`);
