@@ -1,0 +1,77 @@
+{
+  "note": "Textes Work installés à l'identique depuis le dossier « Léo — capacités complètes » (03/11/2026). Toute modification se fait ici ET met à jour l'empreinte ; tests/unit-leo-complements.mjs le vérifie.",
+  "sources": [
+    {
+      "id": "work:methode-paul/SKILL.md",
+      "installe": ".claude/skills/methode-paul/SKILL.md",
+      "sha256_utf8": "eff26950e56cdf9a0101bb652b52a4ba77bf66ecf85cfa7c04581d832099292f",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abac79d66448191ae769f5a24b1c456/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:methode-paul/references/supervision-paul.md",
+      "installe": ".claude/skills/methode-paul/references/supervision-paul.md",
+      "sha256_utf8": "45b22f2f40170e66154d8dd15268cff473c5acf4650ce6bf756340459ad26ece",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abac79d66448191ae769f5a24b1c456/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:directive-zs/SKILL.md",
+      "installe": ".claude/skills/directive-zs/SKILL.md",
+      "sha256_utf8": "19425aee754c12f4308d001a8f39ee50df938676ca13e8cd3ab61007cc5f20c9",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6acc8f7e60b08191bb6d2685dc11ddd4/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:rapport-client-pro/SKILL.md",
+      "installe": ".claude/skills/rapport-client-pro/SKILL.md",
+      "sha256_utf8": "c9decdf755366a57433a57cbfb96511a3c3299cccf1a8784c71407c177c3c9d0",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6adb747cb43c8191b1667214e5cde64c/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:leo/SKILL.md",
+      "installe": ".claude/leo-complements/leo-lv1.md",
+      "sha256_utf8": "845fe84de0fdd626285fad55662010b8b34e008ca18f585fdaff8d109a4091e5",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abb669f34c48191ad2dd12762dd5fa2/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:leo/references/supervision-code.md",
+      "installe": ".claude/leo-complements/references/supervision-code.md",
+      "sha256_utf8": "efaa25533794b8e6f461cab04e087e39c971c00fc32ec0a8b05c703d3638a149",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abb669f34c48191ad2dd12762dd5fa2/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:leo/references/orchestration-pro-perso.md",
+      "installe": ".claude/leo-complements/references/orchestration-pro-perso.md",
+      "sha256_utf8": "b00049a95d8782d7bd5a41c9b5bb7719bb61790d81955e0b8d83037aff5718c0",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abb669f34c48191ad2dd12762dd5fa2/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:leo/references/vigilance-risques.md",
+      "installe": ".claude/leo-complements/references/vigilance-risques.md",
+      "sha256_utf8": "b78a1c0ddf7f1f43d216268ffbabe9dee42f50f9fcbae772a9eada8078400c44",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abb669f34c48191ad2dd12762dd5fa2/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    },
+    {
+      "id": "work:leo/references/etat-reprise.md",
+      "installe": ".claude/leo-complements/references/etat-reprise.md",
+      "sha256_utf8": "919934bab83dad4847ceb77c49231761d23be2b69ea993602367304095e27b7c",
+      "origine": "skill://flora-user-skills/root/.codex/skills/remote-skills/skill-6abb669f34c48191ad2dd12762dd5fa2/SKILL.md",
+      "archive_generee_le": "2026-11-03",
+      "revision_ultima_archive": "50eab2c431efab1eaed74db4e9051c8d7a65559d"
+    }
+  ]
+}

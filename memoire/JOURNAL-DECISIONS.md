@@ -4909,3 +4909,12 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 **Décision 2 :** deux écarts de texte corrigés — la commande `/leo` cite les six directives (et non quatre) ; la charte §5 acte que Gmail expose l'envoi direct, toujours interdit sans instruction explicite avec destinataire nommé.
 
 **Constats de la vérification (lecture seule, 03/11) :** chargement par `.claude/commands/leo.md` ; GitHub, Gmail, Agenda, Drive, Notion, Supabase (projet Ultima raccordé, 33 tables sous RLS) et Vercel lus ; tests 90/90 après `npm ci` ; absents de la séance : `methode-paul`, `directive-zs`, skill Léo LV1, Gamma (à autoriser) et les connecteurs design (proxy 403). Restent à éprouver : cadrage fictif, outil absent, « go solo » fictif avec envoi, reprise en séance neuve.
+
+## 2026-11-03 — Léo : capacités Work implantées dans Claude Code (phases 1–2)
+
+**Source :** instruction de Paul « Implante capa Léo pour augmentation de ses capa », avec le dossier « Léo — capacités complètes et implantation bidirectionnelle » (archive du 03/11, 54 textes, empreintes vérifiées).
+
+**Fait :** `methode-paul` (+ référence), `directive-zs` et `rapport-client-pro` installés sous `.claude/skills/` à l'identique ; compétence Léo LV1 de Work et quatre références rangées dans `.claude/leo-complements/` comme compléments **non invocables** (une seule Léo) ; matrice des 58 capacités avec état mesuré dans `.claude/leo-complements/README.md` ; charte pointée ; garde `tests/unit-leo-complements.mjs` (9 sabotages rouges, témoin vert).
+
+**Non fait, et pourquoi :** skills `comptabilite-gestion`, `emails`, `email-writer`, `copy-editing` (dépendances absentes de l'archive) ; phases 4–7 du dossier (connecteurs, adaptateur vers les API Ultima, continuité Work ↔ Claude Code, Fin) — chacune demande son cadrage. Aucune parité déclarée.
+
