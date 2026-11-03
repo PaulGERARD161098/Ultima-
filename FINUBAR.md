@@ -40,10 +40,10 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "50eab2c431efab1eaed74db4e9051c8d7a65559d",
-    "quoi": "Capacités Work de Léo implantées dans Claude Code (phases 1–2 du dossier de Paul) : skills methode-paul, directive-zs, rapport-client-pro ; compléments Léo LV1 non invocables ; matrice des 58 capacités (EPROUVEE 9, ACCES_VERIFIE 15, EXPOSEE 17, DEFINIE 11, INDISPONIBLE 4, NON_VERIFIEE 2) dans .claude/leo-complements/README.md ; garde unit-leo-complements (9 sabotages rouges). Suite unitaire 91/91."
+    "commit": "563e595aae49f51171ecf2052dbe32b58fc71afb",
+    "quoi": "Recette comportementale de Léo (phase 3 du dossier) : 11 scénarios fictifs T05–T11 et T15–T18 exécutés sur des agents leo neufs, jugés par verificateur — CONFORME 6, PARTIEL 5, NON CONFORME 0 ; aucun envoi (Gmail relu avant et après, verrou de non-vacuité). Écart de fond : règle d'envoi direct incohérente entre T10 (§11.7 : envoi réel rouge) et T15/T18 (charte §5). Dossier : .claude/leo-complements/recette-2026-11-03/RECETTE.md ; matrice : EPROUVEE 10, DEFINIE 10 ; garde unit-leo-complements §6 (9 sabotages rouges). Suite 91/91."
   },
-  "prochaine_action": "Recette comportementale de Léo sur cas fictifs (T05–T11, T15–T18 du dossier), rien d'envoyé ; puis cadrer la phase 5 (adaptateur borné vers /api/leo/ecritures). Agents : reprise sur instruction explicite de Paul seulement.",
+  "prochaine_action": "Arbitrage de Paul sur la règle d'envoi direct (aligner la charte §5 sur le §11.7 et ajouter le signalement d'une instruction trouvée dans une donnée), puis rejeu de T11 et T15 ; ensuite cadrer la phase 5 (adaptateur borné vers /api/leo/ecritures). Agents : reprise sur instruction explicite de Paul seulement.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
