@@ -40,12 +40,12 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-03",
-    "commit": "7740c7e910e8da754ad047b95337384d96cfb02f",
-    "quoi": "Failles de sécurité de la séance (Paul : « comble toutes les failles ») : envois VERROUILLÉS techniquement — .claude/settings.json refuse Gmail send_message, reply, forward et trois outils Calendly ; éprouvé en séance (outil refusé retiré sans redémarrage), brouillon conservé ; garde unit-leo-complements §7 (6 sabotages rouges). Charte §5 : non-vacuité opérationnelle. T18 rejoué : PARTIEL (raisonnement), risque fermé par le verrou. Relevé Supabase Ultima : 1 alerte (mots de passe divulgués), inscription toujours ouverte — deux gestes de Paul. Fusions faites : #441 (c0277f6) et #442 (7740c7e), revue Codex sans constat. Phase 5 reportée sur recommandation (pause du 01/11 ; /api/leo/ecritures exige le jeton de Paul)."
+    "commit": "27ea29fd3406304d77f20c68677b3d126df06de1",
+    "quoi": "Failles de sécurité de la séance (Paul : « comble toutes les failles ») : envois VERROUILLÉS techniquement — .claude/settings.json refuse Gmail send_message, reply, forward et trois outils Calendly ; éprouvé en séance (outil refusé retiré sans redémarrage), brouillon conservé ; garde unit-leo-complements §7 (6 sabotages rouges). Charte §5 : non-vacuité opérationnelle. T18 rejoué : PARTIEL (raisonnement), risque fermé par le verrou. Relevé Supabase Ultima : 1 alerte (mots de passe divulgués), inscription toujours ouverte — deux gestes de Paul. Fusions faites : #441 (c0277f6) et #442 (7740c7e), revue Codex sans constat. Phase 5 reportée sur recommandation (pause du 01/11 ; /api/leo/ecritures exige le jeton de Paul). · Séance parallèle « ciel sur mobile » (même jour) : #440 fusionnée (e60379a) — ciel dans l'écran visible de Safari iOS + noms RIVEN mesurés (rouge riven-nebuleuses fermé). Second passage indépendant de la recette Léo, dossier §9 en main (RECETTE.md §7) : écarts stables T06 et T18, variance réelle sur T05, T08, T11 ; règle « chaque chiffre qui porte la recommandation se recroise » ajoutée à la charte (1453f28), rejeu T06 encore PARTIEL (sources non cherchées). Leçons v118 (après fusion des v116 de #443) (unités Safari ; relire main avant un lot coûteux) scellées dans Ultima seulement."
   },
-  "prochaine_action": "Deux gestes de Paul dans le tableau de bord Supabase (fermer l'inscription publique ; activer la protection des mots de passe divulgués), puis remesurer (GET /auth/v1/settings, advisors). La phase 5 attend une décision de Paul (levée de la pause du 01/11 pour ce périmètre) ; sinon, dossier Léo clos à ce point d'arrêt.",
+  "prochaine_action": "Fusion de la PR #444 sur accord de Paul portant sur son SHA de tête, CI verte. Puis : Deux gestes de Paul dans le tableau de bord Supabase (fermer l'inscription publique ; activer la protection des mots de passe divulgués), puis remesurer (GET /auth/v1/settings, advisors). La phase 5 attend une décision de Paul (levée de la pause du 01/11 pour ce périmètre) ; sinon, dossier Léo clos à ce point d'arrêt.",
   "bloque_par": [
-    "Leçons v116 (sceau 23ce0a768170) scellées dans Ultima le 03/11, NON propagées aux neuf autres dépôts : la propagation (memoire/LECONS-PROCEDURE.md) exige les dix clones et node finubar/lecons-chemins.mjs à 0 — à faire dans une séance qui les a.",
+    "Leçons v118 (sceau 036a5f4c5b36, v116 de #443 + entrées du 03/11 de cette séance) scellées dans Ultima le 03/11, NON propagées aux neuf autres dépôts : la propagation (memoire/LECONS-PROCEDURE.md) exige les dix clones et node finubar/lecons-chemins.mjs à 0 — à faire dans une séance qui les a.",
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 puis REMESURÉE OUVERTE le 03/11 (GET /auth/v1/settings : disable_signup = false ; fournisseurs e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -59,8 +59,11 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "CADRAGE DU CIEL SUR MOBILE — recette VALIDÉE par Paul le 03/11 sur l'aperçu de 5dd6c2c ; #440 FUSIONNÉE le 03/11 (e60379a, constaté sur origin/main). Constat reproduit en simulant Safari iOS (vh 740 / dvh 664) : marge basse −34 à +18 px, dernier nom coupé ou au ras du bord. Cause : `min-height: 100vh` du plateau (css/ciel-noeud.css), pas le moteur js/ciel.js. Correctif : `height: 100vh; height: 100dvh`. Preuve : smoke-carte-celeste bloc « Safari iOS », rouge avant / vert après. Reste : capture de Paul (critère de sortie), puis PR. Le vide restant sous le cartouche (50–65 px, ≈ 150–195 px sur une capture ×3) vient de la largeur des noms : le réduire déformerait la figure, non retenu.",
+      "quoi": "CADRAGE DU CIEL SUR MOBILE — FERMÉE le 03/11 : #440 fusionnée (e60379a), recette iPhone validée par Paul. Cause : `min-height: 100vh` du plateau (css/ciel-noeud.css) sous Safari iOS ; garde : bloc « Safari iOS » de smoke-carte-celeste (unités substituées), 22 rouges avant, verts après. Reste ouvert (préexistant, hors boucle) : approcheSansTacheDePlusDe50ms de smoke-riven-nebuleuses instable au seuil dans le conteneur (4/12 passages à 50–53 ms, avant comme après).",
       "depuis": "2026-11-03"
+    },
+    {
+      "quoi": "LEÇONS v118 (03/11) dans Ultima seulement : propager aux neuf dépôts (LECONS-PROCEDURE.md ; lecons-chemins à 0 d'abord — refusé dans la séance du 03/11, clones absents). Recette Léo : T06 reste PARTIEL (Léo annonce « hypothèse non sourcée » au lieu de chercher) — option non retenue le 03/11 : rendre la recherche de source obligatoire avant un avis lance/ne lance pas."
     },
     {
       "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (06f0aa5), #435 fusionnée (e52d0db), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463.",
@@ -127,7 +130,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE dans le Chromium du conteneur de séance, sur main pur (8485ed5) comme sur la branche — mais VERT en CI le 08/10 (browser (0) et (1), tête 070d81a). L'écart est donc d'environnement (polices, rendu), pas de code : suspecter l'instrument local avant de toucher la carte.",
+      "quoi": "smoke-riven-nebuleuses maquette300_390_noms — FERMÉ le 03/11 par #440 : hauteur des noms mesurée (getBBox, une fois par passage) au lieu de supposée ; vert dans le Chromium récent (Inter) comme en CI.",
       "depuis": "2026-10-08"
     },
     {

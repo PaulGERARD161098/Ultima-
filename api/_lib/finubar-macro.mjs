@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T04:37:06.181Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -131,7 +131,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T04:37:06.181Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -232,8 +232,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "affd423",
         "tete_le": "2026-11-02T13:17:47+00:00",
@@ -242,20 +242,20 @@ export default {
       },
       "mesure_le": "2026-11-03",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-11-03T04:37:05.266Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 12,
       "jours_en_attente": 91,
       "rang": 0
@@ -338,8 +338,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "c84c002",
         "tete_le": "2026-11-02T13:23:48+01:00",
@@ -348,20 +348,20 @@ export default {
       },
       "mesure_le": "2026-11-03",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-11-03T04:37:06.181Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 11,
       "jours_en_attente": 78,
       "rang": 0
@@ -455,7 +455,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T04:37:06.182Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -527,7 +527,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T04:37:06.181Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -592,8 +592,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "48dc59d",
         "tete_le": "2026-10-31T22:13:51+01:00",
@@ -602,20 +602,20 @@ export default {
       },
       "mesure_le": "2026-11-03",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-11-03T04:37:07.019Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 12,
       "jours_en_attente": 56,
       "rang": 0
@@ -662,7 +662,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T04:37:06.181Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -720,7 +720,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-03T04:37:07.019Z",
+        "lecture_le": "2026-11-03T16:50:10.690Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -753,14 +753,16 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-11-03",
-          "quoi": "#434 fusionnée sur go de Paul (tête c731449, CI 9/9 verte dont Léo LV1) : #364, #381, #417, #418 et #433 absorbées et fermées ; neuf technos ZOH en trois sous-constellations…",
-          "commit": "06f0aa5cd74c4bfc11922e5e902852d505f779bb"
+          "quoi": "Failles de sécurité de la séance (Paul : « comble toutes les failles ») : envois VERROUILLÉS techniquement — .claude/settings.json refuse Gmail send_message, reply, forward et…",
+          "commit": "27ea29fd3406304d77f20c68677b3d126df06de1"
         },
-        "prochaine_action": "Respecter la pause des agents. Capitaliser les apports utiles pendant les autres projets. Reprise seulement sur instruction explicite de Paul.",
+        "prochaine_action": "Fusion de la PR #444 sur accord de Paul portant sur son SHA de tête, CI verte. Puis : Deux gestes de Paul dans le tableau de bord Supabase (fermer l'inscription publique ; activer…",
         "bloque_par": [
+          "Leçons v118 (sceau 036a5f4c5b36, v116 de #443 + entrées du 03/11 de cette séance) scellées dans Ultima le 03/11, NON propagées aux neuf autres dépôts : la propagation…",
           "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en…",
           "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
-          "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…",
+          "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 puis REMESURÉE OUVERTE le 03/11 (GET /auth/v1/settings : disable_signup = false ; fournisseurs e-mail + Google) — geste de…",
+          "Protection des mots de passe divulgués DÉSACTIVÉE (advisor Supabase « auth_leaked_password_protection », WARN, lu le 03/11) — geste de Paul : Authentication › Settings › Password…",
           "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet…",
           "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
@@ -770,7 +772,15 @@ export default {
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
           {
-            "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (main 06f0aa5), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes…",
+            "quoi": "CADRAGE DU CIEL SUR MOBILE — FERMÉE le 03/11 : #440 fusionnée (e60379a), recette iPhone validée par Paul. Cause : `min-height: 100vh` du plateau (css/ciel-noeud.css) sous Safari…",
+            "depuis": "2026-11-03"
+          },
+          {
+            "quoi": "LEÇONS v118 (03/11) dans Ultima seulement : propager aux neuf dépôts (LECONS-PROCEDURE.md ; lecons-chemins à 0 d'abord — refusé dans la séance du 03/11, clones absents). Recette…",
+            "depuis": ""
+          },
+          {
+            "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (06f0aa5), #435 fusionnée (e52d0db), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425…",
             "depuis": "2026-11-02"
           },
           {
@@ -800,20 +810,13 @@ export default {
           {
             "quoi": "Chaîne RB — audit du 22/10 (AUDIT-2026-10-22-chaine-RB.md §5) : #394 et RenoDevis #372 fusionnées (étape 1 ✅) ; A6a geste fait, preuve au battement du 24/10 06:30 UTC ; restent…",
             "depuis": "2026-10-22"
-          },
-          {
-            "quoi": "AMATSU : boucles 1 (l'étoile), 2a (la voix de Léo), 2b-α (maquette) et 2b-β (la page de la rose des vents) FERMÉES — 2b fusionnée le 19/10 (#403, d4ff809 ; amatsu.html en…",
-            "depuis": "2026-10-18"
-          },
-          {
-            "quoi": "Coûts (19/10 → 21/10) : leviers posés et fusionnés le 21/10 dans tous les dépôts où ils sont rentables — RenoBoost#611 (L3 + .md hors déploiement), RenoDevis#407 (L2 + .md exclus…",
-            "depuis": "2026-10-19"
           }
         ],
         "maj": "2026-11-03"
       },
       "recits": [
         "dernier_arret.quoi",
+        "prochaine_action",
         "bloque_par[]",
         "boucles_ouvertes[].quoi"
       ],
@@ -830,7 +833,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-11-03T04:37:04.476Z",
+        "lecture_le": "2026-11-03T16:50:10.689Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -852,7 +855,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 6,
+    "repris": 9,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
@@ -1054,6 +1057,10 @@ export default {
       },
       {
         "projet": "Ultima",
+        "geste": "Leçons v118 (sceau 036a5f4c5b36, v116 de #443 + entrées du 03/11 de cette séance) scellées dans Ultima le 03/11, NON propagées aux neuf autres dépôts : la propagation…"
+      },
+      {
+        "projet": "Ultima",
         "geste": "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en…"
       },
       {
@@ -1062,7 +1069,11 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…"
+        "geste": "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 puis REMESURÉE OUVERTE le 03/11 (GET /auth/v1/settings : disable_signup = false ; fournisseurs e-mail + Google) — geste de…"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Protection des mots de passe divulgués DÉSACTIVÉE (advisor Supabase « auth_leaked_password_protection », WARN, lu le 03/11) — geste de Paul : Authentication › Settings › Password…"
       },
       {
         "projet": "Ultima",
@@ -1100,18 +1111,18 @@ export default {
       "PaulGERARD161098/DATARENO-"
     ],
     "controles": [
-      "PaulGERARD161098/Ultima-",
-      "PaulGERARD161098/RenoBoost",
-      "PaulGERARD161098/RenoDevis",
-      "paggerard-boop/Artidispo"
+      "PaulGERARD161098/Ultima-"
     ],
     "inaccessibles": [],
     "non_examines": [
+      "PaulGERARD161098/RenoBoost",
+      "PaulGERARD161098/RenoDevis",
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
       "PaulGERARD161098/mon-dpe.fr",
       "PaulGERARD161098/artisan-builder",
+      "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
     ],
     "anomalies": [],
@@ -1233,9 +1244,9 @@ export default {
       "condition": "juste après J4 (la formule de l'instance de référence devenue paramètres du pro)",
       "pourquoi": "25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul)"
     },
-    "reprise": false,
+    "reprise": true,
     "mesure_le": "2026-11-03",
     "alerte": true,
-    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 706 commit(s) depuis la série (f1f9fb3 → c84c002) (clone relevé le 2026-11-02 20:54 UTC), dont 244 sur des fichiers qu'elle retouche (133 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
+    "phrase": "(mesure du 2026-11-03, reprise : dépôt de référence absent de cette séance) ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 706 commit(s) depuis la série (f1f9fb3 → c84c002) (clone relevé le 2026-11-02 20:54 UTC), dont 244 sur des fichiers qu'elle retouche (133 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
   }
 };

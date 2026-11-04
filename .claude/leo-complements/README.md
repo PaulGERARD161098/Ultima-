@@ -133,3 +133,6 @@ du `verificateur`, réponses mot pour mot dans `recette-2026-11-03/reponses/`).
 ligne de Paul (dossier détaillé non accessible dans la séance) : elle éprouve
 la décision, pas le chemin réel des outils. Après l'alignement de la règle
 d'envoi (Paul, 03/11), rejeu de T11, T15 et T18 : 2 CONFORME, 1 PARTIEL (T18, §4 bis du dossier).
+**Second passage indépendant** (dossier §9 en main, autres scénarios, barrière hors
+modèle) : `RECETTE.md` §7 — écarts stables T06 et T18, variance réelle sur T05,
+T08 et T11 ; règle T06 ajoutée à la charte (`1453f28`), rejeu T06 encore PARTIEL (sources).
