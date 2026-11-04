@@ -47,6 +47,20 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 
 ## 1. Mesurer, et croire ce qu'on mesure
 
+**UNE ÉCRITURE EXPIRÉE N'EST NI FAITE NI PAS FAITE — ELLE EST EN SUSPENS**
+*(2026-11-04, RenoDevis, nettoyage SOLA).* La suppression validée par Paul (10
+dossiers, 3 entrées de corpus) passait par `execute_sql` de l'outil Supabase, qui
+demande une confirmation à Paul et expire au bout de 60 s. Trois expirations de
+suite ; après chacune, la base relue en lecture seule disait « rien de supprimé ».
+Plus tard, Paul a lancé le même bloc dans l'éditeur SQL : refusé, « RD : 0 lignes au
+lieu de 10 ». Une des trois demandes avait été acceptée APRÈS ma dernière relecture.
+Ce qui a évité une seconde suppression : la transaction comptait ses lignes et
+exigeait que les versions gardées soient présentes avant d'agir. ⛔ **La règle** :
+après une expiration, la relecture ne vaut que pour l'instant où on la fait — avant
+de rejouer, relire encore ; et toute écriture qui peut être rejouée porte son propre
+verrou (nombre exact de lignes visées, présence de ce qu'on garde), sinon un
+rejeu tardif fait le travail deux fois.
+
 **UNE GÉNÉRATION SE VÉRIFIE SUR LES OCTETS LIVRÉS, Y COMPRIS LES SOURCES INCHANGÉES** *(2026-10-27, Ultima-).* La copie locale des sources du catalogue technologique avait une fin de ligne supplémentaire après reconstruction par patch. Le module publié a été généré et contrôlé contre ces copies, puis seul le module et les documents modifiés ont été livrés. Les autres sources sont restées exactes dans GitHub : leurs empreintes ne correspondaient donc plus au module. Coût observé : la CI s'est arrêtée à 79/80 suites ; les trois jobs partageant ce verrou ont échoué malgré les contrôles locaux favorables. Aucun changement de données métier.
 ⇒ Avant génération, comparer à la révision distante les empreintes Git de toutes les sources, pas seulement celles du diff. Reconstituer les fichiers sans ajouter ni retirer de caractère ; ne pas normaliser arbitrairement un fichier métier. Après génération, comparer les empreintes des fichiers livrés et vérifier la publication avec les sources exactes qui resteront dans l'arbre final. Le garde-fou a détecté l'écart ; il reste actif. Source : Ultima- PR #418, workflow 40474174207, verdict `donneeAJour` ; correction sur branche, sans publication de production.
 
@@ -655,6 +669,18 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**« TSC IDENTIQUE » SE MESURE SUR LE COMMIT LIVRÉ, PAS SUR UN COMMIT D'AVANT**
+*(2026-11-04, RenoDevis #476).* La description de la PR affirmait « tsc : 11 erreurs
+avant comme après ». Le compte avait été pris AVANT d'écrire
+`lib/ressemblanceSolaParcours.test.ts`, qui portait 2 erreurs de typage. La CI était
+verte : elle ne type pas les fichiers de test (`tsx` exécute sans vérifier). C'est en
+intégrant `main` et en recomptant fichier par fichier, avant la fusion, que l'écart
+s'est vu : un commit de correction, une exécution de CI (≈ 11 min) et un accord de
+fusion à redemander. ⛔ **La règle** : une affirmation sur une porte de qualité se
+mesure sur la tête qu'on pousse, au dernier geste avant de l'écrire, et en
+comparant fichier par fichier (`cut -d'(' -f1 | sort | uniq -c`), pas un total — un
+total identique peut cacher une erreur corrigée et une autre ajoutée.
 
 **UNE RÉSERVE QUI NOMME LE CRITÈRE FAIT UN PARTIEL, PAS UN « CONFORME AVEC
 RÉSERVE »** *(2026-11-03, Ultima #441)*. Le juge de la recette de Léo a noté T18
