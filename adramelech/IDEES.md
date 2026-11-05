@@ -1939,7 +1939,7 @@ cette seule fiche. Aucun délai de livraison garanti.
 - **Capturée le** : 2026-11-04 (dictée vocale de Paul)
 - **Type** : business (création à plusieurs, adossée à un acteur existant)
 - **Thème** : bâtiment · CVC (climatisation) · association · Paris
-- **Partenaire envisagé** : Henry, Matthieu, Julien — avec Paul, quatre associés
+- **Partenaire envisagé** : Henry, Matthieu Ducrest (SOLA GROUPE), Julien Laudy — avec Paul, quatre associés
 - **Statut** : brute — idée capturée, aucune discussion formalisée, rien engagé
 
 ### L'idée
@@ -1948,12 +1948,13 @@ Monter **Sola Air Paris**, une entreprise de climatisation à Paris, à **quatre
 associés à capital égal**, chacun sur son rôle :
 
 - **Paul** — coordination de chantier ;
-- **Matthieu** — structure de l'entreprise ;
+- **Matthieu Ducrest** — structure de l'entreprise (fondateur-gérant de SOLA
+  GROUPE, qui réunit Sola Air et Sola PV) ;
 - **Henry** — commercial ;
-- **Julien** — capitaux et connexions.
+- **Julien Laudy** — capitaux et connexions.
 
-Pose : **Romin et son fils** comme installateurs ; **Lukas** peut-être aussi
-(« Lukas aussi ? » — question ouverte de Paul).
+Pose : **Romin et son fils** comme installateurs ; **Lukas Fauconnier**
+(ClimatRenov) peut-être aussi (« Lukas aussi ? » — question ouverte de Paul).
 
 Trois leviers déjà sous la main :
 
@@ -1971,22 +1972,31 @@ dans les trois voies : elles s'arbitrent ensemble, pas l'une après l'autre.
 Structurellement, elle tient dans [ADR-007](#adr-007--répondre-à-tous-les-besoins-travaux-dun-client)
 (l'enveloppe-cadre) comme un métier logé dedans.
 
-### À confirmer par Paul (dictée — rien n'est déduit)
+### Identités — confirmées par Paul le 2026-11-05, rapprochées de RIVEN
 
-- **Matthieu** : est-ce **Matthieu du Crest**, fondateur de SOLA GROUPE
-  (`memoire/LEXIQUE-VOCAL.md`) ? Si oui, « structure » et « force de Sola Air
-  à Lyon » viennent du même associé.
-- **Julien** : Julien Laudy, comme dans ADR-002 et ADR-010 ?
-- **Romin** : orthographe (Romain ?) ; **Lukas** : son fils, ou une troisième
-  personne ? Installateurs **salariés** ou **associés** ?
-- **« Sola Air Paris »** : nom de travail, ou marque SOLA utilisée à Paris
-  (licence, franchise, filiale) ?
+Lecture de `network_nodes` (base Ultima) le 2026-11-05 ; seuls les identifiants
+sont repris ici, les fiches restent dans RIVEN.
+
+| Personne | Confirmé par Paul | Fiche RIVEN |
+|---|---|---|
+| Matthieu Ducrest | fondateur-gérant de SOLA GROUPE (Sola Air + Sola PV) | pas de fiche à son nom ; nommé sur `SOLA GROUPE` (`a6e2ccf0`) |
+| Julien Laudy | oui | `Julien LAUDY` (`6adde490`) |
+| Lukas Fauconnier | ClimatRenov | `Lukas FAUCONNIER — CLIMATRENOV` (`ed4ee3ba`) |
+| Romin | — (dicté) | `Romin` (`2252d233`), artisan, « avec son fils » |
+| Henry | **non encore** | candidat unique : `Henry Huvey` (`3e0f31a8`), associé-gérant RénoBoost IA — à confirmer |
+
+Restent ouverts : l'identité d'Henry ; le fils de Romin (pas de fiche) ; le rôle
+de Lukas (installateur, sous-traitant ClimatRenov ou associé) ; **« Sola Air
+Paris »** : nom de travail, ou marque SOLA à Paris (licence, filiale) ?
 
 ### Ce qu'il faut instruire avant d'en parler chiffres
 
 - **Le lien juridique avec Sola Air Lyon** : filiale, licence de marque,
   partenariat commercial ou simple inspiration — il décide de qui porte la
   marque, la garantie et les certifications.
+- **L'équipe de pose** : statut de Romin et de son fils (salariés,
+  sous-traitants, auto-entrepreneurs) et pièces administratives à jour — la
+  fiche RIVEN appelle à la vigilance sur ce point.
 - **Les habilitations du métier** : attestation de capacité fluides
   frigorigènes de l'entreprise, qualifications RGE (QualiPAC) si les aides
   sont visées, assurance décennale — à vérifier aux sources officielles.
@@ -2008,8 +2018,9 @@ Structurellement, elle tient dans [ADR-007](#adr-007--répondre-à-tous-les-beso
 
 ### Liens inter-segments
 
-- **RIVEN** : Henry, Matthieu, Julien, Romin, Lukas — fiches à créer ou
-  rattacher (identifiants seulement, pas de données personnelles ici).
+- **RIVEN** : quatre fiches existent (tableau ci-dessus). Manquent : une
+  fiche « Matthieu Ducrest » reliée à SOLA GROUPE, et le fils de Romin.
+  Création par Léo sur RIVEN (proposer_contact), sur dictée de Paul.
 - **NICOL BOLAS** : simulateur de lancement d'ADR-007 — entrée « s'associer »
   à côté de « créer » et « reprendre ».
 
