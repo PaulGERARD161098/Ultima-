@@ -41,6 +41,7 @@
 | 5 | récupération et réemploi des matériaux (ADR-001) | 5,0/10 | satellite | Hors top — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
 | 6 | prise en charge globale des travaux (ADR-007) | 4,9/10 | structure-cadre | Hors course build — l'**enveloppe souple qui *contient* le socle** ; build différé derrière lui (cf. ADR-007 bloc F) |
 | — | **reprise d’entreprise de climatisation** (ADR-010) | **à instruire** | multiplicateur par acquisition [prov.] | **Non classée** — capturée le 2026-09-05, grille non passée : le prix et les comptes n'existent pas encore (cf. ADR-010 §Analyse) |
+| — | **Sola Air Paris, s'associer à quatre** (ADR-012) | **à instruire** | troisième voie du dossier clim [prov.] | **Non classée** — capturée le 2026-11-04 ; rôles posés, lien avec Sola Air Lyon et pacte d'associés à instruire (cf. ADR-012) |
 
 > Mise à jour 2026-07-20 : visualisation de l’installation scorée **6,9** s'intercale au rang 3.
 > Le moteur système s'enrichit : **visualisation de l’installation conclut la vente** →
@@ -1932,3 +1933,97 @@ Ce parcours est une piste d'enrichissement, pas un dispositif opérationnel.
 **Périmètre de cette capture** : conserver l'idée et son origine terrain.
 Aucun achat, recrutement, développement, dépense ou lancement autorisé par
 cette seule fiche. Aucun délai de livraison garanti.
+
+## ADR-012 — Sola Air Paris : s'associer à quatre
+
+- **Capturée le** : 2026-11-04 (dictée vocale de Paul)
+- **Type** : business (création à plusieurs, adossée à un acteur existant)
+- **Thème** : bâtiment · CVC (climatisation) · association · Paris
+- **Partenaire envisagé** : Henry, Matthieu Ducrest (SOLA GROUPE), Julien Laudy — avec Paul, quatre associés
+- **Statut** : brute — idée capturée, aucune discussion formalisée, rien engagé
+
+### L'idée
+
+Monter **Sola Air Paris**, une entreprise de climatisation à Paris, à **quatre
+associés à capital égal**, chacun sur son rôle :
+
+- **Paul** — coordination de chantier ;
+- **Matthieu Ducrest** — structure de l'entreprise (fondateur-gérant de SOLA
+  GROUPE, qui réunit Sola Air et Sola PV) ;
+- **Henry** — commercial ;
+- **Julien Laudy** — capitaux et connexions.
+
+Pose : **Romin et son fils** comme installateurs ; **Lukas Fauconnier**
+(ClimatRenov) peut-être aussi (« Lukas aussi ? » — question ouverte de Paul).
+
+Trois leviers déjà sous la main :
+
+1. **la force de Sola Air à Lyon** (savoir-faire, offre, organisation existants) ;
+2. **le réseau de Julien** ;
+3. **Renoboost IA et ses outils** pour le commercial et la gestion.
+
+### Place dans le dossier climatisation
+
+C'est la **troisième voie** du même dossier que [ADR-002](#adr-002--créer-une-entreprise-polyvalente-en-climatisation-et-énergie)
+(bâtir) et [ADR-010](#adr-010--reprendre-une-entreprise-de-climatisation)
+(acheter) : **s'associer** — créer, mais adossé à un acteur qui tourne déjà à
+Lyon, avec un tour de table qui couvre les quatre fonctions. Julien est présent
+dans les trois voies : elles s'arbitrent ensemble, pas l'une après l'autre.
+Structurellement, elle tient dans [ADR-007](#adr-007--répondre-à-tous-les-besoins-travaux-dun-client)
+(l'enveloppe-cadre) comme un métier logé dedans.
+
+### Identités — confirmées par Paul le 2026-11-05, rapprochées de RIVEN
+
+Lecture de `network_nodes` (base Ultima) le 2026-11-05 ; seuls les identifiants
+sont repris ici, les fiches restent dans RIVEN.
+
+| Personne | Confirmé par Paul | Fiche RIVEN |
+|---|---|---|
+| Matthieu Ducrest | fondateur-gérant de SOLA GROUPE (Sola Air + Sola PV) | pas de fiche à son nom ; nommé sur `SOLA GROUPE` (`a6e2ccf0`) |
+| Julien Laudy | oui | `Julien LAUDY` (`6adde490`) |
+| Lukas Fauconnier | ClimatRenov | `Lukas FAUCONNIER — CLIMATRENOV` (`ed4ee3ba`) |
+| Romin | — (dicté) | `Romin` (`2252d233`), artisan, « avec son fils » |
+| Henry | **non encore** | candidat unique : `Henry Huvey` (`3e0f31a8`), associé-gérant RénoBoost IA — à confirmer |
+
+Restent ouverts : l'identité d'Henry ; le fils de Romin (pas de fiche) ; le rôle
+de Lukas (installateur, sous-traitant ClimatRenov ou associé) ; **« Sola Air
+Paris »** : nom de travail, ou marque SOLA à Paris (licence, filiale) ?
+
+### Ce qu'il faut instruire avant d'en parler chiffres
+
+- **Le lien juridique avec Sola Air Lyon** : filiale, licence de marque,
+  partenariat commercial ou simple inspiration — il décide de qui porte la
+  marque, la garantie et les certifications.
+- **L'équipe de pose** : statut de Romin et de son fils (salariés,
+  sous-traitants, auto-entrepreneurs) et pièces administratives à jour — la
+  fiche RIVEN appelle à la vigilance sur ce point.
+- **Les habilitations du métier** : attestation de capacité fluides
+  frigorigènes de l'entreprise, qualifications RGE (QualiPAC) si les aides
+  sont visées, assurance décennale — à vérifier aux sources officielles.
+- **Capital égal, apports inégaux** : capitaux (Julien) contre temps de
+  travail (Paul, Henry, Matthieu) — pacte d'associés, rémunération des
+  fonctions, sortie d'un associé. À poser avant la première facture.
+- **Le double rôle de Paul** : associé de Sola Air Paris ET fournisseur de
+  Renoboost IA — conditions d'usage des outils à écrire noir sur blanc.
+- **Le temps de Paul** : la coordination de chantier s'ajoute à Ultima et
+  Renoboost IA — combien d'heures par semaine, réellement ?
+
+### Axe vente (Directive MS)
+
+- Pour **Renoboost IA** : Sola Air Paris serait un **pro utilisateur** de ses
+  outils commerciaux et de gestion — un client de plus, interne au tour de
+  table. Indicateur : pro actif sur Renoboost IA.
+- Pour l'entreprise elle-même : indicateur à fixer à la première discussion
+  (rendez-vous tenus, devis signés) — aucun volume supposé ici.
+
+### Liens inter-segments
+
+- **RIVEN** : quatre fiches existent (tableau ci-dessus). Manquent : une
+  fiche « Matthieu Ducrest » reliée à SOLA GROUPE, et le fils de Romin.
+  Création par Léo sur RIVEN (proposer_contact), sur dictée de Paul.
+- **NICOL BOLAS** : simulateur de lancement d'ADR-007 — entrée « s'associer »
+  à côté de « créer » et « reprendre ».
+
+**Périmètre de cette capture** : conserver l'idée, ses rôles et ses questions.
+Aucun contact, aucun engagement, aucune dépense, aucun score par cette seule
+fiche — la grille stratégique attend les réponses ci-dessus.
