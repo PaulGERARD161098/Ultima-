@@ -1938,7 +1938,7 @@ cette seule fiche. Aucun délai de livraison garanti.
 
 - **Capturée le** : 2026-11-04 (dictée vocale de Paul)
 - **Type** : business (création à plusieurs, adossée à un acteur existant)
-- **Thème** : bâtiment · CVC (climatisation) · association · Paris
+- **Thème** : stratégie d'entreprise · bâtiment · CVC (climatisation) · association · Paris
 - **Partenaire envisagé** : Henry Huvey, Matthieu Ducrest (SOLA GROUPE), Julien Laudy — avec Paul, quatre associés
 - **Statut** : à raffiner — fiche complète le 2026-11-05 ; score à instruire, rien engagé
 
