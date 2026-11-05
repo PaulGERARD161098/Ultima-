@@ -4930,3 +4930,16 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 **Fait :** #441 fusionnée (`c0277f6`) : recette CONFORME 5, PARTIEL 6. #442 fusionnée (`7740c7e`) : verrou, non-vacuité opérationnelle, T18 rejoué (PARTIEL ; risque fermé par le verrou). Revue Codex sans constat sur `c8c904a`.
 
 **Non fait, et pourquoi :** fermer l'inscription Supabase et activer la protection des mots de passe divulgués (aucun outil de la séance ne règle l'authentification ; geste de Paul). Phase 5 reportée sur recommandation : elle relève de la pause du 01/11, et `/api/leo/ecritures` exige le jeton de Paul ; dicter à Léo dans Ultima couvre déjà le besoin.
+
+## 2026-11-05 — Sola Air Paris : l'idée, ses associés, sa case
+
+**Source :** dictée de Paul du 04/11 (« Implante dans le bon projet … On met ça où ? »), puis ses réponses du 05/11.
+
+**Décision 1 — où :** l'idée vit dans ADRAMELECH sous **ADR-012**, troisième voie du dossier climatisation (bâtir ADR-002, acheter ADR-010, s'associer ADR-012), contenue par ADR-007. Archipel : **« stratégie d'entreprise »** (Paul : « plutôt entreprise »), pas un archipel nouveau.
+
+**Décision 2 — qui :** quatre associés à capital égal : Paul (coordination de chantier), Matthieu Ducrest, fondateur-gérant de SOLA GROUPE (Sola Air + Sola PV) (structure), Henry Huvey (commercial), Julien Laudy (capitaux et connexions). Pose : Romin et son fils ; Lukas Fauconnier (ClimatRenov), **installateur sous-traitant exclusif**. **Sola Air Paris = la marque SOLA à Paris.**
+
+**Fait :** fiche complète (classification, grille qualitative A, B, D, F, G) ; #446, #447, #448, #449 fusionnées sur accord de Paul portant sur chaque SHA. Lecture RIVEN seule, aucune écriture en base, aucun contact.
+
+**Non fait, et pourquoi :** blocs C et E (aucun chiffre : forme du lien SOLA et capital à obtenir) ; fiches RIVEN de Matthieu Ducrest et du fils de Romin (dictée de Paul à Léo, voie proposer_contact) ; ordre du jour de la réunion à quatre (refusé par Paul le 05/11 au profit de la fiche).
+

@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v119 2026-11-04 sha256:d05afa7960e4 -->
+<!-- lecons:empreinte v120 2026-11-05 sha256:6987fae6b671 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2724,6 +2724,19 @@ modifie, et attendre la revue automatique avant de fusionner. Relire la tête de
 `main` au moment de poser la question de fusion, puis juste avant de fusionner.
 
 ## 6. Économie
+
+**ON NE DEMANDE PAS L'ACCORD DE FUSION TANT QUE PAUL RÉPOND ENCORE SUR LE FOND**
+*(2026-11-05, Ultima #446 → #449)*. Une seule fiche d'idée (ADR-012) a produit
+quatre PR et cinq CI complètes : à chaque fois, l'accord était demandé sur un SHA
+pendant que des questions restaient ouvertes. La réponse suivante de Paul tombait
+après l'accord, donc dans une nouvelle PR, puisqu'un commit de plus rend l'accord
+caduc. Mesuré sur les check runs : 13 à 17 min par job navigateur, deux jobs par
+exécution, alors que la règle « une PR par séance » vise une seule CI. La CI lourde
+ne sautait jamais, parce que le diff portait `carto-idees.html` (généré) et un
+test `.mjs`. ⛔ **Tant qu'une question de fond est posée à Paul, on committe et on
+pousse, mais on ne demande pas l'accord : on le demande une fois, quand il n'a plus
+rien à trancher.** S'il donne un accord et une correction dans le même message, on
+fusionne le SHA approuvé et la correction attend la PR de clôture de la séance.
 
 **LE GRAIN SE RELIT EN ADVERSAIRE AVANT LA PR, PAS APRÈS LE VERT** *(2026-11-03,
 Ultima #441)*. Après une CI verte et juste avant l'accord de Paul, la relecture
