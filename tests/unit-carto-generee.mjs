@@ -45,8 +45,11 @@ verdicts.regroupementCorrect = chaqueIdeeBienPlacee &&
 // Thème pour les quatre premières).
 const parLabel = Object.fromEntries(archipels.map((a) => [a.label, a.idees.map((i) => i.id)]));
 verdicts.archipelsAttendus =
-  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005', 'ADR-009', 'ADR-010', 'ADR-011', 'ADR-012']) &&
-  JSON.stringify(parLabel['Commercial']) === JSON.stringify(['ADR-004']);
+  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005', 'ADR-009', 'ADR-010', 'ADR-011']) &&
+  JSON.stringify(parLabel['Commercial']) === JSON.stringify(['ADR-004']) &&
+  // ADR-012 Sola Air Paris rangée en « stratégie d'entreprise » (Paul, 05/11 :
+  // « plutôt entreprise »), avec ADR-007 qui la contient.
+  JSON.stringify(parLabel["Stratégie d'entreprise"]) === JSON.stringify(['ADR-007', 'ADR-012']);
 
 // ---------- 4. Idée sans thème → archipel « À classer » (fixture en mémoire) ----------
 // On n'ajoute PAS l'idée à IDEES.md : la fixture vit ici, en mémoire.
