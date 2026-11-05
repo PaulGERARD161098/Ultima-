@@ -1939,22 +1939,23 @@ cette seule fiche. Aucun délai de livraison garanti.
 - **Capturée le** : 2026-11-04 (dictée vocale de Paul)
 - **Type** : business (création à plusieurs, adossée à un acteur existant)
 - **Thème** : bâtiment · CVC (climatisation) · association · Paris
-- **Partenaire envisagé** : Henry, Matthieu Ducrest (SOLA GROUPE), Julien Laudy — avec Paul, quatre associés
+- **Partenaire envisagé** : Henry Huvey, Matthieu Ducrest (SOLA GROUPE), Julien Laudy — avec Paul, quatre associés
 - **Statut** : brute — idée capturée, aucune discussion formalisée, rien engagé
 
 ### L'idée
 
-Monter **Sola Air Paris**, une entreprise de climatisation à Paris, à **quatre
+Monter **Sola Air Paris** — la **marque SOLA à Paris** (confirmé par Paul le 2026-11-05) —, une entreprise de climatisation, à **quatre
 associés à capital égal**, chacun sur son rôle :
 
 - **Paul** — coordination de chantier ;
 - **Matthieu Ducrest** — structure de l'entreprise (fondateur-gérant de SOLA
   GROUPE, qui réunit Sola Air et Sola PV) ;
-- **Henry** — commercial ;
+- **Henry Huvey** — commercial ;
 - **Julien Laudy** — capitaux et connexions.
 
 Pose : **Romin et son fils** comme installateurs ; **Lukas Fauconnier**
-(ClimatRenov) peut-être aussi (« Lukas aussi ? » — question ouverte de Paul).
+(ClimatRenov) comme **installateur sous-traitant exclusif** (confirmé par Paul
+le 2026-11-05).
 
 Trois leviers déjà sous la main :
 
@@ -1981,19 +1982,22 @@ sont repris ici, les fiches restent dans RIVEN.
 |---|---|---|
 | Matthieu Ducrest | fondateur-gérant de SOLA GROUPE (Sola Air + Sola PV) | pas de fiche à son nom ; nommé sur `SOLA GROUPE` (`a6e2ccf0`) |
 | Julien Laudy | oui | `Julien LAUDY` (`6adde490`) |
-| Lukas Fauconnier | ClimatRenov | `Lukas FAUCONNIER — CLIMATRENOV` (`ed4ee3ba`) |
+| Lukas Fauconnier | ClimatRenov ; installateur sous-traitant exclusif | `Lukas FAUCONNIER — CLIMATRENOV` (`ed4ee3ba`) |
 | Romin | — (dicté) | `Romin` (`2252d233`), artisan, « avec son fils » |
-| Henry | **non encore** | candidat unique : `Henry Huvey` (`3e0f31a8`), associé-gérant RénoBoost IA — à confirmer |
+| Henry Huvey | oui (2026-11-05) | `Henry Huvey` (`3e0f31a8`), associé-gérant RénoBoost IA |
 
-Restent ouverts : l'identité d'Henry ; le fils de Romin (pas de fiche) ; le rôle
-de Lukas (installateur, sous-traitant ClimatRenov ou associé) ; **« Sola Air
-Paris »** : nom de travail, ou marque SOLA à Paris (licence, filiale) ?
+Reste ouvert : le fils de Romin (pas de fiche). **« Sola Air Paris » est la
+marque SOLA à Paris** : la forme du lien (licence de marque, filiale de SOLA
+GROUPE) reste à instruire ci-dessous.
 
 ### Ce qu'il faut instruire avant d'en parler chiffres
 
-- **Le lien juridique avec Sola Air Lyon** : filiale, licence de marque,
-  partenariat commercial ou simple inspiration — il décide de qui porte la
-  marque, la garantie et les certifications.
+- **Le lien juridique avec SOLA GROUPE** : la marque est acquise (SOLA à
+  Paris) ; reste sa forme — filiale ou licence de marque. Elle décide de qui
+  porte la garantie, les certifications, et de la place de Matthieu Ducrest
+  des deux côtés.
+- **L'exclusivité de Lukas Fauconnier** : contrat de sous-traitance écrit
+  (périmètre, durée, prix, ce qu'« exclusif » engage de chaque côté).
 - **L'équipe de pose** : statut de Romin et de son fils (salariés,
   sous-traitants, auto-entrepreneurs) et pièces administratives à jour — la
   fiche RIVEN appelle à la vigilance sur ce point.
