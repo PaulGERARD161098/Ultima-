@@ -41,7 +41,7 @@
 | 5 | récupération et réemploi des matériaux (ADR-001) | 5,0/10 | satellite | Hors top — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
 | 6 | prise en charge globale des travaux (ADR-007) | 4,9/10 | structure-cadre | Hors course build — l'**enveloppe souple qui *contient* le socle** ; build différé derrière lui (cf. ADR-007 bloc F) |
 | — | **reprise d’entreprise de climatisation** (ADR-010) | **à instruire** | multiplicateur par acquisition [prov.] | **Non classée** — capturée le 2026-09-05, grille non passée : le prix et les comptes n'existent pas encore (cf. ADR-010 §Analyse) |
-| — | **Sola Air Paris, s'associer à quatre** (ADR-012) | **à instruire** | troisième voie du dossier clim [prov.] | **Non classée** — capturée le 2026-11-04 ; rôles posés, lien avec Sola Air Lyon et pacte d'associés à instruire (cf. ADR-012) |
+| — | **Sola Air Paris, s'associer à quatre** (ADR-012) | **à instruire** | client et terrain d'application du socle [prov.] | **Non classée** — grille qualitative passée le 2026-11-05 (A, B, D, F, G) ; C et E attendent la forme du lien SOLA et le capital (cf. ADR-012) |
 
 > Mise à jour 2026-07-20 : visualisation de l’installation scorée **6,9** s'intercale au rang 3.
 > Le moteur système s'enrichit : **visualisation de l’installation conclut la vente** →
@@ -1940,7 +1940,7 @@ cette seule fiche. Aucun délai de livraison garanti.
 - **Type** : business (création à plusieurs, adossée à un acteur existant)
 - **Thème** : bâtiment · CVC (climatisation) · association · Paris
 - **Partenaire envisagé** : Henry Huvey, Matthieu Ducrest (SOLA GROUPE), Julien Laudy — avec Paul, quatre associés
-- **Statut** : brute — idée capturée, aucune discussion formalisée, rien engagé
+- **Statut** : à raffiner — fiche complète le 2026-11-05 ; score à instruire, rien engagé
 
 ### L'idée
 
@@ -1972,6 +1972,19 @@ Lyon, avec un tour de table qui couvre les quatre fonctions. Julien est présent
 dans les trois voies : elles s'arbitrent ensemble, pas l'une après l'autre.
 Structurellement, elle tient dans [ADR-007](#adr-007--répondre-à-tous-les-besoins-travaux-dun-client)
 (l'enveloppe-cadre) comme un métier logé dedans.
+
+### Classification — la case retenue
+
+- **Quadrant Ultima** : **ADRAMELECH** pour la capture, ancrée dans **RIVEN**
+  (les cinq personnes et SOLA GROUPE y sont, ou y entrent) et **NICOL BOLAS**
+  (capital, pacte, rémunération des fonctions : un acte financier d'abord).
+- **Type** : **business** — création à plusieurs, pas outil interne.
+- **Rôle vs socle Renoboost IA** : **client et terrain d'application** du socle,
+  pas concurrent [prov.]. Sola Air Paris vend et installe ; Renoboost IA lui
+  fournit le commercial et la gestion. Le risque n'est pas la cannibalisation,
+  c'est le **temps de Paul** (voir §Analyse, bloc F).
+- **Rang provisoire** : **non classée — score « à instruire »**, comme ADR-010 :
+  le chiffre n'existe pas encore (voir §Analyse, bloc E).
 
 ### Identités — confirmées par Paul le 2026-11-05, rapprochées de RIVEN
 
@@ -2028,6 +2041,91 @@ GROUPE) reste à instruire ci-dessous.
 - **NICOL BOLAS** : simulateur de lancement d'ADR-007 — entrée « s'associer »
   à côté de « créer » et « reprendre ».
 
-**Périmètre de cette capture** : conserver l'idée, ses rôles et ses questions.
-Aucun contact, aucun engagement, aucune dépense, aucun score par cette seule
-fiche — la grille stratégique attend les réponses ci-dessus.
+### Analyse stratégique
+
+> Grille des 7 blocs (`CADRAGE-ADRAMELECH.md` §8.2), passée le 2026-11-05 **sur
+> ce qui est connu** : rôles, identités, marque. Les blocs qualitatifs (A, B, D,
+> F, G) sont tenus ; **C et E restent ouverts**, faute de chiffres. Toute
+> affirmation non sourcée porte **[hyp.]**.
+
+#### A. Positionnement — ERRC et 5 forces
+
+- **Marché** : la climatisation résidentielle à Paris est un **océan rouge**
+  [hyp. — nombre d'installateurs non mesuré] : beaucoup d'acteurs, une
+  réputation du secteur abîmée (constat déjà posé dans ADR-002).
+- **ERRC** — *Exclure* : le démarchage agressif et les promesses d'aides non
+  tenues. *Atténuer* : la saisonnalité, par l'adossement à Sola PV dans le même
+  groupe [hyp. — à confirmer avec Matthieu Ducrest]. *Renforcer* : la marque
+  SOLA, déjà éprouvée à Lyon, et la coordination de chantier. *Créer* : un
+  parcours commercial et de gestion outillé par Renoboost IA dès le premier
+  client.
+- **5 forces** : rivalité forte ; pouvoir des clients fort (devis comparés) ;
+  fournisseurs (fabricants, grossistes) — l'appui SOLA GROUPE peut peser ;
+  entrants faciles ; substituts faibles en été. **Verdict : rouge, avec un
+  angle bleu possible** — la fiabilité outillée sous une marque existante.
+
+#### B. Diagnostic — TOWS
+
+- **Forces** : quatre fonctions couvertes dès le départ ; marque et savoir-faire
+  SOLA ; réseau de Julien Laudy ; outils Renoboost IA ; trois poseurs identifiés.
+- **Faiblesses** : capital égal pour des apports inégaux ; double casquette de
+  Matthieu Ducrest (SOLA GROUPE et associé) et de Paul (associé et fournisseur
+  d'outils) ; pose concentrée sur deux équipes ; aucun chiffre.
+- **Opportunités** : le réseau de Julien comme premier flux de clients ; la
+  demande de rafraîchissement l'été [hyp.] ; le relais PAC et PV hors saison.
+- **Menaces** : un été frais ; une malfaçon qui abîme la marque SOLA jusqu'à
+  Lyon ; une habilitation manquante qui bloque les chantiers aidés.
+- **Axes** : (1) **démarrer adossé, pas seul** — la forme du lien avec SOLA
+  GROUPE se tranche en premier ; (2) **écrire les règles avant le premier
+  euro** — pacte, sous-traitance exclusive, conditions d'usage des outils ;
+  (3) **le premier flux vient du réseau de Julien**, mesuré en rendez-vous tenus.
+
+#### C. Business model — Lean Canvas (ouvert)
+
+- **Problème** : un client parisien qui veut une clim fiable, posée vite, sans
+  surprise d'aides. **Solution** : une pose SOLA, coordonnée, suivie.
+- **Canaux** : réseau de Julien Laudy, commercial d'Henry Huvey, outils
+  Renoboost IA. **Avantage déloyal** : la marque SOLA et son retour d'expérience
+  lyonnais.
+- **Besoins réels à chiffrer** : capital de départ, véhicule et outillage,
+  stock, assurances, coût horaire de la sous-traitance, rémunération des
+  fonctions. **Aucun montant posé ici** : ils se demandent à SOLA GROUPE (coûts
+  réels à Lyon) et se décident à quatre.
+
+#### D. Risque — prémortem à deux ans
+
+| Cause d'échec projetée | Signal avancé |
+|---|---|
+| Blocage à deux contre deux, faute de règle de décision | un désaccord tranché « plus tard » dès les premières réunions |
+| Conflit d'intérêts SOLA GROUPE / Sola Air Paris (prix, clients, marque) | la forme du lien encore floue au premier devis |
+| Pose saturée ou à l'arrêt (deux équipes, pièces administratives) | un chantier décalé faute de poseur ; un document manquant |
+| Paul débordé : coordination + Ultima + Renoboost IA | des chantiers coordonnés le soir ; Renoboost IA qui ralentit |
+| Une malfaçon qui touche la marque à Lyon | un premier avis client négatif non traité sous 48 h |
+
+#### E. Scoring — non passé, refus motivé
+
+Le bloc E exige *Rémunérateur* et *Temps* chiffrés (pondérés ×2). Ni le chiffre
+d'affaires visé, ni le capital, ni le délai d'ouverture n'existent : un score ici
+aurait l'apparence des autres et serait cru. **Score : à instruire**, le jour où
+la forme du lien SOLA et le capital de départ sont connus.
+
+#### F. Benchmark — face à Renoboost IA
+
+Sola Air Paris **ne concurrence pas** le socle : elle en est un **utilisateur**,
+et un terrain où éprouver ses outils sur une vraie entreprise de pose. Le point
+de friction est unique et réel : **le temps de Paul**. Verdict provisoire :
+**complément du socle, sous condition** — que la coordination de chantier soit
+bornée en heures par semaine avant le lancement.
+
+#### G. Provision d'exécution — ce qui existe déjà
+
+- **Léo sur RIVEN** : fiches et relations (Matthieu Ducrest, le fils de Romin).
+- **Renoboost IA** : outils commerciaux et de gestion de la future entreprise.
+- **Skill `rapport-client-pro`** : SOLA y est déjà un pro suivi — le bilan
+  mensuel pourrait couvrir Sola Air Paris sans outil nouveau.
+- **NICOL BOLAS** : simulateur de lancement d'ADR-007, entrée « s'associer ».
+- Aucun agent à créer à ce stade.
+
+**Périmètre de cette fiche** : capture, identités, analyse qualitative.
+Aucun contact, aucun engagement, aucune dépense, aucun score — le bloc E attend
+la forme du lien SOLA et le capital de départ.
