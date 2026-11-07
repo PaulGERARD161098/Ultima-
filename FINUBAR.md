@@ -1,3 +1,35 @@
+# Réactivation et clôture hebdomadaire — 07/11/2026
+
+Mandat : terminer les boucles de la semaine du 2 au 7 novembre. Périmètre initial : dix dépôts de `finubar/depots.json` ; engagements hors dépôts non encore précisés par Paul. Lecture des dix têtes main et comparaison avec les notes. Les paragraphes récents de FINUBAR font foi pour la reprise documentaire ; les anciens objets JSON ne couvrent pas tous les travaux du 05/11. Aucun agent permanent réactivé.
+
+## État rapproché et preuve de sortie restante
+
+| Boucle | Constat au 07/11 | Prochaine preuve / responsable |
+|---|---|---|
+| Ultima : ZOH et mobile | Consolidation #434/#435 et correctif #440 fusionnés ; recette iPhone rapportée par Paul dans le grain | Boucles déjà fermées ; ne pas les refaire |
+| Leçons communes | Source main v120 ; copies v92, v93, v108 ou v115. Quatre chemins ambigus détectés puis préfixés ; v121 préparée, sceau 2bbdd84e949e ; 109 chemins, dix dépôts, zéro ambiguïté | Préparation des neuf copies identiques ; publication à distinguer de préparation. Fusion Ultima sur accord lié à la version |
+| RénoDevis : Stripe | Secret présent en Production, métadonnée modifiée le 22/10 20:39 UTC ; aucune valeur déchiffrée. Note du 04/11 : test:true. Le connecteur Supabase ne montre que Artidispo et un ancien RenoDevis inactif | Mode réel du déploiement courant et comptes capables d'encaisser à vérifier. Présence de variable ≠ mode live. Aucun compte créé ni paiement déclenché |
+| RénoDevis : SOLA deux vocaux et PDF | Code et gardes livrés #487/#488/#490 ; recette terrain non prouvée selon FINUBAR | Paul/Matthieu : deux vrais vocaux, récapitulatif corrigé, prix revérifiés puis PDF reçu ; `memoire/APPRENTISSAGES-SOLA.md` |
+| RénoDevis : signature/envoi/relance | #491 à #494 fusionnées ; preuves isolées documentées. Aucun nouveau passage réel effectué ici | Recette signature sur téléphone, notifications reçues ; réouverture auto après revue de file et décision de Paul. L'ancienne « prochaine liste envoi » est dépassée par #493 |
+| RénoDevis : pose | Code de propositions sur main ; métadonnée Vercel RD_PROPOSITIONS_POSE créée le 05/11 avec commentaire d'activation après contrôles | Réception réelle client → pro → notifications. Base active non accessible par le connecteur courant ; ne pas réappliquer la migration sur la foi de l'ancienne note |
+| RénoDevis : messagerie pro | Préparation OAuth livrée ; noms de configuration Microsoft présents dans Vercel (sans déchiffrement) | Connexion consentie du compte et recette d'envoi/réception à vérifier ; présence des identifiants ≠ connexion aboutie |
+| ArtiDispo : iCal et propositions | Plan canonique en tête de son FINUBAR, main f7d5bb1 : installation inactive, correctifs d'activation par artisan encore à préparer | Lots 1–4 préparables sans Matthieu ; flux ICS réel, configuration email et recette pilote requis avant ouverture. Ne pas confondre avec les souhaits de pose RD |
+| ArtiDispo : téléphone | Ancien objet de grain : renvoi et SMS non éprouvés sur le mobile de Matthieu | Matthieu/Paul : état du renvoi puis appel sans réponse et SMS distinct ; aucune réinitialisation globale |
+| SPC : avis clients | Code main 2ffbd1a, migration et recette isolée documentées dans `artisan-builder/docs/SPC-AVIS-2026-11-03.md` | Vérifier livraison et avis de recette explicitement autorisé, privé ; aucun envoi aux anciens clients |
+| RénoBoost : proximité et contrôle facturation | #633/#634 puis ressources novembre #635 sur main ; source `docs/CHANTIER-PROXIMITE.md` | Relire la réception connectée restante avant de déclarer les quatre parcours finis |
+| ADR-012 | Fiche et analyse qualitative fusionnées #446–#450 | Réunion à quatre : lien SOLA et capital de départ. Fiches RIVEN Matthieu et fils de Romin et recette proposer_contact restent distinctes |
+| Cinq autres dépôts | RenoAgenda, RenoPredict, console, mon-dpe.fr, DATARENO- : aucun commit main daté du 02 au 07/11 trouvé | Leurs dettes antérieures restent conservées, pas déclarées closes |
+
+## Cadre de poursuite
+
+But : fermer chaque boucle par sa preuve utilisateur, puis mettre à jour sa source. Moyens : GitHub, clones isolés, métadonnées Vercel et accès Supabase réellement exposés ; aucun nouveau service. Réussite : preuve datée sur la version reçue, statut durable réconcilié et blocages nommés. Priorité commerciale : encaissement RénoDevis, puis usage SOLA et ArtiDispo ; aucun revenu supplémentaire mesuré. Risques : notes périmées, confusion test/live, activation globale et double envoi ; prévention : versions réelles, recettes isolées, transport réel seulement sur mandat distinct, pas de rejeu d'opération inconnue.
+
+La pause Léo/Fin du 01/11 reste en vigueur pour les agents produits. Les PR #351 et #365 ne sont pas ouvertes ni exécutées ici (contrôle privé R21 exclu). #425 reste hors consolidation et bloquée sur ses preuves ; aucun statut clos inventé. L'accès aux anciennes sessions Notion requiert une offre Business et n'a pas fourni d'historique.
+
+Préparation documentaire en cours sur branche ; aucune fusion, publication métier, migration ou communication à un tiers effectuée par cette reprise.
+
+---
+
 # 2 novembre 2026 — socle vierge paiement artisan préparé
 
 Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur déterministe, recette isolée, badge et publication par le générateur existant. Six tests moteur reçus et publication vérifiée. Aucun compte, fournisseur, taux commercial ou donnée professionnelle. Préparation sur main `f7fe2100d92644cac11c9b0dafe6282c69697ff6`. Aucun agent activé. Prochaine action : recevoir l’intégration du badge avant choix et raccordement d’un prestataire.

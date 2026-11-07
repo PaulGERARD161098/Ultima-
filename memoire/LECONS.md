@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v120 2026-11-05 sha256:6987fae6b671 -->
+<!-- lecons:empreinte v121 2026-11-07 sha256:2bbdd84e949e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -673,7 +673,7 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 **« TSC IDENTIQUE » SE MESURE SUR LE COMMIT LIVRÉ, PAS SUR UN COMMIT D'AVANT**
 *(2026-11-04, RenoDevis #476).* La description de la PR affirmait « tsc : 11 erreurs
 avant comme après ». Le compte avait été pris AVANT d'écrire
-`lib/ressemblanceSolaParcours.test.ts`, qui portait 2 erreurs de typage. La CI était
+`RenoDevis/lib/ressemblanceSolaParcours.test.ts`, qui portait 2 erreurs de typage. La CI était
 verte : elle ne type pas les fichiers de test (`tsx` exécute sans vérifier). C'est en
 intégrant `main` et en recomptant fichier par fichier, avant la fusion, que l'écart
 s'est vu : un commit de correction, une exécution de CI (≈ 11 min) et un accord de
@@ -741,7 +741,7 @@ séparateurs, ses caractères, mesurés à la source (le moteur, la base, le
 clavier du téléphone). Et un test qui garde une règle se sabote **en retirant
 cette règle-là**, pas en cassant le code autour.
 *Rechute de la règle « UNE BOUCLE DE SABOTAGE NE SE RESTAURE PAS PAR
-`git checkout` », le même jour : un `git checkout -- data/prestations.json` a
+`git checkout` », le même jour : un `git checkout` sur `mon-dpe.fr/data/prestations.json` a
 effacé le catalogue air/air non committé. Rattrapé parce que les tests sont
 passés de 91 à 90.*
 
@@ -1044,7 +1044,7 @@ suivant qui la paie.
 **UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN** *(2026-09-13, RenoBoost)*.
 `revoke all on function ... from anon, authenticated` a rendu `success:true` et n'a rien fait : `create function` accorde EXECUTE à PUBLIC, dont anon hérite. Mesuré : `has_function_privilege('anon', ...)` = true APRÈS le revoke. Corrigé par `from public` d'abord.
 ⇒ *Règle* : un droit se vérifie du côté où il peut être contourné (`has_function_privilege`, pas le retour de la migration), et `success:true` n'est pas une mesure.
-*Rechute du 2026-10-19 (Ultima-, AMATSU), sur une TABLE* : `revoke all on public.amatsu_lectures from anon` puis `grant select, insert, delete … to authenticated`. Mais Supabase accorde par défaut TOUS les droits sur une table neuve de `public` à anon ET à authenticated : le rôle connecté gardait UPDATE (bloqué par la RLS, faute de policy) et **TRUNCATE, que la RLS ne voit pas**. Trouvé à la relecture d'avant application, pas par un test : le harnais lisait le TEXTE de la migration. ⛔ Tout retirer d'abord (`from public, anon, authenticated`), puis donner la liste fermée ; et le prouver en EXÉCUTANT la migration dans un Postgres jetable qui reproduit les droits par défaut (`alter default privileges … grant all on tables to anon, authenticated`), puis `has_table_privilege` et un vrai `truncate` — l'ancien revoke y laissait passer le vidage (`tests/unit-amatsu-validate.mjs` §9).
+*Rechute du 2026-10-19 (Ultima-, AMATSU), sur une TABLE* : `revoke all on public.amatsu_lectures from anon` puis `grant select, insert, delete … to authenticated`. Mais Supabase accorde par défaut TOUS les droits sur une table neuve de `public` à anon ET à authenticated : le rôle connecté gardait UPDATE (bloqué par la RLS, faute de policy) et **TRUNCATE, que la RLS ne voit pas**. Trouvé à la relecture d'avant application, pas par un test : le harnais lisait le TEXTE de la migration. ⛔ Tout retirer d'abord (`from public, anon, authenticated`), puis donner la liste fermée ; et le prouver en EXÉCUTANT la migration dans un Postgres jetable qui reproduit les droits par défaut (`alter default privileges … grant all on tables to anon, authenticated`), puis `has_table_privilege` et un vrai `truncate` — l'ancien revoke y laissait passer le vidage (`Ultima-/tests/unit-amatsu-validate.mjs` §9).
 
 
 **LA CLÉ SERVICE PASSE OUTRE LA RLS : LE PÉRIMÈTRE SE POSE À LA MAIN** *(2026-09-15, RenoBoost)*.
@@ -1666,7 +1666,7 @@ Les tests gardaient le texte RENDU de la page ; rien ne lisait ce qu'elle dit qu
 `twitter:*`, JSON-LD et l'IMAGE de partage — tout ce qu'un lien affiche sans que la page soit ouverte.**
 
 ⇒ **Garde posé : `RenoBoost/tests/partage.test.mjs` (interdits + image versionnée `?v=`) et
-`scripts/generer-og-image.mjs` (image régénérée, refuse une promesse interdite). L'aperçu déjà
+`RenoBoost/scripts/generer-og-image.mjs` (image régénérée, refuse une promesse interdite). L'aperçu déjà
 envoyé ne se rattrape pas : WhatsApp le fige à l'envoi.**
 
 **UN CHIFFRAGE SE FAIT AVEC LA RÈGLE CODÉE, PAS AVEC LA PREMIÈRE RÈGLE TROUVÉE** *(2026-10-09, RenoBoost + RenoDevis)*.
