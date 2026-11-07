@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v120 2026-11-05 sha256:6987fae6b671 -->
+<!-- lecons:empreinte v121 2026-11-07 sha256:7a3f624a3d19 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1618,6 +1618,33 @@ plus et un diagnostic à refaire. ⇒ Simuler Safari en **substituant ses unité
 vraies feuilles** (vh/lvh → grand viewport, dvh/svh → visible), comme le bloc « Safari
 iOS » de `Ultima-/tests/smoke-carte-celeste.mjs` ; une cause écrite dans un prompt de reprise est une
 hypothèse tant qu'elle n'est pas reproduite.
+
+**UN TEST VERT N'EST PAS UN GARDE-FOU TENU — IL FAUT LE CASSER ET VOIR LE MESSAGE
+CHANGER** *(2026-11-05 → 07, RenoDevis)*. Quarante gardes du parcours SOLA, de la
+signature par code, de l'envoi au client et du moteur de relance affichaient vert.
+Passées sous le harnais de sabotage `RenoDevis/tests/sabotage/saboter.mjs` — un garde cassé à la fois,
+chaque liste ouverte par un témoin SANS mutation —, cinq étaient vertes pour une
+raison qui n'était pas la leur : deux doublées en amont par une autre garde, une qui
+n'agit qu'avec pièce jointe, une inatteignable dans le suivi V2, une dont le refus
+venait d'un contrôle plus haut. Aucune n'était fausse ; aucune ne prouvait ce qu'on
+croyait. Et l'instrument lui-même a menti deux fois dans la même passe : son témoin
+SQL a viré au rouge parce que le serveur PostgreSQL local était arrêté, pas parce
+qu'un garde avait cédé — un faux rouge se lit comme une trouvaille ; puis un
+paramètre par défaut introduit pour rendre le transport injectable
+(`envoyer = envoyerEmailDevisPrepare`) a cassé un test bac à sable qui ne charge pas
+le module d'envoi, alors que le correctif visait les tests.
+*Ce que ça a coûté* : une demi-journée de passes à requalifier, et cinq garde-fous
+qu'on aurait continué à compter comme tenus.
+⇒ Trois règles, et la troisième est la plus chère. (1) Un garde ne compte comme tenu
+que si, SOUS SA MUTATION, le harnais vire au rouge **sur son propre message** — un
+rouge dont la cause est l'environnement ou une autre garde ne prouve rien ; d'où le
+témoin sans mutation en tête de chaque liste, qui doit rester vert. (2) Une garde
+verte sous mutation se déclare `tolere` avec sa raison écrite, jamais retirée en
+silence : « doublée en amont » est un fait à consigner, pas un échec à cacher.
+(3) Un correctif posé POUR les tests se juge sur la production : une valeur par
+défaut résolue à la signature de la fonction s'évalue même quand l'appelant ne
+l'utilise pas — la résoudre au point d'usage (`envoyer ?? envoyerEmailDevisPrepare`)
+laisse les bacs à sable tranquilles.
 
 ## 3. Ce qu'on donne à Paul
 
