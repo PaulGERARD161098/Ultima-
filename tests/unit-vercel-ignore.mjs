@@ -125,6 +125,27 @@ const fusion = (fichiers) => saute((d) => {
 verdicts.fusion_codeConstruit = !fusion({ 'api/leo.js': 'b' });
 verdicts.fusion_documentationSaute = fusion({ 'tests/unit-b.mjs': 'b' });
 
+
+// 5. Les previews ne se construisent que sur DEMANDE (Paul, 09/11/2026). Cycle Vercel 25/10 → 09/11 :
+// ≈ 30 $ projetés pour 20 $ visés, 92 % en build CPU, et les previews de branches d'agents en première
+// cause (un build complet par commit poussé, facturé une minute pleine × vCPU). Sur une branche de
+// preview, le build ne part que si le DERNIER commit poussé porte `[preview]` dans son message (titre ou
+// corps, casse indifférente). Production et VERCEL_ENV inconnu : inchangés — le repli va vers le build.
+const commitMsg = (cwd, message, fichiers) => { ecrire(cwd, fichiers); git(cwd, 'add', '-A'); git(cwd, 'commit', '-q', '-m', message); };
+const PREVIEW = { ...process.env, VERCEL_ENV: 'preview' };
+const PRODUCTION = { ...process.env, VERCEL_ENV: 'production' };
+verdicts.preview_codeSansMarqueurSaute = saute((d) => commitMsg(d, 'feat: bouton', { 'api/leo.js': 'b' }), { env: PREVIEW });
+verdicts.preview_codeAvecMarqueurConstruit = !saute((d) => commitMsg(d, 'fix [preview]', { 'api/leo.js': 'b' }), { env: PREVIEW });
+verdicts.preview_marqueurEnCorpsConstruit = !saute((d) => commitMsg(d, 'fix\n\n[preview] mobile', { 'api/leo.js': 'b' }), { env: PREVIEW });
+verdicts.preview_marqueurMajusculesConstruit = !saute((d) => commitMsg(d, 'fix [PREVIEW]', { 'api/leo.js': 'b' }), { env: PREVIEW });
+verdicts.preview_marqueurDocumentationSeuleSaute = saute((d) => commitMsg(d, 'docs [preview]', { 'README.md': 'b' }), { env: PREVIEW });
+verdicts.production_codeSansMarqueurConstruit = !saute((d) => commitMsg(d, 'feat', { 'api/leo.js': 'b' }), { env: PRODUCTION });
+{
+  const env = { ...process.env }; delete env.VERCEL_ENV;
+  verdicts.envInconnu_codeConstruit = !saute((d) => commitMsg(d, 'feat', { 'api/leo.js': 'b' }), { env });
+}
+verdicts.chaineLitVercelEnvEtMarqueur = chaine.includes('VERCEL_ENV') && chaine.includes('[preview]');
+
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.keys(verdicts).length >= 26 && Object.values(verdicts).every((v) => v === true);
 console.log(ok ? 'UNIT-VERCEL-IGNORE OK' : 'UNIT-VERCEL-IGNORE ECHEC');
