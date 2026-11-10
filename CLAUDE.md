@@ -498,6 +498,25 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   plus bas que la base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
   console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
 
+- **L5 — PREVIEW SUR DEMANDE, `[preview]` (règle canonique, tous les dépôts)** *(Paul, 09/11/2026)*.
+  Mesuré sur le cycle Vercel 25/10 → 09/11 (capture de Paul + API) : 72 h 52 de Build CPU en 15,6 jours,
+  92 % facturés (« Standard » : 0,0035 $ la CPU-minute, durée arrondie à la minute SUPÉRIEURE, tarif
+  recoupé avec la facture du cycle précédent, 197 h 24 → 41,45 $ = 20 $ de crédit + 21,50 $), rythme
+  ≈ 145 h ≈ 30 $ pour 20 $ visés (20 $ = ≈ 95 h de build par mois). 85 des 135 déploiements visibles
+  étaient des previews de branches d'agents, un build complet par commit poussé, 4 CPU-min minimum même
+  pour un build de 10 s. **Règle** : sur une branche autre que `main`, Vercel ne construit que si le
+  DERNIER commit poussé porte `[preview]` dans son message (titre ou corps, casse indifférente) ; `main`
+  et un `VERCEL_ENV` inconnu construisent comme avant ; la documentation seule reste sautée. Posée le
+  09/11 dans Ultima-, RenoBoost, RenoDevis et Artidispo (`ignoreCommand` + harnais) ; **mon-dpe.fr et
+  artisan-builder restent à faire** (artisan-builder : 60 déploiements sur le cycle, aucun `vercel.json`).
+  ⛔ Une preview se DEMANDE désormais : l'agent pose `[preview]` sur le commit qu'il montre et donne
+  l'URL ; sans marqueur, il le dit au lieu de donner une URL qui ne se construira pas.
+  **Leviers jumeaux décidés par Paul le 09/11, hors de portée du connecteur Vercel (lecture seule, 403
+  sur toute écriture, 3 projets visibles sur 11)** : machine de build **Basic** pour toute l'équipe
+  (2 vCPU au lieu de 4, même mémoire 8 Go, prix du build divisé par deux, site en ligne inchangé) ;
+  **Spend Management** alerte à 20 $ et pause à 30 $ (⛔ la pause coupe aussi la production) ; zéro
+  « Redeploy » manuel (artisan-builder, 28/10 : le même commit construit 6 fois en 2 h 30).
+  Effet à lire sur la courbe Build CPU au 25/11, pas à déclarer.
 - **OÙ PART LE RESTE — relevé du 19/10, lu aux sources, pas déduit** *(Paul : « regarde ce
   qu'il se passe sur les autres sessions, il faut réduire les coûts dès maintenant »)*.
   **Vercel, Build CPU du cycle 25/09–25/10** (capture de Paul) : 197 h 24 au total ;

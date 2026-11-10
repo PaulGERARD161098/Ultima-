@@ -1,3 +1,11 @@
+# 9 novembre 2026 — budget Vercel : preview sur demande `[preview]`
+
+Paul : ramener Vercel à 20 $/mois (cycle 25/10 → 09/11 à ≈ 30 $ projetés, 92 % en build CPU, 0,0035 $ la CPU-minute arrondie à la minute supérieure). Posé sur cette branche : l'`ignoreCommand` de `vercel.json` ne construit une preview que si le dernier commit poussé porte `[preview]` (production et environnement inconnu inchangés, documentation seule toujours sautée) ; tests ajoutés à `tests/unit-vercel-ignore.mjs`, verts en local, chaîne à 239 caractères. Même règle posée le même jour dans les quatre dépôts attachés (RenoBoost, RenoDevis, Artidispo, Ultima-). Décidé aussi par Paul, gestes Vercel à sa main : machine de build « Basic » pour toute l'équipe, Spend Management alerte 20 $ / pause 30 $. Commit : celui de cette entrée, branche `claude/gracious-lovelace-ambyga`, PR brouillon à fusionner sur son go.
+
+**Prochaine action :** Paul règle Basic (Team Settings → Build and Deployment, puis chaque projet qui porte encore « Standard ») et le plafond ; relire la courbe Build CPU au 25/11.
+
+---
+
 # 2 novembre 2026 — socle vierge paiement artisan préparé
 
 Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur déterministe, recette isolée, badge et publication par le générateur existant. Six tests moteur reçus et publication vérifiée. Aucun compte, fournisseur, taux commercial ou donnée professionnelle. Préparation sur main `f7fe2100d92644cac11c9b0dafe6282c69697ff6`. Aucun agent activé. Prochaine action : recevoir l’intégration du badge avant choix et raccordement d’un prestataire.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "ignoreCommand": "bash -c 'c=$(git diff --name-only HEAD^ HEAD)&&{ grep -qvxFf <(git ls-files -ci --exclude-from=.vercelignore) <<<\"$c\";[ $? = 1 ];}' && exit 0; exit 1",
+  "ignoreCommand": "bash -c '[ \"$VERCEL_ENV\" != preview ] || git log -1 --format=%B | grep -qiF \"[preview]\" || exit 0; c=$(git diff --name-only HEAD^ HEAD)&&{ grep -qvxFf <(git ls-files -ci --exclude-from=.vercelignore) <<<\"$c\";[ $? = 1 ];}' && exit 0; exit 1",
   "redirects": [
     {
       "source": "/traveler",
