@@ -140,14 +140,13 @@ projets (les trois visibles du connecteur relisent `basic`) ; budget 30 $ créé
 activée après relecture (elle était sur Off sur la première capture). Alertes natives à
 50 / 75 / 100 % du budget : 15 / 22,5 / 30 $.
 
-**Leçon payée (v123, famille 2)** : un `grep` en bout de chaîne a masqué le code de sortie
+**Leçon payée (scellée v123, propagée v124 le 10/11, famille 2)** : un `grep` en bout de chaîne a masqué le code de sortie
 de `npm test` ; un commit est parti avec `# fail 1` affiché. Rouge local seulement (porte
 ESLint sans ESLint installé), mais l'ordre des gestes était faux.
 
 **Non fait, nommément** : les grains Finubar d'artisan-builder et de mon-dpe.fr portent le
 SHA de `main` d'AVANT fusion (une PR de plus pour une ligne aurait coûté un build de
-production sur artisan-builder) ; RenoBoost n'a pas L2 ; les leçons v123 ne sont pas
-propagées aux neuf copies ; la facture Vercel ne se lit toujours pas depuis une séance.
+production sur artisan-builder) ; RenoBoost n'a pas L2 ; la facture Vercel ne se lit toujours pas depuis une séance.
 
 ## 9. Roadmap et pre-mortem à 3 mois (10/11 → 10/02/2027)
 
@@ -176,7 +175,7 @@ propagées aux neuf copies ; la facture Vercel ne se lit toujours pas depuis une
 5. **Basic a doublé la durée des builds lents** (Next.js : RenoDevis, mon-dpe.fr) sans
    diviser le coût par deux. Parade : mesurer la durée des builds de production avant /
    après sur les deux projets au 25/11.
-6. **La leçon v123 n'a pas été propagée** et une copie a divergé. Parade : le rappel
+6. **Une leçon suivante n'a pas été propagée** et une copie a divergé (propagation v124 faite le 10/11). Parade : le rappel
    Finubar de chaque dépôt compare les sceaux ; la propagation est la première action de
    la prochaine séance Ultima.
 
@@ -188,13 +187,13 @@ Cap : Vercel ≤ 20 $/mois, GitHub ≤ 50 $ facturés ; Paul contrôle, les levi
 État mesuré le 10/11 : règle L5 « preview sur demande » sur main des six dépôts (Ultima- e69a9f9,
 RenoBoost b5ab1a3, RenoDevis 9bed231, Artidispo 9d80269, artisan-builder 4f7b487, mon-dpe.fr b4b68d8),
 prouvée Ignored/Ready sur Vercel ; Basic pour l'équipe ; Spend Management 30 $, Pause activée.
-Prochaine action UNIQUE : au 25/11 (rappel posé), lire la capture Usage Vercel du cycle 25/10 → 25/11,
+Prochaine action UNIQUE : au 15/11 (point de mi-parcours, rappel posé) puis au 25/11 (rappel posé), lire la capture Usage Vercel du cycle 25/10 → 25/11,
 part facturée et premier projet, et la comparer à 72 h 52 / ≈ 30 $ projetés le 09/11.
 Bloqué par : la facture ne se lit pas depuis une séance (capture de Paul).
 Gates : aucune coupure de cron de surveillance ; aucun levier sans chiffre lu à la source.
 Pièges : ne pas réécrire une chaîne ignoreCommand au-dessus de 256 caractères ; ne pas pousser une
 branche dont le dernier commit porte « [preview] » dans le titre sans vouloir un build ; les grains
-Finubar d'artisan-builder et mon-dpe.fr portent le SHA d'avant fusion (attendu) ; leçons v123 à
-propager aux neuf copies avant toute autre leçon ; un grep derrière npm test ne garde rien.
+Finubar d'artisan-builder et mon-dpe.fr portent le SHA d'avant fusion (attendu) ; leçons v124
+propagées le 10/11, dix copies identiques ; un grep derrière npm test ne garde rien.
 ```
 
