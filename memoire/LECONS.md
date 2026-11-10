@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v122 2026-11-10 sha256:658dc26715cf -->
+<!-- lecons:empreinte v123 2026-11-10 sha256:3d97b6c99a6a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -669,6 +669,20 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**UN FILTRE EN BOUT DE CHAÎNE MASQUE LE CODE DE SORTIE DU TEST**
+*(2026-11-10, RenoBoost, correctif du harnais `RenoBoost/tests/journal.navigateur.mjs`).*
+`npm test 2>&1 | grep -E '^# (tests|pass|fail)' && git commit … && git push` : le `&&`
+lisait le code de sortie de `grep` — 0 dès qu'une ligne correspond — jamais celui de
+`npm test`. La suite affichait `# fail 1` et la chaîne a quand même commité et poussé.
+Le rouge était local (la porte ESLint de `RenoBoost/tests/lint.test.mjs` échoue quand
+ESLint n'est pas installé ; après `npm ci`, 1784/1784 et CI verte) : le résultat était
+juste, l'ordre des gestes non — un filtre de LECTURE avait pris la place du VERROU.
+⛔ **La règle** : ce qui conditionne un commit ou un push est le code de sortie du test
+lui-même — `npm test > journal.txt || exit 1`, ou `set -o pipefail` avant la chaîne —
+jamais celui d'un `grep`, `tail` ou `tee` posé derrière. Un affichage réussi n'est pas
+un test réussi ; une chaîne qui ne peut pas s'arrêter sur un rouge n'a pas de verrou.
+
 
 **« TSC IDENTIQUE » SE MESURE SUR LE COMMIT LIVRÉ, PAS SUR UN COMMIT D'AVANT**
 *(2026-11-04, RenoDevis #476).* La description de la PR affirmait « tsc : 11 erreurs
