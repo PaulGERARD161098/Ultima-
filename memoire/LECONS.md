@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v122 2026-11-10 sha256:2b3590d5a6f8 -->
+<!-- lecons:empreinte v123 2026-11-10 sha256:3d97b6c99a6a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2004,6 +2004,9 @@ geste donné à Paul porte sa contre-épreuve : « la fenêtre de confirmation d
 Production ».
 
 ## 4. Conduire une boucle
+
+**Une préversion validée laisse la livraison ouverte** *(2026-11-10, RenoDevis, PR #499).* La fiche au survol a été reçue le 7 novembre en préversion. La clôture a masqué une PR en brouillon et un contrôle CI en échec. Trois jours plus tard, Paul voyait toujours l’ancienne bulle et a dû rouvrir la boucle.
+Pour une livraison demandée en production, consigner trois preuves dans la clôture : la PR fusionnée avec son SHA, le déploiement READY qui sert le domaine de production et le geste utilisateur rejoué sur ce domaine. Si le mandat s’arrête à la préversion, l’écrire explicitement. Si une étape manque, nommer l’étape atteinte et garder la livraison ouverte.
 
 **UN PROTOTYPE D'AGENT NE PROUVE QUE LA COUCHE RÉELLEMENT ÉPROUVÉE**
 *(2026-10-23, RenoDevis, comparaison des prototypes).* Un PDF fabriqué par

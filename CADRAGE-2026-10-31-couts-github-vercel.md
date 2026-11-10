@@ -140,13 +140,13 @@ projets (les trois visibles du connecteur relisent `basic`) ; budget 30 $ créé
 activée après relecture (elle était sur Off sur la première capture). Alertes natives à
 50 / 75 / 100 % du budget : 15 / 22,5 / 30 $.
 
-**Leçon payée (v122, famille 2)** : un `grep` en bout de chaîne a masqué le code de sortie
+**Leçon payée (v123, famille 2)** : un `grep` en bout de chaîne a masqué le code de sortie
 de `npm test` ; un commit est parti avec `# fail 1` affiché. Rouge local seulement (porte
 ESLint sans ESLint installé), mais l'ordre des gestes était faux.
 
 **Non fait, nommément** : les grains Finubar d'artisan-builder et de mon-dpe.fr portent le
 SHA de `main` d'AVANT fusion (une PR de plus pour une ligne aurait coûté un build de
-production sur artisan-builder) ; RenoBoost n'a pas L2 ; les leçons v122 ne sont pas
+production sur artisan-builder) ; RenoBoost n'a pas L2 ; les leçons v123 ne sont pas
 propagées aux neuf copies ; la facture Vercel ne se lit toujours pas depuis une séance.
 
 ## 9. Roadmap et pre-mortem à 3 mois (10/11 → 10/02/2027)
@@ -176,7 +176,7 @@ propagées aux neuf copies ; la facture Vercel ne se lit toujours pas depuis une
 5. **Basic a doublé la durée des builds lents** (Next.js : RenoDevis, mon-dpe.fr) sans
    diviser le coût par deux. Parade : mesurer la durée des builds de production avant /
    après sur les deux projets au 25/11.
-6. **La leçon v122 n'a pas été propagée** et une copie a divergé. Parade : le rappel
+6. **La leçon v123 n'a pas été propagée** et une copie a divergé. Parade : le rappel
    Finubar de chaque dépôt compare les sceaux ; la propagation est la première action de
    la prochaine séance Ultima.
 
@@ -194,7 +194,7 @@ Bloqué par : la facture ne se lit pas depuis une séance (capture de Paul).
 Gates : aucune coupure de cron de surveillance ; aucun levier sans chiffre lu à la source.
 Pièges : ne pas réécrire une chaîne ignoreCommand au-dessus de 256 caractères ; ne pas pousser une
 branche dont le dernier commit porte « [preview] » dans le titre sans vouloir un build ; les grains
-Finubar d'artisan-builder et mon-dpe.fr portent le SHA d'avant fusion (attendu) ; leçons v122 à
+Finubar d'artisan-builder et mon-dpe.fr portent le SHA d'avant fusion (attendu) ; leçons v123 à
 propager aux neuf copies avant toute autre leçon ; un grep derrière npm test ne garde rien.
 ```
 
