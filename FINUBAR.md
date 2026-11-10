@@ -1,3 +1,11 @@
+# 10 novembre 2026 — agent `prospection` créé, point du matin absorbé par Léo
+
+Paul, 10/11 : agent de prospection validé ; l'agent « boîte et agenda » devient un mode de Léo ; l'agent d'encaissement est différé (Stripe non branché). Posé sur la branche `claude/brave-ride-tfgsl3` : `.claude/agents/prospection.md` (sous-agent de Léo, prépare et propose, aucun envoi, aucune écriture en base, aucun fichier de prospects) ; `.claude/agents/leo.md` §2 (ligne de dispatch) et §5 (« Point du matin — boîte et agenda », à la demande, assemble C27, C28, C30, C31, C58). `tests/unit-leo-complements.mjs` : 239 vérifications vertes en local. Aucun automatisme, aucune routine, aucun raccordement nouveau : la pause du 01/11 sur le développement de Léo reste en place, ceci est une mise à jour de charte demandée par Paul. Non éprouvé : aucun lot de prospects réel, aucun point du matin réel. Commit : celui de cette entrée, PR brouillon à fusionner sur son go.
+
+**Prochaine action :** Paul donne à Léo une offre, une zone et un métier pour le premier lot de prospects (Artidispo en priorité : échéance du 30/11).
+
+---
+
 # 9 novembre 2026 — budget Vercel : preview sur demande `[preview]`
 
 Paul : ramener Vercel à 20 $/mois (cycle 25/10 → 09/11 à ≈ 30 $ projetés, 92 % en build CPU, 0,0035 $ la CPU-minute arrondie à la minute supérieure). Posé sur cette branche : l'`ignoreCommand` de `vercel.json` ne construit une preview que si le dernier commit poussé porte `[preview]` (production et environnement inconnu inchangés, documentation seule toujours sautée) ; tests ajoutés à `tests/unit-vercel-ignore.mjs`, verts en local, chaîne à 239 caractères. Même règle posée le même jour dans les quatre dépôts attachés (RenoBoost, RenoDevis, Artidispo, Ultima-). Décidé aussi par Paul, gestes Vercel à sa main : machine de build « Basic » pour toute l'équipe, Spend Management alerte 20 $ / pause 30 $. Commit : celui de cette entrée, branche `claude/gracious-lovelace-ambyga`, PR brouillon à fusionner sur son go.
