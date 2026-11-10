@@ -57,11 +57,10 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "dernier_arret": {
     "le": "2026-11-10",
     "commit": "e69a9f9",
-    "quoi": "Budget Vercel (Paul, 09/11 : ramener à 20 $/mois ; cycle 25/10 → 09/11 à 72 h 52 de Build CPU, 92 % facturés, ≈ 30 $ projetés). Règle L5 « preview sur demande » ([preview] dans le dernier commit poussé) posée et fusionnée sur main des six dépôts : Ultima- #453 (e69a9f9, règle canonique), RenoBoost #636 (b5ab1a3, + harnais journal.navigateur réparé), RenoDevis #503, Artidispo #187, artisan-builder #124 (4f7b487), mon-dpe.fr #276 (b4b68d8) ; prouvée Ignored/Ready sur Vercel. Gestes de Paul faits le 10/11 : machine Basic pour l'équipe, Spend Management 30 $ avec Pause. Leçon v123 scellée (famille 2 : un grep derrière npm test ne garde rien). Détail, roadmap et pre-mortem : CADRAGE-2026-10-31-couts-github-vercel.md §8–§10. Le commit ci-dessus est la tête de main AVANT la PR de cette clôture : la collecte dira un commit d'avance, c'est attendu."
+    "quoi": "Budget Vercel (Paul, 09/11 : ramener à 20 $/mois ; cycle 25/10 → 09/11 à 72 h 52 de Build CPU, 92 % facturés, ≈ 30 $ projetés). Règle L5 « preview sur demande » ([preview] dans le dernier commit poussé) posée et fusionnée sur main des six dépôts : Ultima- #453 (e69a9f9, règle canonique), RenoBoost #636 (b5ab1a3, + harnais journal.navigateur réparé), RenoDevis #503, Artidispo #187, artisan-builder #124 (4f7b487), mon-dpe.fr #276 (b4b68d8) ; prouvée Ignored/Ready sur Vercel. Gestes de Paul faits le 10/11 : machine Basic pour l'équipe, Spend Management 30 $ avec Pause. Leçon scellée (famille 2 : un grep derrière npm test ne garde rien), puis leçons PROPAGÉES le 10/11 après-midi en v124 (quatre chemins nus préfixés, lecons-chemins à 0 sur les dix clones) : copie identique dans les neuf dépôts, une PR de documentation seule chacun. Détail, roadmap et pre-mortem : CADRAGE-2026-10-31-couts-github-vercel.md §8–§10. Le commit ci-dessus est la tête de main AVANT la PR de cette clôture : la collecte dira un commit d'avance, c'est attendu."
   },
   "prochaine_action": "Paul dicte à Léo sur RIVEN la fiche « Matthieu Ducrest », reliée à SOLA GROUPE (puis le fils de Romin) : c'est aussi la preuve réelle de proposer_contact en production. Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
   "bloque_par": [
-    "Leçons v123 (10/11 ; v119 → v122 incluses) scellées dans Ultima, NON propagées aux neuf autres dépôts : la propagation (memoire/LECONS-PROCEDURE.md) exige les dix clones et node finubar/lecons-chemins.mjs à 0 — à faire dans une séance qui les a.",
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 puis REMESURÉE OUVERTE le 03/11 (GET /auth/v1/settings : disable_signup = false ; fournisseurs e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -79,7 +78,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-11-03"
     },
     {
-      "quoi": "LEÇONS v118 (03/11) dans Ultima seulement : propager aux neuf dépôts (LECONS-PROCEDURE.md ; lecons-chemins à 0 d'abord — refusé dans la séance du 03/11, clones absents). Recette Léo : T06 reste PARTIEL (Léo annonce « hypothèse non sourcée » au lieu de chercher) — option non retenue le 03/11 : rendre la recherche de source obligatoire avant un avis lance/ne lance pas."
+      "quoi": "Recette Léo : T06 reste PARTIEL (Léo annonce « hypothèse non sourcée » au lieu de chercher) — option non retenue le 03/11 : rendre la recherche de source obligatoire avant un avis lance/ne lance pas."
     },
     {
       "quoi": "Consolidation ZOH FERMÉE le 03/11 : #434 fusionnée (06f0aa5), #435 fusionnée (e52d0db), #364, #381, #417, #418 et #433 fermées comme absorbées. Restent hors consolidation : #425 (9 empreintes preuve_ultima introuvables, source non versionnée — blocage documenté sur la PR ; prochain ordre libre : 10), #365 et #351 (pause de Léo), RenoDevis #463.",
@@ -126,20 +125,12 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-10-13"
     },
     {
-      "quoi": "LEÇONS v91 (12–13/10, quatre leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
-      "depuis": "2026-10-12"
-    },
-    {
       "quoi": "ZOH · plan et base à jour le 10/10 (CADRAGE-2026-10-10-zohshia-mise-a-jour.md). Série : 32 conflits, dont 25 dans les fichiers de J4 ; à rafraîchir juste après J4 de RenoDevis (REPORT.json).",
       "depuis": "2026-10-08"
     },
     {
       "quoi": "Dictée qui suit les pauses (#367) : non prouvée sur téléphone (le harnais simule les coupures). Recette = une dictée réelle de Paul, avec des pauses.",
       "depuis": "2026-10-08"
-    },
-    {
-      "quoi": "LEÇONS v86 dans Ultima seulement (les neuf autres en v85). À la propagation, préfixer l.663 `outils/` et l.2330 `package-lock.json` : lecons-chemins les signale.",
-      "depuis": "2026-10-10"
     },
     {
       "quoi": "RIVEN deux cartes — à trancher par Paul : la bascule s'ouvre sur « Tout » (choix de séance : rien ne disparaît, et 9 harnais comptent les 9 fiches de démo). Passer le défaut à « Individus » = 1 ligne (carteRetenue) + recaler les harnais. Une personne (« Indépendante ») n'a pas d'entreprise, à dessein ; un rattachement porte un rôle vide (fonction absente des notes).",
