@@ -4951,3 +4951,11 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 
 **Même jour :** #458 fusionnée (`6a26082`) ; #451 et #351 fermées comme dépassées (branches conservées) ; restent ouvertes #425 (source manquante) et #365 (pause de Léo).
 
+## 2026-11-11 — RIVEN : Matthieu Ducrest ajouté par la séance
+
+**Source :** instruction de Paul du 11/11 (« Ajoute Matthieu Ducrest dans RIVEN, gérant de SOLA GROUPE ; prends son num et son tel dans ses mails »).
+
+**Fait :** fiche `network_nodes` c8aa83ad (partenaire, actif), téléphone et mail lus dans la signature de ses mails SOLA du 07/11 ; rattachement à SOLA GROUPE (a6e2ccf0) dans les notes. Relu en base : fiche unique, même propriétaire.
+
+**Écart assumé :** écrite en SQL depuis la séance, sur mandat explicite, et non par Léo dans Ultima. Elle échappe donc au journal `leo_ecritures` et ne prouve pas `proposer_contact` ; cette preuve passe au fils de Romin.
+

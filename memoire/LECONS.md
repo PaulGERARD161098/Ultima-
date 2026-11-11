@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v125 2026-11-11 sha256:90d2a0e79fd1 -->
+<!-- lecons:empreinte v126 2026-11-11 sha256:82d1164eb7c5 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2004,6 +2004,10 @@ geste donné à Paul porte sa contre-épreuve : « la fenêtre de confirmation d
 Production ».
 
 ## 4. Conduire une boucle
+
+**UN LIVRABLE N'EST PAS FINI TANT QUE CE QUI LE PRODUIT VIT HORS DU DÉPÔT** *(2026-11-11, paggerard-boop/mod-lisation-2-3D, PR #1 puis #2).* La planche avant / après d'une salle de bain SPC a été produite, validée par Paul (« c'est exactement ce genre de choses que je voulais ») et sa PR fusionnée. Mais les vues 3D, le PDF et les deux images à transmettre sortaient de trois scripts restés dans l'espace temporaire de la séance. À la question « à l'avenir, c'est bien ce livrable que me fera l'outil ? », la réponse honnête était non : une séance suivante, repartie de `main`, aurait refait le plan mais ni la 3D ni le PDF.
+*Ce que cela a coûté* : une PR de plus (#2) pour verser une commande unique, et une clôture annoncée trop tôt, rattrapée seulement parce que Paul a posé la question.
+⇒ Avant de déclarer un livrable fait, le reproduire **depuis le dépôt seul**, dans un dossier vierge, avec la commande qu'une autre séance lancerait, et comparer au livrable validé (ici : plans identiques à l'octet, vues 3D au pixel). Tout script qui a servi à le produire est soit versé, soit nommé dans la clôture comme manquant.
 
 **Une préversion validée laisse la livraison ouverte** *(2026-11-10, RenoDevis, PR #499).* La fiche au survol a été reçue le 7 novembre en préversion. La clôture a masqué une PR en brouillon et un contrôle CI en échec. Trois jours plus tard, Paul voyait toujours l’ancienne bulle et a dû rouvrir la boucle.
 Pour une livraison demandée en production, consigner trois preuves dans la clôture : la PR fusionnée avec son SHA, le déploiement READY qui sert le domaine de production et le geste utilisateur rejoué sur ce domaine. Si le mandat s’arrête à la préversion, l’écrire explicitement. Si une étape manque, nommer l’étape atteinte et garder la livraison ouverte.
