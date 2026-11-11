@@ -56,7 +56,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-11",
-    "commit": "3b94ca61dd6ed3837ca269b08872c7b5315131d7",
+    "commit": "3bd6ada4b3c8194c98946cee3af5586c801fc1e1",
     "quoi": "Fiche RIVEN « Matthieu DUCREST — SOLA GROUPE » créée sur instruction de Paul (11/11, 17:50 UTC, id c8aa83ad) : partenaire actif, téléphone et mail lus dans la signature de ses mails SOLA (07/11), rattachement à SOLA GROUPE (a6e2ccf0) écrit dans les notes — aucun type de relation RIVEN ne dit « gérant de ». Écrite en SQL depuis la séance, PAS par Léo : hors journal leo_ecritures, pas défaisable d'un clic, et elle ne prouve PAS proposer_contact. Relu en base : une seule fiche, même propriétaire que SOLA GROUPE. Plus tôt le même jour : #458, #459, #460 fusionnées ; #451 et #351 fermées ; inscription Supabase fermée."
   },
   "prochaine_action": "Paul dicte à Léo, dans Ultima sur RIVEN, la fiche du fils de Romin (puis « rappelle-le lundi ») : c'est la preuve réelle de proposer_contact en production, à relire ensuite en base (network_nodes + leo_ecritures). Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
