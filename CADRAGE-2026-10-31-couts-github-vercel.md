@@ -129,10 +129,15 @@ visibles étaient des previews de branches d'agents, un build complet par commit
 | Artidispo | #187 | 9d80269 | 246 car. | — |
 | artisan-builder | #124 | 4f7b487 | 121 car., marqueur seul | **pas de saut documentation** : le code lit des `.md` |
 | mon-dpe.fr | #276 | b4b68d8 | 253 car., `@`/`@^` | fusion en squash seulement |
+| RenoAgenda | #120 | 5cce300 (11/11) | 121 car., marqueur seul | production READY constatée sur Vercel |
+| RenoPredict | #99 | 6f3794c (11/11) | 121 car., marqueur seul | harnais ajouté à la CI ; projet non visible du connecteur (403) |
+| renoboost-console | #26 | bd5e0ab (11/11) | 121 car., marqueur seul | projet non visible du connecteur (403) |
 
 **Prouvé sur la plateforme, pas seulement au harnais** : sans marqueur → « Ignored »
 (renoboost-ia 33a8fd5, reno-devis-final, mon-dpe-fr 9fc0e80, renoboost-ia 54e87ec) ;
-avec marqueur → « Ready » (renoboost-ia 98a44e5, artisan-builder 99b8193). `VERCEL_ENV`
+avec marqueur → « Ready » (renoboost-ia 98a44e5, artisan-builder 99b8193).
+Le 11/11, sans marqueur → « Ignored » sur les trois PR (reno-agenda, renopredict,
+renoboost-console, commentaire du robot Vercel). `VERCEL_ENV`
 est bien exposé à l'étape d'ignore, aucune chaîne ne sort en erreur ni en 127.
 
 **Gestes de Paul, faits le 10/11 (captures)** : Basic en défaut d'équipe et sur tous les
@@ -186,6 +191,7 @@ Reprise budget Vercel/GitHub — Ultima fil rouge (CADRAGE-2026-10-31-couts-gith
 Cap : Vercel ≤ 20 $/mois, GitHub ≤ 50 $ facturés ; Paul contrôle, les leviers tournent seuls.
 État mesuré le 10/11 : règle L5 « preview sur demande » sur main des six dépôts (Ultima- e69a9f9,
 RenoBoost b5ab1a3, RenoDevis 9bed231, Artidispo 9d80269, artisan-builder 4f7b487, mon-dpe.fr b4b68d8),
+puis le 11/11 RenoAgenda 5cce300, RenoPredict 6f3794c, renoboost-console bd5e0ab (neuf dépôts),
 prouvée Ignored/Ready sur Vercel ; Basic pour l'équipe ; Spend Management 30 $, Pause activée.
 Prochaine action UNIQUE : au 15/11 (point de mi-parcours, rappel posé) puis au 25/11 (rappel posé), lire la capture Usage Vercel du cycle 25/10 → 25/11,
 part facturée et premier projet, et la comparer à 72 h 52 / ≈ 30 $ projetés le 09/11.

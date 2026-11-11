@@ -506,9 +506,12 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   étaient des previews de branches d'agents, un build complet par commit poussé, 4 CPU-min minimum même
   pour un build de 10 s. **Règle** : sur une branche autre que `main`, Vercel ne construit que si le
   DERNIER commit poussé porte `[preview]` dans son message (titre ou corps, casse indifférente) ; `main`
-  et un `VERCEL_ENV` inconnu construisent comme avant ; la documentation seule reste sautée. Posée le
-  09/11 dans Ultima-, RenoBoost, RenoDevis et Artidispo (`ignoreCommand` + harnais) ; **mon-dpe.fr et
-  artisan-builder restent à faire** (artisan-builder : 60 déploiements sur le cycle, aucun `vercel.json`).
+  et un `VERCEL_ENV` inconnu construisent comme avant ; la documentation seule reste sautée là où son
+  inertie est prouvée. Posée (`ignoreCommand` + harnais) sur `main` des neuf dépôts du registre qui
+  déploient sur Vercel : Ultima-, RenoBoost, RenoDevis, Artidispo (09/11) ; artisan-builder, mon-dpe.fr
+  (10/11) ; RenoAgenda, RenoPredict, renoboost-console (11/11). Marqueur seul, sans saut documentation,
+  sur artisan-builder et les trois du 11/11. DATARENO- n'a plus de projet Vercel (déconnecté par Paul le
+  10/11). ⚠️ Le connecteur ne voit que 3 projets Vercel sur 11 : un projet hors registre n'est pas couvert.
   ⛔ Une preview se DEMANDE désormais : l'agent pose `[preview]` sur le commit qu'il montre et donne
   l'URL ; sans marqueur, il le dit au lieu de donner une URL qui ne se construira pas.
   **Leviers jumeaux décidés par Paul le 09/11, hors de portée du connecteur Vercel (lecture seule, 403
