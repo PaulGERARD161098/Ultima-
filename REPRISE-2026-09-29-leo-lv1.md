@@ -1,4 +1,540 @@
-# Reprise courante — 5 octobre 2026, raccord et arrêt FINUBAR préparés
+# Reprise courante — mise en ligne Léo / FINUBAR
+
+## Reprise du 14/10/2026 — Hyper-V déjà qualifié, mémoire à actualiser
+
+Cette section remplace la prochaine action du 13/10. Paul demande de terminer
+Léo et FINUBAR. Réutiliser le kit et la roadmap existants ; cette reprise
+n'autorise ni accès au contrôle privé, ni dépense, ni fusion par déduction.
+
+### Fait et preuves
+
+- Lecture GitHub du 14/10 : PR365 ouverte, brouillon, non fusionnée,
+  tête 351ae0ad19ad89c8f3b1079627988951b8f548ea ; base
+  5848ea99668ec8a901e746e2bed1d628241fb22f ; mergeable=false.
+  La non-fusionnabilité devra être qualifiée et résolue avant livraison ;
+  aucun résultat de CI de branche ne prouve l'intégration au main actuel.
+- Trois workflows de cette tête relus completed/success :
+  Tests 38412109821, Auth 38412111341, LV1 38412109638.
+  Aucun test applicatif ou workflow manuel relancé dans cette séance.
+- Artefact read-service 11674652639 relu : expired=false,
+  63314 octets, expiration 24/10/2026 15:52:50 UTC ; digest API
+  8a12036f2d2b32688b2a796558ae329d6af4798e300335d81dd5b27541294c3f,
+  conforme au dossier. Archive non retéléchargée dans cette séance.
+- Dernier retour opérateur de Paul, présent dans le contexte de reprise :
+  toutes les fonctionnalités Hyper-V affichées Enabled ; service vmms Running ;
+  RAM_libre_Go 1,8. Observation historique transmise par Paul, pas mesure
+  actuelle du PC ni accès direct depuis Work. La demande de requalifier
+  l'installation du rôle Hyper-V est périmée.
+- Compétence Work réellement lue : leo-lv1 1.5 (12/10), contrat 1.1.
+  La roadmap historique cite encore la compatibilité skill1.4 : le raccord
+  devra qualifier la version effectivement invoquée, sans relever une
+  constante pour faire passer le contrôle.
+
+### Restant et limite d'accès
+
+1. Actualiser uniquement la RAM disponible et vérifier si une VM a été créée
+   depuis l'arrêt ; conserver les fonctionnalités Windows et protections.
+2. Préparer le seed fictif et le harnais de recette systemd exécutable :
+   la grille seule ne suffit pas ; cette préparation peut avancer séparément
+   de la disponibilité de la VM, avec revue distincte avant exécution.
+3. Éprouver le kit sur une VM dédiée : nominal, refus, arrêt externe,
+   disparition propriétaire/gardien/scope, panne Docker et reprise sans replay.
+4. Raccorder acquisition GitHub limitée à Ultima, modèle et budget borné,
+   puis installation opérateur, cockpit et permanence selon la roadmap.
+
+Aucune VM créée ni recette cible exécutée pendant cette séance. Aucun accès
+direct au PC Windows ou au terminal Hostinger disponible dans les outils
+exposés ; lecture GitHub réussie. Ne pas installer les essais de panne sur
+le Docker partagé de n8n/Traefik. Préserver le pilote R21 completed.
+
+### Prochaine action opérateur
+
+Après enregistrement du travail et fermeture des applications inutilisées,
+Paul relève la mémoire disponible avec Get-CimInstance Win32_OperatingSystem
+et communique la sortie ainsi que les VM existantes si nécessaire.
+Ne pas lui redemander l'activation Hyper-V ou le diagnostic complet déjà reçu.
+Ce relevé sert à dimensionner la VM de recette, pas à annoncer une permanence
+sur le PC ni la réception de Léo/FINUBAR.
+
+---
+
+## Reprise du 13/10/2026 — mise en ligne complète, preuves opérateur et roadmap
+
+Cette section remplace les prochaines actions du 10/10. Mandat de Paul :
+« tu compiles bien la data pour qu'on apprenne des échecs [...] fais roadmap
+pour obj final puis go ». Préparation et capitalisation autorisées ; pas de
+nouvelle dépense, accès Work au contrôle privé, envoi réel ni fusion déduits.
+
+### But, périmètre et moyens
+
+But final : Léo conduit des missions autorisées depuis Ultima, avec FINUBAR
+indépendant qui contrôle droits, budget, arrêt et reprise ; fonctionnement
+permanent seulement après réception des mécanismes réels. Premier jalon utile :
+une lecture réelle des PR d'Ultima, rapport privé sourcé et reçu retrouvé
+depuis une session neuve, sans doublon. Bénéfice commercial indirect : réduire
+le travail de vérification demandé à Paul ; aucun gain de temps chiffré mesuré.
+
+Moyens : PR365 et kit figé existants, protocole leo/ACTIVATION.md, serveur
+Hostinger existant, VM de recette indépendante à qualifier. Pas de second
+moteur ni migration métier. Préserver n8n, Traefik et le pilote R21 completed.
+Ne pas confondre le service de lecture déterministe offline et un agent
+raisonnant avec un modèle : acquisition réelle et modèle restent à raccorder.
+
+Réussite globale : preuves de recette cible, premier rapport réel, arrêt
+effectif, reprise sans replay, séparation contrôle/worker, budget exécutoire,
+pilotage Ultima et surveillance de disponibilité réellement actifs ; dossier
+R01–R28 examiné et réception par Paul. Aucun pourcentage global inventé.
+
+### État relu et observations opérateur
+
+- GitHub relu le 13/10 : PR365 ouverte en brouillon, tête d717243c9d0cf8c7564a3dbaff04b2376c7c56e9.
+  PR381 Journal d'apprentissages reste une préparation distincte ; aucun hook
+  ou apprentissage automatique n'est déduit de sa présence.
+- Preuves CI historiques relues le 11/10 dans cette conversation :
+  SHA applicatif daba3eb, 294 tests runtime et 14 scénarios Docker réussis ;
+  trois workflows réussis aussi sur la tête documentaire d717243.
+  Ces résultats ne constituent ni recette systemd réelle ni intégration au
+  main courant. Relire les checks si code/base changent.
+- Sorties terminal transmises par Paul les 11–12/10, sans accès direct de Work :
+  srv2051208.hstgr.cloud, offre Hostinger KVM2, Ubuntu déclaré 24.04.5 LTS,
+  Linux6.8.0-139 x86_64, PID1 systemd255, Python3.12.3, pidfd_api True.
+  Disponibilité de l'API seulement : pidfd effectif non éprouvé.
+- Docker29.8.1 : endpoint qualifié unix:///var/run/docker.sock avec
+  PATH=/usr/bin:/bin, HOME=/tmp ; linux/x86_64, cgroup2, docker.service active.
+- Capture de ressources du 12/10 : 7,8Gio RAM et environ6,9Gio disponibles,
+  93Go disque disponibles, aucune unité systemd en échec.
+  Deux conteneurs n8n et Traefik présents ; statut Docker exact/health à
+  reconfirmer en sortie non traduite avant action. La traduction de la capture
+  ne prouve pas la santé applicative.
+- /dev/kvm absent : accélération KVM imbriquée indisponible à ce contrôle.
+  Le fournisseur d'hyperviseur KVM affiché ne prouve pas /dev/kvm disponible.
+  Cela n'est pas une preuve d'impossibilité de toute émulation logicielle ;
+  aucune émulation lente sur le serveur partagé n'est retenue sans essai borné.
+- Windows11 Professionnel64bits : 7,8Go RAM, 1,5–1,6Go libres, 365,3Go disque.
+  CIM virtualization/SLAT False, puis systeminfo : hyperviseur détecté,
+  intégrité du code appliquée par hyperviseur en cours d'exécution.
+  Incompatibilité matérielle NON démontrée. Rôle/outils Hyper-V et droits de
+  création VM encore non qualifiés. Ne désactiver ni HVCI ni App Control.
+- Message Ubuntu « System restart required » observé ; pas de redémarrage.
+  Inventorier services et fenêtre opérateur avant reboot ; préserver l'existant.
+- Aucun accès direct de Work au PC ou serveur, aucune installation cible ni
+  mission réelle Léo/FINUBAR prouvée dans cette séance.
+
+### Roadmap dans l'ordre utile
+
+| Jalon | Travail et dépendance | Critère vérifiable | Responsable / état |
+|---|---|---|---|
+| 1. Figer le dossier | Reprendre versions, kit, préflight et incidents existants | SHA, empreintes, preuves et inconnues séparées | Work : documentation actualisée ; pas de nouveau test applicatif |
+| 2. Qualifier la VM de recette | Lire rôle/outils Hyper-V, droits et RAM disponible du PC ; ne pas contourner sécurité Windows | VM Ubuntu indépendante, Docker local/systemd réels ; versions compatibles documentées, aucun partage de secrets ou données du PC | Paul fournit lectures ; VM non créée |
+| 3. Préparer la recette exécutable | Revoir seed fictif et injections séparément, empreintes archive avant extraction, cas/état distincts et bornes ; aucune commande improvisée sur VPS métier | Grille ACTIVATION transformée en étapes reproductibles ; chaque essai a entrée, oracle, preuve et nettoyage borné | Work prépare ; revue distincte requise pour préparation sensible |
+| 4. Recevoir le contrôle cible | Exécuter nominal, refus, perte propriétaire/gardien/scope, Docker indisponible et reprise sur VM isolée | systemd/ExecStopPost effectifs, worker absent par CID et nom, témoin conservé, unknown si reçu absent, zéro replay | Opérateur exécute ; bloqué par2–3 |
+| 5. Livrer la première mission réelle | Résoudre compatibilité skill1.4, identité GitHub lecture seule Ultima, médiateur réseau/modèle hors worker et plafond de coût ; rééprouver code exact et intégration avant installation | Rapport privé lié aux PR/SHA/date ; reçu durable ; arrêt et plafond réellement respectés ; aucune autorité libre du worker | Work prépare ; accès opérateur et budget facturé à qualifier |
+| 6. Raccorder Ultima et l'exploitation | Installer version exacte reçue hors droits Léo ; statut/date/dernier reçu/budget/arrêt dans le pilotage existant ; sauvegarde et retour arrière | Contrôle non modifiable par Léo ; statut du runtime distinct de la preview web ; perte d'accès/sauvegarde/restauration éprouvées | Opérateur + Work ; dépend de4–5 |
+| 7. Activer la permanence puis recevoir LV1 | Déclencheurs bornés, surveillance externe, alertes privées, reprise après reboot et non-chevauchement ; revue dossier R01–R28 | Mécanisme réel actif, arrêt coupe tout nouvel engagement, panne visible ; exigences critiques reçues par preuves applicables et verdict Paul | Non activé ; dépend de6 |
+
+Pas de délai promis : accès, compatibilité et travail restant ne sont pas
+encore mesurés. Les jalons de permanence ne sont pas livrés par le oneshot
+Restart=no sans timer existant.
+
+### Choix ZS et prévention
+
+Réutiliser le kit et Hostinger pour la cible conserve le travail reçu sans
+acheter de moteur. VM Windows temporaire : coût fournisseur additionnel nul
+si moyens locaux suffisants, mais RAM et rôle Hyper-V à qualifier ; meilleure
+séparation des essais que le Docker partagé. VPS dédié de recette :
+alternative si PC inadéquat, coût et durée à vérifier avant achat ; aucune
+offre/prix choisis. Aucun benchmark de rapidité ni économie promis.
+Sources officielles Microsoft consultées pour diagnostic :
+https://learn.microsoft.com/windows-server/virtualization/hyper-v/host-hardware-requirements
+https://learn.microsoft.com/en-us/powershell/module/dism/get-windowsoptionalfeature
+
+Risques : VM insuffisante -> lecture RAM avant création ; sécurité Windows
+abaissée -> aucune désactivation HVCI/App Control ; faux succès de fixture ->
+recette cible et mission réelle distinctes ; worker accède au contrôle ->
+identités et montages séparés ; dérive code/base -> preuves invalidées et
+intégration revue ; service partagé interrompu -> essais sur VM seule ;
+apprentissage change permissions -> écriture proposée/versionnée, jamais
+élévation automatique.
+
+### Capitalisation des frictions réellement rencontrées
+
+Ces observations appartiennent à cette reprise ; les règles générales restent
+dans memoire/LECONS.md. Ne pas les présenter comme apprentissage automatique.
+
+| Incident / conséquence constatée | Correction utile | Contrôle à réutiliser |
+|---|---|---|
+| Premier récap du11/10 repris d'un bilan intermédiaire : 278/12 au lieu du dossier294/14, supervision présentée encore à préparer | Lire la tête PR et la première section de reprise avant résumé | Versions et preuves actuelles avant prochaine action |
+| Deux captures annoncées illisibles à partir d'une erreur locale, sans tentative effective ; une capture ultérieure était lisible avec view_image | Essayer réellement l'accès au fichier avant demander à Paul de recopier | Distinguer erreur affichée et résultat de lecture ; si accès absent, texte minimal demandé |
+| Diagnostic Windows CIM False risquait de conclure à tort à absence de virtualisation | systeminfo a révélé hyperviseur actif/HVCI | Qualifier hyperviseur et rôle Hyper-V séparément avant BIOS |
+| Choix VM imbriquée proposé avant vérification /dev/kvm ; chemin indisponible | Préflight matériel avant installation | Distinguer hyperviseur fournisseur et capacité VM invitée |
+| Succession de diagnostics humains sans dossier unique actualisé | Préflight reçu et roadmap conservés ici | Ne refaire que lectures périmées ou nécessaires à l'action |
+
+Aucun coût de friction, temps économisé ni erreur matérielle Windows inventé.
+À clôture de chaque jalon : résultat observé, version, anomalie, correction,
+preuve, reste et prochaine action dans ce fichier ; nouvelle règle générale
+seulement si incident réel et procédure canonique de leçons suivie.
+
+### Prochaine action unique
+
+Lire dans PowerShell administrateur Get-WindowsOptionalFeature -Online
+-FeatureName '*Hyper-V*', Get-Service vmms -ErrorAction SilentlyContinue et
+RAM disponible. Lecture seule ; ne pas activer/désactiver de fonctionnalité.
+Hyperviseur détecté ne signifie pas rôle Hyper-V installé. Si rôle/RAM
+adéquats, préparer VM indépendante ; sinon qualifier alternative sans achat.
+
+
+---
+
+## Dossier historique du 10 octobre — versions et preuves conservées
+
+# Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
+
+## Reprise courante — recette sur serveur existant, 10/10/2026 à 18 h 11 Paris
+
+Les trois workflows du SHA applicatif daba3ebf6a91522f02eab9fce3d93df5ebd137c6
+sont désormais réussis : LV138065281406, Auth38065281403 et Tests38065281402.
+294 tests runtime et 14 scénarios Docker réussis ; navigateurs réussis.
+Paul choisit un serveur existant, dont l'identité et l'accès restent à qualifier.
+Le protocole cible, le kit exact et la grille de recette sont centralisés dans
+leo/ACTIVATION.md, section « Recette cible cadrée ». Aucune commande cible
+exécutée, aucun bootstrap/reset de données, installation ou activation.
+Les mentions plus anciennes « tests à mesurer » sont historiques pour ce SHA.
+Prochaine action : identifier ce serveur et sa console pour préflight ciblé.
+
+
+## Kit de service FINUBAR préparé — 10/10/2026, accord à 17 h 25 Paris
+
+Reprise courante : préparer la supervision extérieure au guardian et un kit
+opérateur figé. Préparation sur PR365, aucun accès Work au contrôle exclu,
+aucune fusion, installation, dépense ou activation.
+
+Choix ZS : Linux/systemd comme référence accessible pour superviser un service
+ponctuel hors de ses processus ; modules, latch, claims et builder existants
+réutilisés, bibliothèque standard uniquement. Aucun hébergement actuel choisi
+ou compatible vérifié, aucun coût de serveur inventé. Cette référence ne vaut
+pas validation d'un hébergement permanent ni autonomie 24/7.
+
+- Le guardian inscrit atomiquement le nom et le CID dans claim.container avant
+  tout démarrage. Une création inconnue ne peut produire une preuve positive.
+  Le conteneur reçoit un label d'appartenance figé ; aucun label choisi par worker.
+- ReadReaper ne crée et ne démarre rien : tombstone STOP, CID enregistré,
+  vérification CID/nom/label avant rm, absence CID ET nom après suppression.
+  Conteneur renommé, label incorrect, erreur Docker et absence de registration
+  refusent la preuve. Un seul claim par installation, inventaire limité à 16
+  entrées ; commandes Docker bornées, aucun nettoyage général de la machine.
+- La preuve .reaper ne remplace pas une ancienne attestation .watchdog. Elle
+  ancre le CID enregistré ; reconcile_interrupted valide contexte/principal/
+  writer et conserve unknown et budget réservé, sans replay ni faux completed.
+- Builder existant : option --read-service, 24 fichiers figés dont modèle
+  systemd ; code_digest, image et source/cible/intégration enregistrés.
+  Configuration approved:false, revue et mission à fournir ; aucun registre
+  initial/reset, aucun secret et aucun timer. Le kit pilote R21 legacy et son
+  installation completed restent distincts et conservés.
+- Unité préparée : Type=oneshot, Restart=no, KillMode=control-group,
+  ExecStopPost=cleanup, TimeoutStopSec=90 ; code/configuration en lecture seule,
+  état privé en écriture. PrivateTmp désactivé pour que Docker voie le staging.
+  Hôte opérateur distinct de UID65534 worker ; accès Docker jamais au worker.
+  CLI run/cleanup/reconcile fixe ; aucune identité ou proposition libre du worker.
+- Seize tests runtime nouveaux préparés : dix reaper, quatre kit, deux
+  réconciliation extérieure. Deux scénarios Docker ajoutés au relais fermé :
+  SIGKILL du guardian ; puis destruction réelle de tout le helper contenant
+  propriétaire ET guardian, worker Running constaté, nouveau helper indépendant
+  lisant l'état privé conservé, suppression et reprise unknown sans doublon.
+  Conteneur voisin préservé dans les deux. Quatorze scénarios préparés au total,
+  dont le mutant connu de suppression ; résultats du nouveau SHA à mesurer.
+- CI prépare une archive read-service.tar.gz séparée du kit pilote existant,
+  après tests isolés, puis la conserve comme candidat uniquement.
+
+Revue indépendante statique : favorable après correction du cas de création
+inconnue et de la recherche par nom ; marqueur child-ready fragmenté traité
+par buffer borné. AST et YAML vérifiés statiquement ; systemd-analyze verify réussi sur unité rendue
+avec dépendance Docker factice (validation statique seulement). Aucun test
+applicatif local.
+Le gestionnaire systemd réel n'est pas éprouvé par le relais Docker : cette
+recette sur la machine cible reste obligatoire, avec perte guardian/scope,
+droits code/config/contrôle, reçu/reprise, Docker indisponible et arrêt borné.
+
+État antérieur vérifié : f88889d6ad79b49b5f565db859f9b1814a5a1f1c, les trois
+workflows LV138061650392/Auth38061650414/Tests38061650316 réussis ; 278 tests
+runtime et 12 scénarios Docker réussis. Ne pas transférer cette preuve au
+présent changement sans ses résultats.
+
+Prochaine action : éprouver et conserver ce kit exact en CI, puis vérifier
+l'hébergement opérateur et cadrer la recette cible avant toute installation.
+Restent hors boucle : modèle/appels facturés, acquisition GitHub réelle,
+identité opérateur authentifiée, compatibilité skill1.4 et réception LV1.
+Une VM ou Docker indisponible ne peut être nettoyée par un service inexécutable.
+
+
+## FINUBAR externe préparé — 10/10/2026, accord à 16 h 44 Paris
+
+Cette section définit la reprise courante ; les jalons suivants sont historiques.
+But : supprimer le worker hors réseau après SIGKILL du processus propriétaire,
+puis reprendre le registre sans rejouer la mission. Préparation dans PR365
+seulement ; dépôt privé de contrôle exclu, aucune installation ni activation.
+
+- Le lanceur normal crée un guardian FINUBAR distinct, détaché par setsid.
+  Identité du propriétaire épinglée par pidfd Linux, accusé prêt avant create.
+  Seul le guardian détient DockerTransport : plan exact, une création et un
+  démarrage, requêtes privées bornées ; aucun démarrage tardif par le propriétaire
+  après sa mort. Pendant une commande Docker, la détection attend sa borne
+  existante (15 s) ; les suppressions/observations ont aussi des bornes.
+- Perte du propriétaire, échéance ou arrêt : pierre tombale durable existante
+  avant nettoyage, sans attendre un verrou SQL. Fermeture du client, suppression
+  et observation d'absence sont tentées indépendamment ; une erreur produit une
+  preuve négative. Le fichier host-only claim.watchdog est une attestation de
+  nettoyage atomique, PAS un reçu de mission ou un second registre.
+- reconcile_interrupted recontrôle mandat, source, writer, contexte et preuve
+  exacte : pending devient unknown ; unknown reste idempotent. Aucun résultat
+  completed inventé et aucune réservation libérée. Reprise refusée après arrêt.
+- Huit tests runtime du guardian et quatre de réconciliation ajoutés. Le relais
+  Docker éprouve SIGKILL d'un propriétaire distinct du PID 1 du helper pendant
+  qu'un enfant détaché tourne ; suppression réelle et conteneur voisin préservé.
+  Cas négatif connu : neutraliser rm seulement dans la fixture doit laisser le
+  worker réel vivant, produire une preuve false et empêcher la réconciliation.
+  Le runner supprimera ensuite ce survivant fictif. Douze scénarios Docker
+  préparés au total ; résultats du présent SHA encore à mesurer en CI isolée.
+- ZS : réutilisation des modules, claims, latch et registres ; bibliothèque
+  standard Python, primitives Linux et Docker existant, aucune dépendance
+  additionnelle ni service acheté. Simplicité d'exploitation permanente encore
+  à éprouver sur l'hébergement choisi.
+
+Limites : Linux avec pidfd et hôte propriétaire mono-thread ; la perte du
+guardian lui-même ou de toute sa cgroup/VM n'est pas couverte par cette boucle.
+Un service externe et sa recette d'installation restent nécessaires pour cela.
+Aucun modèle, accès GitHub vivant du worker, secret, identité opérateur réelle,
+appel payant ou réception LV1. Le kit pilote existant n'inclut pas ce candidat.
+Le contrat reste v1.1 et le runtime refuse toujours la compétence incompatible.
+
+État antérieur mesuré : tête a4b28b0d28e1af1b135d77711322c9bf0775fc99,
+CI LV138057628222, Tests38057628213 et Auth38057628230 réussies ;
+266 tests runtime et dix scénarios Docker réussis. Ces preuves ne sont pas
+automatiquement transférables au nouveau changement.
+Prochaine action : mesurer le présent candidat en CI, puis préparer la
+supervision du guardian et l'installation figée hors droits de Léo.
+
+
+## Raccord Broker–lanceur préparé — 10/10/2026, accord à 15 h 46 Paris
+
+Cette section définit la reprise courante ; les jalons ci-dessous restent
+historiques. But : une mission de lecture hors réseau traverse les autorisations,
+réservations et reçus existants avant de lancer le worker. Aucun nouveau moteur
+ni registre : ReadBroker, MissionStore, BudgetLedger, ControlLatch et le lanceur
+précédent sont réutilisés. Pas de service ou dépendance supplémentaire.
+
+- ReadBroker reçoit une ReadLaunchConfig exacte fournie par l'hôte uniquement.
+  Le worker ne choisit toujours que action/operation_id/expected_version ; pas
+  de chemin, image, identité, empreinte, configuration ou autorité libre.
+- Réserve avant begin_operation ; payload ancré à l'instantané, image, SHA256
+  worker, limite temporelle et namespace de claims. Les claims host-only sont
+  dérivés de mission/opération et restent une garde anti-rejeu, PAS un reçu.
+- Admissions courtes sous ControlLatch puis transaction du registre commun
+  avant create et start : mandat, version, identité/writer, source, opération
+  pending et réservation exacte recontrôlés. Aucun verrou maintenu durant tout
+  le worker ; le poll recontrôle stop global/mission, expiration et version.
+- Résultat exact et suppression confirmée du conteneur avant complete_operation,
+  puis settle. Si une réponse est perdue APRÈS commit du reçu, un nouvel hôte
+  peut le retrouver et solder après stop, sans nouveau lancement. Si la preuve
+  n'a pas été committée, pending/unknown garde la réserve et ne repart jamais.
+  Ni le claim ni le rapport attendu ne fabriquent un completed manquant.
+- 21 scénarios runtime préparés et quatre épreuves Docker de mission ajoutées
+  au relais existant : nominal + reprise sans replay, réponse perdue après commit
+  puis réconciliation après arrêt, arrêt d'une mission avec enfant réellement
+  détaché (marqueur APRÈS setsid), budget nul sans create/start/claim/réservation.
+  Dix scénarios Docker au total avec les six précédents. Une reprise d'un second
+  hôte pendant poll doit voir pending, sans second départ ni consommation.
+
+État mesuré du jalon précédent, SHA38b6d5747d57dacacceec49055dc89fa3cc92695 :
+les trois workflows ont terminé avec succès ; runtime245tests et six scénarios
+Docker réussis. Ne PAS transférer ces succès au nouveau SHA sans lecture CI.
+
+Preuve actuelle avant publication : syntaxe AST valide, revue indépendante
+statique favorable ; tests du raccord préparés, pas exécutés localement (Docker
+absent). Le verdict mesuré sur le SHA final sera consigné dans la PR365.
+
+Limites : fixture offline uniquement, pas d'identité externe réellement résolue,
+GitHub live, modèle, appel facturé ou compatibilité skill1.4. Les lectures SQLite
+peuvent attendre10s, create Docker15s ; le poll et l'échéance ne garantissent pas
+un arrêt instantané entre appels bloquants. SIGKILL de l'hôte entier exige encore
+un watchdog FINUBAR externe, non livré. Création incertaine : arrêt persistant et
+réconciliation opérateur du nom réservé, jamais relance. Pas de kit installable
+pour ce raccord, merge, installation/activation ni accès au contrôle exclu.
+Ne pas réinitialiser le pilote completed ni toucher les archives.
+
+Prochaine action après ces preuves : préparer le watchdog externe de l'instance
+et sa réconciliation après disparition de l'hôte ; ensuite traiter explicitement
+la compatibilité1.4 et les médiateurs GitHub/modèle avant toute mission réelle.
+
+
+## Lanceur de lecture préparé — 10/10/2026, suite autorisée à 15 h 28 Paris
+
+Cette section est l'état courant ; le candidat et les jalons précédents restent
+historiques. Réutilisation de Docker, ControlLatch et de la CI existante, sans
+nouveau service ni dépendance : ce choix réduit l'installation et l'exploitation.
+
+- `read_launcher.py` ajoute une capacité hôte offline à usage unique : claim
+  privé durable avant création, empreintes SHA256 revues obligatoires, copies
+  figées dans un staging privé, commande create fermée, puis start du CID acquis.
+- Deux montages RO uniquement côté worker ; réseau none, UID65534, root RO,
+  caps retirées, no-new-privileges, PID/mémoire/CPU bornés et aucun log Docker.
+- Délai worker <=120s (30s par défaut), collecte stdout <=49153 octets et stderr
+  <=4096 octets ; appels de gestion Docker <=15s chacun, métadonnées <=8192
+  octets par flux. Nettoyage a ses propres bornes ; le délai worker ne prétend
+  pas borner toute la durée hôte à lui seul.
+- Sortie comparée octet pour octet au rapport déterministe attendu et état
+  Docker exited/code0 sans OOM contrôlé. Client arrêté puis conteneur supprimé
+  et absence contrôlée avant succès. Un défaut de nettoyage inscrit l'arrêt.
+- Une création sans CID certain refuse le succès et inscrit l'arrêt : aucun
+  start ultérieur. Son nom reste dans le claim ; une création différée peut
+  laisser un conteneur INERTE à réconcilier par l'opérateur, jamais rejoué.
+- 17 scénarios runtime ajoutés (transport réel par pipes dans le bac isolé,
+  anti-rejeu depuis hôte neuf, arrêt, timeout, limite, sortie forgée, erreurs de
+  nettoyage et empreintes). Six scénarios Docker réels préparés : nominal,
+  isolation, arrêt avec descendant passé en nouvelle session, timeout, sortie
+  excessive et faux rapport. Le harnais CI fermé exécute l'application dans un
+  helper isolé, sans socket ; le runner stdlib ne relaie qu'une commande exacte
+  et un CID réservé. Aucun secret ou accès de production dans ces fixtures.
+
+Preuves avant publication : syntaxe AST vérifiée ; revue indépendante favorable sur ce candidat offline et son harnais, après corrections.
+Les tests n'ont PAS été exécutés localement (Docker absent). Lire le verdict CI
+sur le SHA final dans la PR365 avant de déclarer cette boucle éprouvée.
+
+Limites : lanceur offline autonome du Broker, pas encore un pipeline de mission
+ni une admission métier ; claim != reçu métier. Pas de GitHub live, modèle,
+credential runtime, facture ni compatibilité skill1.4. Arrêt après SIGKILL de
+l'hôte entier nécessite un watchdog FINUBAR externe, non livré ici. Pas de kit
+installable pour le nouveau lanceur, pas de modification du contrôle exclu,
+pas de merge, installation ou activation ; ne pas réinitialiser le pilote completed.
+
+Prochaine action après CI/revue : relier ce lanceur aux admissions/réservations
+et reçus durables existants, puis définir la compatibilité1.4 avant raccord réel.
+
+
+## Candidat de lecture inerte — 10/10/2026
+
+Préparation autorisée par Paul à 15 h 05 Paris. Aucun accès au contrôle exclu,
+aucun appel réseau/modèle, aucune installation ni fusion.
+
+### Portée du candidat
+- `read_candidate.py` étend Broker avec read_source sur un instantané fourni
+  par l'hôte : Ultima seul, 1 à 20 PR sélectionnées, métadonnées explicites,
+  32 Kio maximum. Aucun URL, chemin, secret ou autorité proposé par le worker.
+- Réutilisation de MissionStore, BudgetLedger, Policy et ControlLatch :
+  réserve avant dispatch, admission finale sous transaction, reçu durable,
+  pas de rejeu pending/unknown, récupération d'un reçu completed après stop.
+  Les unités sont fictives et NE représentent PAS un prix fournisseur.
+- `read_worker.py` est un témoin déterministe hors réseau, pas un modèle Léo :
+  instantané en lecture seule, sortie JSON bornée, texte PR traité comme données.
+  `autonomous_agent:false`, `publication:false`, `environment:fixture`.
+- WorkerPlan prépare une commande Docker figée : image par digest, réseau none,
+  UID65534, root read-only, capacités retirées, deux fichiers RO seulement.
+  Il ne lance RIEN. L'opérateur doit fournir des fichiers revus, immuables
+  pendant le lancement et sans secrets ; chemins validés ne garantissent pas
+  seuls leur contenu ni l'absence de remplacement concurrent.
+
+### Preuves et limites
+Revue statique indépendante /root/read_candidate_review : deux blocages trouvés
+et corrigés (admission finale atomique, réconciliation après arrêt) ; verdict
+favorable au candidat INERTE uniquement. Syntaxe AST vérifiée sans exécution.
+15 scénarios de tests préparés dans la découverte runtime de la CI isolée
+existante : reçu depuis hôte neuf, perte du checkpoint, stop, budget, identité,
+versions, changement de snapshot, injection comme données, scope, bornes,
+immutabilité et contrat de montages. Leur résultat doit être lu sur le SHA
+publié ; cette section n'annonce aucun succès CI avant sa mesure.
+
+Absents volontairement : lanceur réel de cette commande avec timeout mural,
+collecte stdout bornée et kill du conteneur ; transport authentifié ; acquisition
+GitHub réelle ; médiateur modèle ; accord/coût fournisseur ; compatibilité1.4.
+Le candidat conserve le contrat1.1/skill1.0 et refuse une divergence : ne pas
+changer seulement la constante pour annoncer compatibilité.
+Pas de service permanent, aucune réception LV1 globale.
+Les tests d'argv ne prouvent pas la séparation noyau ni un arrêt Docker actif.
+
+### Prochaine boucle
+Construire et éprouver le lanceur de confiance (deadline indépendante, sortie
+bornée, kill du conteneur entier, perte du résultat et relecture durable), puis
+les médiateurs GitHub/modèle avec credentials détenus hors worker et budget
+opérateur chiffré. Les appels facturés restent bloqués jusqu'à accord précis.
+Conserver l'installation fixture completed ; ne pas la réinitialiser.
+La boucle status/prepare/execute du 10/10 est reçue par captures dans PR365 ;
+reconcile cible et stop actif ne sont pas encore reçus.
+
+
+---
+
+## Historique — anciennes prochaines actions remplacées par le relevé ci-dessus
+
+# Reprise courante — 8 octobre 2026, essai cible échoué puis arrêté
+
+Paul a installé le candidat source27664c7 et exécuté lui-même status/prepare/
+execute/reconcile/stop dans le contrôle exclu. Aucune voie Work n'a accédé à ce
+dépôt. Capture 23h37Paris : stoppedtrue, owner_stop, phaseunknown, séquence5,
+exécution37846177261 sans reçu ; préparation37845684569 completed. L'arrêt est
+prouvé après l'échec, pas pendant une exécution. Aucune autonomie reçue.
+
+Cause structurelle confirmée dans le code : /trial-output1777 incompatible avec
+le verrou FINUBAR. Copilot a déclaré la reproduction ; ses captures montrent
+le correctif0700,uid65534,gid65534 mais conservent ancienne identité/source/revue.
+Sa PR est non fusionnée selon Paul. Ne pas suivre la proposition de re-seed.
+
+Correctif source et test avec les vrais montages préparés dans PR365, sur sa
+tête précédente27664c7, sans écraser main ni les travaux Claude. Main relu :
+6203fe407c742fce562de2ae1cc7e6629d9162ac. Montage seul corrigé, garde inchangée.
+CI à mesurer au nouveau SHA : argv complets comparés en helper isolé, témoin
+1777 refusé précisément, prepare/execute et inspection dans des conteneurs
+distincts. Aucun code applicatif exécuté dans Work ou sur le runner hors bac.
+
+Dossier et relevé détaillés : leo/ACTIVATION.md, première section. Les mentions
+« contrôle vide », « import à faire » et les anciens succès de tests ci-dessous
+sont historiques. La graine connue est ba369884db05db6a4af321620e11790de61a2656.
+Ne pas redemander l'installation ni rejouer execute ; garder r21-state et
+R21_STATE_SEED inchangés. La correction ne réarme pas l'installation arrêtée.
+
+Prochaine action : recevoir le correctif et ses preuves dans #365, puis préparer
+la succession explicite d'installation en préservant l'ancienne ancre. Ce plan
+reste ouvert ; aucun nouveau candidat ne peut être installé par simple reset.
+Pas de fusion, contrôle direct, secret, migration réelle, envoi ni achat.
+
+---
+
+# Historique — 8 octobre 2026, kit candidat de pilote préparé
+
+Cap : Léo conduit une mission bornée sous contrôle FINUBAR, avec arrêt durable
+et reprise sans doublon. Aucune réception d’autonomie acquise.
+Mandat de Paul « ok vasy » : construire et éprouver le kit dans Ultima ; pas
+installer/importer/activer ni accéder au dépôt de contrôle exclu.
+
+Base du code : main 5848ea99668ec8a901e746e2bed1d628241fb22f. PR365 brouillon,
+branche codex/leo-raccord-reel-20261008. PR361 fusionnée depuis le diagnostic ;
+préserver les travaux concurrents PR364/366 et la fondation inerte PR351.
+
+Le dossier canonique est leo/ACTIVATION.md, section « Kit candidat du 08/10/2026 ».
+Code préparé : état distant à ref courante/seed opérateur, CAS non forcé et nonce,
+réserve avant effet, archive conservée, arrêt monotone, hôte Actions et conteneur
+sans réseau/secret, deadline interne. Une seule fixture déterministe, pas Léo
+modèle. Contrat1.1/runtime skill1.0 inchangés ; compatibilité Work1.4 non reçue.
+
+Preuve initiale : source fc7d343433badea03d0e8cee3a223d6f5afed7b0,
+run37811920873, 211 tests runtime verts dont45nouveaux et archive inerte générée.
+Le relevé final de la version candidate, revue, contrôles et empreintes figure
+dans PR365 ; toute version suivante exige ses propres contrôles. Aucun test local.
+Prochaine action après ces contrôles : installation opérateur hors Work du
+candidat exact, uniquement après accord distinct. Ne pas importer le squelette
+PR351 et ne pas rétablir l’accès Work au dépôt de contrôle.
+
+Le diagnostic du contrôle est clos : capture Paul du08/10 à18h07 Paris, dépôt
+privé vide (Quick setup). Ne pas redemander cette capture. Aucun accès direct
+Work au contrôle, import ou dispatch manuel. #353/#354 déjà fusionnées : ne pas
+rouvrir leur fusion ni confondre leurs tests avec installation des agents.
+
+Restent hors réception : hôte cible et exclusion globale, accord réel exact,
+essai sur hôte cible et reprise neuve, identité propre/compatibilité Léo1.4,
+autonomie permanente. Budget/cron/suivi continus non activés. Le16/10 n’est pas
+une date garantie. Aucun secret, migration réelle, envoi, achat ou fusion.
+
+---
+
+# Historique — 5 octobre 2026, raccord et arrêt FINUBAR préparés
 
 Mandat : raccord Ultima, absence d'auto-contrôle, arrêt externe par FINUBAR.
 Code préparé : admission six champs, client, journal anti-rejeu ; garde
@@ -19,7 +555,7 @@ réception LV1 restent ouverts. Pas de fusion/import/activation/secret/envoi.
 
 ---
 
-# Reprise courante — 5 octobre 2026, accès contrôle révoqué
+# Historique — 5 octobre 2026, accès contrôle révoqué
 
 La révocation par Paul est vérifiée pour le connecteur organisation
 160835885 : 12 dépôts conservés, contrôle absent ; GET métadonnées du contrôle
@@ -45,7 +581,7 @@ publication, migration, workflow manuel ou émission externe.
 
 ---
 
-# Reprise courante — 5 octobre 2026, protocole R21 préparatoire
+# Historique — 5 octobre 2026, protocole R21 préparatoire
 
 Demande : débloquer et mettre en ligne. Ultima est déjà déployé READY au main
 `9a261c5fb1ac1a77bdf53e5b3f98444297b2599b` ; le dossier Python Léo est exclu de
@@ -77,7 +613,7 @@ ne pas annoncer d'autonomie ni de réception LV1.
 
 ---
 
-# Reprise courante — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
+# Historique — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
 
 **Boucle actuelle :** demande de Paul de cadrer précisément l'autonomie de Léo
 et FINUBAR, puis réaliser la première étape. Dossier opératoire et rétroplanning
@@ -145,7 +681,7 @@ ci-dessus ; la revue PR351 ne vaut ni installation ni effet R21 sous accord rée
 
 ---
 
-# Reprise courante — 30 septembre 2026, diagnostic GitHub Team clos
+# Historique — 30 septembre 2026, diagnostic GitHub Team clos
 
 **Fait :** intégration préparatoire de main `ce1ff937465e5d65a269b481b9ee488b65e02ffa`
 (PR310/311) dans la branche `codex/leo-lv1-20260929`, source technique
@@ -780,3 +1316,4 @@ publication. Résultats à rattacher au commit effectivement exécuté dans PR30
 R21 n'est pas reçu par ce raccord : l'identité réelle de Paul et son accord
 exact restent à fournir par un canal de confiance. Le serveur fermé d'épreuve
 ne constitue pas un hébergement permanent ni un contrôle des outils Work.
+
