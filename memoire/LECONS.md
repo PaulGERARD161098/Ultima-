@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v125 2026-11-11 sha256:b63700ff55e2 -->
+<!-- lecons:empreinte v126 2026-11-11 sha256:82d1164eb7c5 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2828,6 +2828,23 @@ s'arrête sans prévenir le dépôt : une alerte à 75 % se pose dans « Budgets
 (geste de Paul). Puis l'onglet Usage **groupé par dépôt** a tranché en une capture :
 `Ultima-/.github/workflows/tests.yml` facturait ≈ 29 min par exécution (27 pour le
 harnais navigateur), jouée même pour un commit de `.md`.
+
+**UNE CI ROUGE AVANT LE PREMIER TEST SE LIT PAR ÉTAPE, PAS PAR SON RÉSULTAT** *(2026-11-11, RenoDevis #524)*.
+Le build est tombé cinq fois en exit 100, à l'étape `apt-get install poppler-utils` :
+« Temporary failure resolving 'azure.archive.ubuntu.com' », le miroir Ubuntu était
+injoignable depuis le runner pendant tout l'après-midi. Aucun test n'avait tourné, la
+ligne rouge ne disait rien du code. Trois relances manuelles (≈ 6 min chacune) n'ont
+rien prouvé. La fusion attendue par Paul (« la biblio d'Henry doit être en ligne ») a
+pris environ 2 h de retard. Une fois la PDF débloquée, la panne a frappé l'étape
+suivante (`playwright install --with-deps`) : même cause, autre étape.
+⛔ **La règle** : devant un job rouge, lire d'abord la liste des étapes
+(`get_workflow_job`). Si l'étape rouge précède `npm test` et que l'erreur est réseau,
+on ne relance pas en boucle : on rend TOUTES les installations qui passent par ce
+service tolérantes, d'un coup. Tentative en temps borné, puis repli DIT par un
+avertissement nommé. Les vérifications tournent pour de vrai ou sont écartées
+nommément, jamais sautées en silence. ⚠️ Un sabotage inverse le prouve : la suite
+complète, outil cassé, doit toujours rougir (RenoDevis `.github/workflows/ci.yml`,
+11 rouges mesurés).
 
 **UNE COMMANDE QUE LA PLATEFORME EXÉCUTE SE VÉRIFIE SUR LA PLATEFORME** *(2026-10-19)*.
 RenoBoost : `ignoreCommand` de Vercel vert en local, sabotages compris, puis
