@@ -55,9 +55,9 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-10",
-    "commit": "e69a9f9",
-    "quoi": "Budget Vercel (Paul, 09/11 : ramener à 20 $/mois ; cycle 25/10 → 09/11 à 72 h 52 de Build CPU, 92 % facturés, ≈ 30 $ projetés). Règle L5 « preview sur demande » ([preview] dans le dernier commit poussé) posée et fusionnée sur main des six dépôts : Ultima- #453 (e69a9f9, règle canonique), RenoBoost #636 (b5ab1a3, + harnais journal.navigateur réparé), RenoDevis #503, Artidispo #187, artisan-builder #124 (4f7b487), mon-dpe.fr #276 (b4b68d8) ; prouvée Ignored/Ready sur Vercel. Gestes de Paul faits le 10/11 : machine Basic pour l'équipe, Spend Management 30 $ avec Pause. Leçon scellée (famille 2 : un grep derrière npm test ne garde rien), puis leçons PROPAGÉES le 10/11 après-midi en v124 (quatre chemins nus préfixés, lecons-chemins à 0 sur les dix clones) : copie identique dans les neuf dépôts, une PR de documentation seule chacun. Détail, roadmap et pre-mortem : CADRAGE-2026-10-31-couts-github-vercel.md §8–§10. Le commit ci-dessus est la tête de main AVANT la PR de cette clôture : la collecte dira un commit d'avance, c'est attendu."
+    "le": "2026-11-11",
+    "commit": "688ae8f63c816694dc7727fb88fcf88760e6efe0",
+    "quoi": "Règle L5 « preview sur demande » posée sur RenoAgenda, RenoPredict et renoboost-console (fusions du 11/11) : les neuf dépôts du registre déployés sur Vercel la portent ; texte canonique L5 et cadrage des coûts §8/§10 à jour. Prochaine mesure : capture Usage du 15/11."
   },
   "prochaine_action": "Paul dicte à Léo sur RIVEN la fiche « Matthieu Ducrest », reliée à SOLA GROUPE (puis le fils de Romin) : c'est aussi la preuve réelle de proposer_contact en production. Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
   "bloque_par": [
@@ -237,7 +237,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-11-03"
+  "maj": "2026-11-11"
 }
 ```
 
