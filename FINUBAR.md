@@ -56,8 +56,8 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-11",
-    "commit": "688ae8f63c816694dc7727fb88fcf88760e6efe0",
-    "quoi": "Règle L5 « preview sur demande » posée sur RenoAgenda, RenoPredict et renoboost-console (fusions du 11/11) : les neuf dépôts du registre déployés sur Vercel la portent ; texte canonique L5 et cadrage des coûts §8/§10 à jour. Prochaine mesure : capture Usage du 15/11."
+    "commit": "c661313c2457a8bac22af1a683d4573140de0d7e",
+    "quoi": "Tour de piste des PR et des gestes en attente (11/11, après-midi). #458 fusionnée (6a26082, grain corrigé par la séance du matin) ; #451 (leçons v121, absorbée par v124) et #351 (squelette R21, remplacé par #365) fermées comme dépassées, branches conservées. Gestes de Paul dans Supabase Ultima, mesurés après coup : inscription publique fermée (disable_signup = true ; sonde POST /auth/v1/signup → 422 signup_disabled) et mots de passe divulgués refusés (advisors sécurité vides) — #459 fusionnée (c661313). Restent ouvertes : #425 (source manquante) et #365 (pause de Léo). RIVEN relu : aucune fiche « Matthieu Ducrest »."
   },
   "prochaine_action": "Paul dicte à Léo sur RIVEN la fiche « Matthieu Ducrest », reliée à SOLA GROUPE (puis le fils de Romin) : c'est aussi la preuve réelle de proposer_contact en production. Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
   "bloque_par": [
