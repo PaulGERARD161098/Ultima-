@@ -55,9 +55,9 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-11",
-    "commit": "3bd6ada4b3c8194c98946cee3af5586c801fc1e1",
-    "quoi": "Fiche RIVEN « Matthieu DUCREST — SOLA GROUPE » créée sur instruction de Paul (11/11, 17:50 UTC, id c8aa83ad) : partenaire actif, téléphone et mail lus dans la signature de ses mails SOLA (07/11), rattachement à SOLA GROUPE (a6e2ccf0) écrit dans les notes — aucun type de relation RIVEN ne dit « gérant de ». Écrite en SQL depuis la séance, PAS par Léo : hors journal leo_ecritures, pas défaisable d'un clic, et elle ne prouve PAS proposer_contact. Relu en base : une seule fiche, même propriétaire que SOLA GROUPE. Plus tôt le même jour : #458, #459, #460 fusionnées ; #451 et #351 fermées ; inscription Supabase fermée."
+    "le": "2026-11-12",
+    "commit": "36147c5fb146ffacd70ff4617e7e85257668a279",
+    "quoi": "12/11 (séance RénoDevis, documentation seule dans Ultima) : techno du canal WhatsApp de RénoDevis archivée dans zohshia/canal-whatsapp/TECHNO.md avant son retrait ; leçons v127 (deux leçons payées par Devis express : un oracle sur fixtures se rejoue sur la donnée réelle ; un avertissement à l'écran ne protège pas le document qui en sort). Branche claude/reprise-renodevis-reboost-am979d, PR à fusionner sur go de Paul. La fiche RIVEN du 11/11 reste l'état produit courant."
   },
   "prochaine_action": "Paul dicte à Léo, dans Ultima sur RIVEN, la fiche du fils de Romin (puis « rappelle-le lundi ») : c'est la preuve réelle de proposer_contact en production, à relire ensuite en base (network_nodes + leo_ecritures). Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
   "bloque_par": [
@@ -235,7 +235,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-11-11"
+  "maj": "2026-11-12"
 }
 ```
 
