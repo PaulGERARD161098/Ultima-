@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v124 2026-11-10 sha256:9babb8653a66 -->
+<!-- lecons:empreinte v126 2026-11-11 sha256:82d1164eb7c5 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2005,6 +2005,10 @@ Production ».
 
 ## 4. Conduire une boucle
 
+**UN LIVRABLE N'EST PAS FINI TANT QUE CE QUI LE PRODUIT VIT HORS DU DÉPÔT** *(2026-11-11, paggerard-boop/mod-lisation-2-3D, PR #1 puis #2).* La planche avant / après d'une salle de bain SPC a été produite, validée par Paul (« c'est exactement ce genre de choses que je voulais ») et sa PR fusionnée. Mais les vues 3D, le PDF et les deux images à transmettre sortaient de trois scripts restés dans l'espace temporaire de la séance. À la question « à l'avenir, c'est bien ce livrable que me fera l'outil ? », la réponse honnête était non : une séance suivante, repartie de `main`, aurait refait le plan mais ni la 3D ni le PDF.
+*Ce que cela a coûté* : une PR de plus (#2) pour verser une commande unique, et une clôture annoncée trop tôt, rattrapée seulement parce que Paul a posé la question.
+⇒ Avant de déclarer un livrable fait, le reproduire **depuis le dépôt seul**, dans un dossier vierge, avec la commande qu'une autre séance lancerait, et comparer au livrable validé (ici : plans identiques à l'octet, vues 3D au pixel). Tout script qui a servi à le produire est soit versé, soit nommé dans la clôture comme manquant.
+
 **Une préversion validée laisse la livraison ouverte** *(2026-11-10, RenoDevis, PR #499).* La fiche au survol a été reçue le 7 novembre en préversion. La clôture a masqué une PR en brouillon et un contrôle CI en échec. Trois jours plus tard, Paul voyait toujours l’ancienne bulle et a dû rouvrir la boucle.
 Pour une livraison demandée en production, consigner trois preuves dans la clôture : la PR fusionnée avec son SHA, le déploiement READY qui sert le domaine de production et le geste utilisateur rejoué sur ce domaine. Si le mandat s’arrête à la préversion, l’écrire explicitement. Si une étape manque, nommer l’étape atteinte et garder la livraison ouverte.
 
@@ -2824,6 +2828,23 @@ s'arrête sans prévenir le dépôt : une alerte à 75 % se pose dans « Budgets
 (geste de Paul). Puis l'onglet Usage **groupé par dépôt** a tranché en une capture :
 `Ultima-/.github/workflows/tests.yml` facturait ≈ 29 min par exécution (27 pour le
 harnais navigateur), jouée même pour un commit de `.md`.
+
+**UNE CI ROUGE AVANT LE PREMIER TEST SE LIT PAR ÉTAPE, PAS PAR SON RÉSULTAT** *(2026-11-11, RenoDevis #524)*.
+Le build est tombé cinq fois en exit 100, à l'étape `apt-get install poppler-utils` :
+« Temporary failure resolving 'azure.archive.ubuntu.com' », le miroir Ubuntu était
+injoignable depuis le runner pendant tout l'après-midi. Aucun test n'avait tourné, la
+ligne rouge ne disait rien du code. Trois relances manuelles (≈ 6 min chacune) n'ont
+rien prouvé. La fusion attendue par Paul (« la biblio d'Henry doit être en ligne ») a
+pris environ 2 h de retard. Une fois la PDF débloquée, la panne a frappé l'étape
+suivante (`playwright install --with-deps`) : même cause, autre étape.
+⛔ **La règle** : devant un job rouge, lire d'abord la liste des étapes
+(`get_workflow_job`). Si l'étape rouge précède `npm test` et que l'erreur est réseau,
+on ne relance pas en boucle : on rend TOUTES les installations qui passent par ce
+service tolérantes, d'un coup. Tentative en temps borné, puis repli DIT par un
+avertissement nommé. Les vérifications tournent pour de vrai ou sont écartées
+nommément, jamais sautées en silence. ⚠️ Un sabotage inverse le prouve : la suite
+complète, outil cassé, doit toujours rougir (RenoDevis `.github/workflows/ci.yml`,
+11 rouges mesurés).
 
 **UNE COMMANDE QUE LA PLATEFORME EXÉCUTE SE VÉRIFIE SUR LA PLATEFORME** *(2026-10-19)*.
 RenoBoost : `ignoreCommand` de Vercel vert en local, sabotages compris, puis

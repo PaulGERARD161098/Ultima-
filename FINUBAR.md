@@ -56,15 +56,13 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-11",
-    "commit": "688ae8f63c816694dc7727fb88fcf88760e6efe0",
-    "quoi": "Règle L5 « preview sur demande » posée sur RenoAgenda, RenoPredict et renoboost-console (fusions du 11/11) : les neuf dépôts du registre déployés sur Vercel la portent ; texte canonique L5 et cadrage des coûts §8/§10 à jour. Prochaine mesure : capture Usage du 15/11."
+    "commit": "3bd6ada4b3c8194c98946cee3af5586c801fc1e1",
+    "quoi": "Fiche RIVEN « Matthieu DUCREST — SOLA GROUPE » créée sur instruction de Paul (11/11, 17:50 UTC, id c8aa83ad) : partenaire actif, téléphone et mail lus dans la signature de ses mails SOLA (07/11), rattachement à SOLA GROUPE (a6e2ccf0) écrit dans les notes — aucun type de relation RIVEN ne dit « gérant de ». Écrite en SQL depuis la séance, PAS par Léo : hors journal leo_ecritures, pas défaisable d'un clic, et elle ne prouve PAS proposer_contact. Relu en base : une seule fiche, même propriétaire que SOLA GROUPE. Plus tôt le même jour : #458, #459, #460 fusionnées ; #451 et #351 fermées ; inscription Supabase fermée."
   },
-  "prochaine_action": "Paul dicte à Léo sur RIVEN la fiche « Matthieu Ducrest », reliée à SOLA GROUPE (puis le fils de Romin) : c'est aussi la preuve réelle de proposer_contact en production. Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
+  "prochaine_action": "Paul dicte à Léo, dans Ultima sur RIVEN, la fiche du fils de Romin (puis « rappelle-le lundi ») : c'est la preuve réelle de proposer_contact en production, à relire ensuite en base (network_nodes + leo_ecritures). Ensuite, ADR-012 attend la réunion à quatre (forme du lien SOLA : filiale ou licence ; capital de départ) pour passer les blocs C et E.",
   "bloque_par": [
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
-    "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 puis REMESURÉE OUVERTE le 03/11 (GET /auth/v1/settings : disable_signup = false ; fournisseurs e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
-    "Protection des mots de passe divulgués DÉSACTIVÉE (advisor Supabase « auth_leaked_password_protection », WARN, lu le 03/11) — geste de Paul : Authentication › Settings › Password security › activer « Leaked password protection » (contrôle HaveIBeenPwned).",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
