@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v127 2026-11-12 sha256:85cdaa8ccf8b -->
+<!-- lecons:empreinte v128 2026-11-12 sha256:a3214e993679 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -681,6 +681,20 @@ la donnée réelle (ou une fixture qui a sa forme). Si le défaut tient à une p
 réalité n'a pas, c'est la fixture ou l'oracle qui se corrige, pas le moteur.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN TEST RÉÉCRIT PEUT FIGER UNE RÉGRESSION — LE PALIER SE CONTRÔLE CONTRE LE CODE D'HIER**
+*(2026-11-12, RenoDevis, correctifs de l'audit Devis express, RenoDevis#535).* Pour l'A3, une réponse du
+modèle sans `postes_non_poses` a été rendue **refusée** (`assert.throws` réécrit en ce sens). Tests verts,
+revue adverse verte, 85 sabotages rouges : personne n'a vu que le devis affiché la veille **disparaissait**
+derrière un « réessayez ». Seul le contrôle de palier demandé par Paul l'a trouvé : la suite de tests de
+`956d3ed` rejouée telle quelle sur le nouveau code (47/53, un écart non voulu), et un différentiel
+ancien/nouveau code sur 24 devis fictifs. Corrigé (`14e129f`) : le devis reste, le PDF attend.
+⛔ **La règle** : un test qu'on réécrit pour un correctif affirme l'INTENTION de son auteur, pas
+l'absence de régression. Avant de livrer un changement de comportement, rejouer la suite d'AVANT sur le
+code d'APRÈS et justifier chaque rouge un par un. Un rouge qu'on ne sait pas nommer « voulu » est une
+régression. Et un différentiel sur des entrées fixes dit ce que les tests ne disent pas : ce qui a changé
+sans que personne ne l'ait décidé.
+
 
 **UN FILTRE EN BOUT DE CHAÎNE MASQUE LE CODE DE SORTIE DU TEST**
 *(2026-11-10, RenoBoost, correctif du harnais `RenoBoost/tests/journal.navigateur.mjs`).*
