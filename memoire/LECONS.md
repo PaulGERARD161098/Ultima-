@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v126 2026-11-11 sha256:82d1164eb7c5 -->
+<!-- lecons:empreinte v127 2026-11-12 sha256:85cdaa8ccf8b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -667,6 +667,18 @@ boucle entière calibrée sur un client qui n'existe pas dans le portefeuille.
 du client visé (lus en base, sans PII) — pas sur un profil qui « ressemble ».
 Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
+
+**UN DÉFAUT QU'UN ORACLE TROUVE SUR DES FIXTURES SE REPRODUIT SUR LA DONNÉE RÉELLE AVANT
+D'ÊTRE CORRIGÉ** *(2026-11-11, RenoDevis #525, Devis express)*. Le dry run combinatoire
+(`RenoDevis/lib/vocalCombinaisons.test.ts`, 6 480 cas) signalait une « fuite de marque » :
+une unité sans marque acceptée alors que le texte demandait Daikin. Le défaut ne venait que
+des produits de test, qui ne portent aucun nom de marque — la bibliothèque réelle en porte
+sur chaque appareil. Le moteur a pourtant été « corrigé » : le correctif a cassé les
+exclusions (« pas de Midea » ne retirait plus Midea), et c'est le contrôle de Léo qui l'a vu,
+pas les tests. Coût : un commit à défaire, un tour de contrôle, un second correctif.
+⛔ **La règle** : avant de toucher au moteur sur le verdict d'un oracle, rejouer le cas sur
+la donnée réelle (ou une fixture qui a sa forme). Si le défaut tient à une propriété que la
+réalité n'a pas, c'est la fixture ou l'oracle qui se corrige, pas le moteur.
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1659,6 +1671,16 @@ silence : « doublée en amont » est un fait à consigner, pas un échec à cac
 défaut résolue à la signature de la fonction s'évalue même quand l'appelant ne
 l'utilise pas — la résoudre au point d'usage (`envoyer ?? envoyerEmailDevisPrepare`)
 laisse les bacs à sable tranquilles.
+
+**UN AVERTISSEMENT QUI RESTE À L'ÉCRAN NE PROTÈGE PAS LE DOCUMENT QUI EN SORT**
+*(2026-11-11, RenoDevis #525, Devis express)*. Un mono-split dont les deux appareils
+n'étaient pas dans la bibliothèque sortait en PDF à 708,34 € HT — support, cuivre et pose,
+sans climatiseur. « À vérifier » le disait à l'écran ; le PDF, lui, ne portait rien et se
+téléchargeait comme un devis complet. Aucun test ne l'a vu : c'est l'essai de Paul qui l'a
+trouvé. ⛔ **La règle** : quand un résultat quitte l'écran (PDF, mail, export), ce qui le
+rend faux voyage avec lui ou l'empêche de sortir. Ici, la liste des postes écrits et non
+chiffrés est portée par le devis, et l'écran ne produit aucun PDF tant qu'elle n'est pas vide
+(`RenoDevis/components/VocalDevis.tsx`, sabotages V61–V65 et N12).
 
 ## 3. Ce qu'on donne à Paul
 
