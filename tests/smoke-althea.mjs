@@ -67,6 +67,7 @@ const FIXTURE = {
   releves: [
     { id: 'r1', condition_id: 'c1', jour: HIER, tenu: true },
     { id: 'r2', condition_id: 'c1', jour: AUJOURDHUI, tenu: true },
+    { id: 'r3', condition_id: 'c3', jour: AUJOURDHUI, tenu: true, quantite: null },
   ],
 };
 
@@ -164,18 +165,38 @@ console.log('— B. althea.html avec session et Système peuplé —');
   await fausseSession(page);
 
   const appels = [];
+  let releves = [...FIXTURE.releves];
+  let mot = null;
+  let panne = false;
   await page.route('**/api/althea*', async (route) => {
     const req = route.request();
+    const repondre = (data) => route.fulfill({ status: 200,
+      contentType: 'application/json', body: JSON.stringify({ ok: true, data }) });
     appels.push({
       methode: req.method(),
       bearer: req.headers().authorization,
       jour: req.headers()['x-jour-local'],
       corps: req.postData(),
     });
-    if (req.method() === 'GET') {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: FIXTURE }) });
+    if (req.method() === 'POST' && panne) {
+      return route.fulfill({ status: 500, contentType: 'application/json', body: '{"ok":false}' });
     }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: { id: 'neuf' } }) });
+    if (new URL(req.url()).searchParams.get('mot') === 'jour') {
+      if (req.method() === 'POST') mot = req.postDataJSON().mot;
+      return repondre(mot === null ? null : { mot });
+    }
+    if (req.method() === 'GET') {
+      return repondre({ ...FIXTURE, releves });
+    }
+    const corps = req.postDataJSON();
+    if (req.method() === 'DELETE') {
+      releves = releves.filter((r) => r.id !== corps.id);
+      return repondre({ id: corps.id });
+    }
+    const releve = { id: `releve-${corps.condition_id}`, ...corps };
+    releves = releves.filter((r) => r.condition_id !== corps.condition_id || r.jour !== corps.jour);
+    releves.push(releve);
+    return repondre(releve);
   });
 
   await page.goto(`${BASE}/althea.html`);
@@ -203,17 +224,18 @@ console.log('— B. althea.html avec session et Système peuplé —');
     !/rat[ée]|échec|manqué|perdu/i.test(texteBloc), texteBloc.slice(0, 80));
 
   verifier('trois gestes du jour', (await page.locator('.althea-geste').count()) === 3);
-  // Trois états : c1 est tenu aujourd'hui → aria-pressed=true ; c2 et c3 n'ont
-  // aucun relevé → PAS d'attribut du tout (non renseigné, le troisième état).
+  // c2 n'a pas de relevé. L'ancien relevé chiffré c3 doit être complété.
   const etats = await page.locator('.althea-case').evaluateAll(
     (n) => n.map((b) => b.getAttribute('aria-pressed')));
   verifier('le geste tenu est marqué tenu', etats[0] === 'true', JSON.stringify(etats));
-  verifier('les gestes non renseignés n’ont AUCUN état (ni vrai ni faux)',
+  verifier('les gestes à renseigner n’ont aucun état',
     etats[1] === null && etats[2] === null, JSON.stringify(etats));
+  verifier('une ancienne étoile sans quantité reste corrigeable',
+    (await page.locator('.althea-case').nth(2).textContent()).includes('Quantité à préciser'));
 
-  // Le clic parle au serveur, avec le Bearer et le jour local.
-  await page.locator('.althea-case').nth(1).click();
-  await page.waitForTimeout(300);
+  // Le libellé entier parle au serveur, avec le Bearer et le jour local.
+  await page.getByText('Sortir marcher', { exact: false }).click();
+  await page.locator('.althea-case[data-condition="c2"][aria-pressed="true"]').waitFor();
   const post = appels.find((a) => a.methode === 'POST');
   verifier('le clic envoie un POST', Boolean(post));
   verifier('avec le Bearer', post && post.bearer === 'Bearer JETON-TEST');
@@ -224,9 +246,62 @@ console.log('— B. althea.html avec session et Système peuplé —');
     JSON.stringify(corpsPost));
   verifier('le POST porte le jour du navigateur', corpsPost && corpsPost.jour === AUJOURDHUI);
 
+  await page.getByText('Marche longue', { exact: false }).click();
+  await page.getByRole('spinbutton', { name: 'Quantité du jour (km)' }).fill('3.5');
+  await page.getByRole('button', { name: 'Valider', exact: true }).click();
+  await page.locator('.althea-case[data-condition="c3"][aria-pressed="mixed"]').waitFor();
+  verifier('un volume partiel ne vaut pas une quête accomplie',
+    (await page.textContent('#althea-skills-tenus')) === '1 / 2');
+  await page.getByText('Marche longue', { exact: false }).click();
+  await page.getByRole('spinbutton', { name: 'Quantité du jour (km)' }).fill('10');
+  await page.getByRole('button', { name: 'Valider', exact: true }).click();
+  await page.getByText('10 km', { exact: true }).waitFor();
+  verifier('le relevé chiffré transmet la quantité au serveur',
+    releves.some((r) => r.condition_id === 'c3' && r.quantite === 10));
+  verifier('la quantité validée fait avancer le skill',
+    (await page.textContent('#althea-skills-tenus')) === '2 / 2');
+
   verifier('Léo parle', ((await page.textContent('#althea-leo')) || '').length > 10);
   verifier('zéro requête externe', externes.length === 0, externes.join(', '));
   verifier('zéro erreur console', erreurs.length === 0, erreurs.join(' | '));
+
+  const gesteSimple = page.locator('.althea-case[data-condition="c2"]');
+  panne = true;
+  await gesteSimple.click();
+  await page.getByText('Quête non enregistrée.', { exact: false }).waitFor();
+  verifier('un refus est visible et conserve l’état confirmé',
+    await gesteSimple.getAttribute('aria-pressed') === 'true');
+  panne = false;
+  await page.evaluate((cle) => {
+    const active = JSON.parse(localStorage.getItem(cle));
+    localStorage.setItem(cle, JSON.stringify({ ...active, access_token: 'JETON-RENOUVELE' }));
+  }, `sb-${REF_SUPABASE}-auth-token`);
+  await gesteSimple.click();
+  await page.locator('.althea-case[data-condition="c2"][aria-pressed="false"]').waitFor();
+  verifier('un clic utilise le jeton Supabase renouvelé', appels.at(-1).bearer === 'Bearer JETON-RENOUVELE');
+  await gesteSimple.click();
+  await page.locator('.althea-case[data-condition="c2"]:not([aria-pressed])').waitFor();
+  verifier('le cycle tenu, non tenu, non renseigné persiste', !releves.some((r) => r.condition_id === 'c2'));
+
+  await page.getByText('Le mot du jour', { exact: true }).click();
+  const champMot = page.getByRole('textbox', { name: 'Ton mot du jour' });
+  await page.getByRole('button', { name: 'Fierté' }).click();
+  verifier('une amorce remplit le champ libre', (await champMot.inputValue()) === 'Fierté — ');
+  await champMot.fill('Fierté — un pas de plus.');
+  panne = true;
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  await page.getByText('Mot du jour non enregistré.', { exact: false }).waitFor();
+  verifier('un refus conserve le texte saisi', (await champMot.inputValue()) === 'Fierté — un pas de plus.' && mot === null);
+  panne = false;
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  await page.getByText('Mot du jour enregistré.', { exact: true }).waitFor();
+  await page.reload();
+  await page.getByText('Le mot du jour', { exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('#althea-mot-texte:not(:disabled)'));
+  verifier('le mot et le relevé reviennent après rechargement',
+    (await champMot.inputValue()) === 'Fierté — un pas de plus.' &&
+    (await page.locator('.althea-case[data-condition="c3"]').getAttribute('aria-pressed')) === 'true');
+  await page.getByText('Le mot du jour', { exact: true }).click();
 
   // ---- C. Les invariants de FORME (mesurés, jamais estimés) ----
   console.log('— C. La forme : un coup d’œil, et rien d’illisible —');

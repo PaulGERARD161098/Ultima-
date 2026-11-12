@@ -1,4 +1,5 @@
 import { readAll } from './_lib/read-all.js';
+import { jourAlthea } from '../js/althea-progression.mjs';
 // /api/althea — le Système d'ALTHEA (B1), derrière auth (RLS via jeton).
 //
 //   GET    → { ok:true, data:{ avatar, stats:[…], skills:[…], conditions:[…],
@@ -30,22 +31,10 @@ import { requireUser, isAuthError } from './_lib/supabase.js';
 import {
   ok, fail, bodyFail, methodNotAllowed, logError, readJsonBody,
 } from './_lib/http.js';
-import { validateAltheaReleve, estJourLocalValide, isUuid } from './_lib/validate.js';
+import { validateAltheaReleve, isUuid } from './_lib/validate.js';
 
 const ALLOWED = ['GET', 'POST', 'DELETE'];
-
-// Le « aujourd'hui » de Paul. Le client l'envoie en date LOCALE ; on ne
-// l'accepte que s'il est plausible — au plus un jour d'écart avec la date UTC
-// du serveur, ce qui couvre tous les fuseaux réels sans laisser passer une
-// date arbitraire. Sans en-tête valable, on retombe sur la date serveur.
-// C'est le compromis honnête : le serveur ne peut pas CONNAÎTRE le fuseau de
-// Paul, mais il peut refuser une valeur qui n'a aucun sens.
-export function resoudreAujourdhui(entete, maintenantUTC) {
-  const utc = maintenantUTC.toISOString().slice(0, 10);
-  if (!estJourLocalValide(entete)) return utc;
-  const ecart = Math.abs(Date.parse(`${entete}T00:00:00Z`) - Date.parse(`${utc}T00:00:00Z`));
-  return ecart <= 86400000 ? entete : utc;
-}
+const MOT_METHODES = ['GET', 'POST'];
 
 function dbFail(res, error, contexte) {
   if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
@@ -60,8 +49,35 @@ function resolveId(req, body) {
   return null;
 }
 
+async function motDuJour(req, res, client) {
+  const jour = jourAlthea();
+  if (req.headers?.['x-jour-local'] !== jour) {
+    return fail(res, 409, 'Un nouveau jour a commencé. Recharge la page.');
+  }
+  if (req.method === 'GET') {
+    const { data, error } = await client.from('althea_mots_du_jour')
+      .select('mot').eq('jour', jour).maybeSingle();
+    if (error) return dbFail(res, error, 'althea:mot:get');
+    return ok(res, data);
+  }
+
+  const body = await readJsonBody(req);
+  if (body === null || body === 'too_large') return bodyFail(res, body);
+  const mot = typeof body.mot === 'string' ? body.mot.trim() : '';
+  if (Object.keys(body).length !== 1 || !mot || mot.length > 280) {
+    return fail(res, 400, 'Le mot du jour doit contenir entre 1 et 280 caractères');
+  }
+  const { data, error } = await client.from('althea_mots_du_jour')
+    .upsert({ jour, mot }, { onConflict: 'owner_id,jour' })
+    .select('mot').single();
+  if (error) return dbFail(res, error, 'althea:mot:post');
+  return ok(res, data);
+}
+
 export default async function handler(req, res) {
-  if (!ALLOWED.includes(req.method)) return methodNotAllowed(res, ALLOWED);
+  const demandeMot = req.query?.mot === 'jour';
+  const methodes = demandeMot ? MOT_METHODES : ALLOWED;
+  if (!methodes.includes(req.method)) return methodNotAllowed(res, methodes);
 
   const result = await requireUser(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
@@ -69,6 +85,8 @@ export default async function handler(req, res) {
   const { client } = result;
 
   try {
+    if (demandeMot) return await motDuJour(req, res, client);
+
     if (req.method === 'GET') {
       const [avatarRes, statsRes, skillsRes, conditionsRes, relevesRes] = await Promise.all([
         client.from('althea_avatar').select('*').maybeSingle(),
@@ -97,8 +115,7 @@ export default async function handler(req, res) {
       const body = await readJsonBody(req);
       if (body === null || typeof body !== 'object') return bodyFail(res, body);
 
-      const aujourdhui = resoudreAujourdhui(req.headers?.['x-jour-local'], new Date());
-      const { value, error } = validateAltheaReleve(body, 'create', aujourdhui);
+      const { value, error } = validateAltheaReleve(body, 'create', jourAlthea());
       if (error) return fail(res, 400, error);
 
       // Un jour = une ligne : on écrase le relevé du jour au lieu d'en empiler

@@ -40,29 +40,7 @@
         <p class="althea-entete" id="althea-t-profil">Le profil</p>
 
         <div class="althea-fiche">
-          <svg class="althea-sceau" viewBox="0 0 120 120" role="img"
-               aria-label="Sceau du Système : un disque cranté, sa lame et l’œil qui voit loin" focusable="false">
-            <circle cx="60" cy="60" r="55" fill="none" stroke="#8a733a" stroke-width="1"/>
-            <circle cx="60" cy="60" r="49" fill="#080d16" stroke="#d8b45c" stroke-width="1.2"/>
-            <g fill="#8a733a" stroke="#d8b45c" stroke-width=".8" stroke-linejoin="round">
-              <path d="M60 6 L64 26 H56 Z"/><path d="M110 56 L90 60 V52 Z"/>
-              <path d="M60 106 L56 86 H64 Z"/><path d="M10 56 L30 52 V60 Z"/>
-              <path d="M95 21 L82 37 L76 31 Z"/><path d="M95 91 L76 81 L82 75 Z"/>
-              <path d="M25 91 L38 75 L44 81 Z"/><path d="M25 21 L44 31 L38 37 Z"/>
-            </g>
-            <circle cx="60" cy="56" r="27" fill="#080d16" stroke="#d8b45c" stroke-width="2"/>
-            <circle cx="60" cy="56" r="21" fill="none" stroke="#8a733a" stroke-width="1"/>
-            <circle cx="60" cy="56" r="15" fill="none" stroke="#8a733a" stroke-width="1"/>
-            <path d="M50 80 q-5 9 -2 16 q3 7 -2 13 l4 -2 l3 4" fill="none" stroke="#8a733a" stroke-width="2.6" stroke-linecap="round"/>
-            <path d="M70 80 q5 9 2 16 q-3 7 2 13 l-4 -2 l-3 4" fill="none" stroke="#8a733a" stroke-width="2.6" stroke-linecap="round"/>
-            <circle cx="60" cy="15" r="3" fill="#6fc0ff"/>
-            <path d="M60 18 V29" stroke="#6fc0ff" stroke-width="2.6" stroke-linecap="round"/>
-            <path d="M45 31 H75" stroke="#6fc0ff" stroke-width="2.6" stroke-linecap="round"/>
-            <path d="M55 34 H65 L62.5 92 L60 104 L57.5 92 Z" fill="#6fc0ff" opacity=".92"/>
-            <!-- L'œil passe DEVANT la lame : c'est lui qui porte le titre. -->
-            <path d="M48 56 q12 -11 24 0 q-12 11 -24 0 z" fill="#04060b" stroke="#6fc0ff" stroke-width="1.5"/>
-            <circle cx="60" cy="56" r="3.4" fill="#6fc0ff"/>
-          </svg>
+          <img class="althea-sceau" src="icons/imladrik-sceau.svg" alt="Épée au soleil">
           <div>
             <p class="althea-nom" id="althea-nom">—</p>
             <p class="althea-cle-titre">Titre</p>
@@ -98,8 +76,30 @@
 
         <div id="althea-annonce" aria-live="polite"></div>
 
-        <p class="althea-sous-titre">Le jour — <span id="althea-date">—</span></p>
+        <div class="althea-jour-entete">
+          <p class="althea-sous-titre">Le jour — <span id="althea-date">—</span></p>
+          <span id="althea-jour-progres"></span>
+        </div>
+        <p id="althea-jour-statut" class="althea-statut" role="status"></p>
         <div id="althea-jour"><p class="althea-vide">Chargement…</p></div>
+
+        <details id="althea-mot" class="althea-mot" hidden>
+          <summary>Le mot du jour</summary>
+          <p class="althea-mot-invite">Qu’est-ce qui te reste de cette journée ?</p>
+          <form id="althea-mot-formulaire">
+            <fieldset disabled>
+              <div class="althea-actions">
+                <button type="button" class="althea-action" data-amorce="Fierté">Fierté</button>
+                <button type="button" class="althea-action" data-amorce="Honte">Honte</button>
+                <button type="button" class="althea-action" data-amorce="Surprise">Surprise</button>
+              </div>
+              <textarea id="althea-mot-texte" aria-label="Ton mot du jour" rows="3" maxlength="280"
+                placeholder="Un mot ou quelques phrases…" required></textarea>
+              <button class="althea-action althea-action-principale" type="submit">Enregistrer</button>
+            </fieldset>
+          </form>
+          <p id="althea-mot-statut" class="althea-statut" role="status"></p>
+        </details>
 
         <div class="althea-leo">
           <p class="qui">Léo</p>
