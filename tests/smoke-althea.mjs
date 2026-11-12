@@ -214,6 +214,12 @@ console.log('— B. althea.html avec session et Système peuplé —');
   verifier('stat = socle + niveau (intelligence)', stats[1] === '62', stats.join(','));
 
   verifier('deux skills rendus', (await page.locator('.althea-skill').count()) === 2);
+  verifier('le profil indique le prochain niveau et le rang le plus proche',
+    (await page.textContent('#althea-palier-titre')) === 'Niveau 41 → 42'
+    && (await page.textContent('#althea-palier-objectif')).includes('Rang II dans 1 jour tenu'));
+  verifier('la jauge annonce exactement le cumul affiché',
+    await page.getByRole('progressbar', { name: 'LANGUE DU NORD vers le rang II' })
+      .getAttribute('aria-valuetext') === '2 jours tenus sur 3');
   const badges = await page.locator('.althea-skill .etat').allTextContents();
   verifier('un skill tenu, un en sommeil',
     badges.includes('Tenu') && badges.includes('Sommeil'), badges.join(','));
@@ -252,6 +258,9 @@ console.log('— B. althea.html avec session et Système peuplé —');
   await page.locator('.althea-case[data-condition="c3"][aria-pressed="mixed"]').waitFor();
   verifier('un volume partiel ne vaut pas une quête accomplie',
     (await page.textContent('#althea-skills-tenus')) === '1 / 2');
+  verifier('le détail intermédiaire est visible avant le rang',
+    (await page.locator('.althea-skill-jour').nth(1).textContent()) === '1/2 conditions aujourd’hui'
+    && (await page.locator('.althea-skill-palier').nth(1).textContent()).includes('0/1 jour tenu'));
   await page.getByText('Marche longue', { exact: false }).click();
   await page.getByRole('spinbutton', { name: 'Quantité du jour (km)' }).fill('10');
   await page.getByRole('button', { name: 'Valider', exact: true }).click();
@@ -260,6 +269,11 @@ console.log('— B. althea.html avec session et Système peuplé —');
     releves.some((r) => r.condition_id === 'c3' && r.quantite === 10));
   verifier('la quantité validée fait avancer le skill',
     (await page.textContent('#althea-skills-tenus')) === '2 / 2');
+  verifier('le niveau franchi est annoncé après confirmation',
+    (await page.textContent('#althea-palier-annonce')) === 'Montée de niveau ! Niveau 42 atteint · +1 à chaque stat');
+  verifier('la jauge passe au rang suivant et garde le cumul',
+    await page.getByRole('progressbar', { name: 'MARCHE vers le rang II', exact: true })
+      .getAttribute('aria-valuetext') === '1 jour tenu sur 3');
 
   verifier('Léo parle', ((await page.textContent('#althea-leo')) || '').length > 10);
   verifier('zéro requête externe', externes.length === 0, externes.join(', '));

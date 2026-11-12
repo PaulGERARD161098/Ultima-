@@ -249,6 +249,27 @@ bloc('6. Le niveau, et les stats qui en découlent');
 // ──────────────── 7. L'état complet ────────────────
 bloc('7. L’état complet, tel que l’écran le consomme');
 {
+  const jour = '2026-08-06';
+  const skills = [{ id: 'langue' }, { id: 'course' }];
+  const conditions = [
+    { id: 'a', skill_id: 'langue', cadence: 'duree_jour', seuil: 30, unite: 'min', groupe: 0 },
+    { id: 'b', skill_id: 'langue', cadence: 'duree_jour', seuil: 30, unite: 'min', groupe: 0 },
+    { id: 'c', skill_id: 'course', cadence: 'volume_semaine', seuil: 10, unite: 'km', groupe: 0 },
+  ];
+  const releves = [
+    rel('a', jour, true, 20), rel('b', jour, true, 15),
+    rel('c', jour, true, 2), rel('c', '2026-08-02', true, 4),
+    rel('c', '2026-07-30', true, 5),
+  ];
+  const calcul = etatAlthea({ skills, conditions, releves, jour });
+  verifier('le détail du jour ne cumule pas deux langues alternatives',
+    calcul.skills[0].progressionDuJour,
+    { acquis: 0, objectif: 1, mesure: { valeur: 20, cible: 30, unite: 'min', hebdomadaire: false } });
+  verifier('le détail hebdomadaire suit la même fenêtre que le moteur',
+    calcul.skills[1].progressionDuJour,
+    { acquis: 0, objectif: 1, mesure: { valeur: 6, cible: 10, unite: 'km', hebdomadaire: true } });
+}
+{
   const etat = etatAlthea({
     avatar: { socle_niveau: 40, titre_code: 'farsight' },
     skills: [
