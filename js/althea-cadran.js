@@ -6,7 +6,7 @@
 // tiennent — c'est la leçon payée deux fois sur la maquette (un anneau parti
 // hors cadre, un nom de cap qui débordait de 3 px).
 
-import { etatAlthea, decalerJour } from './althea-progression.mjs';
+import { etatAlthea, decalerJour, jourAlthea } from './althea-progression.mjs';
 
 const ROMAIN = ['', 'I', 'II', 'III', 'IV', 'V'];
 const SVG = 'http://www.w3.org/2000/svg';
@@ -72,11 +72,6 @@ function dessiner(skills, jour) {
   return svg;
 }
 
-function jourLocal(d = new Date()) {
-  const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
 (async function demarrer() {
   const hote = document.getElementById('althea-cadran-hote');
   const note = document.getElementById('althea-cadran-note');
@@ -91,7 +86,7 @@ function jourLocal(d = new Date()) {
   } catch (_) { session = null; }
   if (!session) { dire('Ouvre ta session pour voir ton cadran.'); return; }
 
-  const jour = jourLocal();
+  const jour = jourAlthea();
   let d = null;
   try {
     const rep = await fetch('/api/althea', {

@@ -191,21 +191,59 @@
 .althea-skill.verrouille .rang { color: var(--verrou); }
 
 /* ── Le relevé du jour : une case par geste, moins de cinq secondes. ── */
+.althea-jour-entete { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+#althea-jour-progres { color: var(--parch-bas); font-size: .78rem; white-space: nowrap; }
 .althea-geste {
   display: flex; align-items: center; gap: 10px;
-  padding: 5px 0; border-top: 1px solid var(--trait);
+  width: 100%; min-height: 44px; padding: 6px 4px;
+  border: 0; border-top: 1px solid var(--trait); border-radius: 0;
+  background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer;
 }
-.althea-geste:first-of-type { border-top: 0; }
-.althea-case {
-  width: 21px; height: 21px; flex: 0 0 21px; padding: 0;
-  border: 1px solid var(--or-sourd); background: transparent;
-  color: var(--or); font-size: 12px; line-height: 1; cursor: pointer;
+.althea-geste:first-child { border-top-color: transparent; }
+.althea-geste:hover, .althea-geste:focus-visible { background: rgba(143, 194, 212, .08); }
+.althea-case-symbole {
+  width: 22px; height: 22px; flex: 0 0 22px;
+  display: grid; place-items: center;
+  border: 1px solid var(--instrument-trait-fort);
+  color: var(--parch); font-size: .82rem; line-height: 1;
 }
-.althea-case[aria-pressed="true"] { background: var(--or); color: var(--nuit); border-color: var(--or); }
-.althea-case[aria-pressed="false"] { border-style: dashed; border-color: var(--verrou); }
+.althea-case[aria-pressed="true"] .althea-case-symbole { background: var(--or); color: var(--nuit); border-color: var(--or); }
+.althea-case[aria-pressed="false"] .althea-case-symbole { border-style: dashed; border-color: var(--verrou); }
 .althea-case:focus-visible { outline: 2px solid var(--spectre); outline-offset: 2px; }
 .althea-geste .lib { flex: 1; font-size: .86rem; }
 .althea-geste .lib small { display: block; color: var(--parch-bas); font-size: .72rem; letter-spacing: .06em; }
+.althea-geste-detail { color: var(--parch-bas); max-width: 35%; text-align: right; font-size: .74rem; }
+.althea-statut { margin: 4px 0; color: var(--parch); font-size: .8rem; }
+.althea-statut:empty, .althea-geste-detail:empty { margin: 0; }
+.althea-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+.althea-quantite { padding: 8px 4px 10px 36px; }
+.althea-quantite label { font-size: .8rem; }
+.althea-quantite input, .althea-mot textarea {
+  display: block; max-width: 100%; box-sizing: border-box;
+  border: 1px solid var(--instrument-trait-fort); border-radius: 4px;
+  background: var(--nuit); color: var(--parch); font: inherit; padding: 8px;
+}
+.althea-quantite input { width: 9em; margin-top: 4px; }
+.althea-action {
+  min-height: 38px; padding: 6px 10px;
+  border: 1px solid var(--instrument-trait-fort); border-radius: 4px;
+  color: var(--parch); background: transparent; font: inherit; cursor: pointer;
+}
+.althea-action:hover, .althea-action-principale { background: rgba(143, 194, 212, .12); }
+.althea-action:disabled { opacity: .55; cursor: wait; }
+.althea-mot { border-block: 1px solid var(--trait); margin-top: 12px; padding: 0 4px; }
+.althea-mot[open] { padding-bottom: 12px; }
+.althea-mot summary { padding: 11px 0; cursor: pointer; color: var(--parch); }
+.althea-mot summary:focus-visible { outline: 2px solid var(--spectre); outline-offset: 2px; }
+.althea-mot-invite { margin: 0 0 8px; color: var(--parch-bas); font-size: .85rem; }
+.althea-mot fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.althea-mot textarea { width: 100%; resize: vertical; margin: 8px 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .althea-quete-validee .althea-case-symbole { animation: althea-validation 320ms ease-out; }
+  @keyframes althea-validation {
+    45% { transform: scale(1.18); box-shadow: 0 0 12px var(--or-sourd); }
+  }
+}
 
 /* ── La fenêtre du Système : elle SURGIT. Deux registres de parole, une seule
       voix — Léo conseille dans son cartouche, le Système proclame ici. ── */
@@ -394,9 +432,6 @@
   outline: 2px solid var(--stellar-focus, #b7dced);
   outline-offset: 3px;
 }
-.althea-case {
-  border-color: var(--instrument-trait-fort);
-}
 .althea .retour-althea {
   min-height: 44px;
   display: inline-flex;
@@ -410,11 +445,7 @@
     padding-left: calc(env(safe-area-inset-left, 0px) + 10px);
   }
   .althea-visuel { gap: 12px; }
-  .althea-case {
-    width: 44px;
-    height: 44px;
-    flex-basis: 44px;
-  }
+  .althea-action { min-height: 44px; }
   .althea-bloc {
     padding: 14px 12px 16px;
     border-radius: 6px;
@@ -440,5 +471,5 @@
 @media (forced-colors: active) {
   .althea-bloc { background: Canvas; border-color: CanvasText; }
   .althea-entete { background: Canvas; border-color: CanvasText; }
-  .althea-case { border-color: ButtonText; }
+  .althea-case-symbole { border-color: ButtonText; }
 }

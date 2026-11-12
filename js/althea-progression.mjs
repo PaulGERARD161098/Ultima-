@@ -46,6 +46,15 @@ export const SEUILS_DEFAUT = [7, 30, 90, 180, 365];
 // --- Dates : tout se compte en date LOCALE (règle ④) -----------------------
 // Une date est manipulée en 'AAAA-MM-JJ'. Aucune conversion UTC : un relevé
 // pris à 23 h 40 doit se ranger le jour où Paul l'a vécu, pas le lendemain.
+const calendrierAlthea = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit',
+});
+
+export function jourAlthea(date = new Date()) {
+  const parts = calendrierAlthea.formatToParts(date);
+  const lire = (type) => parts.find((part) => part.type === type).value;
+  return `${lire('year')}-${lire('month')}-${lire('day')}`;
+}
 
 /** Vrai si `s` est une date locale bien formée et réelle (2026-02-30 → faux). */
 export function estJourValide(s) {

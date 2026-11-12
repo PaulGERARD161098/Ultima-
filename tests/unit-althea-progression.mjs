@@ -20,7 +20,7 @@
 import {
   conditionTenue, skillTenu, compterSkill, rangPour, nomDuRang,
   versLeRangSuivant, niveau, valeurStat, etatAlthea,
-  ecartJours, decalerJour, estJourValide, volumeSemaine, RANGS,
+  ecartJours, decalerJour, estJourValide, jourAlthea, volumeSemaine, RANGS,
 } from '../js/althea-progression.mjs';
 
 let echecs = 0;
@@ -40,6 +40,9 @@ const rel = (condition_id, jour, tenu, quantite) => ({ condition_id, jour, tenu,
 
 // ───────────────────────────── 0. Les dates ─────────────────────────────
 bloc('0. Les dates — en local, jamais en UTC');
+verifier('jour de Paris en hiver après minuit', jourAlthea(new Date('2026-11-12T23:30:00Z')), '2026-11-13');
+verifier('jour de Paris en été après minuit', jourAlthea(new Date('2026-07-12T22:30:00Z')), '2026-07-13');
+verifier('jour de Paris avant minuit', jourAlthea(new Date('2026-11-12T22:30:00Z')), '2026-11-12');
 verifier('date réelle', estJourValide('2026-08-06'), true);
 verifier('date impossible refusée', estJourValide('2026-02-30'), false);
 verifier('format libre refusé', estJourValide('6/8/2026'), false);

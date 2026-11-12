@@ -9,18 +9,11 @@
 // éprouvé au harnais sans navigateur. Ce fichier ne fait que demander, rendre,
 // et renvoyer un geste.
 
-import { etatAlthea, decalerJour } from './althea-progression.mjs';
+import { conditionTenue, etatAlthea, decalerJour, jourAlthea } from './althea-progression.mjs';
 
 const $ = (id) => document.getElementById(id);
 
-// Le jour de PAUL, en date locale — jamais l'UTC du navigateur. Un relevé pris
-// à 23 h 40 doit se ranger le jour qu'il a vécu (règle cardinale ④).
-function jourLocal(d = new Date()) {
-  const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
-const etat = { session: null, donnees: null, jour: jourLocal() };
+const etat = { client: null, proprietaire: null, donnees: null, jour: jourAlthea(), enregistrement: false };
 
 function texte(el, valeur) { if (el) el.textContent = valeur; }
 
@@ -56,27 +49,32 @@ function muet(message, avecLien) {
     : 'Je te dirai où tu en es dès que le Système répondra.');
 }
 
-async function session() {
+function clientSupabase() {
   const cfg = window.ULTIMA_CONFIG || {};
   if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) return null;
   if (!window.supabase || typeof window.supabase.createClient !== 'function') return null;
+  return window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+}
+
+async function session() {
   try {
-    const client = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
-    const { data } = await client.auth.getSession();
-    return data && data.session ? data.session : null;
+    const r = await etat.client?.auth.getSession();
+    return r?.data?.session ?? null;
   } catch (_) {
     return null;
   }
 }
 
-async function appel(methode, corps) {
-  if (!etat.session || !etat.session.access_token) return { ok: false, status: 401 };
+async function appel(methode, corps, chemin = '/api/althea') {
+  const active = await session();
+  if (!active?.access_token || active.user?.id !== etat.proprietaire) {
+    return { ok: false, status: 401 };
+  }
   const options = {
     method: methode,
     headers: {
-      Authorization: `Bearer ${etat.session.access_token}`,
-      // Le serveur ne peut pas CONNAÎTRE le fuseau de Paul ; il peut refuser
-      // une date aberrante. On le lui dit, il vérifie la plausibilité.
+      Authorization: `Bearer ${active.access_token}`,
+      // Le jour affiché évite qu'un mot saisi avant minuit se range le lendemain.
       'X-Jour-Local': etat.jour,
     },
   };
@@ -85,9 +83,9 @@ async function appel(methode, corps) {
     options.body = JSON.stringify(corps);
   }
   try {
-    const reponse = await fetch('/api/althea', options);
+    const reponse = await fetch(chemin, options);
     const json = await reponse.json().catch(() => null);
-    return { ok: reponse.ok, status: reponse.status, data: json && json.data };
+    return { ok: reponse.ok && json?.ok === true, status: reponse.status, data: json?.data };
   } catch (_) {
     return { ok: false, status: 0 };
   }
@@ -178,13 +176,21 @@ function rendreSkills(skills) {
   }
 }
 
-// Les gestes du jour, avec leur case. Un geste = une case = un clic.
+function quantifie(condition) {
+  return ['volume_semaine', 'duree_jour', 'n_par_jour'].includes(condition.cadence);
+}
+
+// Les gestes du jour. Toute la ligne est le bouton, y compris son libellé.
 function rendreJour(conditions, skills, releves) {
   const hote = $('althea-jour');
   if (!hote) return;
   hote.textContent = '';
   const parSkill = new Map(skills.map((s) => [s.id, s]));
   const actives = conditions.filter((c) => c.actif !== false);
+  const relevesDuJour = new Map(releves.filter((r) => r.jour === etat.jour)
+    .map((r) => [r.condition_id, r]));
+  let renseignes = 0;
+  texte($('althea-jour-progres'), '');
   if (!actives.length) {
     const vide = document.createElement('p');
     vide.className = 'althea-vide';
@@ -193,20 +199,22 @@ function rendreJour(conditions, skills, releves) {
     return;
   }
   for (const c of actives) {
-    const releve = releves.find((r) => r.condition_id === c.id && r.jour === etat.jour);
-    const ligne = document.createElement('div');
-    ligne.className = 'althea-geste';
+    const releve = relevesDuJour.get(c.id);
+    const aCompleter = releve?.tenu && quantifie(c) && releve.quantite == null;
+    const partiel = releve?.tenu && quantifie(c) && !aCompleter
+      && !conditionTenue(c, releves, etat.jour);
+    if (releve && !aCompleter) renseignes++;
 
     const bouton = document.createElement('button');
     bouton.type = 'button';
-    bouton.className = 'althea-case';
-    // Trois états, et l'attribut le dit : true (tenu), false (manqué déclaré),
-    // absent (NON RENSEIGNÉ — le troisième état, celui qui ne juge pas).
-    if (releve) bouton.setAttribute('aria-pressed', releve.tenu ? 'true' : 'false');
-    else bouton.removeAttribute('aria-pressed');
-    bouton.textContent = releve && releve.tenu ? '✦' : '';
-    bouton.setAttribute('aria-label', `Cocher : ${c.libelle}`);
-    bouton.addEventListener('click', () => basculer(c, releve));
+    bouton.className = 'althea-geste althea-case';
+    bouton.dataset.condition = c.id;
+    if (releve && !aCompleter) bouton.setAttribute('aria-pressed', partiel ? 'mixed' : String(releve.tenu));
+
+    const symbole = document.createElement('span');
+    symbole.className = 'althea-case-symbole';
+    symbole.setAttribute('aria-hidden', 'true');
+    symbole.textContent = aCompleter || partiel ? '·' : releve?.tenu ? '✦' : '';
 
     const lib = document.createElement('span');
     lib.className = 'lib';
@@ -216,9 +224,21 @@ function rendreJour(conditions, skills, releves) {
     sous.textContent = `${skill ? skill.nom : ''} · ${libelleCadence(c)}`;
     lib.appendChild(sous);
 
-    ligne.append(bouton, lib);
-    hote.appendChild(ligne);
+    const detail = document.createElement('small');
+    detail.className = 'althea-geste-detail';
+    if (aCompleter) detail.textContent = 'Quantité à préciser';
+    else if (releve?.tenu && releve.quantite != null) {
+      detail.textContent = `${releve.quantite} ${c.unite || ''}`.trim();
+    }
+    bouton.append(symbole, lib, detail);
+    bouton.addEventListener('click', () => {
+      if (etat.enregistrement) return;
+      if (quantifie(c) && releve?.tenu !== false) ouvrirQuantite(bouton, c, releve);
+      else basculer(c, releve);
+    });
+    hote.appendChild(bouton);
   }
+  texte($('althea-jour-progres'), `${renseignes} / ${actives.length} renseignées`);
 }
 
 function libelleCadence(c) {
@@ -230,19 +250,139 @@ function libelleCadence(c) {
   return '';
 }
 
-// Un clic fait le tour des trois états : non renseigné → tenu → manqué → non
-// renseigné. Revenir au silence est un geste À PART ENTIÈRE : se tromper de
-// case ne doit pas laisser une trace fausse en base.
-async function basculer(condition, releve) {
-  let r;
-  if (!releve) {
-    r = await appel('POST', { condition_id: condition.id, jour: etat.jour, tenu: true });
-  } else if (releve.tenu) {
-    r = await appel('POST', { condition_id: condition.id, jour: etat.jour, tenu: false });
-  } else {
-    r = await appel('DELETE', { id: releve.id });
+function ouvrirQuantite(bouton, condition, releve) {
+  const precedent = $('althea-quantite');
+  const memeLigne = precedent?.previousElementSibling === bouton;
+  precedent?.remove();
+  if (memeLigne) return;
+
+  const formulaire = document.createElement('form');
+  formulaire.id = 'althea-quantite';
+  formulaire.className = 'althea-quantite althea-actions';
+  const label = document.createElement('label');
+  label.textContent = condition.unite ? `Quantité du jour (${condition.unite})` : 'Quantité du jour';
+  const champ = document.createElement('input');
+  champ.type = 'number';
+  champ.inputMode = 'decimal';
+  champ.min = '0';
+  champ.max = '99999999';
+  champ.step = condition.cadence === 'n_par_jour' ? '1' : '0.01';
+  champ.required = true;
+  champ.value = releve?.quantite ?? '';
+  label.appendChild(champ);
+  const valider = document.createElement('button');
+  valider.className = 'althea-action althea-action-principale';
+  valider.textContent = 'Valider';
+  formulaire.append(label, valider);
+
+  if (releve?.tenu) {
+    const nonTenu = document.createElement('button');
+    nonTenu.type = 'button';
+    nonTenu.className = 'althea-action';
+    nonTenu.textContent = 'Non tenu';
+    nonTenu.addEventListener('click', () => basculer(condition, releve));
+    formulaire.appendChild(nonTenu);
   }
-  if (r.ok) await charger();
+  formulaire.addEventListener('submit', (event) => {
+    event.preventDefault();
+    basculer(condition, releve, champ.valueAsNumber);
+  });
+  bouton.after(formulaire);
+  champ.focus();
+}
+
+function messageEchec(statut, message) {
+  if (statut === 401) return 'Ta session a expiré. Recharge la page, puis réessaie.';
+  if (statut === 409) return 'Un nouveau jour a commencé. Copie ton texte avant de recharger la page.';
+  return message;
+}
+
+// Les trois états restent accessibles. Pour un geste chiffré, valider la
+// quantité crée ou corrige le relevé sans faire d'hypothèse sur sa valeur.
+async function basculer(condition, releve, quantite) {
+  if (etat.enregistrement) return;
+  const statut = $('althea-jour-statut');
+  if (etat.jour !== jourAlthea()) {
+    texte(statut, 'Un nouveau jour a commencé. Recharge la page pour cocher tes quêtes.');
+    return;
+  }
+  etat.enregistrement = true;
+  const hote = $('althea-jour');
+  hote.setAttribute('aria-busy', 'true');
+  texte(statut, 'Enregistrement…');
+  const effacer = releve?.tenu === false && quantite === undefined;
+  const tenu = quantite !== undefined || !releve;
+  const corps = effacer ? { id: releve.id }
+    : { condition_id: condition.id, jour: etat.jour, tenu, quantite };
+  const r = await appel(effacer ? 'DELETE' : 'POST', corps);
+  etat.enregistrement = false;
+  hote.removeAttribute('aria-busy');
+  if (!r.ok || !r.data?.id) {
+    texte(statut, messageEchec(r.status, 'Quête non enregistrée. Réessaie dans un instant.'));
+    return;
+  }
+  const autres = etat.donnees.releves.filter((ligne) =>
+    ligne.condition_id !== condition.id || ligne.jour !== etat.jour);
+  if (!effacer) autres.push(r.data);
+  etat.donnees.releves = autres;
+  rendre(etat.donnees);
+  const bouton = Array.from(hote.querySelectorAll('.althea-case'))
+    .find((el) => el.dataset.condition === condition.id);
+  bouton?.focus({ preventScroll: true });
+  if (tenu && bouton?.getAttribute('aria-pressed') === 'true') bouton.classList.add('althea-quete-validee');
+  texte(statut, effacer ? 'Quête remise à zéro.' : 'Relevé enregistré.');
+}
+
+function installerMotDuJour() {
+  const panneau = $('althea-mot');
+  const formulaire = $('althea-mot-formulaire');
+  const champ = $('althea-mot-texte');
+  const statut = $('althea-mot-statut');
+  const controles = formulaire.querySelector('fieldset');
+  const chemin = '/api/althea?mot=jour';
+  let charge = false;
+  let chargement = false;
+  panneau.hidden = false;
+  panneau.addEventListener('toggle', async () => {
+    if (!panneau.open || charge || chargement) return;
+    chargement = true;
+    texte(statut, 'Chargement…');
+    const r = await appel('GET', undefined, chemin);
+    chargement = false;
+    if (!r.ok) {
+      texte(statut, messageEchec(r.status, 'Le mot du jour est indisponible. Rouvre ce volet pour réessayer.'));
+      return;
+    }
+    charge = true;
+    champ.value = r.data?.mot ?? '';
+    controles.disabled = false;
+    texte(statut, '');
+  });
+  formulaire.addEventListener('click', (event) => {
+    const amorce = event.target.dataset.amorce;
+    if (!amorce) return;
+    const contenu = champ.value.trim();
+    const amorces = Array.from(formulaire.querySelectorAll('[data-amorce]'));
+    if (!contenu || amorces.some((bouton) => contenu === `${bouton.dataset.amorce} —`)) {
+      champ.value = `${amorce} — `;
+    }
+    champ.focus();
+  });
+  formulaire.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const mot = champ.value.trim();
+    if (!mot || controles.disabled) return;
+    if (etat.jour !== jourAlthea()) {
+      texte(statut, 'Un nouveau jour a commencé. Copie ton texte avant de recharger la page.');
+      return;
+    }
+    controles.disabled = true;
+    texte(statut, 'Enregistrement…');
+    const r = await appel('POST', { mot }, chemin);
+    controles.disabled = false;
+    texte(statut, r.ok ? 'Mot du jour enregistré.'
+      : messageEchec(r.status, 'Mot du jour non enregistré. Ton texte est encore dans le champ.'));
+  });
 }
 
 function annoncer(etatCalcule) {
@@ -300,9 +440,12 @@ async function charger() {
       : 'Le Système ne répond pas pour l’instant.', r.status === 401);
     return;
   }
-  const d = r.data || {};
-  etat.donnees = d;
+  etat.donnees = { ...r.data, releves: r.data?.releves || [] };
+  rendre(etat.donnees);
+  installerMotDuJour();
+}
 
+function rendre(d) {
   const calcul = etatAlthea({
     avatar: d.avatar,
     skills: d.skills || [],
@@ -332,8 +475,10 @@ async function charger() {
 }
 
 (async function demarrer() {
-  etat.session = await session();
-  if (!etat.session) {
+  try { etat.client = clientSupabase(); } catch (_) {}
+  const active = await session();
+  etat.proprietaire = active?.user?.id;
+  if (!etat.proprietaire) {
     muet('Ouvre ta session pour voir ton Système.', true);
     return;
   }
