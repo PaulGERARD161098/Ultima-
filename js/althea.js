@@ -13,7 +13,7 @@ import { conditionTenue, etatAlthea, decalerJour, jourAlthea } from './althea-pr
 
 const $ = (id) => document.getElementById(id);
 
-const etat = { client: null, proprietaire: null, donnees: null, jour: jourAlthea(), enregistrement: false };
+const etat = { client: null, proprietaire: null, donnees: null, jour: jourAlthea(), enregistrement: false, niveau: null };
 
 function texte(el, valeur) { if (el) el.textContent = valeur; }
 
@@ -94,6 +94,7 @@ async function appel(methode, corps, chemin = '/api/althea') {
 // ---------- Rendu ----------
 
 const ROMAIN = ['', 'I', 'II', 'III', 'IV', 'V'];
+const formatMesure = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
 
 function rendreStats(stats) {
   const hote = $('althea-stats');
@@ -119,6 +120,15 @@ function rendreStats(stats) {
   }
 }
 
+function objectifDuJour(progression) {
+  if (!progression) return 'Aucune quête liée';
+  const { mesure, acquis, objectif } = progression;
+  if (!mesure) return `${acquis}/${objectif} ${objectif === 1 ? 'condition' : 'conditions'} aujourd’hui`;
+  const periode = mesure.hebdomadaire ? 'sur 7 jours' : 'aujourd’hui';
+  const unite = mesure.unite ? ` ${mesure.unite}` : '';
+  return `${formatMesure.format(mesure.valeur)}/${formatMesure.format(mesure.cible)}${unite} ${periode}`;
+}
+
 function rendreSkills(skills) {
   const hote = $('althea-skills');
   if (!hote) return;
@@ -141,6 +151,7 @@ function rendreSkills(skills) {
     const rang = document.createElement('span');
     rang.className = 'rang';
     rang.textContent = ROMAIN[s.rang] || '–';
+    if (s.nomDuRang) rang.title = s.nomDuRang;
 
     const corps = document.createElement('span');
     corps.className = 'corps';
@@ -159,13 +170,35 @@ function rendreSkills(skills) {
       dit.textContent = ` « ${s.enonce} »`;
       nom.appendChild(dit);
     }
-    const barre = document.createElement('span');
-    barre.className = 'barre';
-    const i = document.createElement('i');
-    const part = s.suivant ? Math.max(0, Math.min(1, s.suivant.part)) : 1;
-    i.style.width = `${Math.round(part * 100)}%`;
-    barre.appendChild(i);
-    corps.append(nom, barre);
+    corps.appendChild(nom);
+    if (!s.verrouille) {
+      const quotidien = document.createElement('small');
+      quotidien.className = 'althea-skill-jour';
+      quotidien.textContent = objectifDuJour(s.progressionDuJour);
+      corps.appendChild(quotidien);
+    }
+    if (!s.verrouille && s.progressionDuJour) {
+      const palier = document.createElement('small');
+      palier.className = 'althea-skill-palier';
+      if (s.suivant) {
+        const cible = s.tenus + s.suivant.reste;
+        const barre = document.createElement('span');
+        barre.className = 'barre';
+        barre.setAttribute('role', 'progressbar');
+        barre.setAttribute('aria-label', `${s.nom} vers le rang ${ROMAIN[s.suivant.rangVise]}`);
+        barre.setAttribute('aria-valuemax', String(cible));
+        barre.setAttribute('aria-valuenow', String(s.tenus));
+        barre.setAttribute('aria-valuetext', `${s.tenus} ${s.tenus === 1 ? 'jour tenu' : 'jours tenus'} sur ${cible}`);
+        const i = document.createElement('i');
+        i.style.width = `${Math.round(s.tenus / cible * 100)}%`;
+        barre.appendChild(i);
+        palier.textContent = `${s.tenus}/${cible} ${cible === 1 ? 'jour tenu' : 'jours tenus'} · Rang ${ROMAIN[s.suivant.rangVise]} · ${s.suivant.nomVise}`;
+        corps.appendChild(barre);
+      } else {
+        palier.textContent = 'Dernier rang atteint';
+      }
+      corps.appendChild(palier);
+    }
 
     const badge = document.createElement('span');
     badge.className = s.etatDuJour === true ? 'etat' : 'etat dort';
@@ -174,6 +207,28 @@ function rendreSkills(skills) {
     ligne.append(rang, corps, badge);
     hote.appendChild(ligne);
   }
+}
+
+function prochainPalier(skills) {
+  return skills.filter((s) => !s.verrouille && s.progressionDuJour && s.suivant)
+    .sort((a, b) => a.suivant.reste - b.suivant.reste)[0];
+}
+
+function rendrePalier(niveau, proche) {
+  const panneau = $('althea-palier');
+  const gain = etat.niveau === null ? 0 : niveau - etat.niveau;
+  etat.niveau = niveau;
+  panneau.hidden = !proche && gain <= 0;
+  panneau.classList.toggle('franchi', gain > 0);
+  texte($('althea-palier-titre'), proche ? `Niveau ${niveau} → ${niveau + 1}` : `Niveau ${niveau}`);
+  if (proche) {
+    const reste = proche.suivant.reste;
+    texte($('althea-palier-objectif'),
+      `${proche.nom} est le plus proche · Rang ${ROMAIN[proche.suivant.rangVise]} dans ${reste} ${reste === 1 ? 'jour tenu' : 'jours tenus'}`);
+  } else texte($('althea-palier-objectif'), '');
+  texte($('althea-palier-gain'), proche ? 'Un rang franchi = +1 niveau et +1 à chaque stat.' : '');
+  texte($('althea-palier-annonce'), gain > 0
+    ? `Montée de niveau ! Niveau ${niveau} atteint · +${gain} à chaque stat` : '');
 }
 
 function quantifie(condition) {
@@ -391,10 +446,8 @@ function annoncer(etatCalcule) {
   hote.textContent = '';
   // Le Système n'annonce QUE ce qui se franchit. Rien à annoncer = silence :
   // il ne meuble pas, et il ne reproche rien (règle cardinale ③).
-  const proche = etatCalcule.skills
-    .filter((s) => s.suivant && s.suivant.reste > 0 && s.suivant.reste <= 3)
-    .sort((a, b) => a.suivant.reste - b.suivant.reste)[0];
-  if (!proche) return;
+  const proche = prochainPalier(etatCalcule.skills);
+  if (!proche || proche.suivant.reste > 3) return;
   const fenetre = document.createElement('div');
   fenetre.className = 'althea-fenetre';
   const voix = document.createElement('p');
@@ -416,14 +469,13 @@ function parlerLeo(etatCalcule) {
     el.textContent = 'Pose tes premiers skills et je te dirai où tu en es.';
     return;
   }
-  const aNourrir = etatCalcule.skills.filter((s) => s.etatDuJour !== true && !s.verrouille);
+  const aNourrir = etatCalcule.skills
+    .filter((s) => s.etatDuJour !== true && !s.verrouille && s.progressionDuJour);
   if (aNourrir.length === 0) {
     el.textContent = 'Tout est tenu aujourd’hui. Rien à faire de plus — profite.';
     return;
   }
-  const proche = etatCalcule.skills
-    .filter((s) => s.suivant && s.suivant.reste > 0)
-    .sort((a, b) => a.suivant.reste - b.suivant.reste)[0];
+  const proche = prochainPalier(etatCalcule.skills);
   const debut = `${aNourrir.length} skill${aNourrir.length > 1 ? 's' : ''} à nourrir aujourd’hui.`;
   el.textContent = proche
     ? `${debut} Le plus près du rang suivant : ${proche.nom}, à ${proche.suivant.reste}.`
@@ -467,6 +519,7 @@ function rendre(d) {
   texte($('althea-nb-stats'), String(calcul.stats.length));
   texte($('althea-date'), etat.jour);
 
+  rendrePalier(calcul.niveau, prochainPalier(calcul.skills));
   rendreStats(calcul.stats);
   rendreSkills(calcul.skills);
   rendreJour(d.conditions || [], d.skills || [], d.releves || []);

@@ -142,6 +142,24 @@ export function volumeSemaine(condition, releves, jour) {
 
 // --- Un skill, un jour -----------------------------------------------------
 
+function groupesDuSkill(skill, conditions) {
+  const groupes = new Map();
+  for (const condition of conditions) {
+    if (condition.skill_id !== skill.id || condition.actif === false) continue;
+    const groupe = condition.groupe ?? 0;
+    if (!groupes.has(groupe)) groupes.set(groupe, []);
+    groupes.get(groupe).push(condition);
+  }
+  return [...groupes.values()];
+}
+
+function groupeTenu(membres, releves, jour) {
+  const etats = membres.map((condition) => conditionTenue(condition, releves, jour));
+  if (etats.some((etat) => etat === true)) return true;
+  if (etats.every((etat) => etat === null)) return null;
+  return false;
+}
+
 /**
  * Un skill est-il tenu le jour dit ? `true` / `false` / `null`.
  *
@@ -154,22 +172,8 @@ export function volumeSemaine(condition, releves, jour) {
  * un échec, à aucun étage.
  */
 export function skillTenu(skill, conditions, releves, jour) {
-  const siennes = conditions.filter((c) => c.skill_id === skill.id && c.actif !== false);
-  if (siennes.length === 0) return null;
-
-  const groupes = new Map();
-  for (const c of siennes) {
-    const g = c.groupe == null ? 0 : c.groupe;
-    if (!groupes.has(g)) groupes.set(g, []);
-    groupes.get(g).push(c);
-  }
-
-  const verdicts = [...groupes.values()].map((membres) => {
-    const etats = membres.map((c) => conditionTenue(c, releves, jour));
-    if (etats.some((e) => e === true)) return true;   // OU : une suffit
-    if (etats.every((e) => e === null)) return null;  // rien de renseigné
-    return false;
-  });
+  const verdicts = groupesDuSkill(skill, conditions)
+    .map((membres) => groupeTenu(membres, releves, jour));
 
   if (verdicts.every((v) => v === null)) return null;
   if (skill.nourriture === 'un') {
@@ -179,6 +183,32 @@ export function skillTenu(skill, conditions, releves, jour) {
   // 'tous' (défaut) : un seul groupe non tenu suffit à ne pas compter le jour.
   if (verdicts.some((v) => v === false)) return false;
   return verdicts.every((v) => v === true) ? true : null;
+}
+
+function progressionDuJour(skill, conditions, releves, jour) {
+  const groupes = groupesDuSkill(skill, conditions);
+  if (!groupes.length) return null;
+  const objectif = skill.nourriture === 'un' ? 1 : groupes.length;
+  const acquis = Math.min(objectif, groupes.filter((g) => groupeTenu(g, releves, jour) === true).length);
+  const [groupe] = groupes;
+  const [premiere] = groupe;
+  const { cadence, seuil, unite } = premiere;
+  const mesureUnique = groupes.length === 1
+    && ['volume_semaine', 'duree_jour', 'n_par_jour'].includes(cadence)
+    && groupe.every((c) => c.cadence === cadence && c.seuil === seuil && c.unite === unite);
+  if (!mesureUnique) return { acquis, objectif };
+
+  // Les alternatives d'un même groupe s'évaluent chacune : deux langues à
+  // 15 minutes ne font pas une pratique de 30 minutes.
+  const valeurs = groupe.map((c) => {
+    if (cadence === 'volume_semaine') return volumeSemaine(c, releves, jour);
+    const releve = releves.find((r) => r.condition_id === c.id && r.jour === jour);
+    return releve?.tenu ? Number(releve.quantite ?? 0) : 0;
+  });
+  return { acquis, objectif, mesure: {
+    valeur: Math.max(...valeurs), cible: Number(seuil), unite,
+    hebdomadaire: cadence === 'volume_semaine',
+  } };
 }
 
 // --- Le cumul, l'élan, le rang --------------------------------------------
@@ -305,6 +335,7 @@ export function etatAlthea({ avatar, skills, conditions, releves, stats, jour, d
         rang,
         nomDuRang: nomDuRang(rang),
         suivant: versLeRangSuivant(c.tenus, seuils),
+        progressionDuJour: progressionDuJour(s, conditions || [], releves || [], jour),
       };
     });
 
