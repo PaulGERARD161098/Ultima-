@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v128 2026-11-12 sha256:a3214e993679 -->
+<!-- lecons:empreinte v129 2026-11-14 sha256:b2be640a5c43 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1697,6 +1697,9 @@ chiffrés est portée par le devis, et l'écran ne produit aucun PDF tant qu'ell
 (`RenoDevis/components/VocalDevis.tsx`, sabotages V61–V65 et N12).
 
 ## 3. Ce qu'on donne à Paul
+
+**UN NUMÉRO VU À L'ÉCRAN N'EST PAS UNE LIGNE EN BASE — ON LA LIT AVANT DE PROPOSER DE LA SUPPRIMER**
+*(2026-11-14, RenoDevis, recette Devis express SOLA).* Un essai de recette affichait « n°307 » ; l'agent a affirmé que ce devis d'essai était enregistré et a mis sa suppression dans la liste des gestes. Lu en base ensuite : le vrai n°307 est un devis client réel, envoyé le 14/11 à 12:29 UTC ; Devis express est un mode d'essai qui n'enregistre rien. Rien n'a été supprimé, l'autre séance a été prévenue d'urgence. Coût constaté : un échange avec Paul et une alerte inter-séance ; perte évitée de justesse, un devis client effacé. ⇒ **Avant toute suppression proposée ou faite, lire la ligne visée en base (référence, date de création, source, statut) et la rapprocher du geste d'essai (heure, contenu). Si la ligne ne correspond pas, ou si le parcours n'écrit rien, le dire au lieu de supprimer.** Une affirmation « c'est enregistré » sur un mode que l'on n'a pas lu au code est une déduction (Directive EL).
 
 **UN BROUILLON PRÊT CHEZ L'AGENT N'EST PAS PRÊT CHEZ PAUL**
 *(2026-10-29, RenoDevis).* Texte gardé dans le navigateur et sélection des pièces non durable : il a fallu copier le message dans deux notes privées et demander une nouvelle sélection. Cinq PDF étaient préparés ; l'archive finale en joint deux, les trois autres restant accessibles par le lien. La cause exacte de la sélection finale n'est pas établie. Coût constaté : reprises manuelles et écart entre préparation annoncée et mail envoyé, sans document devenu inaccessible. ⇒ Avant « prêt à envoyer », éprouver la reprise du même brouillon dans une autre session, puis rapprocher message, destinataires, versions et pièces de l'aperçu final. Sinon nommer précisément ce qui reste local ; une note de secours n'est pas un brouillon partagé.
