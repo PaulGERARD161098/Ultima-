@@ -205,10 +205,12 @@ assert.equal((await soumettre({ ...ARGS, preuves: 'zoh:renodevis zoh:anti-patter
     const r = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: mauvaise } });
     assert.equal(r.statut, 400, `date admise : ${JSON.stringify(mauvaise)}`);
   }
-  const ok = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: '2026-11-15' } });
+  // Date future RELATIVE au jour du test : une date en dur ('2026-11-15') devenait passée, donc 400 (CI rouge le 17/11).
+  const futur = new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10);
+  const ok = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: futur } });
   assert.equal(ok.statut, 200, JSON.stringify(ok));
   const l = (await appeler({ methode: 'GET' })).data.propositions.find((x) => x.id === s3.data.id);
-  assert.equal(l.prochain_reexamen_le.slice(0, 10), '2026-11-15');
+  assert.equal(l.prochain_reexamen_le.slice(0, 10), futur);
   assert.equal((await soumettre({ ...ARGS, objet: 'zoh:anti-pattern', preuves: 'zoh:anti-pattern zoh:renodevis' })).data.resultat, 'deja_tranchee');
 }
 // Retirer une proposition en attente, puis la resoumettre : rouverte.
