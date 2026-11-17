@@ -44,6 +44,10 @@ participants s'ils ne figurent pas dans les notes.
 6. **Sur demande** — un brouillon court par personne qui a une action, avec ses
    seules actions et dates.
 
+**Synthèse d'abord** (Paul, 17/11/2026) : le compte rendu tient en douze lignes
+au plus, une ligne par point, sans phrase d'introduction. Le détail, les
+brouillons et les passages ambigus longs se donnent sur demande.
+
 **Pièges** : une idée lancée n'est pas une décision ; ne corriger aucun chiffre
 qui paraît faux, le signaler ; une date relative ne se convertit qu'avec la date
 du rendez-vous, et la date obtenue se montre.
