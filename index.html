@@ -25,6 +25,7 @@
        d'appel (§⑨) et ne redéfinit rien. -->
   <link rel="stylesheet" href="css/leo.css">
   <link rel="stylesheet" href="css/leo-registre.css">
+  <link rel="stylesheet" href="css/leo-rose.css">
 </head>
 <!-- LA RACINE — l'écran que Paul juge (LV5 / P4). Dernière page à passer de
      la boussole au ciel : la galaxie EST désormais l'accueil, le bandeau
@@ -119,6 +120,7 @@
       </h1>
       <p class="console-invite">Sur quoi est-ce qu'on travaille aujourd'hui&nbsp;?</p>
     </header>
+    <button type="button" id="leo-rose-ouvrir" class="leo-rose-entree" hidden>Rose des vents</button>
     <button type="button" id="leo-mission-ouvrir" class="leo-mission-entree" disabled>Mission Léo</button>
 
     <!-- ===== Le ciel d'accueil, rendu par js/ciel-noeud.mjs =====
@@ -197,6 +199,39 @@
     <p>La reprise d’une réponse perdue est suivie dans cet onglet. Avant de travailler ailleurs, confirme ici le résultat de la dernière demande.</p>
   </dialog>
 
+  <dialog id="leo-rose" class="leo-rose" aria-labelledby="leo-rose-titre">
+    <header class="leo-rose-en-tete">
+      <span>Ultima · Léo</span>
+      <div>
+        <button type="button" id="leo-rose-priorites-ouvrir" aria-controls="leo-rose-priorites" aria-expanded="true">Priorités</button>
+        <button type="button" id="leo-rose-fermer">Fermer</button>
+      </div>
+    </header>
+    <h2 id="leo-rose-titre" tabindex="-1">Rose des vents</h2>
+    <div class="leo-rose-plateau">
+      <div class="leo-rose-cadran">
+        <span class="leo-rose-anneaux" aria-hidden="true"></span>
+        <div id="leo-rose-aiguilles"></div>
+        <button type="button" id="leo-rose-parler" class="leo-rose-centre" aria-label="Donner un cap à Léo"><strong>Léo</strong><span>Parler</span></button>
+      </div>
+      <section id="leo-rose-priorites" class="leo-rose-priorites" aria-labelledby="leo-rose-priorites-titre">
+        <div class="leo-rose-priorites-entete">
+          <div><p>Léo te recommande</p><h3 id="leo-rose-priorites-titre">Tes priorités</h3></div>
+          <button type="button" id="leo-rose-priorites-fermer" aria-label="Masquer les priorités">×</button>
+        </div>
+        <p id="leo-rose-etat" role="status"></p>
+        <ol id="leo-rose-priorites-liste"></ol>
+      </section>
+    </div>
+    <p id="leo-rose-reponse" class="leo-rose-reponse" role="status" hidden></p>
+    <form id="leo-rose-commande" class="leo-rose-commande" autocomplete="off">
+      <div class="leo-rose-saisie">
+        <input id="leo-rose-cap" aria-label="Sur quoi veux-tu avancer ?" maxlength="250" placeholder="On part sur…" required>
+      </div>
+      <button type="submit">Ouvrir</button>
+    </form>
+  </dialog>
+
   <script src="js/ciel-fond.js"></script>
   <!-- Le champ d'étoiles de la porte d'entrée (02/09) : le peintre commun,
        puis le module qui le monte dans l'écran de connexion à sa première
@@ -213,6 +248,8 @@
   <script type="module" src="js/ciel-noeud.mjs"></script>
   <script src="js/leo-registre-client.js" defer></script>
   <script src="js/leo-registre-ui.js" defer></script>
+  <script src="js/dictee.js" defer></script>
+  <script type="module" src="js/leo-rose.mjs"></script>
   <script src="js/boussole-auth.js" defer></script>
   <script src="js/leo-accueil.js"></script>
   <script src="js/leo-partout.js"></script>

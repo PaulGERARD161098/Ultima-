@@ -50,9 +50,11 @@
   // texte figé. Le hook peut ne pas être encore prêt (ordre de scripts) → garde.
   function livrerCockpit() {
     if (window.UltimaLeoRegistreUI) { window.UltimaLeoRegistreUI.poserSession(etat.session); }
-    if (!window.UltimaBoussole || typeof window.UltimaBoussole.poserSession !== 'function') { return; }
     var token = (etat.session && etat.session.access_token) || null;
-    window.UltimaBoussole.poserSession(token);
+    if (window.UltimaLeoRose) { window.UltimaLeoRose.poserSession(token); }
+    if (window.UltimaBoussole && typeof window.UltimaBoussole.poserSession === 'function') {
+      window.UltimaBoussole.poserSession(token);
+    }
   }
 
   function majAuthUi() {
