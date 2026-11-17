@@ -9,7 +9,8 @@ for (const file of files) {
   console.log(`${result.status === 0 ? 'PASS' : 'FAIL'} ${file}`);
   if (result.status !== 0) {
     failures++;
-    console.error(result.stdout, result.stderr, result.error?.message || '');
+    // Le signal se dit : un SIGKILL (mémoire du conteneur) n'a ni stdout ni stderr (17/11/2026).
+    console.error(result.stdout, result.stderr, result.error?.message || '', result.signal ? `signal ${result.signal}` : '');
   }
 }
 console.log(`${files.length - failures}/${files.length} suites réussies`);
