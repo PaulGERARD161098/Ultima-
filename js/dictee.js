@@ -330,6 +330,9 @@
     configurer: function (options) {
       if (options && typeof options.signaler === 'function') { signaler = options.signaler; }
     },
-    attacher: attacherDictee
+    attacher: attacherDictee,
+    annuler: function (champ) {
+      if (dicteeCourante && dicteeCourante.champ === champ) dicteeCourante.annuler(true);
+    }
   };
 })();

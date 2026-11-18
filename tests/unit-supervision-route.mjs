@@ -205,10 +205,15 @@ assert.equal((await soumettre({ ...ARGS, preuves: 'zoh:renodevis zoh:anti-patter
     const r = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: mauvaise } });
     assert.equal(r.statut, 400, `date admise : ${JSON.stringify(mauvaise)}`);
   }
-  const ok = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: '2026-11-15' } });
+  // SQL vérifie sa propre horloge réelle, indépendante de l'horloge du handler.
+  const { maintenant, reexamen } = (await db.query(
+    'select current_date::text as maintenant, (current_date + 15)::text as reexamen'
+  )).rows[0];
+  const ok = await appeler({ corps: { action: 'arbitrer', id: s3.data.id, decision: 'REFUSEE', reexamen_le: reexamen },
+    opts: { maintenant: Date.parse(maintenant + 'T00:00:00Z') } });
   assert.equal(ok.statut, 200, JSON.stringify(ok));
   const l = (await appeler({ methode: 'GET' })).data.propositions.find((x) => x.id === s3.data.id);
-  assert.equal(l.prochain_reexamen_le.slice(0, 10), '2026-11-15');
+  assert.equal(l.prochain_reexamen_le.slice(0, 10), reexamen);
   assert.equal((await soumettre({ ...ARGS, objet: 'zoh:anti-pattern', preuves: 'zoh:anti-pattern zoh:renodevis' })).data.resultat, 'deja_tranchee');
 }
 // Retirer une proposition en attente, puis la resoumettre : rouverte.

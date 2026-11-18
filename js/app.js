@@ -4644,9 +4644,15 @@
     // du réseau : l'usage a tranché, l'arbre est supprimé. Les données arrivent
     // juste après (chargerDonnees → rafraichir) : le ciel se peuple sans
     // changement d'onglet.
-    activerOnglet('ciel');
+    // L'entrée depuis la rose ouvre directement l'accueil des relances.
+    var allerAuxRelances = new URLSearchParams(window.location.search).get('vue') === 'relances';
+    activerOnglet(allerAuxRelances ? 'accueil' : 'ciel');
     await initAuth();
     await chargerDonnees();
+    if (allerAuxRelances && etat.onglet === 'accueil') {
+      var relances = $('.zone-relances');
+      if (relances) relances.scrollIntoView({ block: 'start' });
+    }
   }
 
   if (document.readyState === 'loading') {

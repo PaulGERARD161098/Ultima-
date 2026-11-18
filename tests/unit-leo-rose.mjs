@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import { lireCommande, lirePriorites } from '../js/leo-rose.mjs';
+
+const priorites = lirePriorites({ riven: { relances_dues: 2 } });
+assert.equal(priorites.length, 1);
+assert.equal(priorites[0].titre, '2 relances à traiter');
+assert.equal(lirePriorites(null), null);
+assert.equal(lirePriorites({ riven: { relances_dues: -1 } }), null);
+assert.deepEqual(lirePriorites({ riven: { relances_dues: 0 } }), []);
+assert.equal(lireCommande('Ouvre la première priorité', priorites).cap.cible, 'riven.html?vue=relances');
+assert.equal(lireCommande('Ouvre la deuxième priorité', priorites).type, 'message');
+assert.equal(lireCommande('Ouvre Artidispo et Riven', priorites).type, 'message');
+assert.equal(lireCommande('Ouvre ça', priorites).type, 'message');
+const explication = lireCommande('Pourquoi la priorité 1 ?', priorites);
+assert.equal(explication.type, 'message');
+assert.equal(lireCommande('Ouvre ça', priorites, explication.cap).cap.id, 'riven');
+assert.equal(lireCommande('On part sur RD').cap.id, 'renodevis');
+assert.equal(lireCommande('Ouvre ALTHÉA').cap.id, 'althea');
+assert.equal(lireCommande('Retour à la rose').type, 'fermer');
+assert.equal(lireCommande('Montre le top 3').type, 'priorites');
+console.log('Rose de Léo · sources et commandes');
