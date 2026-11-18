@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-11-02",
+ "publie_le": "2026-11-18",
  "technos": [
   {
    "id": "renodevis",
@@ -12946,9 +12946,385 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "analyse-energetique-logement",
+   "ordre": 12,
+   "badge": "Analyse énergétique du logement",
+   "etat": "Code conservé · mode personnel préparé · installation cible à recevoir",
+   "mesure": {
+    "commit": "a81a190",
+    "le": "2026-11-18"
+   },
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Résultat et périmètre",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Retrouver un diagnostic par adresse, examiner le logement, comparer des scénarios de rénovation, calculer une orientation énergétique et exporter une étude. La même source de code porte les moteurs ; aucune copie de moteur n'est créée pour une autre interface.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le socle peut fonctionner sur un ordinateur personnel, avec un stockage local neuf et un utilisateur unique. Le référencement ne constitue ni un hébergement ni une installation sur la machine de l'utilisateur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Capacités mesurées",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Identifiant",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ce que porte la brique",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "recherche-diagnostic",
+           ""
+          ]
+         ],
+         [
+          [
+           "Recherche par adresse, numéro et position auprès des sources publiques ; réseau nécessaire",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "moteur-audit",
+           ""
+          ]
+         ],
+         [
+          [
+           "Calcul d'orientation et de dimensionnement, hypothèses, fourchettes et limites",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "etudes-scenarios",
+           ""
+          ]
+         ],
+         [
+          [
+           "Logement d'origine, saisie corrigée, scénarios, révisions et invalidation des résultats périmés",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "export-etude",
+           ""
+          ]
+         ],
+         [
+          [
+           "Export structuré, synthèse et distinction des offres alternatives",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "stockage-personnel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dossiers, historique et conversations sur fichier local ; contraintes et écritures conditionnelles",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "lancement-personnel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Préparation des dépendances, compilation séparée, adresse locale et réouverture sans cookies",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le collecteur vérifie les empreintes des fichiers sources référencés hors de ce dossier. Il refuse une pièce absente, modifiée ou vide. Le plan nomme chaque capacité de l'inventaire. Les identifiants d'instance, adresses, clés et données de logement restent hors du socle.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Conditions de réutilisation",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Conserver le dépôt de référence et son historique. La référence privée indique le commit et les empreintes ; les chemins propres à l'instance restent dans cette référence, jamais dans la publication neutre. Adapter dans la source, puis refaire la recette ; ne pas entretenir une copie divergente du calcul.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La conversation utilise un fournisseur de modèle configuré séparément. Le mode personnel ne constitue pas une inférence locale et ne supprime pas les éventuels coûts d'appels au modèle. Les recherches publiques nécessitent toujours un accès réseau.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Limites et état reçu",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le code personnel est préparé et ses contrôles sont consignés avec sa source. Le premier lancement sur la machine cible, le raccordement éventuel du modèle et la revue des consommateurs externes restent des réceptions distinctes.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une statistique spatiale dépendant de l'ancien service de données n'est pas reconstruite par le stockage local ; le bloc correspondant est masqué. La suppression des anciens services et la résiliation des comptes ne sont jamais déclenchées par cette fiche.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "checklist",
+     "titre": "Avant installation",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Avant installation",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Préparer la source vérifiée et un emplacement de données propre à la machine cible.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Auto : vérifier le commit de référence et toutes les empreintes de la collecte.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : disposer du moteur d'exécution compatible sur l'ordinateur cible.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : récupérer le code sans configuration de production ni anciennes données.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : décider si la conversation doit être activée avec une clé personnelle.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Mise en service",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Lancer et recevoir",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Auto : préparer les dépendances et compiler le mode personnel dans son propre dossier.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : ouvrir une base neuve, indépendante des cookies, et écouter uniquement en boucle locale.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : ouvrir une étude, corriger une valeur, calculer un scénario et télécharger sa synthèse.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : arrêter et redémarrer, puis retrouver le même dossier et ses résultats.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : refuser les demandes d'envoi, la connexion par email, les purges et les requêtes d'une autre origine.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Maintenir et retirer l'ancien service",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Manuel : sauvegarder le dossier de données après arrêt de l'outil ; préserver l'état actuel avant restauration.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Auto : refaire les contrôles de persistance, conflit, panne et export après modification des sources.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : vérifier les consommateurs réels du moteur partagé avant tout retrait d'hébergement.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Manuel : recevoir l'installation cible avant suppression des anciens services ; vérifier séparément les identités de connexion aux comptes conservés.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La préparation ne prouve pas le premier lancement sur la machine cible. Une publication générée ne prouve pas l'affichage du badge dans le produit en service.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
+  "analyse-energetique-logement/badge.json": "30833c15a5665dbb0c53f6c988e9e29d367c35dd04c905243bbbaa1992e698ff",
+  "analyse-energetique-logement/TECHNO.md": "5e36835b6874afca131284028b71af15b376fb99029841a524f87dbfefbeb248",
+  "analyse-energetique-logement/MISE-EN-SERVICE.md": "2b7daf3d0e35a76933ea6d0ab1ba5d14a2af637f2f3bee0e948b85f07d338e7f",
   "anti-pattern/badge.json": "cadb852886a315cfbb0004cb251068660161853622eb9493c7c738413564961c",
   "anti-pattern/TECHNO.md": "7554b1caa4bbb686155ee2ed628aaf99c05bc30811cc4c75ba46fd2b37be77a3",
   "anti-pattern/MISE-EN-SERVICE.md": "865fac3156cf81ab161aa625e815be8c39bdd051ea0d6e57e28c6f0a2d5fbfa2",

@@ -1,0 +1,115 @@
+{
+  "schema": "analyse-energetique/1",
+  "source": {
+    "commit": "a81a19054eb9bb4063c49958c84b42b8d23177c7",
+    "date_commit": "2026-11-18T19:26:08Z"
+  },
+  "capacites": [
+    {
+      "id": "recherche-diagnostic",
+      "modules": [
+        {
+          "id": "recherche-diagnostic-1",
+          "empreinte": "fbbdbc70a1c5802f515db46cf245f391eba26ae618781dca3e02343101f1d0ab"
+        },
+        {
+          "id": "recherche-diagnostic-2",
+          "empreinte": "b3e705f795c7c97841c1a21d7ed670d715f6b882a07f14e1e5197ac15bc4914c"
+        },
+        {
+          "id": "recherche-diagnostic-3",
+          "empreinte": "874521e3eaad27f7c24ac8483d3ce34b811fa0146f49387e1c38cf7266c4f2f1"
+        }
+      ]
+    },
+    {
+      "id": "moteur-audit",
+      "modules": [
+        {
+          "id": "moteur-audit-1",
+          "empreinte": "f8d8240097a58e3147536577caee0421ba65441b4557b2158b355aac423a160c"
+        },
+        {
+          "id": "moteur-audit-2",
+          "empreinte": "701bb66c2c1e0d82e582302508db2a6bd5832310869f1b26c870d0b70ef1274e"
+        },
+        {
+          "id": "moteur-audit-3",
+          "empreinte": "59ff627b7ab36e95cee34ef1f3a5baa92d873e6770be92f69991e10a4aada4aa"
+        }
+      ]
+    },
+    {
+      "id": "etudes-scenarios",
+      "modules": [
+        {
+          "id": "etudes-scenarios-1",
+          "empreinte": "a133634272509157902a63f73cc0f7d294bb207fcb52e101b9e4eecfeb8b2384"
+        },
+        {
+          "id": "etudes-scenarios-2",
+          "empreinte": "1cbbe592becda1eef11dd5c0c47df80381198bb1f6ef0e98612c1e39226bef90"
+        },
+        {
+          "id": "etudes-scenarios-3",
+          "empreinte": "1c2249e586ff94831d5ab72c2bccb3a4d87335dd8c9995aad8abfeadca574019"
+        }
+      ]
+    },
+    {
+      "id": "export-etude",
+      "modules": [
+        {
+          "id": "export-etude-1",
+          "empreinte": "8fe1fde3657ac3ffb035ce986119010a162b820c99506c3df4cf6fcffa24d39b"
+        },
+        {
+          "id": "export-etude-2",
+          "empreinte": "913c0456fc1787bd3e0f26cae126c71d579a33935c9aa70b9e362f34ef14a1c9"
+        }
+      ]
+    },
+    {
+      "id": "stockage-personnel",
+      "modules": [
+        {
+          "id": "stockage-personnel-1",
+          "empreinte": "ecd760997e6d02775dc31f0999a1424977da7fce9992ca62ea4a34897d5eb36d"
+        },
+        {
+          "id": "stockage-personnel-2",
+          "empreinte": "4a82d2440d7e776d0bf0eeab889d97de43eae9d3729c15f0fabba57f7813b5ac"
+        },
+        {
+          "id": "stockage-personnel-3",
+          "empreinte": "127486ba30f59a008b0244d7cb5ce00582dbd1f755775c12142f271578ba9728"
+        },
+        {
+          "id": "stockage-personnel-4",
+          "empreinte": "72554e9e3ac82fee4249c7c77ee71d201cac1e9289e9f7aeab5b1491c4620fea"
+        },
+        {
+          "id": "stockage-personnel-5",
+          "empreinte": "a6d2f83702b891acd693606a39fe80d79eac561b5def610e55c60b8bc59496b5"
+        }
+      ]
+    },
+    {
+      "id": "lancement-personnel",
+      "modules": [
+        {
+          "id": "lancement-personnel-1",
+          "empreinte": "00b208c328091c63ca3157f9e925e326b0ba58609c0eb8340d97692ae00469d4"
+        },
+        {
+          "id": "lancement-personnel-2",
+          "empreinte": "ed4ff7100c0069df60a6b5057ba40e6b010d12d91b9a60c61bdbcd9d27f77339"
+        },
+        {
+          "id": "lancement-personnel-3",
+          "empreinte": "3f365218159e44f8aedcd05dc9071b03aefb8841e5597138b0b3badc95cc9fbe"
+        }
+      ]
+    }
+  ]
+}
