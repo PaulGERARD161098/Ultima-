@@ -441,6 +441,43 @@
 .leo-partir:hover { background: linear-gradient(#1f6787, #114560); }
 .leo-partir:focus-visible { outline: 3px solid var(--accent, #1e6fb8); outline-offset: 2px; }
 
+/* ---------- Étape B du dialogue (maquette validée le 20/11/2026) ----------
+   Le cartouche devient un PANNEAU LATÉRAL à droite, sur toute la hauteur, sur
+   toutes les pages (le composant est le même partout : js/leo-accueil.js).
+   La page reste visible derrière un voile léger ; le dialogue reste modal
+   (aria-modal, focus piégé, Échap et clic dehors ferment). Le fil prend la
+   place libre, la saisie reste collée en bas, « Fermer » monte en haut à droite.
+   Garde : smoke-leo-dialogue (géométrie du panneau, bureau et téléphone). */
+.leo-voile {
+  justify-content: flex-end;
+  align-items: stretch;
+  padding: 0;
+  background: rgba(4, 16, 28, 0.38);
+}
+.leo-cartouche {
+  position: relative;
+  width: min(100vw, 480px);
+  height: 100dvh;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  border-width: 0 0 0 1px;
+  padding: 1.1rem 1.2rem calc(0.9rem + env(safe-area-inset-bottom));
+  animation: leo-panneau-entre 0.18s ease-out;
+}
+@keyframes leo-panneau-entre { from { transform: translateX(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+.leo-entete { padding-right: 6.5rem; }                 /* place de « Fermer » */
+.leo-pied { position: absolute; top: 0.95rem; right: 1.1rem; margin: 0; }
+.leo-partir { min-height: 44px; padding: 0.4rem 1rem; font-size: 0.92rem; box-shadow: none; }
+.leo-section-voix { flex: 1 0 auto; display: flex; flex-direction: column; min-height: min(60dvh, 520px); margin-bottom: 0; }
+.leo-section-voix .leo-dialogue { flex: 1 1 auto; max-height: none; min-height: 8rem; }
+.leo-section-voix .leo-voix-formulaire {
+  position: sticky; bottom: 0; padding-top: 0.5rem;
+  background: linear-gradient(180deg, transparent, var(--parchemin-carte, #efe3c6) 0.6rem);
+}
+@media (prefers-reduced-motion: reduce) { .leo-cartouche { animation: none; } }
+
 /* Mobile : plein écran doux (le cartouche occupe l'écran, coins droits). */
 @media (max-width: 640px) {
   .leo-voile { padding: 0; align-items: stretch; }
@@ -450,7 +487,7 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
-    padding: 1.1rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+    padding: 1.1rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
   }
 }
 

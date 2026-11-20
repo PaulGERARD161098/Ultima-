@@ -60,6 +60,23 @@ for (const [largeur, hauteur] of [[1280, 860], [390, 844]]) {
   // 1. Un seul bouton de sortie, libellé « Fermer ».
   verifier('le bouton de sortie s’appelle « Fermer »', (await page.locator('#leo-partir').textContent())?.trim() === 'Fermer');
 
+  // 1-bis. Étape B : un panneau latéral à droite, toute la hauteur, page visible
+  // à gauche sur bureau ; plein écran sur téléphone ; « Fermer » en haut ; la
+  // saisie dans l'écran.
+  await page.waitForTimeout(300); // fin de l'animation d'entrée
+  const g = await page.evaluate(() => {
+    const r = (s) => document.querySelector(s).getBoundingClientRect();
+    const c = r('#leo-cartouche'), f = r('.leo-voix-formulaire'), x = r('#leo-partir');
+    return { gauche: c.left, droite: c.right, haut: c.top, bas: c.bottom, largeur: c.width,
+      vw: window.innerWidth, vh: window.innerHeight, formBas: f.bottom, fermerHaut: x.top };
+  });
+  verifier('panneau collé au bord droit, sur toute la hauteur',
+    Math.abs(g.droite - g.vw) <= 1 && g.haut <= 1 && Math.abs(g.bas - g.vh) <= 1, JSON.stringify(g));
+  verifier(largeur > 640 ? 'bureau : panneau ≤ 480 px, la page reste visible à gauche' : 'téléphone : panneau plein écran',
+    largeur > 640 ? g.largeur <= 481 && g.gauche > 0 : Math.round(g.largeur) === g.vw, JSON.stringify(g));
+  verifier('« Fermer » en haut du panneau', g.fermerHaut < 80, `${Math.round(g.fermerHaut)} px`);
+  verifier('la saisie est dans l’écran', g.formBas <= g.vh, `${Math.round(g.formBas)} / ${g.vh}`);
+
   // 2. Champ multiligne : Maj+Entrée va à la ligne SANS envoyer, Entrée envoie.
   verifier('le champ est une zone de plusieurs lignes', await champ.evaluate((c) => c.tagName === 'TEXTAREA'));
   await champ.click();
