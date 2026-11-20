@@ -26,8 +26,10 @@
 }
 
 .leo-cartouche {
-  width: min(92vw, 560px);
-  max-height: min(86vh, 660px);
+  /* Étape A du dialogue (20/11/2026) : plus large et plus haut, pour lire un
+     compte rendu sans faire défiler une meurtrière. */
+  width: min(94vw, 720px);
+  max-height: min(92vh, 860px);
   overflow-y: auto;
   padding: 1.25rem 1.4rem 1.2rem;
   color: var(--encre-sepia, #3b2f1c);
@@ -164,8 +166,8 @@
 .leo-dialogue {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  max-height: 200px;
+  gap: 0.55rem;
+  max-height: min(56vh, 520px);
   overflow-y: auto;
   margin: 0 0 0.5rem;
 }
@@ -198,6 +200,19 @@
 }
 
 .leo-bulle-attente { font-style: italic; color: var(--encre-sepia-douce, #6a5636); }
+
+/* Mise en forme des réponses de Léo (étape A, 20/11/2026) — voir
+   ecrireFormate() dans js/leo-accueil.js. Le message de Paul garde ses lignes. */
+.leo-bulle-paul { white-space: pre-wrap; overflow-wrap: anywhere; }
+.leo-bulle-leo { overflow-wrap: anywhere; }
+.leo-md-ligne, .leo-md-titre { display: block; margin: 0.15rem 0; }
+.leo-md-titre { font-weight: 700; margin-top: 0.45rem; }
+.leo-md-titre:first-child { margin-top: 0; }
+.leo-md-liste { margin: 0.2rem 0 0.35rem; padding-left: 1.3rem; }
+.leo-md-liste li { margin: 0.12rem 0; }
+.leo-bulle-collee summary { cursor: pointer; font-weight: 600; list-style-position: inside; }
+.leo-bulle-collee summary:focus-visible { outline: 2px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.leo-colle-texte { margin: 0.45rem 0 0; max-height: 14rem; overflow-y: auto; white-space: pre-wrap; font-size: 0.88rem; }
 
 /* Suivi du 24/10 : mêmes jetons que le cartouche, jalons déclarés distincts
    de l'attente indéterminée d'une réponse. Aucune animation de faux progrès. */
@@ -362,6 +377,9 @@
 .leo-voix-champ {
   flex: 1;
   min-height: 44px;
+  max-height: 220px;   /* miroir de ajusterChamp() */
+  resize: none;
+  line-height: 1.4;
   padding: 0.45rem 0.7rem;
   font: inherit;
   font-size: 0.98rem;
@@ -395,6 +413,8 @@
 .leo-voix-envoyer:hover { background: linear-gradient(#1f6787, #114560); }
 .leo-voix-envoyer:focus-visible { outline: 3px solid var(--accent, #1e6fb8); outline-offset: 2px; }
 .leo-voix-envoyer:disabled, .leo-voix-champ:disabled { opacity: 0.55; cursor: default; }
+.leo-voix-formulaire { align-items: flex-end; }
+.leo-voix-aide { margin: 0.3rem 0 0; font-size: 0.8rem; color: var(--encre-sepia-douce, #6a5636); }
 
 .leo-pied {
   display: flex;

@@ -687,6 +687,48 @@
     return element;
   }
 
+  // Mise en forme des réponses de Léo (étape A du dialogue, Paul, 20/11/2026).
+  // Sous-ensemble Markdown — lignes, listes à puces ou numérotées, **gras**,
+  // titres « # » — construit NŒUD PAR NŒUD avec textContent : jamais
+  // innerHTML. Un « <img onerror> » écrit par le modèle reste du texte.
+  // Garde : smoke-leo-dialogue (tentative d'injection).
+  function ajouterEnLigne(parent, texte) {
+    String(texte).split(/(\*\*[^*\n]+\*\*)/).forEach(function (morceau) {
+      if (!morceau) { return; }
+      var gras = /^\*\*([^*\n]+)\*\*$/.exec(morceau);
+      if (gras) { parent.appendChild(el('strong', '', gras[1])); }
+      else { parent.appendChild(document.createTextNode(morceau)); }
+    });
+  }
+
+  function ecrireFormate(conteneur, texte) {
+    var source = String(texte || '');
+    // Une ligne sans balisage reste UN nœud texte : la bulle d'attente
+    // réécrit son firstChild (« Je prépare toujours la réponse… »).
+    if (!/\n|\*\*|^#{1,6} /m.test(source)) { conteneur.textContent = source; return; }
+    var liste = null, typeListe = '';
+    source.split(/\r?\n/).forEach(function (ligne) {
+      var t = ligne.trim();
+      var puce = /^[-*•]\s+(.+)$/.exec(t);
+      var num = /^(\d{1,3})[.)]\s+(.+)$/.exec(t);
+      if (puce || num) {
+        var type = puce ? 'ul' : 'ol';
+        if (!liste || typeListe !== type) { liste = el(type, 'leo-md-liste'); typeListe = type; conteneur.appendChild(liste); }
+        var li = el('li');
+        if (num) { li.value = parseInt(num[1], 10); } // garde la numérotation de Léo
+        ajouterEnLigne(li, puce ? puce[1] : num[2]);
+        liste.appendChild(li);
+        return;
+      }
+      liste = null; typeListe = '';
+      if (!t) { return; }
+      var titre = /^#{1,6}\s+(.+)$/.exec(t);
+      var bloc = el('span', titre ? 'leo-md-titre' : 'leo-md-ligne');
+      ajouterEnLigne(bloc, titre ? titre[1] : t);
+      conteneur.appendChild(bloc);
+    });
+  }
+
   function svgEl(nom, attributs) {
     var element = document.createElementNS(SVG_NS, nom);
     Object.keys(attributs || {}).forEach(function (cle) {
@@ -877,7 +919,7 @@
         return;
       }
       if (evenement.key !== 'Tab') { return; }
-      var focusables = cartouche.querySelectorAll('button, input');
+      var focusables = cartouche.querySelectorAll('button, input, textarea');
       if (focusables.length === 0) { return; }
       var premier = focusables[0];
       var dernier = focusables[focusables.length - 1];
@@ -963,7 +1005,7 @@
 
     // Pied : fermeture (focus initial dessus).
     var pied = el('footer', 'leo-pied');
-    var partir = el('button', 'leo-partir', "C'est parti");
+    var partir = el('button', 'leo-partir', 'Fermer'); // un seul bouton de sortie (maquette validée le 20/11)
     partir.type = 'button';
     partir.id = 'leo-partir';
     partir.addEventListener('click', fermer);
@@ -997,17 +1039,32 @@
 
     var formulaire = document.createElement('form');
     formulaire.className = 'leo-voix-formulaire';
-    var champ = document.createElement('input');
-    champ.type = 'text';
+    // Plusieurs lignes (étape A, 20/11/2026) : un collage garde sa mise en
+    // page. Entrée envoie, Maj+Entrée va à la ligne ; le champ grandit seul.
+    var champ = document.createElement('textarea');
+    champ.rows = 1;
     champ.className = 'leo-voix-champ';
     champ.maxLength = 16000; // miroir de MAX_MESSAGE_CHARS (api/_lib/leo.js)
-    champ.placeholder = 'Dictez ou écrivez à Léo…';
+    champ.placeholder = 'Écris, colle ou dicte à Léo…';
     champ.setAttribute('aria-label', 'Votre message à Léo');
     var envoyer = el('button', 'leo-voix-envoyer', 'Envoyer');
     envoyer.type = 'submit';
     formulaire.appendChild(champ);
     formulaire.appendChild(envoyer);
     section.appendChild(formulaire);
+    var aideSaisie = el('p', 'leo-voix-aide', 'Entrée pour envoyer · Maj+Entrée pour aller à la ligne');
+    section.appendChild(aideSaisie);
+    function ajusterChamp() {
+      champ.style.height = 'auto';
+      champ.style.height = Math.min(champ.scrollHeight, 220) + 'px';
+    }
+    champ.addEventListener('input', ajusterChamp);
+    champ.addEventListener('keydown', function (evenement) {
+      if (evenement.key !== 'Enter' || evenement.shiftKey || evenement.isComposing) { return; }
+      evenement.preventDefault();
+      if (typeof formulaire.requestSubmit === 'function') { formulaire.requestSubmit(); }
+      else { formulaire.dispatchEvent(new Event('submit', { cancelable: true })); }
+    });
 
     // Le micro (composant partagé js/dictee.js) : progressive enhancement —
     // module absent ou navigateur sans Web Speech → champ nu, aucune erreur.
@@ -1222,8 +1279,22 @@
       rendreSuivi();
     }
 
+    var SEUIL_REPLI = 600; // au-delà, un message de Paul est un collage : replié
     function bulle(genre, texte) {
-      var p = el('p', 'leo-bulle leo-bulle-' + genre, texte);
+      var p;
+      if (genre === 'leo') {
+        p = el('div', 'leo-bulle leo-bulle-leo');
+        ecrireFormate(p, texte);
+      } else if (genre === 'paul' && String(texte || '').length > SEUIL_REPLI) {
+        p = el('div', 'leo-bulle leo-bulle-paul leo-bulle-collee');
+        var replie = el('details');
+        replie.appendChild(el('summary', '', 'Texte collé · ' +
+          String(texte).length.toLocaleString('fr-FR') + ' caractères'));
+        replie.appendChild(el('p', 'leo-colle-texte', texte));
+        p.appendChild(replie);
+      } else {
+        p = el('p', 'leo-bulle leo-bulle-' + genre, texte);
+      }
       dialogue.appendChild(p);
       dialogue.scrollTop = dialogue.scrollHeight;
       return p;
@@ -1556,7 +1627,7 @@
       var generationCommande = generationSuivi;
       if (missionSuivi && memoireBloquee) { bulle('erreur', 'Relis le suivi enregistré avant de continuer.'); return; }
       if (interactionModule && planEnAttente && /^(?:go|oui|ok|je valide le plan)[.! ]*$/i.test(texte)) {
-        await adopterPlan(); champ.value = ''; return;
+        await adopterPlan(); champ.value = ''; ajusterChamp(); return;
       }
       if (interactionModule && /^(?:reprends|on reprend|reprenons)(?: la t[âa]che)?[.! ]*$/i.test(texte)) {
         nouvelleTacheDemandee = false; candidatNouvelleTache = null; planEnAttente = null;
@@ -1581,14 +1652,14 @@
             if (generationCommande !== generationSuivi) { return; }
             bulle('issue', 'Jalon ' + (jalon + 1) + ' marqué terminé selon ta confirmation.');
             historique.push({ role: 'user', content: texte });
-            champ.value = ''; rendreSuivi(); return;
+            champ.value = ''; ajusterChamp(); rendreSuivi(); return;
           } catch (e) { bulle('erreur', 'Ce jalon ne fait pas partie du plan courant.'); return; }
         }
       }
       enCours = true;
       var tourSuivi = generationSuivi;
       rendreSuivi();
-      champ.value = '';
+      champ.value = ''; ajusterChamp();
       champ.disabled = true;
       envoyer.disabled = true;
       historique.push({ role: 'user', content: texte });
@@ -1664,7 +1735,7 @@
             : "La voix de Léo n'est pas encore branchée (clé API en attente).");
         } else {
           historique.pop();
-          champ.value = texte;
+          champ.value = texte; ajusterChamp();
           // Le CODE est dit (02/10) : sans journaux Vercel lisibles, c'est la
           // seule trace qui distingue une session expirée (401), la cadence
           // (429), l'appel IA en échec (502) ou un délai dépassé (504). Un
@@ -1687,7 +1758,7 @@
         attente.remove();
         if (tourSuivi !== generationSuivi) { rearmer(); return; }
         historique.pop();
-        champ.value = texte;
+        champ.value = texte; ajusterChamp();
         bulle('erreur', "Léo n'a pas pu répondre (réseau) — réessayez.");
         rearmer();
       });
