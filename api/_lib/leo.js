@@ -15,7 +15,10 @@ export const LEO_MODELE = 'claude-opus-4-8';
 
 // Bornes de la conversation (minimisation : le pop-up converse, il ne dumpe pas).
 export const MAX_MESSAGES = 30; // tours cumulés user+assistant
-export const MAX_MESSAGE_CHARS = 4000; // un tour dicté reste court
+// 16 000 (Paul, 20/11/2026) : des notes de réunion collées tiennent en un tour
+// (14 000 caractères mesurés sur un compte rendu Gemini). Le plafond GLOBAL
+// ci-dessous ne bouge pas : le coût maximal d'un appel reste le même.
+export const MAX_MESSAGE_CHARS = 16000;
 export const MAX_TOTAL_CHARS = 24000; // plafond global de l'historique
 
 // ---------- Les YEUX de Léo (boucle « lecture », 2026-07-30) ----------

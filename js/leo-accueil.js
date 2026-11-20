@@ -268,7 +268,7 @@
 
   // Écho d'issue renvoyé au MODÈLE : borné. Une page du journal intime va
   // jusqu'à 20 000 caractères ; son écho entier dépassait MAX_MESSAGE_CHARS
-  // (4 000, api/_lib/leo.js) et faisait refuser le tour suivant (400) jusqu'au
+  // (alors 4 000, api/_lib/leo.js) et faisait refuser le tour suivant (400) jusqu'au
   // rechargement — sur la carte depuis L2b, et désormais sans clic (B1 ④).
   // La bulle montre TOUT à Paul ; le modèle n'a besoin que de savoir ce qui a
   // été fait. Relevé par la revue du 30/09. PUR.
@@ -1000,7 +1000,7 @@
     var champ = document.createElement('input');
     champ.type = 'text';
     champ.className = 'leo-voix-champ';
-    champ.maxLength = 4000;
+    champ.maxLength = 16000; // miroir de MAX_MESSAGE_CHARS (api/_lib/leo.js)
     champ.placeholder = 'Dictez ou écrivez à Léo…';
     champ.setAttribute('aria-label', 'Votre message à Léo');
     var envoyer = el('button', 'leo-voix-envoyer', 'Envoyer');
