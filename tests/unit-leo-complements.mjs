@@ -25,7 +25,7 @@ for (const s of manifeste.sources) {
 }
 
 // 2. Skills installés : frontmatter valide, nom = dossier, références présentes.
-for (const nom of ['methode-paul', 'directive-zs', 'rapport-client-pro']) {
+for (const nom of ['methode-paul', 'directive-zs', 'rapport-client-pro', 'administratif']) {
   const t = lire(`.claude/skills/${nom}/SKILL.md`);
   const fm = /^---\n([\s\S]*?)\n---\n/.exec(t);
   ok(fm, `${nom} : frontmatter absent`);

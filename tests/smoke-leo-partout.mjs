@@ -434,6 +434,61 @@ console.log('\n§8 — sans le module de cartouche, PAS de bouton (le défaut du
   await page.close();
 }
 
+console.log('\n§9 — RIVEN : le dock au-dessus de la barre d’onglets, sans bande noire (constat du 20/11)');
+{
+  // Paul, 20/11/2026 : sur riven.html connecté, le dock (z 900) passait SOUS la
+  // barre d'onglets fixe (z 1200) — « Parler » invisible — et la gouttière du
+  // body raccourcissait les espaces : bande noire au-dessus de la barre.
+  for (const [largeur, hauteur] of [[1464, 677], [390, 844]]) {
+    const page = await navigateur.newPage({ viewport: { width: largeur, height: hauteur } });
+    const erreurs = [];
+    page.on('pageerror', (e) => erreurs.push(e.message));
+    await page.addInitScript(() => { Object.defineProperty(window, 'ULTIMA_CONFIG', {
+      value: { SUPABASE_URL: 'https://exemple.supabase.co', SUPABASE_ANON_KEY: 'k' }, writable: false }); });
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+    await page.route('**/api/**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: [] }) }));
+    await page.route('**/js/vendor/supabase-js-2.110.0.min.js', (r) => r.fulfill({
+      contentType: 'application/javascript',
+      body: `window.supabase = { createClient: function () {
+        var q = { select: () => q, eq: () => q, order: () => q, limit: () => q, in: () => q, is: () => q,
+          then: (f) => Promise.resolve({ data: [], error: null }).then(f) };
+        return { from: () => q, auth: {
+          getSession: () => Promise.resolve({ data: { session: { user: { id: "u-test" }, access_token: "jeton-factice" } } }),
+          getUser: () => Promise.resolve({ data: { user: { id: "u-test" } } }),
+          onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) } }; } };`,
+    }));
+    await page.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
+    await page.waitForTimeout(1200);
+    await page.keyboard.press('Escape');
+    await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
+    await page.waitForTimeout(500);
+    const m = await page.evaluate(() => {
+      const boite = (s) => { const e = document.querySelector(s); return e ? e.getBoundingClientRect() : null; };
+      return { dock: boite('#leo-dock'), barre: boite('.barre-onglets'), espace: boite('#espace-accueil'),
+        padBody: getComputedStyle(document.body).paddingBottom };
+    });
+    // Verrou de non-vacuité : sans dock ni barre, les verdicts suivants seraient verts pour rien.
+    verifier(`${largeur} px : verrou — le dock et la barre d’onglets sont présents`, !!(m.dock && m.barre));
+    if (m.dock && m.barre) {
+      verifier(`${largeur} px : le dock finit au-dessus de la barre d’onglets`, m.dock.bottom <= m.barre.top,
+        `dock.bottom=${Math.round(m.dock.bottom)} barre.top=${Math.round(m.barre.top)}`);
+      verifier(`${largeur} px : l’espace d’accueil descend jusqu’à la barre (pas de bande noire)`,
+        m.espace && m.espace.bottom >= m.barre.top - 1,
+        `espace.bottom=${m.espace && Math.round(m.espace.bottom)} barre.top=${Math.round(m.barre.top)}`);
+      verifier(`${largeur} px : « Parler » est cliquable (rien ne le recouvre)`, await page.evaluate(() => {
+        const b = document.querySelector('#leo-dock .leo-dock-parler');
+        if (!b) return false;
+        const r = b.getBoundingClientRect();
+        const e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        return !!e && (e === b || b.contains(e));
+      }));
+    }
+    verifier(`${largeur} px : zéro erreur de page`, erreurs.length === 0, erreurs[0]);
+    await page.close();
+  }
+}
+
 await navigateur.close();
 console.log(echecs === 0
   ? '\n=== smoke-leo-partout : TOUT VERT ==='

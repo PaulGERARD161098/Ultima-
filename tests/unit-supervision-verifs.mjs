@@ -2,6 +2,8 @@
 // (supabase/verifs/supervision-*.sql) — validés sur un cas dont on connaît la
 // réponse : migration intacte → tout vert ; migration sabotée → le script le dit.
 // Un instrument jamais vu en rouge ne prouve rien.
+// Chaque base est FERMÉE après usage : sans close(), 9 PGlite cumulaient 2,47 Go
+// et la CI (conteneur --memory 2g) tuait la suite sans un mot (17/11/2026).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
@@ -33,6 +35,7 @@ async function lancerParcours(db) {
   assert.equal((await db.query('select count(*)::int as n from public.supervision_decisions')).rows[0].n, 0, 'le parcours a laissé des lignes');
   // Rejouable : la base est revenue vide.
   assert.match(await lancerParcours(db), /^PARCOURS_OK/);
+  await db.close();
 }
 
 // ── 2. Sabotages : chaque script vire au rouge sur ce qu'il garde ──────────
@@ -53,23 +56,27 @@ for (const [nom, a, b, ligne] of sabotages) {
   const db = await base(migration.replace(a, b));
   const faux = (await db.query(etat)).rows.filter((l) => l.ok !== true).map((l) => l.n);
   assert.ok(faux.includes(ligne), `${nom} : la ligne ${ligne} reste vraie (fausses : ${faux})`);
+  await db.close();
 }
 { // le parcours voit un refus qui ne tient pas (verrou S1 retiré, réouverture sans date)
   const a = "      and d.statut = 'REFUSEE'\n      and (d.prochain_reexamen_le is null";
   assert.ok(migration.includes(a), 'motif du verrou de refus absent');
   const db = await base(migration.replace(a, "      and d.statut = 'JAMAIS'\n      and (d.prochain_reexamen_le is null"));
   assert.match(await lancerParcours(db), /^ECHEC/);
+  await db.close();
 }
 { // et une preuve inventée qui passerait
   const a = "u.id !~ '^(zoh|finubar):";
   const db = await base(migration.replace(a, "u.id !~ '^(zoh|finubar|fake-uuid):|^fake-uuid-123$|^"));
   assert.match(await lancerParcours(db), /^ECHEC/);
+  await db.close();
 }
 { // sans migration : la lecture dit tout faux, sans planter
   const db = await base('select 1;');
   const r = (await db.query(etat)).rows;
   assert.equal(r.length, 12);
   assert.ok(r.every((l) => l.ok === false), 'une vérification vraie sans migration : ' + r.filter((l) => l.ok !== false).map((l) => l.n));
+  await db.close();
 }
 
 console.log('✓ supervision-verifs : scripts de Paul éprouvés, verts sur la migration, rouges sur ses sabotages');

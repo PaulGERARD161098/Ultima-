@@ -84,6 +84,13 @@ verdicts.contenuInvalide = validerConversation([{ role: 'user', content: '   ' }
   validerConversation([{ role: 'user', content: 42 }]).ok === false;
 verdicts.messageTropLong = validerConversation(
   [{ role: 'user', content: 'x'.repeat(MAX_MESSAGE_CHARS + 1) }]).ok === false;
+// Des notes de réunion collées (14 000 caractères, constat du 20/11/2026) passent
+// en un tour, et la borne exacte aussi ; le cumul reste tenu par MAX_TOTAL_CHARS.
+verdicts.notesColleesAcceptees = validerConversation(
+  [{ role: 'user', content: 'x'.repeat(14000) }]).ok === true &&
+  validerConversation([{ role: 'user', content: 'x'.repeat(MAX_MESSAGE_CHARS) }]).ok === true &&
+  validerConversation([{ role: 'user', content: 'x'.repeat(MAX_MESSAGE_CHARS) },
+    { role: 'assistant', content: 'ok' }, { role: 'user', content: 'x'.repeat(MAX_MESSAGE_CHARS) }]).ok === false;
 verdicts.tropDeMessages = validerConversation(
   Array.from({ length: MAX_MESSAGES + 1 }, () => ({ role: 'user', content: 'a' }))).ok === false;
 {
@@ -108,7 +115,9 @@ verdicts.extraitVide = extraireTexte([]) === '' && extraireTexte(null) === '' &&
   extraireTexte([{ type: 'tool_use' }]) === '';
 
 // ---------- 6. Constantes de coût plafonnées (garde-fou budget) ----------
+// Un message ne dépasse jamais le plafond global, et le global ne bouge pas (20/11/2026).
 verdicts.plafondsCout = MAX_TOKENS_REPONSE <= 2048 && MAX_TOTAL_CHARS <= 30000 &&
+  MAX_MESSAGE_CHARS === 16000 && MAX_MESSAGE_CHARS < MAX_TOTAL_CHARS &&
   typeof LEO_MODELE === 'string' && LEO_MODELE.length > 0;
 
 // ---------- 7. Garde de débit par utilisateur (fermeture S-L2-1) ----------
