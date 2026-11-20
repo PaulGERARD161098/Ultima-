@@ -535,6 +535,17 @@ body:has(.leo-appel) { padding-bottom: var(--leo-gouttiere); }
 .leo-dock--proactif { border-color: rgba(216,189,130,.88); box-shadow: 0 6px 18px rgba(0,0,0,.5); }
 body:has(.leo-dock) > .leo-appel { position: static; inset: auto; box-shadow: none; text-transform: none; letter-spacing: 0; }
 body:has(.leo-dock) { padding-bottom: 5.5rem; }
+
+/* PAGES À BARRE D'ONGLETS (RIVEN) — constat de Paul, 20/11/2026 : le dock
+   (z 900) passait SOUS la barre d'onglets fixe (z 1200), et la gouttière posée
+   sur le body raccourcissait les espaces, d'où une bande noire au-dessus.
+   Ici les espaces défilent EN INTERNE : la gouttière va dans l'espace qui
+   défile, et le dock se pose au-dessus de la barre. Garde : smoke-leo-partout §9. */
+body:has(.barre-onglets):has(.leo-dock) { padding-bottom: 0; }
+body:has(.barre-onglets) .leo-dock {
+  bottom: calc(var(--hauteur-onglets, 56px) + env(safe-area-inset-bottom) + .5rem);
+}
+body:has(.barre-onglets):has(.leo-dock) .espace { padding-bottom: 5.5rem; }
 /* LÉO SEUL EN BAS (08/10/2026) : le bandeau Finubar et le cartouche de parole
    qui s'empilaient sur le dock sont retirés de l'écran (css/ciel-noeud.css,
    js/ciel-noeud.mjs). Le dock pose donc seul, au bas de toutes les pages. */
