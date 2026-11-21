@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="fr">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Ultima · Rose des projets</title
+  ><style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #0b1119;
+      color: #eaeef4;
+      font:
+        15px/1.5 system-ui,
+        sans-serif;
+    }
+    header,
+    main {
+      width: min(1500px, 96%);
+      margin: auto;
+    }
+    header {
+      height: 60px;
+      border-bottom: 1px solid #293647;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header b {
+      letter-spacing: 0.2em;
+    }
+    i {
+      color: #e8bf83;
+      font-style: normal;
+    }
+    small,
+    p {
+      color: #a1aec0;
+    }
+    h1 {
+      font:
+        normal clamp(32px, 4vw, 51px)/1.1 Georgia,
+        serif;
+      margin: 26px 0 7px;
+      letter-spacing: -0.04em;
+    }
+    p {
+      margin: 0 0 18px;
+    }
+    .frame {
+      background: #0d1620;
+      border: 1px solid #293647;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .map {
+      overflow: auto;
+      scrollbar-color: #485867 #111b26;
+    }
+    .map svg {
+      display: block;
+    }
+    g[data-id] {
+      cursor: pointer;
+    }
+    g[data-id]:focus-visible rect,
+    g[data-id]:hover rect {
+      stroke: #fff1cc;
+      stroke-width: 2;
+    }
+    button,
+    summary {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+    button {
+      background: transparent;
+      border: 1px solid #425263;
+      border-radius: 8px;
+      padding: 6px 11px;
+    }
+    footer {
+      min-height: 45px;
+      padding: 8px 14px;
+      border-top: 1px solid #293647;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    output {
+      font-size: 13px;
+      color: #e8bf83;
+    }
+    .mobile {
+      display: none;
+    }
+    .mobile summary,
+    .leaf {
+      padding: 9px 6px;
+    }
+    .mobile details,
+    .leaf {
+      margin-left: 8px;
+      border-left: 1px solid #4b5863;
+      padding-left: 7px;
+    }
+    .mobile svg {
+      width: 22px;
+      height: 22px;
+      vertical-align: middle;
+      margin-right: 7px;
+    }
+    .leaf {
+      display: block;
+      border-radius: 0;
+      border-width: 0 0 0 1px;
+      text-align: left;
+    }
+    .mini {
+      display: block;
+      margin: auto;
+    }
+    .mini svg {
+      width: 100%;
+      height: 100%;
+    }
+    @media (max-width: 700px) {
+      .mobile {
+        display: block;
+        padding: 4px 10px 16px;
+      }
+      .map {
+        display: none;
+      }
+      .mobile .mini {
+        width: min(100%, 365px);
+        height: auto;
+        aspect-ratio: 1;
+        margin: auto;
+      }
+      .mobile .mini > svg {
+        display: block;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .mobile .mini svg svg {
+        width: 24px;
+        height: 24px;
+        margin: 0;
+      }
+      .mobile .nest {
+        margin-left: 4px;
+      }
+      main {
+        width: 94%;
+      }
+      h1 {
+        margin-top: 18px;
+      }
+      .frame {
+        border-radius: 12px;
+      }
+    }
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid #e8bf83;
+    }
+    .info {
+      border-top: 1px solid #293647;
+      padding: 15px 20px 18px;
+    }
+    .info strong {
+      font:
+        25px Georgia,
+        serif;
+    }
+    .info span {
+      color: #e8bf83;
+      margin-left: 12px;
+      font-size: 13px;
+    }
+    .info p {
+      margin: 5px 0;
+      color: #c2cbd6;
+    }
+    .info a {
+      color: #a1bfd7;
+      font-size: 13px;
+    }
+    .info p:empty {
+      display: none;
+    }
+    #zoom svg {
+      display: block;
+      width: 100%;
+      max-width: 1120px;
+      margin: auto;
+    }
+    #zoom [data-open] {
+      cursor: pointer;
+    }
+    #zoom [data-open]:is(:hover, :focus-visible) rect {
+      stroke: #e8bf83;
+      stroke-width: 2;
+    }
+    .focused .map,
+    .focused .mobile {
+      display: none;
+    }
+    #zoom:focus {
+      outline: none;
+    }
+    footer output {
+      margin-right: auto;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      #zoom svg {
+        animation: arrive 0.24s ease-out;
+      }
+      @keyframes arrive {
+        from {
+          opacity: 0.35;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    }
+    header {
+      display: none;
+    }
+    h1 {
+      margin-top: 16px;
+    }
+  </style>
+  <header>
+    <b><i>✧</i> ULTIMA</b><small>Cockpit de Léo</small>
+  </header>
+  <main>
+    <h1>Rose des projets</h1>
+    <p id="hint">
+      Survole une branche pour la déployer. Utilise les flèches au clavier pour
+      explorer.
+    </p>
+    <section class="frame">
+      <div class="map"></div>
+      <div class="mobile"></div>
+      <div id="zoom" hidden></div>
+      <footer>
+        <output aria-live="polite"></output
+        ><button hidden id="select-cap">Travailler ici avec Léo</button
+        ><button id="ret" hidden>← Retour</button
+        ><button id="home">Vue d’ensemble</button>
+      </footer>
+      <section class="info" aria-label="Fiche projet">
+        <div><strong id="title"></strong><span id="state"></span></div>
+        <p id="summary"></p>
+        <p id="milestone"></p>
+        <a id="source" target="_blank" rel="noopener">Voir la source</a>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="js/leo-boussole-vue.mjs"></script>
+</html>

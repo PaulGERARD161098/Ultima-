@@ -192,3 +192,7 @@ function monterRose() {
 }
 
 if (typeof document !== 'undefined' && document.getElementById('leo-rose')) monterRose();
+
+if (typeof document !== 'undefined' && document.getElementById('rose-vue-macro')) {
+  import('./leo-boussole-cockpit.mjs').then(({ monterBoussoleCockpit }) => monterBoussoleCockpit());
+}
