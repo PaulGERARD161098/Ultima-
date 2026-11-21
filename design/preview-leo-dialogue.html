@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette dialogue Léo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE : Ultima, antique et sérieux — une carte savante la nuit, encre et or.
+   IDEA : le carnet de bord du cartographe, ouvert à droite de la carte ; Léo y écrit sur parchemin.
+   PICTURE : l'écran Ultima réel, panneau de dialogue ouvert, puis la même chose sur téléphone.
+   COLOUR and TYPE : nuit #0c1626, or #d8bd82, parchemin #efe3c6 ; Cormorant Garamond + Inter.
+   LAYOUT : maquette bureau pleine largeur, mobile et choix côte à côte en dessous. */
+:root{color-scheme:dark;--nuit:#0c1626;--abysse:#050b14;--or:#d8bd82;--or-doux:#a9884a;--parch:#efe3c6;--sepia:#3b2f1c;--sepia-doux:#6a5636;--ligne:rgba(216,189,130,.35);--texte:#e9e1cf}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--abysse);color:var(--texte);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+.band{padding:clamp(24px,4vw,56px) max(4vw,16px);max-width:1320px;margin:0 auto}
+.tete h1{font-size:clamp(32px,4vw,46px);color:var(--parch)}
+.tete p{margin:.5rem 0 0;color:#b9ae96;max-width:70ch}
+.ex{font-size:13px;color:#8f856f;margin-top:.4rem}
+/* --- écran bureau --- */
+.ecran{position:relative;margin-top:24px;height:760px;border:1px solid var(--ligne);border-radius:8px;overflow:hidden;background:var(--nuit)}
+.bandeau{height:56px;display:flex;align-items:center;gap:14px;padding:0 18px;background:linear-gradient(180deg,#123a52,#0d2a3e);border-bottom:1px solid var(--ligne)}
+.cartouche{border:2px solid var(--or-doux);padding:4px 14px;font-family:"Cormorant Garamond",serif;letter-spacing:.3em;color:var(--or);font-size:18px}
+.fond{padding:28px 40px;opacity:.38;filter:saturate(.6)}
+.fond h2{font-size:34px;color:var(--parch)}
+.fond .tuile{height:54px;border:1px solid var(--ligne);border-radius:6px;margin-top:14px;max-width:520px}
+.onglets{position:absolute;inset:auto 0 0 0;height:52px;display:flex;background:var(--abysse);border-top:1px solid var(--ligne)}
+.onglets span{flex:1;display:grid;place-items:center;font-size:12px;color:#8f856f}
+.onglets span.actif{color:var(--or);border-top:2px solid var(--or)}
+/* --- le panneau --- */
+.panneau{position:absolute;top:56px;right:0;bottom:52px;width:min(460px,100%);display:flex;flex-direction:column;background:linear-gradient(180deg,#0f1d31,#08111f);border-left:1px solid var(--or-doux);box-shadow:-18px 0 40px rgba(0,0,0,.45)}
+.p-tete{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--ligne)}
+.rose{width:38px;height:38px;flex:none}
+.p-tete h3{font-size:24px;color:var(--parch)}
+.p-tete small{display:block;font-size:12px;color:#a99e86;font-family:Inter,sans-serif}
+.fermer{margin-left:auto;min-height:40px;padding:0 12px;border:1px solid var(--ligne);border-radius:4px;background:none;color:var(--texte);font:inherit;font-size:14px;cursor:pointer}
+.fil{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.msg{max-width:88%;border-radius:8px;padding:10px 13px;font-size:15px;line-height:1.5;white-space:pre-wrap}
+.paul{align-self:flex-end;background:#16304a;border:1px solid var(--ligne)}
+.colle{display:flex;gap:10px;align-items:center}
+.colle b{font-weight:600}.colle em{font-style:normal;color:#a99e86;font-size:13px}
+.leo{align-self:flex-start;background:var(--parch);color:var(--sepia);white-space:normal;border:1px solid var(--or-doux)}
+.leo h4{margin:.2rem 0 .3rem;font:600 13px/1.3 Inter,sans-serif;color:var(--sepia-doux)}
+.leo ol,.leo ul{margin:.1rem 0 .5rem;padding-left:1.2rem}.leo li{margin:.15rem 0}
+.leo strong{color:#2a2012}
+.carte{align-self:stretch;border:1px solid var(--or);border-radius:8px;padding:12px;background:rgba(216,189,130,.08)}
+.carte p{margin:0 0 10px;font-size:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{min-height:40px;padding:0 14px;border-radius:4px;font:600 14px Inter,sans-serif;cursor:pointer;border:1px solid var(--or-doux);background:none;color:var(--texte)}
+.btn.prim{background:var(--or);color:#1b140a;border-color:var(--or)}
+.issue{align-self:center;font-size:13px;color:#b9ae96;display:flex;gap:10px;align-items:center}
+.issue button{background:none;border:0;color:var(--or);font:inherit;text-decoration:underline;cursor:pointer}
+.saisie{border-top:1px solid var(--ligne);padding:12px 14px 14px}
+.zone{display:flex;align-items:flex-end;gap:8px;border:1px solid var(--or-doux);border-radius:8px;background:#0b1626;padding:6px 6px 6px 12px}
+.zone:focus-within{outline:2px solid var(--or);outline-offset:2px}
+textarea{flex:1;resize:none;border:0;background:none;color:var(--texte);font:16px/1.45 Inter,sans-serif;max-height:9.5em;padding:6px 0;outline:none}
+.micro,.envoyer{flex:none;min-width:44px;min-height:44px;border-radius:6px;border:1px solid var(--ligne);background:none;color:var(--texte);cursor:pointer;display:grid;place-items:center}
+.envoyer{background:var(--or);color:#1b140a;border-color:var(--or);font:600 14px Inter,sans-serif;padding:0 14px}
+.aide{margin:6px 2px 0;font-size:12px;color:#8f856f}
+/* --- bas : mobile + choix --- */
+.duo{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:start}
+.tel{position:relative;height:720px;border:10px solid #1c2738;border-radius:34px;overflow:hidden;background:var(--nuit)}
+.tel .panneau{top:0;bottom:0;width:100%;border-left:0;box-shadow:none}
+.choix h2{font-size:clamp(26px,3vw,34px);color:var(--parch);margin-bottom:12px}
+.choix ol{padding-left:1.2rem;margin:0}.choix li{margin:.55rem 0;max-width:62ch}
+.choix strong{color:var(--parch)}
+.q{margin-top:22px;border-top:1px solid var(--ligne);padding-top:14px}
+.q p{margin:.4rem 0;color:#cfc5ae}
+@media(max-width:860px){.duo{grid-template-columns:minmax(0,1fr)}.tel{max-width:400px;margin:0 auto;width:100%}.ecran{height:600px}.fond{display:none}}
+@media(max-width:600px){.ecran .panneau{width:100%}}
+@media(prefers-reduced-motion:reduce){.fil{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<section class="band tete">
+  <h1>Léo, un vrai panneau de dialogue sur toutes les pages</h1>
+  <p>Le bouton « Parler » de la barre de Léo ouvre ce carnet à droite, sur n'importe quelle page d'Ultima. Les réponses gardent leurs lignes, leurs listes et leur gras ; le champ accepte un long collage sur plusieurs lignes.</p>
+  <p class="ex">Maquette : contact, notes et réponse sont des exemples, aucune donnée réelle.</p>
+
+  <div class="ecran" aria-label="Maquette bureau">
+    <div class="bandeau"><span class="cartouche">ULTIMA</span><span style="font-size:13px;color:#a99e86">RIVEN · le réseau commercial</span></div>
+    <div class="fond"><h2>Bienvenue, Paul</h2><div class="tuile"></div><div class="tuile"></div><div class="tuile"></div></div>
+    <aside class="panneau" id="pan-bureau"></aside>
+    <div class="onglets"><span class="actif">Accueil</span><span>Ciel</span><span>Contacts</span></div>
+  </div>
+</section>
+
+<section class="band duo">
+  <div class="tel" aria-label="Maquette téléphone"><aside class="panneau" id="pan-tel"></aside></div>
+  <div class="choix">
+    <h2>Ce qui change, et pourquoi</h2>
+    <ol>
+      <li><strong>Un panneau, plus une fenêtre modale.</strong> Il s'ouvre à droite sur toute la hauteur et laisse la page visible ; sur téléphone il prend tout l'écran.</li>
+      <li><strong>Un fil de conversation.</strong> Tes messages à droite, Léo à gauche sur parchemin. Les retours à la ligne, listes numérotées et gras s'affichent vraiment.</li>
+      <li><strong>Un long collage reste lisible.</strong> Il apparaît replié (« Notes collées · 14 012 caractères ») et se déplie au clic.</li>
+      <li><strong>Un champ de plusieurs lignes.</strong> Entrée envoie, Maj+Entrée va à la ligne ; la dictée reste au même endroit.</li>
+      <li><strong>Les gestes de Léo dans le fil.</strong> La carte « Mettre dans le journal » se confirme sur place, puis l'issue se défait d'un clic, comme aujourd'hui.</li>
+      <li><strong>Un seul bouton de sortie : « Fermer ».</strong> « C'est parti » disparaît.</li>
+    </ol>
+    <div class="q">
+      <p><strong>Sécurité :</strong> la mise en forme est construite élément par élément, jamais injectée en HTML ; un test tentera l'injection.</p>
+      <p><strong>Essaie :</strong> écris dans le champ du panneau bureau, Entrée pour envoyer.</p>
+    </div>
+  </div>
+</section>
+
+<template id="modele">
+  <div class="p-tete">
+    <svg class="rose" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#efe3c6" stroke="#a9884a"/><path d="M20 4l4 16-4 16-4-16z" fill="#3b2f1c"/><path d="M4 20l16-4 16 4-16 4z" fill="#6a5636"/></svg>
+    <div><h3>Léo</h3><small>RIVEN · elle voit ton réseau</small></div>
+    <button class="fermer" type="button">Fermer</button>
+  </div>
+  <div class="fil" aria-live="polite">
+    <div class="msg paul"><div class="colle"><span>📋</span><span><b>Notes collées</b><br><em>14 012 caractères · voir</em></span></div>Compte rendu du rendez-vous avec l'Atelier Lambert.</div>
+    <div class="msg leo">
+      <h4>Compte rendu · Atelier Lambert · 20/11</h4>
+      <strong>Décidé</strong>
+      <ol><li>Campagne de leads rénovation dans l'Allier, lancement le 4 janvier.</li><li>Commission au succès : 50/50 sur le courtage, HT.</li></ol>
+      <strong>À confirmer</strong>
+      <ul><li>Date de la rencontre à Paris : 14/12 ou début janvier.</li></ul>
+      <strong>Actions</strong>
+      <ul><li>Paul · prototype de contrat · 4/12</li><li>Atelier Lambert · fiche Google et avis · [à préciser]</li></ul>
+      <strong>Ce que ça rapproche :</strong> le contrat de partenariat, à signer avant le 4/01.
+    </div>
+    <div class="carte"><p>Mettre ce compte rendu dans le journal de <strong>Atelier Lambert</strong> ?</p><div class="actions"><button class="btn prim" type="button">Confirmer</button><button class="btn" type="button">Modifier</button></div></div>
+    <div class="issue">✓ Note ajoutée au journal <button type="button">Défaire</button></div>
+  </div>
+  <form class="saisie">
+    <div class="zone"><textarea rows="1" placeholder="Écris, colle ou dicte à Léo…" aria-label="Ton message à Léo"></textarea><button class="micro" type="button" aria-label="Dicter">🎙</button><button class="envoyer" type="submit">Envoyer</button></div>
+    <p class="aide">Entrée pour envoyer · Maj+Entrée pour aller à la ligne</p>
+  </form>
+</template>
+
+<script>
+{
+  const modele = document.getElementById('modele');
+  for (const id of ['pan-bureau', 'pan-tel']) {
+    const p = document.getElementById(id);
+    p.appendChild(modele.content.cloneNode(true));
+    const fil = p.querySelector('.fil'), champ = p.querySelector('textarea'), form = p.querySelector('form');
+    const ajuster = () => { champ.style.height = 'auto'; champ.style.height = champ.scrollHeight + 'px'; };
+    champ.addEventListener('input', ajuster);
+    champ.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const t = champ.value.trim(); if (!t) return;
+      const m = document.createElement('div'); m.className = 'msg paul'; m.textContent = t; fil.appendChild(m);
+      const r = document.createElement('div'); r.className = 'msg leo'; r.textContent = 'Réponse simulée : dans la vraie version, Léo répond ici.'; fil.appendChild(r);
+      champ.value = ''; ajuster(); fil.scrollTop = fil.scrollHeight;
+    });
+    fil.scrollTop = fil.scrollHeight;
+  }
+}
+</script>
+</body>
+</html>

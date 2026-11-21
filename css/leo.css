@@ -26,8 +26,10 @@
 }
 
 .leo-cartouche {
-  width: min(92vw, 560px);
-  max-height: min(86vh, 660px);
+  /* Étape A du dialogue (20/11/2026) : plus large et plus haut, pour lire un
+     compte rendu sans faire défiler une meurtrière. */
+  width: min(94vw, 720px);
+  max-height: min(92vh, 860px);
   overflow-y: auto;
   padding: 1.25rem 1.4rem 1.2rem;
   color: var(--encre-sepia, #3b2f1c);
@@ -164,8 +166,8 @@
 .leo-dialogue {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  max-height: 200px;
+  gap: 0.55rem;
+  max-height: min(56vh, 520px);
   overflow-y: auto;
   margin: 0 0 0.5rem;
 }
@@ -198,6 +200,19 @@
 }
 
 .leo-bulle-attente { font-style: italic; color: var(--encre-sepia-douce, #6a5636); }
+
+/* Mise en forme des réponses de Léo (étape A, 20/11/2026) — voir
+   ecrireFormate() dans js/leo-accueil.js. Le message de Paul garde ses lignes. */
+.leo-bulle-paul { white-space: pre-wrap; overflow-wrap: anywhere; }
+.leo-bulle-leo { overflow-wrap: anywhere; }
+.leo-md-ligne, .leo-md-titre { display: block; margin: 0.15rem 0; }
+.leo-md-titre { font-weight: 700; margin-top: 0.45rem; }
+.leo-md-titre:first-child { margin-top: 0; }
+.leo-md-liste { margin: 0.2rem 0 0.35rem; padding-left: 1.3rem; }
+.leo-md-liste li { margin: 0.12rem 0; }
+.leo-bulle-collee summary { cursor: pointer; font-weight: 600; list-style-position: inside; }
+.leo-bulle-collee summary:focus-visible { outline: 2px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.leo-colle-texte { margin: 0.45rem 0 0; max-height: 14rem; overflow-y: auto; white-space: pre-wrap; font-size: 0.88rem; }
 
 /* Suivi du 24/10 : mêmes jetons que le cartouche, jalons déclarés distincts
    de l'attente indéterminée d'une réponse. Aucune animation de faux progrès. */
@@ -362,6 +377,9 @@
 .leo-voix-champ {
   flex: 1;
   min-height: 44px;
+  max-height: 220px;   /* miroir de ajusterChamp() */
+  resize: none;
+  line-height: 1.4;
   padding: 0.45rem 0.7rem;
   font: inherit;
   font-size: 0.98rem;
@@ -395,6 +413,8 @@
 .leo-voix-envoyer:hover { background: linear-gradient(#1f6787, #114560); }
 .leo-voix-envoyer:focus-visible { outline: 3px solid var(--accent, #1e6fb8); outline-offset: 2px; }
 .leo-voix-envoyer:disabled, .leo-voix-champ:disabled { opacity: 0.55; cursor: default; }
+.leo-voix-formulaire { align-items: flex-end; }
+.leo-voix-aide { margin: 0.3rem 0 0; font-size: 0.8rem; color: var(--encre-sepia-douce, #6a5636); }
 
 .leo-pied {
   display: flex;
@@ -421,6 +441,51 @@
 .leo-partir:hover { background: linear-gradient(#1f6787, #114560); }
 .leo-partir:focus-visible { outline: 3px solid var(--accent, #1e6fb8); outline-offset: 2px; }
 
+/* ---------- Étape B du dialogue (maquette validée le 20/11/2026) ----------
+   Le cartouche devient un PANNEAU LATÉRAL à droite, sur toute la hauteur, sur
+   toutes les pages (le composant est le même partout : js/leo-accueil.js).
+   La page reste visible derrière un voile léger ; le dialogue reste modal
+   (aria-modal, focus piégé, Échap et clic dehors ferment). Le fil prend la
+   place libre, la saisie reste collée en bas, « Fermer » monte en haut à droite.
+   Garde : smoke-leo-dialogue (géométrie du panneau, bureau et téléphone). */
+.leo-voile {
+  justify-content: flex-end;
+  align-items: stretch;
+  padding: 0;
+  background: rgba(4, 16, 28, 0.38);
+}
+.leo-cartouche {
+  position: relative;
+  width: min(100vw, 480px);
+  height: 100dvh;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  border-width: 0 0 0 1px;
+  padding: 1.1rem 1.2rem calc(0.9rem + env(safe-area-inset-bottom));
+  animation: leo-panneau-entre 0.18s ease-out;
+}
+@keyframes leo-panneau-entre { from { transform: translateX(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+.leo-entete { padding-right: 6.5rem; }                 /* place de « Fermer » */
+.leo-pied { position: absolute; top: 0.95rem; right: 1.1rem; margin: 0; }
+.leo-partir { min-height: 44px; padding: 0.4rem 1rem; font-size: 0.92rem; box-shadow: none; }
+/* Avec la voix, c'est le FIL qui défile, pas le panneau (revue Codex du 21/11,
+   reproduite : après trois longues réponses, la dernière sortait de l'écran et
+   dialogue.scrollTop ne la ramenait plus). Le panneau ne défile plus ; les
+   sections du haut gardent au plus 30 % de la hauteur et défilent seules. */
+.leo-cartouche:has(.leo-section-voix) { overflow: hidden; }
+.leo-cartouche:has(.leo-section-voix) > .leo-section:not(.leo-section-voix) {
+  flex: 0 1 auto; min-height: 0; max-height: 30dvh; overflow-y: auto;
+}
+.leo-section-voix { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; margin-bottom: 0; }
+.leo-section-voix .leo-dialogue { flex: 1 1 auto; max-height: none; min-height: 6rem; }
+.leo-section-voix .leo-voix-formulaire {
+  position: sticky; bottom: 0; padding-top: 0.5rem;
+  background: linear-gradient(180deg, transparent, var(--parchemin-carte, #efe3c6) 0.6rem);
+}
+@media (prefers-reduced-motion: reduce) { .leo-cartouche { animation: none; } }
+
 /* Mobile : plein écran doux (le cartouche occupe l'écran, coins droits). */
 @media (max-width: 640px) {
   .leo-voile { padding: 0; align-items: stretch; }
@@ -430,7 +495,7 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
-    padding: 1.1rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+    padding: 1.1rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
   }
 }
 
