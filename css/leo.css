@@ -470,8 +470,16 @@
 .leo-entete { padding-right: 6.5rem; }                 /* place de « Fermer » */
 .leo-pied { position: absolute; top: 0.95rem; right: 1.1rem; margin: 0; }
 .leo-partir { min-height: 44px; padding: 0.4rem 1rem; font-size: 0.92rem; box-shadow: none; }
-.leo-section-voix { flex: 1 0 auto; display: flex; flex-direction: column; min-height: min(60dvh, 520px); margin-bottom: 0; }
-.leo-section-voix .leo-dialogue { flex: 1 1 auto; max-height: none; min-height: 8rem; }
+/* Avec la voix, c'est le FIL qui défile, pas le panneau (revue Codex du 21/11,
+   reproduite : après trois longues réponses, la dernière sortait de l'écran et
+   dialogue.scrollTop ne la ramenait plus). Le panneau ne défile plus ; les
+   sections du haut gardent au plus 30 % de la hauteur et défilent seules. */
+.leo-cartouche:has(.leo-section-voix) { overflow: hidden; }
+.leo-cartouche:has(.leo-section-voix) > .leo-section:not(.leo-section-voix) {
+  flex: 0 1 auto; min-height: 0; max-height: 30dvh; overflow-y: auto;
+}
+.leo-section-voix { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; margin-bottom: 0; }
+.leo-section-voix .leo-dialogue { flex: 1 1 auto; max-height: none; min-height: 6rem; }
 .leo-section-voix .leo-voix-formulaire {
   position: sticky; bottom: 0; padding-top: 0.5rem;
   background: linear-gradient(180deg, transparent, var(--parchemin-carte, #efe3c6) 0.6rem);

@@ -138,6 +138,24 @@ for (const [largeur, hauteur] of [[1280, 860], [390, 844]]) {
   verifier('le collage est replié, avec sa longueur', !repli.ouvert && /Texte collé · .*caractères/.test(repli.resume), JSON.stringify(repli));
   verifier('le collage part en entier vers Léo', requetes.at(-1)?.messages?.some((m) => m.content === colle.trim()));
 
+  // 6-bis. Conversation longue (revue Codex du 21/11) : c'est le FIL qui défile,
+  // pas le panneau, et la dernière réponse arrive à l'écran sans geste de Paul.
+  reponse = Array.from({ length: 18 }, (_, i) => `- ligne ${i + 1} de la réponse`).join('\n');
+  for (let i = 0; i < 3; i++) {
+    const avant = await page.locator('.leo-bulle-leo:not(.leo-bulle-attente)').count();
+    await champ.fill('Question longue ' + i);
+    await page.keyboard.press('Enter');
+    await page.waitForFunction((n) => document.querySelectorAll('.leo-bulle-leo:not(.leo-bulle-attente)').length > n, avant, { timeout: 5000 });
+  }
+  const defile = await page.evaluate(() => {
+    const c = document.getElementById('leo-cartouche'), d = document.querySelector('.leo-dialogue');
+    const der = [...document.querySelectorAll('.leo-bulle-leo')].at(-1).getBoundingClientRect();
+    return { panneau: c.scrollHeight > c.clientHeight + 1, fil: d.scrollHeight > d.clientHeight,
+      derniere: der.bottom <= window.innerHeight + 1 && der.top >= 0 };
+  });
+  verifier('conversation longue : le fil défile, pas le panneau', defile.fil && !defile.panneau, JSON.stringify(defile));
+  verifier('conversation longue : la dernière réponse est à l’écran', defile.derniere, JSON.stringify(defile));
+
   // 7. Rien ne déborde, et la page reste saine.
   verifier('rien ne déborde horizontalement', await page.evaluate(() => {
     const c = document.getElementById('leo-cartouche').getBoundingClientRect();
