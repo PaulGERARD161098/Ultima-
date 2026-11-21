@@ -16,6 +16,10 @@
 | `canal-whatsapp/` | **Archive (11/11/2026)** — le canal WhatsApp de RénoDevis (vocal, texte ou PDF du pro → brouillon de devis), retiré du produit sur décision de Paul. Le plan neutre (`TECHNO.md`) et le commit d'archive pour le réimplanter vite |
 | `journal-apprentissages/` | Le journal d’apprentissages : plan neutre, consultation locale, collecte des pièces et recette ouverture / travail / clôture. Préparé ; raccordement automatique non activé |
 
+## Analyse énergétique du logement
+
+`analyse-energetique-logement/` conserve le plan de la recherche de diagnostics, des calculs, des scénarios et des exports, avec un mode personnel sur stockage local. La collecte vérifie les empreintes du code de référence sans recopier ses moteurs ni ses données. Le badge distingue la préparation du code de la réception sur l'ordinateur cible.
+
 ## Présentations claires
 
 `presentations-claires/` porte un socle de narration et de composition : six capacités coordonnées, dix compositions, variables graphiques, moteur local PDF/SVG et recette. La compétence `presentations-claires` guide la création ; les données et rendus propres à chaque projet restent hors du socle. Le badge utilise la publication existante ; aucun nouveau bouton de génération en ligne.

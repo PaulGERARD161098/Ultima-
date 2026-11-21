@@ -1,0 +1,113 @@
+{
+  "depot": "PaulGERARD161098/mon-dpe.fr",
+  "commit": "a81a19054eb9bb4063c49958c84b42b8d23177c7",
+  "date_commit": "2026-11-18T19:26:08Z",
+  "capacites": [
+    {
+      "id": "recherche-diagnostic",
+      "fichiers": [
+        {
+          "chemin": "lib/ademe.ts",
+          "blob": "4dec3a0ab59d758d875ed3affff872c19b255544"
+        },
+        {
+          "chemin": "lib/ban.ts",
+          "blob": "c7ecf58294f958a25d2de7c900aa92817ffc9409"
+        },
+        {
+          "chemin": "lib/neighbors.ts",
+          "blob": "31678b9e829aec495c5abb98ba5d11ac8630b502"
+        }
+      ]
+    },
+    {
+      "id": "moteur-audit",
+      "fichiers": [
+        {
+          "chemin": "lib/audit-pac/index.ts",
+          "blob": "ab585df285509b114f7ba116f91310d289bc634f"
+        },
+        {
+          "chemin": "lib/audit-pac/bilan.ts",
+          "blob": "9740e19badc6555fa598ca19678df239019b9971"
+        },
+        {
+          "chemin": "lib/audit-pac/dimensionnement.ts",
+          "blob": "77b95d7661ecba2d0c9eed5d4e45e1874667f0b9"
+        }
+      ]
+    },
+    {
+      "id": "etudes-scenarios",
+      "fichiers": [
+        {
+          "chemin": "lib/vitruve/projet/types.ts",
+          "blob": "16d0a9010494c0daa5f988893f5e45d628a87725"
+        },
+        {
+          "chemin": "lib/vitruve/projet/store.ts",
+          "blob": "5d79543f7060aa757fd91caf8989ad0b4450fbd2"
+        },
+        {
+          "chemin": "lib/vitruve/projet/scenarios.ts",
+          "blob": "df3de62cd0b32eead462721b5a45d07323db1864"
+        }
+      ]
+    },
+    {
+      "id": "export-etude",
+      "fichiers": [
+        {
+          "chemin": "lib/vitruve/projet/export.ts",
+          "blob": "5280985f799547142b620c4bb4d2e0037d68b52c"
+        },
+        {
+          "chemin": "app/api/vitruve/projet/[id]/export/route.ts",
+          "blob": "d71936d92da171778c39ffecda346fe584d672b7"
+        }
+      ]
+    },
+    {
+      "id": "stockage-personnel",
+      "fichiers": [
+        {
+          "chemin": "lib/personal/sqlite.ts",
+          "blob": "c8e07eb83c6dde5e86ec4d7c8f54351d2957867d"
+        },
+        {
+          "chemin": "lib/personal/config.ts",
+          "blob": "7ef1cee7cc4517f8c0c7b95b1bb36270c97722db"
+        },
+        {
+          "chemin": "lib/vitruve/dossier.ts",
+          "blob": "cd6524d1ee3f843b1e68088472a63e8e42a37015"
+        },
+        {
+          "chemin": "lib/vitruve/core.ts",
+          "blob": "2b3896a56759648bec13d4a5a73af0eec15aa4d6"
+        },
+        {
+          "chemin": "lib/anonymous-id.ts",
+          "blob": "5c6cc248ba77786662f08cfe0bcde4ca002c022e"
+        }
+      ]
+    },
+    {
+      "id": "lancement-personnel",
+      "fichiers": [
+        {
+          "chemin": "scripts/personal.mjs",
+          "blob": "7c27f4481c8ff93440393442ebefd41fb8fb896f"
+        },
+        {
+          "chemin": "Lancer-Mon-DPE.cmd",
+          "blob": "61605e85ddcf54626d57a5846f4c48b2d26251bd"
+        },
+        {
+          "chemin": "next.config.ts",
+          "blob": "fc67e42688261413933591ae49bf1664cfb7a3c5"
+        }
+      ]
+    }
+  ]
+}

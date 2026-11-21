@@ -1,0 +1,10 @@
+{
+  "ordre": 12,
+  "badge": "Analyse énergétique du logement",
+  "etat": "Code conservé · mode personnel préparé · installation cible à recevoir",
+  "onglets": [
+    {"id": "techno", "titre": "Ce que fait la techno", "source": "TECHNO.md"},
+    {"id": "checklist", "titre": "Avant installation", "source": "MISE-EN-SERVICE.md", "sections": ["## 1."]},
+    {"id": "service", "titre": "Mise en service", "source": "MISE-EN-SERVICE.md", "sections": ["## 2.", "## 3."]}
+  ]
+}
