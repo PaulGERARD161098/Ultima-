@@ -2129,3 +2129,60 @@ bornée en heures par semaine avant le lancement.
 **Périmètre de cette fiche** : capture, identités, analyse qualitative.
 Aucun contact, aucun engagement, aucune dépense, aucun score — le bloc E attend
 la forme du lien SOLA et le capital de départ.
+
+---
+
+## ADR-013 — Fonctions à vendre aux artisans, tirées du guide « 50 cas BTP »
+
+- **Capturée le** : 2026-11-21 (tri demandé par Paul le 20/11 : « go tri des 50 cas après #469 »)
+- **Type** : business (évolution des produits RenoDevis et RénoBoost)
+- **Thème** : produit · artisans · relance et encaissement · post-chantier
+- **Source** : guide gratuit « 50 cas d'usage de Claude pour le BTP » (Jérémy Nicolas, 2026), sans licence déclarée : seule la méthode est reprise, aucun texte. L'auteur précise que 39 fiches sur 50 n'ont jamais été essayées : ce sont des pistes, pas des fonctions éprouvées.
+- **Statut** : à raffiner — rien engagé, aucun développement lancé
+
+### L'idée
+
+Les 50 cas décrivent ce qu'un artisan voudrait qu'on fasse à sa place. Trier ce
+qui est déjà dans les produits de Paul, ce qui mérite d'y entrer, et ce qui ne
+concerne pas son offre (artisans de la rénovation, clients particuliers).
+
+### Le tri (50 cas)
+
+**Déjà couverts — 7** (preuve : `zohshia/renodevis/TECHNO.md`, tableau des capacités)
+- Devis rédigé depuis tes notes → lignes « Devis » (à la voix) et « Chiffrage ».
+- Mentions vérifiées avant envoi → ligne « Contrôles avant devis ».
+- Relance des devis sans réponse → ligne « Relance » (moteur qui propose, le pro tranche).
+- Commande vérifiée contre le devis → ligne « Facture » (factures fournisseurs rattachées à chaque devis) — partiel.
+- Réponse à une demande de devis → RénoBoost (leads qualifiés, rendez-vous) — partiel.
+- Compte rendu depuis tes notes, Qui fait quoi → compétence `administratif` de Léo (pour Paul, pas pour l'artisan).
+
+**À ajouter — 5 retenues, couvrant 6 cas**, par proximité d'un encaissement (Directive MS)
+1. **Relance polie d'un impayé** — prolonger le moteur de relance au-delà de la signature, sur la facture définitive. Existant réutilisé : lignes « Relance » et « Facture » (tables `relance_queue`, `relance_gabarits`). Effet : encaissement plus rapide pour l'artisan, argument de vente direct.
+2. **Travaux en plus expliqués (avenant)** — un avenant né du devis signé, signé et payé par le même lien. Existant réutilisé : lignes « Signature » (jeton côté serveur) et « Paiement ». Effet : plus de chiffre par chantier, sans litige.
+3. **Demande d'avis après réception, réponses aux avis Google** — **pas une idée nouvelle** : c'est la séquence post-chantier d'**ADR-004** (satisfaction → avis Google → recommandation). Le guide la confirme ; à rattacher à ADR-004, et à la phase « visibilité » de RénoBoost. Besoin exprimé par un pro le 20/11 (fiche Google à relancer, avis à solliciter).
+4. **Écart entre devis et réalisé** — la marge réelle par chantier, à partir des factures fournisseurs déjà rattachées au devis (ligne « Facture »). Effet : « savoir où l'on gagne », argument de vente pour un artisan qui pilote à l'instinct.
+5. **Réserves suivies jusqu'à la levée** — boucler le chantier après la facture : liste par lot, date limite, relances. Effet : moins de litiges, et un client satisfait juste avant la demande d'avis (n° 3).
+
+**Petites améliorations possibles du devis** (non retenues seules) : postes décrits en mots simples, options chiffrées avec la grille du pro — à essayer dans l'estimation RenoDevis si un pro le demande.
+
+**Écartées — 37**, par famille
+- Appels d'offres (5) : les artisans visés travaillent pour des particuliers, pas sur marchés publics.
+- Sécurité (5) : livret, causerie, consignes, analyse d'accident, check-list — validation humaine obligatoire, hors offre.
+- Équipe et recrutement (5) : pas l'offre de Paul.
+- Achats et fournisseurs (4) : demande de prix, comparaison d'offres, relance de livraison, points à négocier — hors cœur, faible valeur de vente.
+- Planning et suivi (4) : planning par lots, planning revu, tâches par équipe, point hebdo — logique de maîtrise d'œuvre, pas d'artisan seul.
+- Réunions de chantier (3) : notes vocales, ordre du jour, photos légendées — gestion interne ; les photos rejoignent plutôt RénoBoost (avant-après) si besoin.
+- Admin et finance (3) : situation mensuelle (logique B2B), attestations des sous-traitants (à revoir pour un client courtier qui vérifie les décennales), courrier à l'assurance (engage l'entreprise).
+- Relation client (2) : réclamation (litige → alerte, pas de brouillon, règle de Léo), point d'avancement au client.
+- Se faire connaître (4) : post LinkedIn, avant-après, présentation, mail prescripteur — déjà servis par l'agent `prospection` et les compétences de présentation pour Paul, pas comme fonctions produit ; avant-après à garder en tête pour RénoBoost.
+- Devis (2) : postes en mots simples, options chiffrées — reportés en « petites améliorations » ci-dessus.
+
+### Prochaine décision
+
+Choisir **une** des quatre nouvelles (1, 2, 4 ou 5) à cadrer dans le dépôt du
+produit concerné (RenoDevis) ; la n° 3 se traite dans ADR-004. Reco : **n° 1,
+la relance d'impayé** — la plus proche d'un encaissement et la plus courte à
+bâtir sur l'existant.
+
+**Périmètre de cette fiche** : tri et capture. Aucun développement, aucun
+contact, aucune dépense.

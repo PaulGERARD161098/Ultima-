@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v129 2026-11-14 sha256:b2be640a5c43 -->
+<!-- lecons:empreinte v130 2026-11-21 sha256:75c1aab64bb8 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -681,6 +681,16 @@ la donnée réelle (ou une fixture qui a sa forme). Si le défaut tient à une p
 réalité n'a pas, c'est la fixture ou l'oracle qui se corrige, pas le moteur.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN PROCESSUS TUÉ PAR LE CONTENEUR NE LAISSE RIEN — LE LANCEUR DOIT DIRE LE SIGNAL**
+*(2026-11-17, Ultima-, PR Ultima-#469).* La suite `Ultima-/tests/unit-supervision-verifs.mjs` est passée au rouge en CI
+sans un mot : ni stdout, ni stderr, ni erreur. Verte au passage précédent, verte en local. La cause, mesurée et non
+supposée : neuf bases PGlite jamais fermées, pic à 2,47 Go, dans un job lancé sous `--memory 2g` → SIGKILL. Le
+lanceur `Ultima-/tests/run-unit.mjs` n'affichait pas `result.signal` : l'échec se lisait comme un caprice.
+*Ce que cela a coûté* : une exécution de CI perdue et un diagnostic à l'aveugle, à deux doigts d'un « flake ».
+⛔ **La règle** : un échec muet se mesure d'abord en mémoire (pic RSS) avant d'être rejoué ; toute base de test
+s'ouvre et se FERME dans le même bloc ; et le lanceur dit le signal (sabotage : un test qui se tue → « signal
+SIGKILL » affiché). Corrigé le même jour : 0,81 Go.
 
 **UN TEST RÉÉCRIT PEUT FIGER UNE RÉGRESSION — LE PALIER SE CONTRÔLE CONTRE LE CODE D'HIER**
 *(2026-11-12, RenoDevis, correctifs de l'audit Devis express, RenoDevis#535).* Pour l'A3, une réponse du
@@ -2043,6 +2053,15 @@ geste donné à Paul porte sa contre-épreuve : « la fenêtre de confirmation d
 Production ».
 
 ## 4. Conduire une boucle
+
+**UN « JE VALIDE » N'EST PAS UN ACCORD DE FUSION — L'ACCORD NOMME LA FUSION ET LE SHA**
+*(2026-11-21, Ultima-, PR Ultima-#472).* Après l'essai du panneau de Léo, Paul écrit « ça me va, je valide ». La
+fusion lancée sur cette phrase est bloquée par le garde-fou de la séance : elle validait le RENDU, pas la fusion.
+Une revue Codex est arrivée entre-temps et a trouvé un vrai défaut (le panneau défilait au lieu du fil), corrigé
+avant fusion — la fusion « sur validation » aurait livré le défaut.
+*Ce que cela a coûté* : un aller-retour avec Paul et une fusion différée.
+⇒ La question de fusion se pose fermée, avec la PR, la cible et le SHA (« fusionne la PR #N sur <sha> ») ; une
+validation d'essai n'en tient pas lieu. Et entre l'essai et la fusion, relire les revues arrivées sur la tête.
 
 **UN LIVRABLE N'EST PAS FINI TANT QUE CE QUI LE PRODUIT VIT HORS DU DÉPÔT** *(2026-11-11, paggerard-boop/mod-lisation-2-3D, PR #1 puis #2).* La planche avant / après d'une salle de bain SPC a été produite, validée par Paul (« c'est exactement ce genre de choses que je voulais ») et sa PR fusionnée. Mais les vues 3D, le PDF et les deux images à transmettre sortaient de trois scripts restés dans l'espace temporaire de la séance. À la question « à l'avenir, c'est bien ce livrable que me fera l'outil ? », la réponse honnête était non : une séance suivante, repartie de `main`, aurait refait le plan mais ni la 3D ni le PDF.
 *Ce que cela a coûté* : une PR de plus (#2) pour verser une commande unique, et une clôture annoncée trop tôt, rattrapée seulement parce que Paul a posé la question.
