@@ -110,7 +110,9 @@ const cles = new Set(ponts.map((p) => `${p.a}|${p.b}`));
 // (la fiche le relie explicitement à la préparation du chantier) → 28 → 29.
 // ADR-012 Sola Air Paris (2026-11-04, thème bâtiment) : troisième voie du dossier
 // clim (ADR-002 bâtir, ADR-010 acheter), logée dans ADR-007 → 29 → 32.
-verdicts.pontsDetectes = ponts.length === 32 && cles.has('ADR-003|ADR-011') &&
+// ADR-013 Fonctions à vendre tirées des 50 cas BTP (2026-11-21) : un seul pont,
+// avec ADR-004 (la demande d'avis après chantier y est rattachée) → 32 → 33.
+verdicts.pontsDetectes = ponts.length === 33 && cles.has('ADR-004|ADR-013') && cles.has('ADR-003|ADR-011') &&
   cles.has('ADR-002|ADR-012') && cles.has('ADR-007|ADR-012') && cles.has('ADR-010|ADR-012') &&
   cles.has('ADR-001|ADR-002') && cles.has('ADR-001|ADR-003') &&
   cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004') &&
