@@ -7,6 +7,13 @@
 > mes écrits. Cadre et maquette ça. »*
 > Boucle **C0** : ce cadrage + la maquette statique
 > `design/preview-caradryel.html`. **Zéro code produit, zéro migration.**
+>
+> **ÉTAT au 22/11 (fin de séance)** — C0 ✅ · C1 ✅ construite sur la branche
+> `claude/busy-mccarthy-snss8y` (`1268b91` données, `14f0e33` front) et éprouvée en
+> local (unitaires + PGlite + navigateur, sabotages rouges). ⏭ **Reste à C1 : la
+> migration, à appliquer par Paul** (gate rouge), puis « Poser mes quatre œuvres » et
+> les 4 liens à coller, puis la fusion sur son accord. C2 à C4 : non commencées.
+> A2 et A3 restent ouverts.
 
 ## 0. Interprétation retenue (dictée vocale)
 

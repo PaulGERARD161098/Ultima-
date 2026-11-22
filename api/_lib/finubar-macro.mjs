@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-11-21",
+  "le": "2026-11-22",
   "projets": [
     {
       "ok": true,
@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.367Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -70,8 +70,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 52,
-      "jours_en_attente": 129,
+      "jours_depuis_maj": 53,
+      "jours_en_attente": 130,
       "rang": 0
     },
     {
@@ -131,7 +131,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.367Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -144,8 +144,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 46,
-      "jours_en_attente": 109,
+      "jours_depuis_maj": 47,
+      "jours_en_attente": 110,
       "rang": 0
     },
     {
@@ -243,7 +243,7 @@ export default {
       "mesure_le": "2026-11-03",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.367Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -256,8 +256,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 30,
-      "jours_en_attente": 109,
+      "jours_depuis_maj": 31,
+      "jours_en_attente": 110,
       "rang": 0
     },
     {
@@ -349,7 +349,7 @@ export default {
       "mesure_le": "2026-11-12",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.367Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -362,8 +362,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 9,
-      "jours_en_attente": 96,
+      "jours_depuis_maj": 10,
+      "jours_en_attente": 97,
       "rang": 0
     },
     {
@@ -455,7 +455,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.368Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -468,8 +468,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 43,
-      "jours_en_attente": 92,
+      "jours_depuis_maj": 44,
+      "jours_en_attente": 93,
       "rang": 0
     },
     {
@@ -527,7 +527,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.368Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -540,8 +540,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 39,
-      "jours_en_attente": 92,
+      "jours_depuis_maj": 40,
+      "jours_en_attente": 93,
       "rang": 0
     },
     {
@@ -603,7 +603,7 @@ export default {
       "mesure_le": "2026-11-03",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.368Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -616,8 +616,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 30,
-      "jours_en_attente": 74,
+      "jours_depuis_maj": 31,
+      "jours_en_attente": 75,
       "rang": 0
     },
     {
@@ -662,7 +662,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.367Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -675,8 +675,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 52,
-      "jours_en_attente": 72,
+      "jours_depuis_maj": 53,
+      "jours_en_attente": 73,
       "rang": 0
     },
     {
@@ -720,7 +720,7 @@ export default {
       "mesure_le": "2026-10-18",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-11-21T13:00:12.368Z",
+        "lecture_le": "2026-11-22T21:38:01.982Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -733,8 +733,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 52,
-      "jours_en_attente": 59,
+      "jours_depuis_maj": 53,
+      "jours_en_attente": 60,
       "rang": 0
     },
     {
@@ -752,12 +752,13 @@ export default {
           "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, "
         },
         "dernier_arret": {
-          "le": "2026-11-21",
-          "quoi": "17→21/11 (séance Léo) : compétence « administratif » (compte rendu 12 lignes, dossier de pièces, rangement) servie aussi à la Léo de l'application ; message à Léo jusqu'à 16 000…",
-          "commit": "0bd7697b011527d1de705b1377e710d8e7bc2548"
+          "le": "2026-11-22",
+          "quoi": "22/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste…",
+          "commit": "14f0e332e343c3f920bd9e830449fe986da0b937"
         },
-        "prochaine_action": "Séance neuve : cadrage d'intégration des 5 fonctions retenues d'ADR-013 (adramelech/IDEES.md) — relance d'impayé, avenant, avis après chantier (rattaché à ADR-004), écart…",
+        "prochaine_action": "Paul applique la migration supabase/migrations/20261122220000_caradryel_oeuvres.sql (SQL Editor) et lance le script de vérification en pied de fichier (5 lignes à true) ; puis…",
         "bloque_par": [
+          "CARADRYEL C1 — migration caradryel_oeuvres à appliquer par Paul (gate rouge) ; A2 (« Lettres à Léo » adressées à Léo l'agent ?) et A3 (accord d'envoi d'un texte à l'API le temps…",
           "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en…",
           "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
           "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet…",
@@ -809,7 +810,7 @@ export default {
             "depuis": "2026-10-22"
           }
         ],
-        "maj": "2026-11-12"
+        "maj": "2026-11-22"
       },
       "recits": [
         "dernier_arret.quoi",
@@ -826,11 +827,11 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-11-21",
+      "mesure_le": "2026-11-22",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-11-21T13:00:12.367Z",
+        "lecture_le": "2026-11-22T21:38:01.981Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -842,8 +843,8 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 9,
-      "jours_en_attente": 93,
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 94,
       "rang": 2
     }
   ],
@@ -1051,6 +1052,10 @@ export default {
       {
         "projet": "DATA RÉNO",
         "geste": "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "CARADRYEL C1 — migration caradryel_oeuvres à appliquer par Paul (gate rouge) ; A2 (« Lettres à Léo » adressées à Léo l'agent ?) et A3 (accord d'envoi d'un texte à l'API le temps…"
       },
       {
         "projet": "Ultima",
