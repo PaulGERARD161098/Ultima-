@@ -327,7 +327,7 @@ verifier('ALTHEA n’est PLUS un cap d’OMEGA',
 // Les macro-quadrants supprimés (29/09) n'ont plus d'étoile : absence éprouvée.
 verifier('GRIMA et NAGA ne sont PLUS des caps d\'OMEGA',
   (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="grima"], #ciel-noeud-scene .ciel-etoile[data-noeud-id="naga"]').count()) === 0
-    && capsOmega.length === 3 && !capsOmega.includes('GRIMA') && !capsOmega.includes('NAGA'),
+    && capsOmega.length === 4 && !capsOmega.includes('GRIMA') && !capsOmega.includes('NAGA'),
   JSON.stringify(capsOmega));
 verifier('Retour vers la racine présent',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);

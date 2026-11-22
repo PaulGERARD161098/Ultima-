@@ -287,7 +287,8 @@ const COQUES_DE_NAVIGATION = Object.keys(NOEUD_DE)
 // Verrou : le registre ne dérive pas sans que ce harnais le voie, et la liste
 // est bien la famille attendue (jamais vide, jamais réduite en silence).
 verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.stringify([
-  ['omega.html', 3], ['imladrik.html', 2],
+  // OMEGA : QUATRE depuis le 22/11/2026 (CARADRYEL).
+  ['omega.html', 4], ['imladrik.html', 2],
   ['adramelech.html', 3], ['bcp.html', 4],
   // LA RACINE (P4, 2026-08-19) : trois caps — ALPHA, OMEGA, ALTHEA.
   ['index.html', 3],

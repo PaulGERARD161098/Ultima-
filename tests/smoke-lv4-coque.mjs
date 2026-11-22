@@ -67,8 +67,8 @@ function brancher(page) {
 }
 
 const CAPS = NOEUDS.omega.enfants;
-// Verrou de non-vacuité : la coque pilote a bien ses trois caps.
-if (CAPS.length !== 3) { throw new Error('OMEGA devrait porter 3 caps, le registre en a ' + CAPS.length); }
+// Verrou de non-vacuité : la coque pilote a bien ses quatre caps (CARADRYEL depuis le 22/11/2026).
+if (CAPS.length !== 4) { throw new Error('OMEGA devrait porter 4 caps, le registre en a ' + CAPS.length); }
 
 // ===========================================================================
 console.log('— A. La coque rend son nœud, sur le téléphone de Paul —');

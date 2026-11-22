@@ -230,7 +230,8 @@ for (const nom of COQUES) {
   if (['alpha', 'omega', 'constellation-dragons', 'imladrik', 'adramelech'].includes(nom)) {
     verdicts['coqueNonVide_' + nom] = r.attendus >= 2;
   }
-  if (nom === 'omega') { verdicts.omegaTroisCaps = r.attendus === 3; }
+  // 22/11/2026 : CARADRYEL, 4ᵉ cap d'OMEGA (CADRAGE-CARADRYEL.md, A1).
+  if (nom === 'omega') { verdicts.omegaQuatreCaps = r.attendus === 4; }
   // IMLADRIK : DEUX entrées (ARMES, DRAGONS) — le repli, lui, porte SEPT pages (la
   // descente est prouvée : sans elle, `ciblesDuRegistre` n'en compterait aucune,
   // les deux entrées étant sans page). TRANSPOSÉ (30/09) : quatre entrées + cinq
