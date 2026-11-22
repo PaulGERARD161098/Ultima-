@@ -189,17 +189,45 @@
     </svg>
 
     <div class="coeur">
-      <!-- Blason proposé (A5) : plume dressée, dragon enroulé — écho de Kalamn-talaen -->
-      <svg viewBox="0 0 120 120" role="img" aria-label="Blason de Caradryel : une plume dressée, un dragon enroulé">
+      <!-- Blason (Paul, 22/11) : une plume de phénix — barbes en langues de flamme,
+           œil de braise au sommet, tuyau d'or. Registre gravure : encre + or + braise. -->
+      <svg viewBox="0 0 120 120" role="img" aria-label="Blason de Caradryel : une plume de phénix">
+        <defs>
+          <linearGradient id="braise" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#8a2b12"/>
+            <stop offset=".45" stop-color="#c8501e"/>
+            <stop offset=".8" stop-color="#e3923a"/>
+            <stop offset="1" stop-color="#e8cf8f"/>
+          </linearGradient>
+          <radialGradient id="oeil" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#f9f1dc"/>
+            <stop offset=".35" stop-color="#e8cf8f"/>
+            <stop offset=".7" stop-color="#c8501e"/>
+            <stop offset="1" stop-color="#5a1a0c"/>
+          </radialGradient>
+        </defs>
         <circle cx="60" cy="60" r="56" fill="#f9f1dc" stroke="#c9a659" stroke-width="3"/>
         <circle cx="60" cy="60" r="49" fill="none" stroke="#a9884a" stroke-width="1"/>
-        <path d="M60 16 C 74 34, 74 62, 62 92 L 58 92 C 50 62, 50 34, 60 16 Z" fill="#e8cf8f" stroke="#5a4118" stroke-width="1.6"/>
-        <path d="M60 22 L 60 100" stroke="#5a4118" stroke-width="1.4"/>
-        <path d="M60 34 l-7 6 M60 44 l-8 6 M60 54 l-8 6 M60 34 l7 6 M60 44 l8 6 M60 54 l8 6" stroke="#5a4118" stroke-width=".8"/>
-        <path d="M42 84 C 30 70, 46 56, 60 66 C 74 76, 90 62, 78 48 C 72 42, 64 46, 68 52" fill="none" stroke="#3b2f1c" stroke-width="3" stroke-linecap="round"/>
-        <path d="M68 52 l 5 -2 l -2 5 Z" fill="#3b2f1c"/>
-        <path d="M42 84 l -6 4 l 7 -1" fill="none" stroke="#3b2f1c" stroke-width="2"/>
-        <path d="M54 100 l 6 8 l 6 -8" fill="#3b2f1c"/>
+        <g transform="translate(60 62) scale(.86) rotate(24) translate(-60 -56)">
+          <!-- flammèches : la plume brûle sans se consumer -->
+          <path d="M60 13 C 54 6, 58 0, 55 -6 C 62 -1, 64 5, 61 10 C 64 6, 68 4, 69 -1 C 71 6, 67 11, 62 14 Z" fill="#e3923a" stroke="#3b2f1c" stroke-width=".7" stroke-linejoin="round"/>
+          <!-- le vexille : étroit, effilé, deux fentes de chaque côté -->
+          <path d="M60 12 C 52 22, 48 36, 48 50 L 52 52 C 47 58, 47 68, 50 74 L 53 74
+                   C 51 80, 54 86, 59 90 L 61 90 C 67 84, 71 74, 71 64 L 68 62
+                   C 73 54, 73 40, 68 30 L 66 31 C 66 22, 63 16, 60 12 Z"
+                fill="url(#braise)" stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round"/>
+          <!-- l'œil de braise -->
+          <ellipse cx="60" cy="30" rx="4.6" ry="8" fill="url(#oeil)" stroke="#3b2f1c" stroke-width=".8"/>
+          <!-- barbes gravées -->
+          <path d="M60 40 q -5 -6 -10 -10 M60 45 q -5 -6 -10 -10 M60 50 q -5 -6 -10 -10 M60 55 q -5 -6 -10 -10 M60 60 q -5 -6 -10 -10 M60 65 q -5 -6 -10 -10 M60 70 q -5 -6 -10 -10 M60 75 q -5 -6 -10 -10 M60 80 q -5 -6 -10 -10 M60 85 q -5 -6 -10 -10 M60 40 q 5 -6 10 -10 M60 45 q 5 -6 10 -10 M60 50 q 5 -6 10 -10 M60 55 q 5 -6 10 -10 M60 60 q 5 -6 10 -10 M60 65 q 5 -6 10 -10 M60 70 q 5 -6 10 -10 M60 75 q 5 -6 10 -10 M60 80 q 5 -6 10 -10 M60 85 q 5 -6 10 -10" fill="none" stroke="#3b2f1c" stroke-width=".55" stroke-linecap="round" opacity=".6"/>
+          <!-- rachis et calamus d'or -->
+          <path d="M60 40 L 60 90" stroke="#3b2f1c" stroke-width="1.3"/>
+          <path d="M60 90 L 60 108" stroke="#a9884a" stroke-width="2.6" stroke-linecap="round"/>
+          <!-- étincelles -->
+          <circle cx="74" cy="20" r="1.3" fill="#c8501e"/>
+          <circle cx="79" cy="30" r=".9" fill="#e3923a"/>
+          <circle cx="44" cy="26" r="1" fill="#e3923a"/>
+        </g>
       </svg>
       <span class="coeur-legende">Caradryel</span>
     </div>
@@ -300,7 +328,7 @@
 <p class="note-maquette">
   À trancher (CADRAGE-CARADRYEL.md §5) : A1 la place du cap · A2 le statut de
   « Lettres à Léo » vis-à-vis de Léo · A3 l'accord pour envoyer un texte à
-  l'API le temps d'une relecture · A4 un horizon de publication · A5 le blason.
+  l'API le temps d'une relecture · A4 un horizon de publication · A5 tranché : la plume de phénix.
   Dans le produit, les titres et les liens Drive n'apparaîtront qu'après
   connexion.
 </p>

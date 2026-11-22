@@ -149,8 +149,8 @@ marqués comme tels** : aucun identifiant de fichier, aucun extrait réel.
   pas.
 - **A4** Y a-t-il un horizon de publication (édition, concours, date) ? Si oui,
   il devient l'indicateur MS du projet.
-- **A5** Le blason : une plume dressée et un dragon enroulé autour (reco,
-  écho de Kalamn-talaen), ou autre.
+- **A5** ~~Le blason~~ — **tranché par Paul le 22/11 : une plume de phénix**
+  (dessinée dans la maquette).
 
 ## 6. Points de vue à éprouver (Paul choisit lesquels creuser)
 
