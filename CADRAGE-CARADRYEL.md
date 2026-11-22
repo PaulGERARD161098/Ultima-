@@ -139,16 +139,15 @@ marqués comme tels** : aucun identifiant de fichier, aucun extrait réel.
 
 ## 5. Arbitrages attendus de Paul
 
-- **A1** Caradryel est-il un cap d'**OMEGA** frère d'IMLADRIK (reco), ou un cap
-  *dans* IMLADRIK ?
+- **A1** ✅ **Tranché par Paul le 22/11 : cap d'OMEGA, à côté d'IMLADRIK.**
 - **A2** *Lettres à Léo* : la destinataire est-elle Léo, l'agent ? Si oui,
   Léo relit-elle ces lettres comme les autres œuvres, ou les tient-elle à part ?
   (reco : à part, relecture de style seulement, sur demande explicite)
 - **A3** Accord de principe : le texte d'une œuvre peut partir vers l'API
   Claude le temps d'une relecture (rien n'est stocké). Sans cet accord, C3 et C4 n'existent
   pas.
-- **A4** Y a-t-il un horizon de publication (édition, concours, date) ? Si oui,
-  il devient l'indicateur MS du projet.
+- **A4** ✅ **Tranché par Paul le 22/11 : « non, c'est perso ».** Aucun horizon
+  de publication. La ligne MS reste « aucun client, perso assumé ».
 - **A5** ~~Le blason~~ — **tranché par Paul le 22/11 : une plume de phénix**
   (dessinée dans la maquette).
 
@@ -161,3 +160,110 @@ marqués comme tels** : aucun identifiant de fichier, aucun extrait réel.
 - **Un éditeur ou un lecteur exigeant** : *la bible tient-elle sur 4 œuvres
   et sur des années ? La voix de Paul reste-t-elle la sienne après les remarques
   de Léo ?*
+
+## 7. Boucle C1 — la porte (cadrage détaillé du 22/11)
+
+**① Le but.** Depuis OMEGA, Paul ouvre `caradryel.html`, le 4ᵉ cap. Sans session,
+la page ne montre rien. Une fois connecté, il voit ses quatre œuvres disposées en
+boussole, comme dans la maquette. Un geste ouvre chaque Google Doc dans un nouvel
+onglet. **MS** : aucun client, perso (A4).
+
+**② Les étapes, dans cet ordre.**
+1. **Migration** `supabase/migrations/<horodatage>_caradryel_oeuvres.sql`, sur le
+   patron de `0012_imladrik_journal.sql`. Table `caradryel_oeuvres` : `id` uuid,
+   `owner_id` (par défaut `auth.uid()`, supprimé avec le compte), `titre` (1 à 120
+   caractères), `drive_file_id` (facultatif, vérifié par
+   `^[A-Za-z0-9_-]{20,128}$`), `ordre` smallint, `created_at`, `updated_at`,
+   unique (`owner_id`, `titre`). RLS active dès la création, une policy par
+   opération, `owner_id = (select auth.uid())`. Rien pour `anon`. Retour arrière
+   en commentaire. Livrée avec un **script de vérification** en contrôles vrais ou
+   faux (modèle : `leo_appels`, 16/16).
+   ⛔ **Gate rouge** : c'est Paul qui l'applique dans l'éditeur SQL.
+2. **API** `api/caradryel.js`, sur le patron de `api/imladrik.js` :
+   `requireUser`, erreurs génériques côté client, codes seuls dans les logs, et
+   le validateur existant `api/_lib/validate.js`.
+   - `GET` renvoie les œuvres du propriétaire, triées par `ordre`.
+   - `POST {action:'initialiser'}` crée les quatre titres s'ils manquent
+     (idempotent, `on conflict do nothing`). Les titres vivent **côté serveur
+     seulement** : jamais dans le JS ni le HTML servis.
+   - `PATCH {id, drive_url}` extrait l'identifiant d'un lien collé. Seuls les
+     hôtes `docs.google.com` (`/document/d/<id>`) et `drive.google.com`
+     (`/file/d/<id>`) sont acceptés, en comparaison exacte de l'hôte, en https.
+     Tout le reste reçoit un 400. Seul l'identifiant est stocké, jamais l'URL.
+   - Pas de `DELETE` en C1 : une suppression réelle est rouge, Paul la fait dans
+     Supabase s'il le faut.
+3. **Front.**
+   - Entrée `caradryel` dans `js/registre-lv3.mjs` (`omega.enfants`), avec un
+     résumé neutre et aucun titre d'œuvre (le registre est servi à tous).
+   - Blason `phenix` dans `js/blasons.mjs`, repris de la maquette.
+   - Coque `caradryel.html` sur le motif d'`imladrik.html`, avec un repli
+     `noscript`.
+   - `js/caradryel.js` : appel authentifié, rendu par `textContent` uniquement.
+     Le lien est **reconstruit** côté client à partir de l'identifiant validé
+     (`https://docs.google.com/document/d/<id>/edit`), avec
+     `target="_blank" rel="noopener noreferrer"`.
+   - Une œuvre sans lien affiche « Lier le Doc » : un champ où coller l'URL
+     (4 collages, une seule fois).
+   - `css/caradryel.css`.
+   - Léo : `data-leo-quadrant="imladrik"`, pour réutiliser le régime intime
+     existant. **Aucune modification de Léo en C1.**
+4. **Pilotage (règle du 13/10).** Un bandeau d'état en bas de la coque, visible
+   après connexion seulement : œuvres liées (n/4), état du branchement Drive
+   (lu par `/api/imladrik/drive/status`, déjà construit). Que des comptes,
+   jamais de contenu.
+5. **Harnais.**
+   - `tests/unit-caradryel.mjs` sur l'extraction de l'identifiant. Doit passer :
+     un Doc et un fichier `.docx`. Doit être refusé : `javascript:`, `http:`,
+     `docs.google.com.evil.tld`, `evil.tld/docs.google.com/…`,
+     `user@docs.google.com`, un identifiant trop court, une chaîne vide.
+     Également : l'initialisation est idempotente (client simulé).
+   - `tests/smoke-caradryel.mjs`, dans le navigateur, avec l'API simulée sur le
+     modèle de `smoke-imladrik`. Sans session, **0 titre affiché, avec un verrou
+     de non-vacuité** (le message « session refermée » est visible). Avec
+     session, 4 cartes, les bons liens et l'attribut `rel`.
+   - Mise à jour de `unit-registre-lv3` (OMEGA passe à 4 caps, repli `noscript`).
+   - **Sabotages obligatoires** : casser la garde d'hôte, puis le rendu sans
+     session. Chaque harnais doit virer au rouge.
+6. **Tests en local** (`npm test`, `bash tests/lancer.sh`), puis commit et push.
+   L'aperçu est demandé par `[preview]` sur le dernier commit. La PR de la
+   séance s'ouvre en fin de séance.
+
+**③ Les moyens — ligne ZS.** Pour lier une œuvre à son Doc en C1 :
+
+| Option | Verdict |
+|---|---|
+| **Coller l'URL une fois par œuvre** | **retenue** : 0 réglage Google, 4 gestes une seule fois. Le lien reste ensuite le **repli** prévu au pre-mortem n° 5 |
+| Google Picker dès C1 | renvoyé en C2 : il exige une clé d'API navigateur et un réglage Google Cloud, donc un geste de Paul sur la console |
+| Léo enregistre le lien par la conversation | plus moderne, mais c'est une écriture de Léo en base : il faudrait étendre son anneau vert, ce qui sort de C1 |
+| Identifiants en dur dans une migration | écartée : des données intimes dans le dépôt, et une migration n'est pas un outil de saisie |
+
+**④ Les critères de réussite (vérifiables).**
+- Sans session : 0 titre et 0 lien Drive dans le DOM, une fois le chargement
+  prouvé.
+- Avec session : 4 cartes. Chaque lien pointe vers
+  `docs.google.com/document/d/<id>/edit` et porte `rel="noopener noreferrer"`.
+- Le script de vérification de la migration est vrai partout : RLS active,
+  4 policies, rien lisible par `anon`, rien lisible par un autre propriétaire.
+- Les harnais sont verts, les sabotages rouges, et la page est vue sur iPhone
+  par Paul.
+
+**⑤ Ce qu'on ne fait PAS en C1.** Pas de Picker. Pas de lecture du contenu des
+Docs. Pas de relecture par Léo. Pas de `DELETE`. Aucun titre ni lien dans le
+code servi. Pas de nouveau quadrant pour Léo.
+
+**⑥ Pre-mortem C1.**
+1. *Migration non appliquée* : l'API renvoie « Service non configuré » (503),
+   distinct de l'erreur 500, et la page le dit en clair.
+2. *Paul colle le lien du doublon `.docx`* : il est accepté (le fichier s'ouvre
+   dans Drive), mais ce n'est pas le bon. La carte affiche « lié le … » et Paul
+   vérifie d'un clic ; le titre réel du Doc ne se lira qu'en C2, avec l'API.
+3. *RLS mal posée* : le script de vérification la prouve avant tout usage, dans
+   le même geste que l'application.
+4. *Lien piégé* (hôte imité, `javascript:`) : on stocke l'identifiant seul et le
+   lien est reconstruit côté client. Les cas hostiles sont au harnais.
+5. *Coût* : la PR touche le front, donc le harnais navigateur tourne
+   (≈ 29 min d'Actions). Une seule PR pour la séance, et un seul build Vercel,
+   demandé par `[preview]`.
+
+**Gates.** Migration = rouge (Paul). Fusion = accord sur le SHA. Rien d'autre
+n'est ouvert par C1.
