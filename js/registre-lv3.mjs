@@ -73,7 +73,7 @@ export const NOEUDS = {
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
-    enfants: ['riven', 'nicol-bolas', 'imladrik'],
+    enfants: ['riven', 'nicol-bolas', 'imladrik', 'caradryel'],
   },
 
   alpha: {
@@ -159,6 +159,18 @@ export const NOEUDS = {
       + 'leurs relations. L’acquis historique d’Ultima.',
   },
 
+  // CARADRYEL (22/11/2026, CADRAGE-CARADRYEL.md) — le scriptorium : les écrits
+  // de Paul, cap d'OMEGA à côté d'IMLADRIK (A1). Feuille : sa page porte sa
+  // propre boussole des œuvres, rendue APRÈS connexion. Aucun titre d'œuvre
+  // ici — ce registre est servi à tous (§5 : intime).
+  caradryel: {
+    nom: 'CARADRYEL',
+    etat: 'Ouvert',
+    blason: 'phenix',
+    cible: 'caradryel.html',
+    resume: 'Le scriptorium : tes écrits, chacun relié à son Google Doc. '
+      + 'Léo t’aidera à bien écrire et à garder la cohérence.',
+  },
   'nicol-bolas': {
     nom: 'NICOL BOLAS',
     etat: 'En chantier',

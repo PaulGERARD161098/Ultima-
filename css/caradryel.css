@@ -1,0 +1,86 @@
+/* CARADRYEL — la porte du scriptorium (boucle C1, CADRAGE-CARADRYEL.md §7).
+   Registre antique et sérieux d'Ultima ; palette de design/preview-caradryel.html. */
+.caradryel {
+  --nuit: #0e3a52; --parchemin: #f9f1dc; --parchemin-doux: #f6eed9;
+  --or-clair: #e8cf8f; --or: #c9a659; --bronze: #a9884a;
+  --encre: #3b2f1c; --encre-brune: #5a4118;
+  min-height: 100vh; min-height: 100dvh;
+  color: var(--parchemin);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  padding: 1rem 1rem 6rem;
+}
+.caradryel :focus-visible { outline: 2px solid var(--or-clair); outline-offset: 3px; }
+.caradryel-retour { margin: 0 0 .6rem; }
+.caradryel-retour a, .caradryel-lien { color: var(--or-clair); }
+
+.caradryel-entete { text-align: center; max-width: 36rem; margin: 0 auto 1rem; }
+.caradryel-surligne { display: block; font-size: .78rem; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--or-clair); }
+.caradryel-entete h1 { font-size: clamp(1.7rem, 5vw, 2.4rem); font-weight: 600;
+  letter-spacing: .14em; margin: .3rem 0 0; color: var(--parchemin); }
+.caradryel-invite { font-style: italic; color: var(--or-clair); margin: .4rem 0 0; }
+.caradryel-filet { width: 9rem; height: 1px; margin: .9rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--or), transparent); }
+
+.caradryel-scene { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.caradryel-etat { max-width: 32rem; text-align: center; background: rgba(14, 58, 82, .82);
+  border: 1px solid rgba(201, 166, 89, .55); border-radius: 3px; padding: .9rem 1.2rem; }
+
+.caradryel-porte { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+.caradryel-plateau { position: relative; width: min(90vw, 560px); aspect-ratio: 1; }
+.caradryel-trame { position: absolute; inset: 0; width: 100%; height: 100%; }
+.caradryel-cercle { fill: none; stroke: var(--or); opacity: .3; }
+.caradryel-cercle--pointille { stroke-dasharray: 1 2; }
+.caradryel-aiguille { stroke: var(--or); stroke-width: .5; opacity: .45; stroke-dasharray: 1.6 2.2; }
+.caradryel-aiguille.is-actif { opacity: 1; stroke-width: .9; stroke-dasharray: none; }
+
+.caradryel-coeur { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 30%; text-align: center; pointer-events: none; }
+.caradryel-coeur svg { width: 100%; height: auto; display: block;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, .45)); }
+.caradryel-coeur-legende { display: block; margin-top: .35rem; font-style: italic;
+  letter-spacing: .14em; color: var(--or-clair); font-size: clamp(.8rem, 2.4vw, 1rem); }
+
+.caradryel-oeuvres { list-style: none; margin: 0; padding: 0; }
+.caradryel-oeuvre {
+  position: absolute; transform: translate(-50%, -50%);
+  width: clamp(8.5rem, 30%, 11rem);
+  background: var(--parchemin); color: var(--encre);
+  border: 1px solid var(--bronze); border-radius: 3px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .35), inset 0 0 0 3px var(--parchemin-doux), inset 0 0 0 4px var(--or);
+  padding: .65rem .7rem .6rem; text-align: center;
+}
+.caradryel-oeuvre-titre { font-size: .98rem; letter-spacing: .06em; color: var(--encre-brune); margin: 0; }
+.caradryel-oeuvre-statut { display: block; font-size: .74rem; font-style: italic; margin: .2rem 0 .45rem; }
+.caradryel-oeuvre-ouvrir, .caradryel-oeuvre-lier {
+  display: inline-block; font: inherit; font-size: .76rem; letter-spacing: .06em;
+  color: var(--encre-brune); background: none; border: 0; border-top: 1px solid var(--or);
+  padding: .3rem .2rem 0; cursor: pointer; text-decoration: none; min-height: 1.6rem;
+}
+.caradryel-oeuvre-ouvrir:hover, .caradryel-oeuvre-lier:hover { text-decoration: underline; }
+
+.caradryel-parole { max-width: 34rem; min-height: 3rem; text-align: center; margin: 0;
+  background: rgba(14, 58, 82, .82); border: 1px solid rgba(201, 166, 89, .55);
+  border-radius: 3px; padding: .8rem 1.1rem; font-style: italic; }
+.caradryel-pilotage { font-size: .8rem; color: var(--or-clair); margin: 0; letter-spacing: .04em; }
+
+.caradryel-lier { width: min(92vw, 30rem); background: var(--parchemin); color: var(--encre);
+  border: 1px solid var(--bronze); border-radius: 3px; padding: 1rem;
+  box-shadow: inset 0 0 0 3px var(--parchemin-doux), inset 0 0 0 4px var(--or);
+  display: grid; gap: .5rem; }
+.caradryel-lier label { font-weight: 600; color: var(--encre-brune); }
+.caradryel-lier input { font: inherit; font-size: 1rem; padding: .5rem; border: 1px solid var(--bronze);
+  border-radius: 2px; background: #fffaf0; color: var(--encre); width: 100%; box-sizing: border-box; }
+.caradryel-lier-actions { display: flex; gap: .5rem; }
+.caradryel-bouton { font: inherit; background: var(--nuit); color: var(--parchemin); border: 0;
+  border-radius: 2px; padding: .5rem 1rem; cursor: pointer; min-height: 2.75rem; }
+.caradryel-bouton[disabled] { opacity: .6; cursor: wait; }
+.caradryel-bouton--discret { background: transparent; color: var(--encre-brune); border: 1px solid var(--bronze); }
+.caradryel-message { margin: 0; font-size: .85rem; color: #7a2410; min-height: 1.2em; }
+
+@media (max-width: 520px) {
+  .caradryel-oeuvre { width: 29%; padding: .45rem .35rem; }
+  .caradryel-oeuvre-titre { font-size: .8rem; letter-spacing: .02em; }
+  .caradryel-oeuvre-statut, .caradryel-oeuvre-ouvrir, .caradryel-oeuvre-lier { font-size: .64rem; letter-spacing: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .caradryel * { transition: none !important; } }
