@@ -19,6 +19,7 @@ import {
   validerCreationDossier,
   validerMajDossier,
   validerCreationDocument,
+  validerFilLeo,
   filtrerParStructure,
   synthetiserDirection
 } from './_lib/structures-pro.mjs';
@@ -58,6 +59,16 @@ export function creerHandler({ authentifier = requireUser } = {}) {
         const scopeBrut = req.query?.scope ?? VUE_DIRECTION;
         const scope = normaliserScopePro(scopeBrut);
         if (!scope) return fail(res, 400, 'Périmètre professionnel inconnu');
+
+        if (req.query?.ressource === 'fil') {
+          const { data, error } = await client.from('pro_fils_leo')
+            .select('scope, messages, updated_at')
+            .eq('scope', scope)
+            .maybeSingle();
+          if (error) return erreurBase(res, 'pro-pilotage:fil:lire', error);
+          const messages = data && data.scope === scope && Array.isArray(data.messages) ? data.messages : [];
+          return ok(res, { scope, messages, updated_at: data?.updated_at || null });
+        }
 
         if (scope === VUE_DIRECTION) {
           const [rTaches, rDossiers, rDocs] = await Promise.all([
@@ -126,6 +137,16 @@ export function creerHandler({ authentifier = requireUser } = {}) {
             .insert(v.donnees).select(COL_DOCUMENTS).single();
           if (error) return erreurBase(res, 'pro-pilotage:creer-document', error);
           return ok(res, { document: data });
+        }
+        if (corps.ressource === 'fil') {
+          const v = validerFilLeo(corps);
+          if (v.erreur) return fail(res, 400, v.erreur);
+          const { data, error } = await client.from('pro_fils_leo')
+            .upsert(v.donnees, { onConflict: 'owner_id,scope' })
+            .select('scope, messages, updated_at')
+            .single();
+          if (error) return erreurBase(res, 'pro-pilotage:sauver-fil', error);
+          return ok(res, { fil: data });
         }
         return fail(res, 400, 'Ressource inconnue');
       }

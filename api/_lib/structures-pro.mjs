@@ -283,6 +283,30 @@ export function validerCreationDocument(corps) {
   };
 }
 
+export function validerFilLeo(corps) {
+  if (!corps || typeof corps !== 'object' || Array.isArray(corps)) {
+    return { erreur: 'Corps de fil invalide' };
+  }
+  const scope = normaliserScopePro(corps.scope);
+  if (!scope) return { erreur: 'Périmètre de fil inconnu' };
+  if (!Array.isArray(corps.messages) || corps.messages.length > 30) {
+    return { erreur: 'Historique de fil invalide (30 messages max)' };
+  }
+  const propres = [];
+  let total = 0;
+  for (const m of corps.messages) {
+    if (!m || typeof m !== 'object' || !['user', 'assistant'].includes(m.role) || typeof m.content !== 'string') {
+      return { erreur: 'Message de fil invalide' };
+    }
+    const texte = m.content.trim();
+    if (!texte || texte.length > 16000) return { erreur: 'Longueur de message invalide' };
+    total += texte.length;
+    if (total > 24000) return { erreur: 'Historique trop volumineux' };
+    propres.push({ role: m.role, content: texte });
+  }
+  return { donnees: { scope, messages: propres } };
+}
+
 // Garde-fou défensif côté serveur : aucune ligne d'une autre structure ne sort
 // jamais en vue structure, même en cas d'anomalie du client de stockage.
 export function filtrerParStructure(lignes, structureId) {

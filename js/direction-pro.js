@@ -308,7 +308,11 @@ function ouvrirLeoDansContexte() {
     voix: {
       quadrant: scopeActif,
       jeton: jetonSession,
-      etat: dernierEtatLeo
+      etat: dernierEtatLeo,
+      notifier: () => {
+        annoncer('Action de Léo enregistrée.');
+        chargerScope();
+      }
     }
   });
 }

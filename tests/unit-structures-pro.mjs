@@ -15,6 +15,7 @@ import {
   validerCreationDossier,
   validerMajDossier,
   validerCreationDocument,
+  validerFilLeo,
   filtrerParStructure,
   synthetiserDirection
 } from '../api/_lib/structures-pro.mjs';
@@ -248,6 +249,24 @@ function creerClientMemoire(etat, { fuiteVolontaire = false, erreurCode = null }
     body: { ressource: 'tache', structure_id: 'direction', titre: 'Interdit' }
   }), resDirPost);
   assert.equal(resDirPost.statusCode, 400);
+}
+
+// ---------- 4bis. Validation des fils Léo cloisonnés (pro_fils_leo) ----------
+{
+  assert.ok(validerFilLeo({ scope: 'inconnu', messages: [] }).erreur);
+  assert.ok(validerFilLeo({ scope: 'amo', messages: [{ role: 'system', content: 'hack' }] }).erreur);
+  assert.ok(validerFilLeo({ scope: 'amo', messages: [{ role: 'user', content: '   ' }] }).erreur);
+  const okFil = validerFilLeo({
+    scope: 'sola-air-paris',
+    messages: [
+      { role: 'user', content: '  Point sur Sola Air Paris  ' },
+      { role: 'assistant', content: 'Voici les priorités.' }
+    ]
+  });
+  assert.equal(okFil.erreur, undefined);
+  assert.equal(okFil.donnees.scope, 'sola-air-paris');
+  assert.equal(okFil.donnees.messages.length, 2);
+  assert.equal(okFil.donnees.messages[0].content, 'Point sur Sola Air Paris');
 }
 
 // ---------- 5. Contrôle statique du contrat SQL de la migration ----------
