@@ -64,9 +64,9 @@ export const NOEUDS = {
     etat: 'Ouvert',
     blason: 'rose',
     cible: 'omega.html',
-    resume: 'La supra-division personnelle. Ton réseau, ton argent, et '
-      + 'IMLADRIK — le macro-projet de développement et de gestion de tes '
-      + 'projets personnels.',
+    resume: 'La supra-division personnelle. Ton réseau, ton argent, IMLADRIK — '
+      + 'le macro-projet de développement et de gestion de tes projets '
+      + 'personnels — et CARADRYEL, le scriptorium de tes écrits.',
     titre: 'OMEGA',
     surligne: 'Supra-division Omega',
     invite: 'Léo te guide — survole un cap.',
