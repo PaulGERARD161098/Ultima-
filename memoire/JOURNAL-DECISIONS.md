@@ -4969,3 +4969,11 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 **Fait :** cadrage `CADRAGE-CARADRYEL.md` (C0 + C1 détaillé), maquette `design/preview-caradryel.html`, boucle C1 construite sur branche (table, route, porte). Constat Drive (métadonnées seules) : les 4 œuvres existent en Google Docs étoilés.
 
 **Ouvert :** A2 (« Lettres à Léo » s'adresse-t-elle à Léo l'agent ?) ; A3 (accord d'envoi d'un texte à l'API le temps d'une relecture — requis pour C3/C4) ; migration C1 à appliquer par Paul.
+
+## 2026-11-23 — CARADRYEL C1 : migration appliquée, PR fusionnée
+
+**Source :** Paul, 23/11 : « Applique toi la migration. Accord fusion ok » — donné après le constat CI verte sur `ee46fbf`, cible `main`.
+
+**Fait :** migration `caradryel_oeuvres` appliquée par la séance (connecteur Supabase, projet Ultima) ; contrôles : 6/6 vrais, refus `anon` et DELETE éprouvés, advisors sécurité vides, 0 ligne. Puis Ultima-#475 fusionnée en squash sur `ee46fbf` → `1111713`.
+
+**Reste :** le geste de Paul (poser les quatre œuvres, coller les liens) ; A2 et A3 ouverts.
