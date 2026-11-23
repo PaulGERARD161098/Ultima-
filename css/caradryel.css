@@ -7,7 +7,7 @@
   min-height: 100vh; min-height: 100dvh;
   color: var(--parchemin);
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  padding: 1rem 1rem 6rem;
+  padding: 1rem 1rem 3rem;
 }
 .caradryel :focus-visible { outline: 2px solid var(--or-clair); outline-offset: 3px; }
 .caradryel-retour { margin: 0 0 .6rem; }
@@ -22,7 +22,10 @@
 .caradryel-filet { width: 9rem; height: 1px; margin: .9rem auto 0;
   background: linear-gradient(90deg, transparent, var(--or), transparent); }
 
-.caradryel-scene { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.caradryel-scene { display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  /* Place pour le dock de Léo (fixe, ≈ 70 px) sous le dernier élément : la
+     coque commune écrase le padding du <body>, on la réserve ici. */
+  padding-bottom: 8rem; }
 .caradryel-etat { max-width: 32rem; text-align: center; background: rgba(14, 58, 82, .82);
   border: 1px solid rgba(201, 166, 89, .55); border-radius: 3px; padding: .9rem 1.2rem; }
 
@@ -67,7 +70,9 @@
 .caradryel-lier { width: min(92vw, 30rem); background: var(--parchemin); color: var(--encre);
   border: 1px solid var(--bronze); border-radius: 3px; padding: 1rem;
   box-shadow: inset 0 0 0 3px var(--parchemin-doux), inset 0 0 0 4px var(--or);
-  display: grid; gap: .5rem; }
+  display: grid; gap: .5rem;
+  /* S'arrête au-dessus du dock de Léo quand il défile jusqu'à lui. */
+  scroll-margin-bottom: 7rem; }
 .caradryel-lier label { font-weight: 600; color: var(--encre-brune); }
 .caradryel-lier input { font: inherit; font-size: 1rem; padding: .5rem; border: 1px solid var(--bronze);
   border-radius: 2px; background: #fffaf0; color: var(--encre); width: 100%; box-sizing: border-box; }
@@ -84,3 +89,8 @@
   .caradryel-oeuvre-statut, .caradryel-oeuvre-ouvrir, .caradryel-oeuvre-lier { font-size: .64rem; letter-spacing: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .caradryel * { transition: none !important; } }
+.caradryel-oeuvre-changer { display: block; margin: .25rem auto 0; font: inherit; font-size: .66rem;
+  font-style: italic; color: var(--bronze); background: none; border: 0; cursor: pointer;
+  min-height: 1.5rem; padding: 0 .3rem; }
+.caradryel-oeuvre-changer:hover { text-decoration: underline; color: var(--encre-brune); }
+@media (max-width: 520px) { .caradryel-oeuvre-changer { font-size: .6rem; } }

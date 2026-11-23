@@ -37,6 +37,8 @@ const PAGES = [
   // déclare le sien.
   { fichier: 'omega.html', quadrant: 'ultima' },
   { fichier: 'imladrik.html', quadrant: 'imladrik' },
+  // CARADRYEL (23/11/2026) : régime intime d'IMLADRIK ; le bouton manquait (revue Codex sur #475).
+  { fichier: 'caradryel.html', quadrant: 'imladrik' },
 ];
 verifier('Verrou : le cas du repli « ultima » reste éprouvé (omega.html) et tao.html n\'est plus listé',
   PAGES.filter((p) => p.quadrant === 'ultima').map((p) => p.fichier).join() === 'omega.html'
