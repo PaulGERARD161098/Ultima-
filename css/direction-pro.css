@@ -1,0 +1,292 @@
+/* Ultima — Direction & Structures pro (Boucle 3).
+   Registre sombre / or gravé cohérent avec le ciel stellaire d'Ultima. */
+
+.direction-page {
+  margin: 0;
+  min-height: 100vh;
+  background: #0b1119;
+  color: #eaeef4;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  padding-bottom: 5rem;
+}
+
+.dir-retour {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 0;
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.dir-retour a,
+.dir-lien {
+  color: #e8bf83;
+  text-decoration: none;
+}
+
+.dir-retour a:hover,
+.dir-lien:hover {
+  text-decoration: underline;
+}
+
+.dir-entete,
+.dir-contenu {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.dir-surligne {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e8bf83;
+}
+
+.dir-entete h1 {
+  margin: 0 0 0.35rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  color: #f9f1dc;
+}
+
+.dir-sous-titre {
+  margin: 0 0 1.25rem;
+  color: #a9b6c7;
+}
+
+.dir-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dir-tab {
+  background: #121c29;
+  color: #d6e0ec;
+  border: 1px solid #2a3a4e;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.dir-tab:hover {
+  border-color: #e8bf83;
+}
+
+.dir-tab.is-actif {
+  background: #e8bf83;
+  color: #0b1119;
+  border-color: #e8bf83;
+  font-weight: 600;
+}
+
+.dir-barre-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #101926;
+  border: 1px solid #253447;
+  border-radius: 12px;
+}
+
+.dir-badge {
+  font-size: 0.88rem;
+  color: #e8bf83;
+}
+
+.dir-btn-leo,
+.dir-btn {
+  background: #1d3550;
+  color: #f9f1dc;
+  border: 1px solid #e8bf83;
+  border-radius: 8px;
+  padding: 0.5rem 0.95rem;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.dir-btn-leo:hover,
+.dir-btn:hover {
+  background: #27476b;
+}
+
+.dir-etat {
+  padding: 1.25rem;
+  background: #101926;
+  border: 1px solid #253447;
+  border-radius: 12px;
+  color: #c8d4e3;
+}
+
+.dir-grille-structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.dir-carte {
+  background: #101926;
+  border: 1px solid #26364a;
+  border-radius: 14px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.dir-carte h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  color: #f9f1dc;
+}
+
+.dir-carte p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #a9b6c7;
+}
+
+.dir-compteurs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+}
+
+.dir-compteurs span {
+  background: #172436;
+  border: 1px solid #2c3f56;
+  border-radius: 6px;
+  padding: 0.2rem 0.55rem;
+}
+
+.dir-colonnes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dir-panneau {
+  background: #101926;
+  border: 1px solid #253447;
+  border-radius: 14px;
+  padding: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.dir-panneau h2 {
+  margin: 0 0 0.85rem;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  color: #f9f1dc;
+}
+
+.dir-liens-externes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.dir-liens-externes a {
+  background: #152233;
+  border: 1px solid #30455e;
+  color: #e8bf83;
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.dir-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.dir-form-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dir-form input,
+.dir-form select,
+.dir-form textarea {
+  background: #0b1119;
+  color: #eaeef4;
+  border: 1px solid #31445c;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.dir-form input[type="text"],
+.dir-form textarea {
+  flex: 1 1 200px;
+}
+
+.dir-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.dir-item {
+  background: #142030;
+  border: 1px solid #24354a;
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dir-item-meta {
+  font-size: 0.8rem;
+  color: #9db0c6;
+  margin-top: 0.2rem;
+}
+
+.dir-item-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: #22344b;
+  color: #e8bf83;
+  margin-right: 0.4rem;
+}
+
+.dir-vide {
+  color: #8ea0b5;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.dir-statut-live {
+  min-height: 1.25rem;
+  font-size: 0.88rem;
+  color: #e8bf83;
+}
