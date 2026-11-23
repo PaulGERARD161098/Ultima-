@@ -15,17 +15,29 @@
 </head>
 <body class="direction-page" data-leo-quadrant="direction">
 
-  <nav class="dir-retour" aria-label="Navigation principale">
-    <a href="/">✦ Accueil &amp; Rose</a>
-    <a href="alpha.html">ALPHA (Pro)</a>
-    <a href="omega.html">OMEGA (Perso)</a>
-    <a href="althea.html">ALTHEA</a>
+  <nav class="dir-topbar" aria-label="Navigation unifiée Ultima">
+    <div class="dir-brand">
+      <a class="dir-brand-link" href="/">✦ ULTIMA · LÉO</a>
+      <span id="dir-vps-statut" class="dir-vps-pill" aria-live="polite">VPS Léo · vérification…</span>
+    </div>
+    <div class="dir-nav-poles">
+      <a href="/">Rose des vents</a>
+      <a href="omega.html">OMEGA</a>
+      <a href="riven.html">RIVEN</a>
+      <a href="althea.html">ALTHEA</a>
+      <a href="finubar.html">FINUBAR</a>
+    </div>
   </nav>
 
   <header class="dir-entete">
-    <p class="dir-surligne">ALPHA · Assistante de direction multi-structures</p>
-    <h1 id="dir-titre">Direction — Vue globale</h1>
-    <p id="dir-sous-titre" class="dir-sous-titre">Vision consolidée de tes trois structures professionnelles, sans mélange de données.</p>
+    <p class="dir-surligne">Poste de commandement unifié · Pro &amp; Direction</p>
+    <div class="dir-titre-ligne">
+      <div>
+        <h1 id="dir-titre">Direction — Vue globale</h1>
+        <p id="dir-sous-titre" class="dir-sous-titre">Vision consolidée de tes trois structures professionnelles, sans mélange de données.</p>
+      </div>
+      <button type="button" id="dir-parler-leo" class="dir-btn-leo">Parler à Léo (Direction)</button>
+    </div>
 
     <div class="dir-switcher" role="tablist" aria-label="Choisir la vue ou la structure">
       <button type="button" class="dir-tab is-actif" role="tab" aria-selected="true" data-scope="direction">Direction (Global)</button>
@@ -36,7 +48,12 @@
 
     <div class="dir-barre-actions">
       <span id="dir-badge-cloison" class="dir-badge">Vue consolidée · 3 structures</span>
-      <button type="button" id="dir-parler-leo" class="dir-btn-leo">Parler à Léo dans ce contexte</button>
+      <div class="dir-raccourcis-leo" aria-label="Raccourcis assistante de direction">
+        <button type="button" class="dir-chip" data-leo-prompt="priorites">Priorités du jour</button>
+        <button type="button" class="dir-chip" data-leo-prompt="reunion">Préparer réunion</button>
+        <button type="button" class="dir-chip" data-leo-prompt="cr">CR (12 lignes)</button>
+        <button type="button" class="dir-chip" data-leo-prompt="mail">Brouillon e-mail</button>
+      </div>
     </div>
   </header>
 

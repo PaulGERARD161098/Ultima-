@@ -293,15 +293,25 @@ function basculerScope(nouveauScope) {
   chargerScope();
 }
 
-function ouvrirLeoDansContexte() {
+const SALUTATIONS_RACCOURCIS = {
+  priorites: (nom) => `Mode ${nom} · Dis-moi si tu veux l’arbitrage des priorités du jour ou les relances urgentes.`,
+  reunion: (nom) => `Mode ${nom} · Donne-moi l’interlocuteur et l’objet de la réunion : je prépare l’ordre du jour et les points à trancher.`,
+  cr: (nom) => `Mode ${nom} · Colle tes notes brutes (et la date) : je sors le compte rendu en 12 lignes max (Décidé · À confirmer · Actions · Axe vente).`,
+  mail: (nom) => `Mode ${nom} · Donne-moi le destinataire et l’intention : je prépare le brouillon d’e-mail (jamais envoyé automatiquement).`
+};
+
+function ouvrirLeoDansContexte(raccourci = null) {
   if (!jetonSession || !window.UltimaLeo?.accueillirQuadrant) return;
   const nom = LIBELLES_SCOPES[scopeActif] || scopeActif;
+  const salutation = raccourci && SALUTATIONS_RACCOURCIS[raccourci]
+    ? SALUTATIONS_RACCOURCIS[raccourci](nom)
+    : scopeActif === 'direction'
+      ? 'Vue Direction ouverte. Sur quelle structure veux-tu arbitrer ou avancer ?'
+      : `Espace ${nom} ouvert (cloisonné). Quelle priorité, relance ou rédaction préparons-nous ?`;
   window.UltimaLeo.accueillirQuadrant({
     quadrant: scopeActif,
     blason: 'boussole',
-    salutation: scopeActif === 'direction'
-      ? 'Vue Direction ouverte. Sur quelle structure veux-tu arbitrer ou avancer ?'
-      : `Espace ${nom} ouvert (cloisonné). Quelle priorité, relance ou rédaction préparons-nous ?`,
+    salutation,
     sections: [],
     sansPropositions: true,
     forcer: true,
@@ -317,11 +327,27 @@ function ouvrirLeoDansContexte() {
   });
 }
 
+async function verifierVps() {
+  const pill = $('dir-vps-statut');
+  if (!pill || !jetonSession) return;
+  const { status, json } = await appelApi('GET', '/api/pro-pilotage?ressource=vps-health');
+  if (status === 200 && json?.data?.vps === 'en_ligne') {
+    pill.textContent = 'VPS Léo · En ligne (24/7)';
+    pill.classList.add('is-online');
+  } else {
+    pill.textContent = 'VPS Léo · Hors ligne';
+    pill.classList.remove('is-online');
+  }
+}
+
 async function demarrer() {
   for (const tab of document.querySelectorAll('.dir-tab')) {
     tab.addEventListener('click', () => basculerScope(tab.dataset.scope));
   }
-  $('dir-parler-leo').addEventListener('click', ouvrirLeoDansContexte);
+  $('dir-parler-leo').addEventListener('click', () => ouvrirLeoDansContexte());
+  for (const chip of document.querySelectorAll('.dir-chip')) {
+    chip.addEventListener('click', () => ouvrirLeoDansContexte(chip.dataset.leoPrompt));
+  }
 
   $('form-tache').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -379,6 +405,7 @@ async function demarrer() {
 
   jetonSession = await lireJeton();
   majEntete(scopeActif, null);
+  verifierVps();
   await chargerScope();
 }
 
