@@ -43,9 +43,26 @@ function appliquerCors(req, res, originesAutorisees) {
   return true;
 }
 
+export function creerLimiteDebit(maxRequetes = 60, fenetreMs = 60_000, maxIps = 1000) {
+  const hits = new Map();
+  return function autoriser(ip, maintenant = Date.now()) {
+    const cle = String(ip || 'inconnu');
+    const entree = hits.get(cle);
+    if (!entree || maintenant - entree.debut >= fenetreMs) {
+      if (hits.size >= maxIps && !hits.has(cle)) hits.clear();
+      hits.set(cle, { debut: maintenant, compte: 1 });
+      return true;
+    }
+    if (entree.compte >= maxRequetes) return false;
+    entree.compte += 1;
+    return true;
+  };
+}
+
 export function creerServeurVps({
   routes = ROUTES_VPS,
-  originesAutorisees = parserOrigines(process.env.ALLOWED_ORIGINS || '')
+  originesAutorisees = parserOrigines(process.env.ALLOWED_ORIGINS || ''),
+  limiteDebit = creerLimiteDebit(60, 60_000)
 } = {}) {
   return createServer(async (req, res) => {
     poserEntetesSecurite(res);
@@ -57,6 +74,14 @@ export function creerServeurVps({
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
       res.end(JSON.stringify({ ok: true, service: 'leo-vps' }));
+      return;
+    }
+
+    const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').toString().split(',')[0].trim();
+    if (!limiteDebit(ip)) {
+      res.statusCode = 429;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.end(JSON.stringify({ ok: false, error: 'Trop de requêtes' }));
       return;
     }
 

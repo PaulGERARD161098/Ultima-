@@ -136,7 +136,7 @@ create table public.pro_documents (
   updated_at   timestamptz not null default now(),
   foreign key (dossier_id, owner_id, structure_id)
     references public.pro_dossiers (id, owner_id, structure_id)
-    on delete set null
+    on delete restrict
 );
 
 create index pro_documents_owner_structure_created_idx
