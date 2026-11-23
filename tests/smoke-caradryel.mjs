@@ -78,6 +78,17 @@ async function ouvrir({ session = true, configVide = false, routeur, viewport } 
   return { page, erreurs, externes, appels };
 }
 const nbCartes = (page) => page.locator('.caradryel-oeuvre').count();
+// Le dock de Léo est fixé en bas de l'écran : rien d'actionnable ne doit finir dessous.
+const positions = (page) => page.evaluate(() => {
+  const r = (s) => { const e = document.querySelector(s); return e ? e.getBoundingClientRect() : null; };
+  const b = r('#caradryel-lier button[type=submit]'); const d = r('#leo-dock');
+  return { bouton: b && Math.round(b.bottom), dock: d && Math.round(d.top) };
+});
+const auDessusDuDock = async (page) => {
+  const p = await positions(page);
+  // Verrou : le dock est bien là (sinon « au-dessus » serait vrai sur rien).
+  return p.dock !== null && p.bouton !== null && p.bouton <= p.dock - 8;
+};
 
 // ======================= A. Sans session =======================
 console.log('— A. caradryel.html SANS session (fail-closed) —');
@@ -89,6 +100,7 @@ console.log('— A. caradryel.html SANS session (fail-closed) —');
   verifier('Verrou de non-vacuité : cartouche de session visible et rédigé', /session/.test(texte) && texte.length > 40);
   verifier('Aucune œuvre au DOM', (await nbCartes(page)) === 0);
   verifier('Porte cachée', await page.locator('#caradryel-porte').evaluate((e) => e.hidden));
+  verifier('Sans session : pas de bouton « Parler à Léo »', (await page.locator('#leo-appel').count()) === 0);
   verifier('Chargement effacé', await page.locator('#caradryel-chargement').evaluate((e) => e.hidden));
   verifier('Zéro requête externe (CDN)', externes.length === 0, externes.join(', '));
   verifier('Zéro erreur console', erreurs.length === 0, erreurs.join(' | '));
@@ -124,6 +136,12 @@ console.log('— B. caradryel.html avec session : la porte —');
     `https://docs.google.com/document/d/${ID_A}/edit`, `https://docs.google.com/document/d/${ID_B}/edit`]));
   verifier('rel="noopener noreferrer" et nouvel onglet', liens.every((l) => l.rel === 'noopener noreferrer' && l.target === '_blank'));
   verifier('Deux boutons « Lier le Doc »', (await page.locator('.caradryel-oeuvre-lier').count()) === 2);
+  // Revue Codex sur #475 : un lien posé par erreur doit pouvoir se corriger.
+  verifier('Deux boutons « Changer le lien » sur les œuvres reliées',
+    (await page.locator('.caradryel-oeuvre-changer').count()) === 2);
+  // Revue Codex sur #475 : sans leo-accueil.js, leo-partout.js ne posait jamais son bouton.
+  await page.waitForSelector('#leo-appel', { timeout: 5000 }).catch(() => {});
+  verifier('Avec session : le bouton « Parler à Léo » est posé', (await page.locator('#leo-appel').count()) === 1);
   verifier('Titre hostile rendu en TEXTE (aucune image injectée)',
     (await page.locator('.caradryel-oeuvre img').count()) === 0
     && (await page.evaluate(() => window.__xss)) === undefined
@@ -144,7 +162,7 @@ console.log('— B. caradryel.html avec session : la porte —');
   const patchs = [];
   await page.route('**/api/caradryel', async (r) => {
     const corps = JSON.parse(r.request().postData() || 'null');
-    patchs.push(corps);
+    patchs.push({ ...corps, _auth: r.request().headers().authorization || '' });
     if (!/^https:\/\/docs\.google\.com\//.test(corps.drive_url)) {
       return r.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ ok: false, error: 'Lien Google Docs non reconnu' }) });
     }
@@ -152,16 +170,33 @@ console.log('— B. caradryel.html avec session : la porte —');
     return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: { oeuvres: liste } }) });
   });
   await page.locator('.caradryel-oeuvre-lier').first().click();
+  await page.waitForTimeout(300);
+  verifier('Le bouton « Lier » s’arrête AU-DESSUS du dock de Léo (23/11 : il était dessous)',
+    await auDessusDuDock(page), JSON.stringify(await positions(page)));
   verifier('Le formulaire s’ouvre, titré par l’œuvre', /Œuvre de l’Est/.test(await page.locator('#caradryel-lier-titre').textContent()));
   await page.fill('#caradryel-lier-url', 'https://evil.tld/document/d/x');
   await page.locator('#caradryel-lier button[type=submit]').click();
   await page.waitForFunction(() => /pas celui d’un Google Doc/.test(document.getElementById('caradryel-lier-message').textContent));
   verifier('Lien refusé : message clair, formulaire toujours ouvert', !(await page.locator('#caradryel-lier').evaluate((e) => e.hidden)));
+  // Revue Codex sur #475 : le jeton se relit à chaque appel. On simule un
+  // renouvellement par Supabase (nouveau jeton en stockage) AVANT d'envoyer.
+  await page.evaluate((ref) => {
+    const cle = `sb-${ref}-auth-token`;
+    const s = JSON.parse(localStorage.getItem(cle));
+    s.access_token = 'jeton-renouvele';
+    localStorage.setItem(cle, JSON.stringify(s));
+  }, REF_SUPABASE);
   await page.fill('#caradryel-lier-url', `https://docs.google.com/document/d/${ID_C}/edit`);
   await page.locator('#caradryel-lier button[type=submit]').click();
   await page.waitForFunction(() => document.getElementById('caradryel-lier').hidden);
-  verifier('PATCH {id, drive_url} pour la bonne œuvre', patchs.at(-1).id === uuid(2) && Object.keys(patchs.at(-1)).sort().join() === 'drive_url,id');
+  const dernier = patchs.at(-1);
+  verifier('PATCH {id, drive_url} pour la bonne œuvre', dernier.id === uuid(2) && dernier.drive_url.includes(ID_C));
+  verifier('Le jeton RENOUVELÉ est envoyé (jamais celui du démarrage)', dernier._auth === 'Bearer jeton-renouvele', dernier._auth);
   verifier('La carte est désormais reliée (3 liens)', (await page.locator('.caradryel-oeuvre-ouvrir').count()) === 3);
+  await page.locator('.caradryel-oeuvre-changer').first().click();
+  verifier('« Changer le lien » rouvre le formulaire, titré par l’œuvre',
+    !(await page.locator('#caradryel-lier').evaluate((e) => e.hidden))
+    && /Œuvre du Nord/.test(await page.locator('#caradryel-lier-titre').textContent()));
   await page.close();
 }
 
@@ -205,6 +240,11 @@ console.log('— F. Téléphone 390 px —');
     const b = e.getBoundingClientRect(); return [b.left, b.right];
   }));
   // Marge ≥ 8 px : une carte collée au bord se lit mal et se touche mal (sabotage « rayon » du 22/11).
+  await page.waitForSelector('#leo-dock', { timeout: 5000 }).catch(() => {});
+  await page.locator('.caradryel-oeuvre-lier').first().click();
+  await page.waitForTimeout(300);
+  verifier('Téléphone : le bouton « Lier » s’arrête au-dessus du dock de Léo',
+    await auDessusDuDock(page), JSON.stringify(await positions(page)));
   verifier('Quatre cartes, dans l’écran avec une marge', bords.length === 4 && bords.every(([g, d]) => g >= 8 && d <= 382),
     JSON.stringify(bords));
   await page.close();

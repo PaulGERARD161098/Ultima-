@@ -11,7 +11,9 @@
   'use strict';
 
   var ID_DRIVE = /^[A-Za-z0-9_-]{20,128}$/;
-  var etat = { session: null, oeuvres: [], cible: null };
+  // `client` garde le client Supabase : la session se relit à CHAQUE appel
+  // (getSession renouvelle un jeton expiré) — revue Codex sur #475.
+  var etat = { client: null, oeuvres: [], cible: null };
 
   function $(id) { return document.getElementById(id); }
   function el(nom, classe, texte) {
@@ -47,10 +49,21 @@
   function parler(texte) { var p = $('caradryel-parole'); if (p) { p.textContent = texte; } }
 
   // ---------- Appels API (Bearer, fail-closed) ----------
+  // Jeton courant, ou null (session refermée) : jamais un jeton figé au démarrage.
+  async function jeton() {
+    try {
+      var r = await etat.client.auth.getSession();
+      var s = r && r.data && r.data.session;
+      return (s && s.access_token) || null;
+    } catch (e) { return null; }
+  }
+
   async function appel(methode, corps) {
+    var t = await jeton();
+    if (!t) { return { statut: 401, corps: null }; }
     var options = {
       method: methode,
-      headers: { Accept: 'application/json', Authorization: 'Bearer ' + etat.session.access_token }
+      headers: { Accept: 'application/json', Authorization: 'Bearer ' + t }
     };
     if (corps) {
       options.headers['Content-Type'] = 'application/json';
@@ -103,6 +116,12 @@
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         carte.appendChild(a);
+        // Un lien posé par erreur se corrige ici (revue Codex sur #475 : sans ce
+        // bouton, seule une requête manuelle ou la base pouvaient le réparer).
+        var changer = el('button', 'caradryel-oeuvre-changer', 'Changer le lien');
+        changer.type = 'button';
+        changer.addEventListener('click', function () { ouvrirLiaison(o); });
+        carte.appendChild(changer);
       } else {
         carte.appendChild(el('span', 'caradryel-oeuvre-statut', 'Pas encore reliée'));
         var b = el('button', 'caradryel-oeuvre-lier', 'Lier le Doc');
@@ -130,10 +149,12 @@
   // Pilotage : l'état du branchement Drive d'IMLADRIK (déjà construit). Lecture seule.
   async function lirePilotageDrive() {
     var ligne = $('caradryel-pilotage');
+    var t = await jeton();
+    if (!t) { return; }
     var r;
     try {
       r = await fetch('/api/imladrik/drive/status', {
-        headers: { Accept: 'application/json', Authorization: 'Bearer ' + etat.session.access_token }
+        headers: { Accept: 'application/json', Authorization: 'Bearer ' + t }
       });
     } catch (e) { return; }
     var j = null;
@@ -149,8 +170,12 @@
     $('caradryel-lier-titre').textContent = 'Colle le lien du Google Doc de « ' + String(o.titre || '') + ' »';
     $('caradryel-lier-url').value = '';
     $('caradryel-lier-message').textContent = '';
-    $('caradryel-lier').hidden = false;
-    $('caradryel-lier-url').focus();
+    var form = $('caradryel-lier');
+    form.hidden = false;
+    // Le dock de Léo est fixé en bas de l'écran : le formulaire vient se poser
+    // AU-DESSUS (scroll-margin-bottom, css/caradryel.css), jamais dessous.
+    form.scrollIntoView({ block: 'end' });
+    $('caradryel-lier-url').focus({ preventScroll: true });
   }
   function fermerLiaison() {
     etat.cible = null;
@@ -193,14 +218,10 @@
       return;
     }
     var cfg = window.ULTIMA_CONFIG;
-    var session = null;
     try {
-      var client = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
-      var res = await client.auth.getSession();
-      session = (res && res.data && res.data.session) || null;
-    } catch (e) { session = null; }
-    if (!session || !session.access_token) { montrer('caradryel-auth'); return; }
-    etat.session = session;
+      etat.client = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+    } catch (e) { montrer('caradryel-auth'); return; }
+    if (!(await jeton())) { montrer('caradryel-auth'); return; }
     traiter(await appel('GET'));
   }
 
