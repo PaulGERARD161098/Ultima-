@@ -563,6 +563,54 @@
         corps: { action: 'soumettre', args: argsSupervision } };
     }
 
+    // ---- ASSISTANTE DE DIRECTION MULTI-STRUCTURES (Boucle 3, 2026-11-23) ----
+    // Trois outils ORANGE : toujours confirmés par Paul avant POST /api/pro-pilotage.
+    var STRUCTURES_VALIDES = ['renoboost-ia', 'sola-air-paris', 'amo'];
+    if (outil === 'proposer_tache_pro') {
+      if (STRUCTURES_VALIDES.indexOf(args.structure_id) === -1 ||
+          typeof args.titre !== 'string' || !args.titre || args.titre.length > 160) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsTache = { ressource: 'tache', structure_id: args.structure_id, titre: args.titre };
+      if (args.type) { corpsTache.type = args.type; }
+      if (args.priorite) { corpsTache.priorite = args.priorite; }
+      if (args.echeance) { corpsTache.echeance = args.echeance; }
+      if (args.contact_ref) { corpsTache.contact_ref = args.contact_ref; }
+      if (args.notes) { corpsTache.notes = args.notes; }
+      return { ok: true, url: '/api/pro-pilotage', methode: 'POST', corps: corpsTache };
+    }
+    if (outil === 'proposer_dossier_pro') {
+      if (STRUCTURES_VALIDES.indexOf(args.structure_id) === -1 ||
+          typeof args.titre !== 'string' || !args.titre || args.titre.length > 160) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsDossier = { ressource: 'dossier', structure_id: args.structure_id, titre: args.titre };
+      if (args.statut) { corpsDossier.statut = args.statut; }
+      if (args.synthese) { corpsDossier.synthese = args.synthese; }
+      if (args.prochaine_action) { corpsDossier.prochaine_action = args.prochaine_action; }
+      return { ok: true, url: '/api/pro-pilotage', methode: 'POST', corps: corpsDossier };
+    }
+    if (outil === 'proposer_document_pro') {
+      if (STRUCTURES_VALIDES.indexOf(args.structure_id) === -1 ||
+          typeof args.type !== 'string' || !args.type ||
+          typeof args.titre !== 'string' || !args.titre || args.titre.length > 160 ||
+          typeof args.contenu !== 'string' || !args.contenu || args.contenu.length > 20000) {
+        return { ok: false, raison: 'invalide' };
+      }
+      return {
+        ok: true,
+        url: '/api/pro-pilotage',
+        methode: 'POST',
+        corps: {
+          ressource: 'document',
+          structure_id: args.structure_id,
+          type: args.type,
+          titre: args.titre,
+          contenu: args.contenu
+        }
+      };
+    }
+
     // ---- IMLADRIK (boucle ④, 2026-07-30) : les 3 caps. Mêmes règles que
     // ci-dessus — bornes alignées sur les validateurs serveur (jamais de
     // troncature silencieuse : ce que la carte affiche est ce qui sera

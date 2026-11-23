@@ -28,7 +28,7 @@
   // Miroir CLIENT de la liste serveur (api/_lib/leo.js). Il ne fait pas
   // autorité — le serveur re-valide et répond 400 — mais il évite d'ouvrir une
   // voix qui échouerait au premier mot sur une déclaration mal orthographiée.
-  var QUADRANTS = ['riven', 'bcp', 'adramelech', 'imladrik', 'finubar', 'ultima'];
+  var QUADRANTS = ['riven', 'bcp', 'adramelech', 'imladrik', 'finubar', 'ultima', 'direction', 'renoboost-ia', 'sola-air-paris', 'amo'];
   var REPLI = 'ultima';
 
   function quadrantDeLaPage() {

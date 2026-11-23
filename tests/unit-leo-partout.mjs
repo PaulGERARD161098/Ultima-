@@ -31,7 +31,7 @@ function verifier(intitule, condition, detail) {
 
 console.log('\n§1 — les six quadrants, et ce que les deux nouveaux ne peuvent pas faire');
 
-const CONNUS = ['riven', 'bcp', 'adramelech', 'imladrik', 'finubar', 'ultima'];
+const CONNUS = ['riven', 'bcp', 'adramelech', 'imladrik', 'finubar', 'ultima', 'direction', 'renoboost-ia', 'sola-air-paris', 'amo'];
 for (const q of CONNUS) {
   verifier(`« ${q} » a un prompt système`, typeof construireSysteme(q, false) === 'string');
 }

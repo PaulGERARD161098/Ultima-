@@ -1,0 +1,37 @@
+services:
+  leo-runtime:
+    build:
+      context: ../..
+      dockerfile: deploy/hostinger/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.vps
+    environment:
+      PORT: "3000"
+      HOST: "0.0.0.0"
+    expose:
+      - "3000"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - leo-runtime
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      LEO_DOMAIN: ${LEO_DOMAIN:?Définir LEO_DOMAIN dans .env.vps}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

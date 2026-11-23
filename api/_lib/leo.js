@@ -4,6 +4,16 @@ import { REGLES_INTERACTION_LEO } from '../../js/leo-interaction.mjs';
 import { EMAIL_RE } from './validate.js';
 import { decrireStockZoh } from './leo-zohshia.mjs';
 import { ARGS_SUPERVISION, supervisionActive } from './supervision.mjs';
+import {
+  STRUCTURES_PRO,
+  IDS_STRUCTURES_PRO,
+  VUE_DIRECTION,
+  TYPES_TACHE,
+  PRIORITES_TACHE,
+  STATUTS_DOSSIER,
+  TYPES_DOCUMENT,
+  estStructurePro
+} from './structures-pro.mjs';
 
 // Voix de Léo (boucle L2) — briques PURES : bornes de la conversation,
 // prompt système Jarvis par quadrant, validation d'entrée, extraction de la
@@ -98,6 +108,42 @@ const QUADRANTS = {
       "marche des dépôts. Tu orientes : tu dis où une chose se traite et par " +
       "quoi commencer. Tu n'as AUCUNE donnée sous les yeux ici — si Paul te " +
       'demande un chiffre ou un état, renvoie-le vers le quadrant qui le porte.'
+  },
+  // DIRECTION & STRUCTURES PRO (Boucle 2, 2026-11-23 — Option A) :
+  // Double niveau de vue : `direction` (consolidé, arbitrage transverse) et
+  // 3 espaces strictement cloisonnés (`renoboost-ia`, `sola-air-paris`, `amo`).
+  [VUE_DIRECTION]: {
+    nom: 'DIRECTION (MULTI-STRUCTURES)',
+    registre: 'opérationnel',
+    sujet: 'la vue globale consolidée des trois structures professionnelles de Paul : ' +
+      'Renoboost IA, Sola Air Paris et AMO. Tu joues le rôle d’assistante de direction ' +
+      'unique et navigatrice : arbitrer les priorités transverses, orienter vers la bonne ' +
+      'structure, suivre les échéances et relances, préparer réunions et brouillons. ' +
+      'Toujours nommer la structure concernée ; ne jamais mélanger leurs données.'
+  },
+  'renoboost-ia': {
+    nom: STRUCTURES_PRO['renoboost-ia'].nom,
+    registre: 'opérationnel',
+    sujet: 'la structure professionnelle Renoboost IA (' +
+      STRUCTURES_PRO['renoboost-ia'].resume + ' Rôle de Paul : ' +
+      STRUCTURES_PRO['renoboost-ia'].rolePaul + '). Espace strictement cloisonné : ' +
+      'priorités, tâches, relances, dossiers, comptes-rendus et brouillons dédiés à Renoboost IA uniquement.'
+  },
+  'sola-air-paris': {
+    nom: STRUCTURES_PRO['sola-air-paris'].nom,
+    registre: 'opérationnel',
+    sujet: 'la structure professionnelle Sola Air Paris (' +
+      STRUCTURES_PRO['sola-air-paris'].resume + ' Rôle de Paul : ' +
+      STRUCTURES_PRO['sola-air-paris'].rolePaul + '). Espace strictement cloisonné : ' +
+      'priorités, tâches, relances, dossiers, comptes-rendus et brouillons dédiés à Sola Air Paris uniquement.'
+  },
+  amo: {
+    nom: STRUCTURES_PRO.amo.nom,
+    registre: 'opérationnel',
+    sujet: 'la structure professionnelle AMO (' +
+      STRUCTURES_PRO.amo.resume + ' Rôle de Paul : ' +
+      STRUCTURES_PRO.amo.rolePaul + '). Projet à part des autres structures, strictement cloisonné : ' +
+      'priorités, tâches, relances, dossiers, comptes-rendus et brouillons dédiés à l’AMO uniquement.'
   }
 };
 
@@ -431,6 +477,52 @@ const CATALOGUE = {
         critere_arret: 'Le critère pour arrêter.'
       }[cle]
     }]))
+  },
+
+  // ---- ASSISTANTE DE DIRECTION MULTI-STRUCTURES (Boucle 2, 2026-11-23) ----
+  // Trois outils d'écriture pure dans `/api/pro-pilotage`, tous en ANNEAU ORANGE :
+  // Paul valide d'un clic avant toute écriture en base (zéro suppression, zéro envoi réel).
+  proposer_tache_pro: {
+    quadrant: [VUE_DIRECTION, ...IDS_STRUCTURES_PRO],
+    anneau: 'orange',
+    description: 'Proposer la création d’une tâche, d’une relance ou d’une décision ' +
+      'dans une des trois structures professionnelles (renoboost-ia, sola-air-paris ou amo). ' +
+      'En vue structure, structure_id doit correspondre exactement à la structure ouverte.',
+    args: {
+      structure_id: { max: 32, requis: true, enum: [...IDS_STRUCTURES_PRO], description: 'Structure cible : renoboost-ia, sola-air-paris ou amo.' },
+      titre: { max: 160, requis: true, description: 'Intitulé court et actionnable, fidèle à la dictée.' },
+      type: { max: 16, enum: [...TYPES_TACHE], description: 'tache, relance ou decision.' },
+      priorite: { max: 16, enum: [...PRIORITES_TACHE], description: 'haute, normale ou basse.' },
+      echeance: { max: 10, date: true, description: 'Échéance au format AAAA-MM-JJ (optionnelle).' },
+      contact_ref: { max: 120, description: 'Personne ou interlocuteur concerné (optionnel).' },
+      notes: { max: 2000, description: 'Contexte ou précisions dictées (optionnel).' }
+    }
+  },
+  proposer_dossier_pro: {
+    quadrant: [VUE_DIRECTION, ...IDS_STRUCTURES_PRO],
+    anneau: 'orange',
+    description: 'Proposer l’ouverture d’un dossier de suivi dans une des trois structures ' +
+      'professionnelles (renoboost-ia, sola-air-paris ou amo).',
+    args: {
+      structure_id: { max: 32, requis: true, enum: [...IDS_STRUCTURES_PRO], description: 'Structure cible : renoboost-ia, sola-air-paris ou amo.' },
+      titre: { max: 160, requis: true, description: 'Titre du dossier, fidèle à la dictée.' },
+      statut: { max: 16, enum: [...STATUTS_DOSSIER], description: 'actif, en_attente ou clos.' },
+      synthese: { max: 4000, description: 'Synthèse structurée du dossier (optionnelle).' },
+      prochaine_action: { max: 300, description: 'Prochaine action concrète attendue (optionnelle).' }
+    }
+  },
+  proposer_document_pro: {
+    quadrant: [VUE_DIRECTION, ...IDS_STRUCTURES_PRO],
+    anneau: 'orange',
+    description: 'Proposer d’enregistrer un document de travail (compte rendu de réunion, ' +
+      'préparation de réunion, brouillon d’email ou synthèse) dans la structure ciblée. ' +
+      'Un brouillon n’est JAMAIS envoyé automatiquement.',
+    args: {
+      structure_id: { max: 32, requis: true, enum: [...IDS_STRUCTURES_PRO], description: 'Structure cible : renoboost-ia, sola-air-paris ou amo.' },
+      type: { max: 24, requis: true, enum: [...TYPES_DOCUMENT], description: 'compte_rendu, preparation_reunion, brouillon_mail ou synthese.' },
+      titre: { max: 160, requis: true, description: 'Titre du document.' },
+      contenu: { max: 20000, requis: true, description: 'Contenu complet du premier jet.' }
+    }
   }
 };
 
@@ -454,7 +546,10 @@ export function normaliserQuadrant(quadrant) {
     : quadrant;
 }
 
-export const OUTILS_PAR_QUADRANT = { riven: [], bcp: [], adramelech: [], imladrik: [], finubar: [] };
+export const OUTILS_PAR_QUADRANT = {
+  riven: [], bcp: [], adramelech: [], imladrik: [], finubar: [],
+  [VUE_DIRECTION]: [], 'renoboost-ia': [], 'sola-air-paris': [], amo: []
+};
 for (const nom of Object.keys(CATALOGUE)) {
   const outil = CATALOGUE[nom];
   const properties = {};
@@ -659,6 +754,11 @@ export function validerProposition(nomOutil, args, quadrant, env = process.env) 
   for (const cle of Object.keys(outil.args)) {
     if (outil.args[cle].requis && !propres[cle]) return { ok: false };
   }
+  // Cloisonnement strict inter-structures (Boucle 2) : en vue structure,
+  // le modèle ne peut JAMAIS proposer une écriture vers une autre structure.
+  if (estStructurePro(quadrant) && propres.structure_id && propres.structure_id !== quadrant) {
+    return { ok: false };
+  }
   // L'anneau voyage AVEC le verdict : c'est le chemin que `api/leo.js`
   // emprunte déjà, donc l'information est sur la voie vivante, pas dans une
   // fonction que l'on penserait à appeler.
@@ -745,6 +845,31 @@ export function reformulerProposition(proposition) {
         (coordonnees ? ' — ' + coordonnees : '') +
         (args.apporteur ? ' — contact obtenu par ' + args.apporteur : '') +
         (args.note ? ' — « ' + args.note + ' »' : '') + '.';
+    }
+    case 'proposer_tache_pro': {
+      const nomStructure = STRUCTURES_PRO[args.structure_id]?.nom || args.structure_id;
+      const typeLabel = args.type === 'relance' ? 'la relance' : args.type === 'decision' ? 'la décision' : 'la tâche';
+      return '[' + nomStructure + '] Créer ' + typeLabel + ' « ' + args.titre + ' »' +
+        (args.priorite ? ' (priorité ' + args.priorite + ')' : '') +
+        (args.echeance ? ', échéance ' + dateFrancaise(args.echeance) : '') +
+        (args.contact_ref ? ', contact : ' + args.contact_ref : '') + '.';
+    }
+    case 'proposer_dossier_pro': {
+      const nomStructure = STRUCTURES_PRO[args.structure_id]?.nom || args.structure_id;
+      return '[' + nomStructure + '] Ouvrir le dossier « ' + args.titre + ' »' +
+        (args.statut ? ' (' + args.statut + ')' : '') +
+        (args.prochaine_action ? ' — prochaine action : « ' + args.prochaine_action + ' »' : '') + '.';
+    }
+    case 'proposer_document_pro': {
+      const nomStructure = STRUCTURES_PRO[args.structure_id]?.nom || args.structure_id;
+      const types = {
+        compte_rendu: 'le compte rendu',
+        preparation_reunion: 'la préparation de réunion',
+        brouillon_mail: 'le brouillon d’e-mail',
+        synthese: 'la synthèse'
+      };
+      return '[' + nomStructure + '] Enregistrer ' + (types[args.type] || 'le document') +
+        ' « ' + args.titre + ' » (premier jet, jamais envoyé automatiquement).';
     }
     default:
       return '';
@@ -920,6 +1045,27 @@ export function construireSysteme(quadrant, avecOutils) {
         'dépendances, celle des protections et le retour arrière. Une preuve existe ' +
         'ne veut pas dire qu’elle concerne l’objet : dis-le. Paul tranche au ' +
         'cockpit ; tu n’as aucun moyen d’arbitrer.'
+    );
+  }
+  // ASSISTANTE DE DIRECTION MULTI-STRUCTURES (Boucle 2, 2026-11-23) :
+  if (quadrant === VUE_DIRECTION) {
+    reglesAction.push(
+      '- Mode DIRECTION (vue globale consolidée) : tu aides Paul à piloter et arbitrer ' +
+        'entre ses trois structures (Renoboost IA, Sola Air Paris, AMO) sur 4 axes : ' +
+        'navigation/synthèse, priorités/tâches/relances, rédaction (emails en brouillon, CR, ' +
+        'préparations de réunions) et structuration/aide à la décision. Nomme TOUJOURS la ' +
+        'structure concernée ; n’appelle jamais un outil pro sans structure_id explicite et ' +
+        'ne mélange jamais les dossiers ni les interlocuteurs de deux structures.'
+    );
+  } else if (estStructurePro(quadrant)) {
+    const meta = STRUCTURES_PRO[quadrant];
+    reglesAction.push(
+      '- Mode STRUCTURE CLOISONNÉE (' + meta.nom + ') : tu travailles EXCLUSIVEMENT sur ' +
+        meta.nom + '. Cloisonnement strict : ne mélange jamais les tâches, dossiers, ' +
+        'contacts ou historiques des deux autres structures. Si Paul évoque une autre ' +
+        'structure, signale-le clairement et propose de basculer dans son espace dédié ' +
+        'ou en vue Direction. Tes propositions d’outils doivent viser structure_id="' +
+        meta.id + '" uniquement ; tout brouillon reste un premier jet jamais envoyé.'
     );
   }
   return [

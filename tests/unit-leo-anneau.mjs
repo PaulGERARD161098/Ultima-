@@ -32,8 +32,10 @@ const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map(
 // DOUZE depuis le 23/10 : + proposer_contact, la fiche réseau par la voix.
 // TREIZE depuis le 31/10 : + proposer_supervision, ORANGE, sur un CINQUIÈME
 // quadrant (FINUBAR, choix de Paul) — et coupé par défaut (LEO_SUPERVISION).
-verdicts.nonVacuite = tousLesOutils.length === 13 &&
-  Object.keys(OUTILS_PAR_QUADRANT).length === 5;
+// SEIZE depuis le 23/11 (Boucle 2) : + proposer_tache_pro, proposer_dossier_pro,
+// proposer_document_pro — tous ORANGE, sur 4 quadrants pro (direction + 3 structures).
+verdicts.nonVacuite = tousLesOutils.length === 16 &&
+  Object.keys(OUTILS_PAR_QUADRANT).length === 9;
 
 // ---------- 1. Chaque outil porte un anneau EXPLICITE et reconnu ----------
 // Le défaut orange rattrape un champ manquant à l'exécution ; il ne dispense
