@@ -2,7 +2,7 @@
 
 Paul, 22/11 : créer CARADRYEL, cap d'OMEGA à côté d'IMLADRIK, pour centraliser ses écrits (Lettres à Léo, Vies volées, Catabasis, Anabasis) avec un accès direct à chaque Google Doc, et que Léo l'aide à écrire et à garder la cohérence. Cadrage `CADRAGE-CARADRYEL.md`, maquette `design/preview-caradryel.html` (plume de phénix), puis C1 construite sur `claude/busy-mccarthy-snss8y` : table `caradryel_oeuvres` (RLS), `/api/caradryel`, `caradryel.html`. PR Ultima-#475.
 
-**Prochaine action :** ✅ 23/11 : migration appliquée (6/6 contrôles) et Ultima-#475 fusionnée (`1111713`). Reste : Paul pose ses quatre œuvres et colle les liens Docs.
+**Prochaine action :** ✅ 23/11 : migration appliquée (6/6 contrôles), #475, #476 et #477 fusionnées (`7cf7f25`), A2 et A3 tranchés, 4 œuvres posées. Reste : Paul colle les 4 liens Docs.
 
 ---
 
@@ -64,12 +64,12 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   },
   "dernier_arret": {
     "le": "2026-11-23",
-    "commit": "1111713838b4ce55ad860447c10fa5e04bd09704",
-    "quoi": "22–23/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste l'éditeur). Cadrage CADRAGE-CARADRYEL.md, maquette (plume de phénix), boucle C1 : table caradryel_oeuvres, /api/caradryel, caradryel.html. Ultima-#475 fusionnée (1111713) sur accord de Paul, CI verte. Migration appliquée le 23/11 par la séance sur mandat de Paul : 6/6 contrôles vrais, refus anon et DELETE éprouvés, advisors 0 alerte."
+    "commit": "7cf7f25bc37ae3d790ff2e0f2c38d73f65b0da70",
+    "quoi": "22–23/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste l'éditeur). Ultima-#475 fusionnée (1111713 : cadrage, maquette, C1 = table caradryel_oeuvres, /api/caradryel, caradryel.html), #476 (ac9ce7a, documentation), #477 (7cf7f25 : correctifs de la revue Codex — bouton Léo, « Changer le lien », jeton relu — et dock de Léo qui masquait « Lier »). Migration appliquée le 23/11 (6/6 contrôles, advisors 0). A1, A2, A3, A4, A5 tranchés. Mesuré en base le 23/11 : 4 œuvres posées, 0 reliée."
   },
-  "prochaine_action": "Paul ouvre Ultima → OMEGA → CARADRYEL, clique « Poser mes quatre œuvres », colle les 4 liens de ses Google Docs, et regarde la page sur iPhone ; la séance suivante relit la table en base (4 lignes, liens posés) avant de fermer C1. Ensuite seulement : cadrage C2 (Google Picker). Hors CARADRYEL, la prochaine boucle reste ADR-013 (relance d'impayé dans RenoDevis).",
+  "prochaine_action": "Paul colle les 4 liens de ses Google Docs dans CARADRYEL (« Lier le Doc » ; pour Lettres à Léo, le Google Doc et pas le .docx) et regarde la page sur iPhone ; la séance suivante relit la table en base (count(drive_file_id) = 4) et ferme C1. Ensuite : cadrage C2 (Google Picker). Hors CARADRYEL, la prochaine boucle reste ADR-013 (relance d'impayé dans RenoDevis).",
   "bloque_par": [
-    "CARADRYEL C1 — geste de Paul : poser ses quatre œuvres et coller les 4 liens Docs (la migration est appliquée et la PR fusionnée le 23/11) ; A2 (« Lettres à Léo » adressées à Léo l'agent ?) et A3 (accord d'envoi d'un texte à l'API le temps d'une relecture, requis pour C3/C4) ouverts.",
+    "CARADRYEL C1 — geste de Paul : coller les 4 liens Docs (4 œuvres posées, 0 reliée au 23/11). A2 et A3 tranchés le 23/11 (A3 : envoi temporaire à l'API accordé ; C3/C4 restent à cadrer après C2).",
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",

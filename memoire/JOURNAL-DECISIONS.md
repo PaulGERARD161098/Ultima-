@@ -4977,3 +4977,11 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 **Fait :** migration `caradryel_oeuvres` appliquée par la séance (connecteur Supabase, projet Ultima) ; contrôles : 6/6 vrais, refus `anon` et DELETE éprouvés, advisors sécurité vides, 0 ligne. Puis Ultima-#475 fusionnée en squash sur `ee46fbf` → `1111713`.
 
 **Reste :** le geste de Paul (poser les quatre œuvres, coller les liens) ; A2 et A3 ouverts.
+
+## 2026-11-23 — CARADRYEL : A2 et A3 tranchés, #477 fusionnée
+
+**Source :** Paul, 23/11 : « lettres à [Léo] : non » ; « oui ok pour envoi temporaire ».
+
+**Tranché :** A2 : *Lettres à Léo* ne s'adresse pas à Léo l'agent. Elle est relue comme les autres œuvres. A3 : accord d'envoi du texte d'une œuvre à l'API Claude le temps d'une relecture, sans stockage ni journalisation. C3 et C4 sont débloquées sur le principe ; elles restent à cadrer.
+
+**Même jour :** Ultima-#477 fusionnée (`7cf7f25`), sur accord de Paul et CI verte. Elle corrige les trois constats de la revue Codex de #475 et le dock de Léo qui masquait « Lier ». Relu en base : 4 œuvres posées par Paul, 0 reliée.
