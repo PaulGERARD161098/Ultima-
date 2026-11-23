@@ -4959,3 +4959,13 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 
 **Écart assumé :** écrite en SQL depuis la séance, sur mandat explicite, et non par Léo dans Ultima. Elle échappe donc au journal `leo_ecritures` et ne prouve pas `proposer_contact` ; cette preuve passe au fils de Romin.
 
+
+## 2026-11-22 — CARADRYEL : le scriptorium des écrits de Paul
+
+**Source :** dictées de Paul du 22/11 (« on crée Caradryel… cadre et maquette ça » ; « remplace le logo par une plume de phénix » ; « OMEGA à côté d'Imladrik, non c'est perso, go cadrage pour la suite » ; « go étape 1 »).
+
+**Tranché :** CARADRYEL est un cap d'**OMEGA**, à côté d'IMLADRIK (A1) ; blason = **plume de phénix** (A5) ; **pas d'horizon de publication**, c'est perso (A4, lecture retenue de « non c'est perso » — elle pourrait aussi répondre à A2, laissé ouvert) ; Google Docs reste l'éditeur, Ultima indexe et Léo relira (ligne ZS du cadrage).
+
+**Fait :** cadrage `CADRAGE-CARADRYEL.md` (C0 + C1 détaillé), maquette `design/preview-caradryel.html`, boucle C1 construite sur branche (table, route, porte). Constat Drive (métadonnées seules) : les 4 œuvres existent en Google Docs étoilés.
+
+**Ouvert :** A2 (« Lettres à Léo » s'adresse-t-elle à Léo l'agent ?) ; A3 (accord d'envoi d'un texte à l'API le temps d'une relecture — requis pour C3/C4) ; migration C1 à appliquer par Paul.

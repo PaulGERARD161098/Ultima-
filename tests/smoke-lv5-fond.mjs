@@ -392,7 +392,7 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'coque390'], [1280, 860, 'coqu
   verdicts['coquePhaseTenue_' + nom] = r.phase !== null && r.phase <= 1;
   verdicts['coquePlusDePoussiereSvg_' + nom] = r.poussiereSvg === 0;
   verdicts['coqueLesCapsSontLa_' + nom] = r.etoiles === NOEUDS.omega.enfants.length
-    && r.etoiles === 3; // OMEGA : RIVEN, NICOL BOLAS, IMLADRIK (GRIMA et NAGA supprimés)
+    && r.etoiles === 4; // OMEGA : RIVEN, NICOL BOLAS, IMLADRIK, CARADRYEL (22/11/2026)
   verdicts['coqueLeGesteVaALEtoile_' + nom] = r.gesteVaALEtoile === true;
   await page.close();
 }

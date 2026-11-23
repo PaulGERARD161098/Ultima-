@@ -1,3 +1,11 @@
+# 22 novembre 2026 — CARADRYEL, le scriptorium : cadrage, maquette, boucle C1
+
+Paul, 22/11 : créer CARADRYEL, cap d'OMEGA à côté d'IMLADRIK, pour centraliser ses écrits (Lettres à Léo, Vies volées, Catabasis, Anabasis) avec un accès direct à chaque Google Doc, et que Léo l'aide à écrire et à garder la cohérence. Cadrage `CADRAGE-CARADRYEL.md`, maquette `design/preview-caradryel.html` (plume de phénix), puis C1 construite sur `claude/busy-mccarthy-snss8y` : table `caradryel_oeuvres` (RLS), `/api/caradryel`, `caradryel.html`. PR Ultima-#475.
+
+**Prochaine action :** Paul applique la migration CARADRYEL et sa vérification, pose ses quatre œuvres et colle les liens ; fusion sur son accord.
+
+---
+
 # 10 novembre 2026 — agent `prospection` créé, point du matin absorbé par Léo
 
 Paul, 10/11 : agent de prospection validé ; l'agent « boîte et agenda » devient un mode de Léo ; l'agent d'encaissement est différé (Stripe non branché). Posé sur la branche `claude/brave-ride-tfgsl3` : `.claude/agents/prospection.md` (sous-agent de Léo, prépare et propose, aucun envoi, aucune écriture en base, aucun fichier de prospects) ; `.claude/agents/leo.md` §2 (ligne de dispatch) et §5 (« Point du matin — boîte et agenda », à la demande, assemble C27, C28, C30, C31, C58). `tests/unit-leo-complements.mjs` : 239 vérifications vertes en local. Aucun automatisme, aucune routine, aucun raccordement nouveau : la pause du 01/11 sur le développement de Léo reste en place, ceci est une mise à jour de charte demandée par Paul. Non éprouvé à la pose : aucun point du matin réel. Fusionnée le 10/11 (Ultima-#455, `6a4a160`, relu sur `origin/main` le 11/11).
@@ -55,12 +63,13 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-21",
-    "commit": "0bd7697b011527d1de705b1377e710d8e7bc2548",
-    "quoi": "17→21/11 (séance Léo) : compétence « administratif » (compte rendu 12 lignes, dossier de pièces, rangement) servie aussi à la Léo de l'application ; message à Léo jusqu'à 16 000 caractères ; dock de Léo au-dessus des onglets sur RIVEN (« Parler » était masqué) — Ultima-#469 fusionnée (7c240d3). Dialogue avec Léo : réponses mises en forme (textContent, jamais innerHTML), champ multiligne, panneau latéral sur toutes les pages, fil qui défile seul (revue Codex) — Ultima-#472 fusionnée (0bd7697), recette Paul validée. Tri des 50 cas BTP → ADR-013 (7 couverts, 5 retenus, 37 écartés). Leçons v130 (2 leçons) à propager aux 9 autres dépôts."
+    "le": "2026-11-22",
+    "commit": "14f0e332e343c3f920bd9e830449fe986da0b937",
+    "quoi": "22/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste l'éditeur). Cadrage CADRAGE-CARADRYEL.md (C0 + C1 détaillé, A1/A4/A5 tranchés), maquette design/preview-caradryel.html (blason plume de phénix). Boucle C1 construite sur claude/busy-mccarthy-snss8y : table caradryel_oeuvres (RLS, 1268b91), route /api/caradryel, porte caradryel.html (14f0e33) ; unitaires 96/96, PGlite, smoke-caradryel vert, 14 sabotages rouges. PR Ultima-#475 (brouillon). Migration NON appliquée."
   },
-  "prochaine_action": "Séance neuve : cadrage d'intégration des 5 fonctions retenues d'ADR-013 (adramelech/IDEES.md) — relance d'impayé, avenant, avis après chantier (rattaché à ADR-004), écart devis/réalisé, suivi des réserves — dans RenoDevis, en commençant par la relance d'impayé (reco). Les 37 cas écartés : une autre séance.",
+  "prochaine_action": "Paul applique la migration supabase/migrations/20261122220000_caradryel_oeuvres.sql (SQL Editor) et lance le script de vérification en pied de fichier (5 lignes à true) ; puis, sur l'aperçu, « Poser mes quatre œuvres » et colle les 4 liens Docs ; puis fusion de Ultima-#475 sur son accord (SHA). Ensuite seulement : cadrage C2 (Google Picker). La suite ADR-013 (relance d'impayé dans RenoDevis) reste la prochaine boucle hors CARADRYEL.",
   "bloque_par": [
+    "CARADRYEL C1 — migration caradryel_oeuvres à appliquer par Paul (gate rouge) ; A2 (« Lettres à Léo » adressées à Léo l'agent ?) et A3 (accord d'envoi d'un texte à l'API le temps d'une relecture, requis pour C3/C4) ouverts.",
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
@@ -235,7 +244,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-11-12"
+  "maj": "2026-11-22"
 }
 ```
 

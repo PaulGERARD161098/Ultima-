@@ -128,8 +128,9 @@ verifier('ALTHEA n’est plus un cadran d’OMEGA (il pend à la racine)',
   !attendus.includes('ALTHEA'), `lu: ${JSON.stringify(attendus)}`);
 // Éprouvé par l'ABSENCE, sur le RENDU (pas seulement sur le registre) : les
 // macro-quadrants supprimés n'ont ni étoile ni nom peint sur cet étage.
-verifier('OMEGA : trois caps, ni GRIMA ni NAGA, ni l\'ancien nom ULTIMA',
-  noms.length === 3 && !noms.some((n) => /^(GRIMA|NAGA|ULTIMA)$/.test(n)),
+// 22/11/2026 : CARADRYEL est le 4ᵉ cap d'OMEGA (CADRAGE-CARADRYEL.md, A1).
+verifier('OMEGA : quatre caps, ni GRIMA ni NAGA, ni l\'ancien nom ULTIMA',
+  noms.length === 4 && !noms.some((n) => /^(GRIMA|NAGA|ULTIMA)$/.test(n)),
   JSON.stringify(noms));
 
 // Chaque cadran est cliquable et ouvre sa porte — celles du registre, pas une
@@ -343,10 +344,10 @@ const capsOmega = await lireCaps(page);
 const nomsOmega = capsOmega.map((c) => c.nom);
 // Même scission que pour IMLADRIK plus bas : la déclaration du registre est
 // conservée, l'ordre du DOM est abandonné (la géométrie range).
-verifier('OMEGA : le registre déclare RIVEN + NICOL BOLAS + IMLADRIK dans cet ordre',
-  JSON.stringify(attendusOmega) === JSON.stringify(['RIVEN', 'NICOL BOLAS', 'IMLADRIK']),
+verifier('OMEGA : le registre déclare RIVEN + NICOL BOLAS + IMLADRIK + CARADRYEL dans cet ordre',
+  JSON.stringify(attendusOmega) === JSON.stringify(['RIVEN', 'NICOL BOLAS', 'IMLADRIK', 'CARADRYEL']),
   `registre: ${JSON.stringify(attendusOmega)}`);
-verifier('OMEGA : les trois caps sont rendus (ordre abandonné)',
+verifier('OMEGA : les quatre caps sont rendus (ordre abandonné)',
   JSON.stringify([...nomsOmega].sort()) === JSON.stringify([...attendusOmega].sort()),
   `lu: ${JSON.stringify(nomsOmega)}`);
 // Les portes se lisent dans le repli <noscript> : au ciel, l'étoile n'est pas

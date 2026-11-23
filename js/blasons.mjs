@@ -153,6 +153,25 @@ export const BLASONS = {
   aileNoire: disque('<g transform="translate(72,0) scale(-1,1)">' + aile('#241c12') + '</g>',
     'l’aile noire de ZEKROM'),
 
+  // — CARADRYEL (22/11/2026) : la plume de phénix, dictée par Paul. Barbes de
+  //   braise, œil au sommet, flamme à la pointe, tuyau d'or. Ids de dégradés
+  //   préfixés (une page ne porte jamais deux fois le même id).
+  phenix: disque(
+    '<defs><linearGradient id="phenix-braise" x1="0" y1="1" x2="0" y2="0">'
+    + '<stop offset="0" stop-color="#8a2b12"/><stop offset=".45" stop-color="#c8501e"/>'
+    + '<stop offset=".8" stop-color="#e3923a"/><stop offset="1" stop-color="#e8cf8f"/></linearGradient>'
+    + '<radialGradient id="phenix-oeil" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#f9f1dc"/>'
+    + '<stop offset=".35" stop-color="#e8cf8f"/><stop offset=".7" stop-color="#c8501e"/>'
+    + '<stop offset="1" stop-color="#5a1a0c"/></radialGradient></defs>'
+    + '<g transform="translate(36 37) scale(.52) rotate(24) translate(-60 -56)">'
+    + '<path d="M60 13 C 54 6, 58 0, 55 -6 C 62 -1, 64 5, 61 10 C 64 6, 68 4, 69 -1 C 71 6, 67 11, 62 14 Z" fill="#e3923a" stroke="#3b2f1c" stroke-width="1"/>'
+    + '<path d="M60 12 C 52 22, 48 36, 48 50 L 52 52 C 47 58, 47 68, 50 74 L 53 74 C 51 80, 54 86, 59 90 L 61 90 C 67 84, 71 74, 71 64 L 68 62 C 73 54, 73 40, 68 30 L 66 31 C 66 22, 63 16, 60 12 Z" fill="url(#phenix-braise)" stroke="#3b2f1c" stroke-width="2" stroke-linejoin="round"/>'
+    + '<ellipse cx="60" cy="30" rx="4.6" ry="8" fill="url(#phenix-oeil)" stroke="#3b2f1c" stroke-width="1.2"/>'
+    + '<path d="M60 40 L 60 90" stroke="#3b2f1c" stroke-width="2"/>'
+    + '<path d="M60 90 L 60 108" stroke="#a9884a" stroke-width="3.6" stroke-linecap="round"/>'
+    + '</g>',
+    'une plume de phénix'),
+
   // — Les caps d'IMLADRIK.
   plume: disque(
     '<path d="M46 16 C 38 20, 30 30, 27 44 L 29.5 45 C 35 33, 41 24, 48 19 Z" fill="#3b2f1c"/>'

@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>CARADRYEL — maquette du scriptorium</title>
+<!-- Maquette C0 (2026-11-22) — STATIQUE. Cadrage : CADRAGE-CARADRYEL.md.
+     Zéro code produit : ni API, ni auth, ni donnée. Seuls les quatre TITRES
+     sont réels (dictés par Paul) ; tout le reste — statuts, fiches, remarques
+     de Léo — est FICTIF et marqué comme tel. Aucun identifiant Drive ici.
+     Palette et typographie : celles de preview-imladrik-boussole.html. -->
+<style>
+  :root {
+    --nuit: #0e3a52; --mer: #145070;
+    --parchemin: #f9f1dc; --parchemin-doux: #f6eed9;
+    --or-clair: #e8cf8f; --or: #c9a659; --bronze: #a9884a;
+    --encre: #3b2f1c; --encre-brune: #5a4118;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse 120% 80% at 50% -10%, var(--mer), var(--nuit) 70%);
+    color: var(--parchemin);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    padding: 1.4rem 1rem 3rem;
+  }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--or-clair); outline-offset: 3px; }
+
+  .bandeau-proto {
+    display: block; width: fit-content; margin: 0 auto 1rem;
+    font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--nuit); background: var(--or-clair);
+    border: 1px solid var(--bronze); border-radius: 2px; padding: .28rem .9rem;
+    text-align: center;
+  }
+  .entete { text-align: center; max-width: 36rem; margin: 0 auto; }
+  .surligne { display: block; font-size: .78rem; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--or-clair); opacity: .85; }
+  h1 { font-size: clamp(1.7rem, 5vw, 2.4rem); font-weight: 600;
+    letter-spacing: .14em; margin-top: .3rem; }
+  .invite { font-style: italic; color: var(--or-clair); margin-top: .4rem; }
+  .filet { width: 9rem; height: 1px; margin: .9rem auto 0;
+    background: linear-gradient(90deg, transparent, var(--or), transparent); }
+
+  /* Onglets de la maquette (navigation entre les deux écrans proposés) */
+  .vues { display: flex; justify-content: center; gap: .5rem; margin: 1.2rem 0 1.4rem; }
+  .vues button {
+    background: transparent; border: 1px solid var(--bronze); border-radius: 2px;
+    padding: .4rem 1rem; letter-spacing: .12em; text-transform: uppercase;
+    font-size: .78rem; cursor: pointer; color: var(--or-clair);
+  }
+  .vues button[aria-selected="true"] { background: var(--or-clair); color: var(--nuit); }
+
+  /* ============ ÉCRAN 1 — LA PORTE (boussole des quatre œuvres) ============ */
+  .porte { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+  .plateau { position: relative; width: min(90vw, 560px); aspect-ratio: 1; }
+  .plateau svg.trame { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .cercle { fill: none; stroke: var(--or); opacity: .28; }
+  .aiguille { stroke: var(--or); stroke-width: .5; opacity: .45; stroke-dasharray: 1.6 2.2; }
+  .aiguille.is-actif { opacity: 1; stroke-width: .9; stroke-dasharray: none; }
+  .fil-croise { fill: none; stroke: var(--or-clair); stroke-width: .5;
+    stroke-dasharray: .8 1.6; opacity: .7; }
+  .fil-legende { fill: var(--or-clair); font-size: 2.6px; font-style: italic; opacity: .85; }
+
+  .coeur { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 30%; text-align: center; }
+  .coeur svg { width: 100%; filter: drop-shadow(0 4px 14px rgba(0,0,0,.45)); }
+  .coeur-legende { display: block; margin-top: .35rem; font-style: italic;
+    letter-spacing: .14em; color: var(--or-clair); font-size: clamp(.8rem, 2.4vw, 1rem); }
+
+  .oeuvre {
+    position: absolute; transform: translate(-50%, -50%);
+    width: clamp(8.5rem, 30%, 11rem);
+    background: var(--parchemin); color: var(--encre);
+    border: 1px solid var(--bronze); border-radius: 3px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.35), inset 0 0 0 3px var(--parchemin-doux), inset 0 0 0 4px var(--or);
+    padding: .65rem .7rem .6rem; text-align: center; cursor: pointer;
+    transition: transform .2s;
+  }
+  .oeuvre:hover, .oeuvre:focus-visible { transform: translate(-50%, -50%) scale(1.04); }
+  .oeuvre h2 { font-size: .98rem; letter-spacing: .06em; color: var(--encre-brune); }
+  .oeuvre .statut { display: block; font-size: .72rem; font-style: italic; margin: .2rem 0 .45rem; }
+  .oeuvre .drive {
+    display: inline-block; font-size: .72rem; letter-spacing: .08em;
+    border-top: 1px solid var(--or); padding-top: .3rem; color: var(--encre-brune);
+  }
+  .o-nord { left: 50%; top: 9%; }  .o-sud { left: 50%; top: 91%; }
+  .o-ouest { left: 13%; top: 50%; } .o-est { left: 87%; top: 50%; }
+
+  .parole {
+    max-width: 34rem; min-height: 4.2rem; text-align: center;
+    background: rgba(249,241,220,.06); border: 1px solid rgba(201,166,89,.45);
+    border-radius: 3px; padding: .8rem 1.1rem; font-style: italic; color: var(--parchemin);
+  }
+  .parole strong { font-style: normal; color: var(--or-clair); letter-spacing: .08em; }
+
+  /* ============ ÉCRAN 2 — L'ATELIER (rail permanent · bible · Léo) ============ */
+  .atelier { display: grid; grid-template-columns: 13rem 1fr 20rem; gap: 1rem;
+    max-width: 72rem; margin: 0 auto; }
+  .panneau { background: var(--parchemin); color: var(--encre);
+    border: 1px solid var(--bronze); border-radius: 3px; padding: 1rem;
+    box-shadow: inset 0 0 0 3px var(--parchemin-doux), inset 0 0 0 4px var(--or); }
+  .panneau h3 { font-size: .78rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--encre-brune); margin-bottom: .7rem; }
+
+  .rail ol { list-style: none; display: grid; gap: .45rem; }
+  .rail li button {
+    width: 100%; text-align: left; background: transparent; cursor: pointer;
+    border: 1px solid transparent; border-radius: 2px; padding: .45rem .5rem; color: var(--encre);
+  }
+  .rail li button[aria-current="true"] { border-color: var(--bronze); background: var(--parchemin-doux); }
+  .rail .nom { display: block; font-weight: 600; color: var(--encre-brune); }
+  .rail .meta { font-size: .72rem; font-style: italic; }
+  .rail .ouvrir { display: block; margin-top: .9rem; text-align: center; font-size: .8rem;
+    border: 1px solid var(--bronze); padding: .45rem; border-radius: 2px; color: var(--encre-brune);
+    text-decoration: none; }
+
+  .bible-tetes { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .8rem; }
+  .bible-tetes span { font-size: .74rem; border: 1px solid var(--or); border-radius: 2px;
+    padding: .15rem .5rem; }
+  .bible-tetes span.is-actif { background: var(--encre-brune); color: var(--parchemin); }
+  .fiche { border-top: 1px solid rgba(169,136,74,.5); padding: .6rem 0; }
+  .fiche h4 { font-size: .92rem; color: var(--encre-brune); }
+  .fiche p { font-size: .84rem; line-height: 1.45; }
+  .fiche .src { font-size: .72rem; font-style: italic; color: var(--bronze); }
+  .proposee { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--nuit); background: var(--or-clair); padding: 0 .35rem; border-radius: 2px; }
+  .fictif { font-size: .7rem; font-style: italic; color: var(--bronze); }
+
+  .leo-actions { display: grid; gap: .4rem; margin-bottom: .8rem; }
+  .leo-actions button { background: var(--nuit); color: var(--parchemin); border: 0;
+    border-radius: 2px; padding: .45rem; font-size: .82rem; cursor: pointer; }
+  .remarque { border-left: 3px solid var(--or); padding: .35rem .6rem; margin-bottom: .6rem;
+    background: var(--parchemin-doux); }
+  .remarque .type { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--encre-brune); }
+  .remarque p { font-size: .82rem; line-height: 1.4; }
+  .remarque blockquote { font-size: .78rem; font-style: italic; margin: .25rem 0; color: var(--encre-brune); }
+  .remarque a { font-size: .72rem; color: var(--encre-brune); }
+  .leo-champ { width: 100%; margin-top: .4rem; font: inherit; font-size: .85rem;
+    padding: .5rem; border: 1px solid var(--bronze); border-radius: 2px; background: #fffaf0; resize: vertical; }
+
+  .note-maquette { max-width: 46rem; margin: 1.8rem auto 0; font-size: .82rem;
+    color: var(--or-clair); opacity: .9; line-height: 1.5; }
+
+  [hidden] { display: none !important; }
+  @media (max-width: 900px) { .atelier { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) {
+    .oeuvre { width: 29%; padding: .45rem .35rem; }
+    .oeuvre h2 { font-size: .8rem; letter-spacing: .02em; }
+    .oeuvre .statut, .oeuvre .drive { font-size: .62rem; letter-spacing: 0; }
+    .o-ouest { left: 15%; } .o-est { left: 85%; }
+    .fil-legende { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<span class="bandeau-proto">Maquette statique — titres réels, tout le reste est fictif</span>
+
+<header class="entete">
+  <span class="surligne">Omega · cap frère d'Imladrik</span>
+  <h1>CARADRYEL</h1>
+  <p class="invite">Le scriptorium — tes écrits, leur cohérence, et Léo qui relit.</p>
+  <div class="filet"></div>
+</header>
+
+<nav class="vues" role="tablist" aria-label="Écrans de la maquette">
+  <button role="tab" id="t-porte" aria-selected="true" aria-controls="v-porte">① La porte</button>
+  <button role="tab" id="t-atelier" aria-selected="false" aria-controls="v-atelier">② L'atelier</button>
+</nav>
+
+<!-- ======================= ① LA PORTE ======================= -->
+<main>
+<section id="v-porte" class="porte" role="tabpanel" aria-labelledby="t-porte">
+  <div class="plateau">
+    <svg class="trame" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="cercle" cx="50" cy="50" r="46"/>
+      <circle class="cercle" cx="50" cy="50" r="31" stroke-dasharray="1 2"/>
+      <line class="aiguille" data-o="anabasis"  x1="50" y1="50" x2="50" y2="15"/>
+      <line class="aiguille" data-o="catabasis" x1="50" y1="50" x2="50" y2="85"/>
+      <line class="aiguille" data-o="lettres"   x1="50" y1="50" x2="19" y2="50"/>
+      <line class="aiguille" data-o="vies"      x1="50" y1="50" x2="81" y2="50"/>
+      <!-- Fil croisé proposé : la descente et la remontée (contrôle C4) -->
+      <path class="fil-croise" d="M58 86 C 92 74, 92 26, 58 14"/>
+      <text class="fil-legende" x="88" y="77">descente ↔ remontée</text>
+    </svg>
+
+    <div class="coeur">
+      <!-- Blason (Paul, 22/11) : une plume de phénix — barbes en langues de flamme,
+           œil de braise au sommet, tuyau d'or. Registre gravure : encre + or + braise. -->
+      <svg viewBox="0 0 120 120" role="img" aria-label="Blason de Caradryel : une plume de phénix">
+        <defs>
+          <linearGradient id="braise" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#8a2b12"/>
+            <stop offset=".45" stop-color="#c8501e"/>
+            <stop offset=".8" stop-color="#e3923a"/>
+            <stop offset="1" stop-color="#e8cf8f"/>
+          </linearGradient>
+          <radialGradient id="oeil" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#f9f1dc"/>
+            <stop offset=".35" stop-color="#e8cf8f"/>
+            <stop offset=".7" stop-color="#c8501e"/>
+            <stop offset="1" stop-color="#5a1a0c"/>
+          </radialGradient>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="#f9f1dc" stroke="#c9a659" stroke-width="3"/>
+        <circle cx="60" cy="60" r="49" fill="none" stroke="#a9884a" stroke-width="1"/>
+        <g transform="translate(60 62) scale(.86) rotate(24) translate(-60 -56)">
+          <!-- flammèches : la plume brûle sans se consumer -->
+          <path d="M60 13 C 54 6, 58 0, 55 -6 C 62 -1, 64 5, 61 10 C 64 6, 68 4, 69 -1 C 71 6, 67 11, 62 14 Z" fill="#e3923a" stroke="#3b2f1c" stroke-width=".7" stroke-linejoin="round"/>
+          <!-- le vexille : étroit, effilé, deux fentes de chaque côté -->
+          <path d="M60 12 C 52 22, 48 36, 48 50 L 52 52 C 47 58, 47 68, 50 74 L 53 74
+                   C 51 80, 54 86, 59 90 L 61 90 C 67 84, 71 74, 71 64 L 68 62
+                   C 73 54, 73 40, 68 30 L 66 31 C 66 22, 63 16, 60 12 Z"
+                fill="url(#braise)" stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round"/>
+          <!-- l'œil de braise -->
+          <ellipse cx="60" cy="30" rx="4.6" ry="8" fill="url(#oeil)" stroke="#3b2f1c" stroke-width=".8"/>
+          <!-- barbes gravées -->
+          <path d="M60 40 q -5 -6 -10 -10 M60 45 q -5 -6 -10 -10 M60 50 q -5 -6 -10 -10 M60 55 q -5 -6 -10 -10 M60 60 q -5 -6 -10 -10 M60 65 q -5 -6 -10 -10 M60 70 q -5 -6 -10 -10 M60 75 q -5 -6 -10 -10 M60 80 q -5 -6 -10 -10 M60 85 q -5 -6 -10 -10 M60 40 q 5 -6 10 -10 M60 45 q 5 -6 10 -10 M60 50 q 5 -6 10 -10 M60 55 q 5 -6 10 -10 M60 60 q 5 -6 10 -10 M60 65 q 5 -6 10 -10 M60 70 q 5 -6 10 -10 M60 75 q 5 -6 10 -10 M60 80 q 5 -6 10 -10 M60 85 q 5 -6 10 -10" fill="none" stroke="#3b2f1c" stroke-width=".55" stroke-linecap="round" opacity=".6"/>
+          <!-- rachis et calamus d'or -->
+          <path d="M60 40 L 60 90" stroke="#3b2f1c" stroke-width="1.3"/>
+          <path d="M60 90 L 60 108" stroke="#a9884a" stroke-width="2.6" stroke-linecap="round"/>
+          <!-- étincelles -->
+          <circle cx="74" cy="20" r="1.3" fill="#c8501e"/>
+          <circle cx="79" cy="30" r=".9" fill="#e3923a"/>
+          <circle cx="44" cy="26" r="1" fill="#e3923a"/>
+        </g>
+      </svg>
+      <span class="coeur-legende">Caradryel</span>
+    </div>
+
+    <button class="oeuvre o-nord" data-o="anabasis">
+      <h2>Anabasis</h2><span class="statut">Commencée · exemple</span>
+      <span class="drive">Ouvrir dans Drive ↗</span>
+    </button>
+    <button class="oeuvre o-est" data-o="vies">
+      <h2>Vies volées</h2><span class="statut">En cours · exemple</span>
+      <span class="drive">Ouvrir dans Drive ↗</span>
+    </button>
+    <button class="oeuvre o-sud" data-o="catabasis">
+      <h2>Catabasis</h2><span class="statut">La plus avancée · exemple</span>
+      <span class="drive">Ouvrir dans Drive ↗</span>
+    </button>
+    <button class="oeuvre o-ouest" data-o="lettres">
+      <h2>Lettres à Léo</h2><span class="statut">En cours · exemple</span>
+      <span class="drive">Ouvrir dans Drive ↗</span>
+    </button>
+  </div>
+
+  <p class="parole" id="parole" aria-live="polite">Survole une œuvre — Léo t'en dit l'essentiel. Clic : l'atelier de l'œuvre.</p>
+</section>
+
+<!-- ======================= ② L'ATELIER ======================= -->
+<section id="v-atelier" role="tabpanel" aria-labelledby="t-atelier" hidden>
+  <div class="atelier">
+
+    <!-- Rail permanent : les quatre œuvres restent toujours visibles -->
+    <aside class="panneau rail" aria-label="Tes œuvres">
+      <h3>Tes œuvres</h3>
+      <ol>
+        <li><button data-o="lettres"><span class="nom">Lettres à Léo</span><span class="meta">exemple : il y a 5 j</span></button></li>
+        <li><button data-o="vies"><span class="nom">Vies volées</span><span class="meta">exemple : il y a 3 sem.</span></button></li>
+        <li><button data-o="catabasis" aria-current="true"><span class="nom">Catabasis</span><span class="meta">exemple : aujourd'hui</span></button></li>
+        <li><button data-o="anabasis"><span class="nom">Anabasis</span><span class="meta">exemple : aujourd'hui</span></button></li>
+      </ol>
+      <a class="ouvrir" href="#" id="ouvrir-drive" aria-disabled="true">Écrire dans Google Docs ↗</a>
+    </aside>
+
+    <!-- La bible de cohérence de l'œuvre : Léo propose, Paul valide -->
+    <section class="panneau" aria-labelledby="bible-titre">
+      <h3 id="bible-titre">Bible de <span id="oeuvre-nom">Catabasis</span></h3>
+      <div class="bible-tetes" aria-label="Rubriques de la bible">
+        <span class="is-actif">Personnages</span><span>Lieux</span><span>Chronologie</span>
+        <span>Motifs</span><span>Voix et règles</span><span>Liens entre œuvres</span>
+      </div>
+      <p class="fictif">Fiches d'exemple, inventées pour la maquette — aucun contenu réel n'a été lu.</p>
+      <article class="fiche">
+        <h4>Le narrateur</h4>
+        <p>Première personne, au passé. S'adresse au lecteur par moments, jamais par son nom.</p>
+        <span class="src">validée · source : ch. 1, 4</span>
+      </article>
+      <article class="fiche">
+        <h4>Personnage B <span class="proposee">proposée par Léo</span></h4>
+        <p>Apparaît au ch. 3 ; « la sœur » au ch. 3, « la cousine » au ch. 9 — à trancher.</p>
+        <span class="src">à valider · source : ch. 3, 9</span>
+      </article>
+      <article class="fiche">
+        <h4>Règle de voix</h4>
+        <p>Phrases courtes dans les scènes de descente ; longues périodes dans les souvenirs.</p>
+        <span class="src">validée · posée par Paul</span>
+      </article>
+    </section>
+
+    <!-- Léo relit : chaque remarque cite son passage, sinon elle n'est pas affichée -->
+    <aside class="panneau" aria-labelledby="leo-titre">
+      <h3 id="leo-titre">Léo relit</h3>
+      <div class="leo-actions">
+        <button>Relire le style du dernier passage</button>
+        <button>Vérifier la cohérence avec la bible</button>
+        <button>Croiser avec les autres œuvres</button>
+      </div>
+      <p class="fictif">Remarques d'exemple.</p>
+      <div class="remarque">
+        <span class="type">Cohérence</span>
+        <p>Le lien de parenté de B change entre deux chapitres.</p>
+        <blockquote>« …ma sœur m'attendait… » (ch. 3) / « …ma cousine… » (ch. 9)</blockquote>
+        <a href="#">Voir le passage dans Docs ↗</a>
+      </div>
+      <div class="remarque">
+        <span class="type">Style</span>
+        <p>« silence » revient 4 fois en deux paragraphes. Je signale, je ne réécris pas.</p>
+        <a href="#">Voir le passage dans Docs ↗</a>
+      </div>
+      <div class="remarque">
+        <span class="type">Entre œuvres</span>
+        <p>L'escalier ouvre Catabasis ; Anabasis pourrait le reprendre en miroir, à toi de voir.</p>
+      </div>
+      <label for="leo-q" class="fictif">Ou demande-lui :</label>
+      <textarea id="leo-q" class="leo-champ" rows="2" placeholder="dicte ou écris…"></textarea>
+    </aside>
+  </div>
+</section>
+</main>
+
+<p class="note-maquette">
+  À trancher (CADRAGE-CARADRYEL.md §5) : A1 la place du cap · A2 le statut de
+  « Lettres à Léo » vis-à-vis de Léo · A3 l'accord pour envoyer un texte à
+  l'API le temps d'une relecture · A4 un horizon de publication · A5 tranché : la plume de phénix.
+  Dans le produit, les titres et les liens Drive n'apparaîtront qu'après
+  connexion.
+</p>
+
+<script>
+  // Maquette seulement : bascule d'onglets, parole au survol, sélection d'œuvre.
+  var PAROLES = {
+    anabasis:  'Anabasis — la remontée. Commencée : je peux en tirer la bible au fil de l’écriture.',
+    catabasis: 'Catabasis — la descente. La plus avancée : c’est elle qui fixe les règles que reprend Anabasis.',
+    lettres:   'Lettres à Léo — je relis le style seulement, sur demande (arbitrage A2).',
+    vies:      'Vies volées — je tiens les personnages et la chronologie, je signale ce qui se contredit.'
+  };
+  var NOMS = { anabasis: 'Anabasis', catabasis: 'Catabasis', lettres: 'Lettres à Léo', vies: 'Vies volées' };
+  var parole = document.getElementById('parole');
+  var REPOS = parole.textContent;
+
+  function vue(nom) {
+    ['porte', 'atelier'].forEach(function (v) {
+      document.getElementById('v-' + v).hidden = v !== nom;
+      document.getElementById('t-' + v).setAttribute('aria-selected', String(v === nom));
+    });
+  }
+  function choisir(o) {
+    document.getElementById('oeuvre-nom').textContent = NOMS[o];
+    document.querySelectorAll('.rail li button').forEach(function (b) {
+      b.setAttribute('aria-current', String(b.dataset.o === o));
+    });
+    vue('atelier');
+  }
+  document.getElementById('t-porte').onclick = function () { vue('porte'); };
+  document.getElementById('t-atelier').onclick = function () { vue('atelier'); };
+  document.querySelectorAll('.oeuvre').forEach(function (b) {
+    var o = b.dataset.o;
+    function allume(on) {
+      document.querySelector('.aiguille[data-o="' + o + '"]').classList.toggle('is-actif', on);
+      parole.textContent = on ? PAROLES[o] : REPOS;
+    }
+    b.addEventListener('mouseenter', function () { allume(true); });
+    b.addEventListener('mouseleave', function () { allume(false); });
+    b.addEventListener('focus', function () { allume(true); });
+    b.addEventListener('blur', function () { allume(false); });
+    b.addEventListener('click', function () { choisir(o); });
+  });
+  document.querySelectorAll('.rail li button').forEach(function (b) {
+    b.addEventListener('click', function () { choisir(b.dataset.o); });
+  });
+  document.querySelectorAll('a[href="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); });
+  });
+</script>
+</body>
+</html>

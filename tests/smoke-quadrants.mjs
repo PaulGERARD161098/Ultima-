@@ -232,8 +232,8 @@ console.log('— A. OMEGA : 3 caps, puis les portes via OMEGA / IMLADRIK —');
   // verrou des six portes lues ci-dessus.
   verifier('Aucune porte vers tao.html (page supprimée)',
     toutes.length >= 6 && !toutes.some((h) => /^tao\.html/.test(h)), JSON.stringify(toutes));
-  verifier('OMEGA porte le personnel (RIVEN + NICOL BOLAS + IMLADRIK)',
-    JSON.stringify(portes['omega.html']) === JSON.stringify(['riven.html', 'bcp.html', 'imladrik.html']),
+  verifier('OMEGA porte le personnel (RIVEN + NICOL BOLAS + IMLADRIK + CARADRYEL)',
+    JSON.stringify(portes['omega.html']) === JSON.stringify(['riven.html', 'bcp.html', 'imladrik.html', 'caradryel.html']),
     JSON.stringify(portes['omega.html']));
   verifier('IMLADRIK porte ses huit pages (les trois dragons, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA depuis le 04/10/2026, AMATSU depuis le 19/10/2026)',
     JSON.stringify(portes['imladrik.html']) === JSON.stringify(

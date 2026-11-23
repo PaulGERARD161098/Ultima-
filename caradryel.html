@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — CARADRYEL</title>
+  <meta name="description" content="CARADRYEL — le scriptorium : les écrits de Paul, chacun relié à son Google Doc. Privé, derrière authentification.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23241c12'/%3E%3Cpath d='M16 5 C 12 10, 11 17, 15 25 L 17 25 C 21 17, 20 10, 16 5 Z' fill='%23e3923a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-fond-page.css">
+  <link rel="stylesheet" href="css/caradryel.css">
+  <link rel="stylesheet" href="css/leo.css">
+</head>
+<!-- CARADRYEL — boucle C1 « la porte » (CADRAGE-CARADRYEL.md §7, 2026-11-22).
+     Page MUETTE et sans donnée : aucun titre d'œuvre, aucun lien Drive dans le
+     HTML servi (§5 : intime). Tout arrive de /api/caradryel APRÈS connexion.
+     Léo : régime intime d'IMLADRIK réutilisé tel quel (aucune modification). -->
+<body class="caradryel ciel-noeud-coque" data-fond-etoile="atelier" data-leo-quadrant="imladrik">
+
+  <p class="caradryel-retour"><a href="omega.html">↞ OMEGA</a></p>
+
+  <header class="caradryel-entete">
+    <span class="caradryel-surligne">Omega · le scriptorium</span>
+    <h1>CARADRYEL</h1>
+    <p class="caradryel-invite">Tes écrits, chacun relié à son Google Doc.</p>
+    <div class="caradryel-filet" aria-hidden="true"></div>
+  </header>
+
+  <main class="caradryel-scene" aria-label="Tes œuvres">
+
+    <p id="caradryel-chargement" class="caradryel-etat">Ouverture…</p>
+
+    <section id="caradryel-auth" class="caradryel-etat" hidden>
+      <p>Ta session s’est refermée. Ce qui vit ici est intime&nbsp;: il faut ta session pour l’ouvrir.</p>
+      <p><a class="caradryel-lien" href="/">Se reconnecter</a></p>
+    </section>
+
+    <section id="caradryel-erreur" class="caradryel-etat" hidden>
+      <p>Le scriptorium ne répond pas. Réessaie dans un instant.</p>
+    </section>
+
+    <section id="caradryel-non-installe" class="caradryel-etat" hidden>
+      <p>Le scriptorium n’est pas encore installé&nbsp;: la migration de CARADRYEL attend d’être appliquée.</p>
+    </section>
+
+    <section id="caradryel-vide" class="caradryel-etat" hidden>
+      <p>Aucune œuvre n’est encore posée ici.</p>
+      <button type="button" id="caradryel-initialiser" class="caradryel-bouton">Poser mes quatre œuvres</button>
+    </section>
+
+    <section id="caradryel-porte" class="caradryel-porte" hidden>
+      <div class="caradryel-plateau" id="caradryel-plateau">
+        <svg class="caradryel-trame" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <circle class="caradryel-cercle" cx="50" cy="50" r="46"/>
+          <circle class="caradryel-cercle caradryel-cercle--pointille" cx="50" cy="50" r="31"/>
+          <g id="caradryel-aiguilles"></g>
+        </svg>
+        <div class="caradryel-coeur">
+          <!-- Blason : la plume de phénix (Paul, 22/11 — arbitrage A5). -->
+          <svg viewBox="0 0 120 120" role="img" aria-label="Blason de Caradryel : une plume de phénix" focusable="false">
+            <defs>
+              <linearGradient id="caradryel-braise" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stop-color="#8a2b12"/><stop offset=".45" stop-color="#c8501e"/>
+                <stop offset=".8" stop-color="#e3923a"/><stop offset="1" stop-color="#e8cf8f"/>
+              </linearGradient>
+              <radialGradient id="caradryel-oeil" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="#f9f1dc"/><stop offset=".35" stop-color="#e8cf8f"/>
+                <stop offset=".7" stop-color="#c8501e"/><stop offset="1" stop-color="#5a1a0c"/>
+              </radialGradient>
+            </defs>
+            <circle cx="60" cy="60" r="56" fill="#f9f1dc" stroke="#c9a659" stroke-width="3"/>
+            <circle cx="60" cy="60" r="49" fill="none" stroke="#a9884a" stroke-width="1"/>
+            <g transform="translate(60 62) scale(.86) rotate(24) translate(-60 -56)">
+              <path d="M60 13 C 54 6, 58 0, 55 -6 C 62 -1, 64 5, 61 10 C 64 6, 68 4, 69 -1 C 71 6, 67 11, 62 14 Z" fill="#e3923a" stroke="#3b2f1c" stroke-width=".7" stroke-linejoin="round"/>
+              <path d="M60 12 C 52 22, 48 36, 48 50 L 52 52 C 47 58, 47 68, 50 74 L 53 74 C 51 80, 54 86, 59 90 L 61 90 C 67 84, 71 74, 71 64 L 68 62 C 73 54, 73 40, 68 30 L 66 31 C 66 22, 63 16, 60 12 Z" fill="url(#caradryel-braise)" stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round"/>
+              <ellipse cx="60" cy="30" rx="4.6" ry="8" fill="url(#caradryel-oeil)" stroke="#3b2f1c" stroke-width=".8"/>
+              <path d="M60 40 L 60 90" stroke="#3b2f1c" stroke-width="1.3"/>
+              <path d="M60 90 L 60 108" stroke="#a9884a" stroke-width="2.6" stroke-linecap="round"/>
+              <circle cx="74" cy="20" r="1.3" fill="#c8501e"/><circle cx="79" cy="30" r=".9" fill="#e3923a"/><circle cx="44" cy="26" r="1" fill="#e3923a"/>
+            </g>
+          </svg>
+          <span class="caradryel-coeur-legende">Caradryel</span>
+        </div>
+        <ul class="caradryel-oeuvres" id="caradryel-oeuvres"></ul>
+      </div>
+
+      <p class="caradryel-parole" id="caradryel-parole" role="status" aria-live="polite"></p>
+
+      <!-- Pilotage (règle du 13/10) : des comptes, jamais de contenu. -->
+      <p class="caradryel-pilotage" id="caradryel-pilotage"></p>
+    </section>
+
+    <!-- Lier une œuvre à son Doc : un seul champ, la confirmation par le serveur. -->
+    <form id="caradryel-lier" class="caradryel-lier" hidden novalidate>
+      <label for="caradryel-lier-url" id="caradryel-lier-titre">Colle le lien du Google Doc</label>
+      <input id="caradryel-lier-url" name="drive_url" type="url" inputmode="url" autocomplete="off"
+             maxlength="2048" required placeholder="https://docs.google.com/document/d/…">
+      <div class="caradryel-lier-actions">
+        <button type="submit" class="caradryel-bouton">Lier</button>
+        <button type="button" id="caradryel-lier-annuler" class="caradryel-bouton caradryel-bouton--discret">Annuler</button>
+      </div>
+      <p id="caradryel-lier-message" class="caradryel-message" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <noscript>
+    <p class="caradryel-etat">CARADRYEL a besoin de JavaScript pour ouvrir ta session. <a href="omega.html">Retour à OMEGA</a></p>
+  </noscript>
+
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel-fond-page.js"></script>
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/caradryel.js"></script>
+  <script src="js/leo-partout.js"></script>
+</body>
+</html>

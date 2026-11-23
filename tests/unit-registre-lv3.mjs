@@ -112,8 +112,11 @@ verdicts.cheminReshiramParLesDragons = JSON.stringify(chemin('reshiram'))
 // 2026-08-07 : il le REMONTE À LA RACINE. Sous ULTIMA, il était subordonné au
 // personnel ; à la racine il n'est subordonné à rien, ce qui est exactement ce
 // que « tout seul » voulait dire. ULTIMA retrouve donc ses DEUX macro-quadrants.
-verdicts.omegaTroisCaps = JSON.stringify(NOEUDS.omega.enfants)
-  === JSON.stringify(['riven', 'nicol-bolas', 'imladrik'])
+// 2026-11-22 : CARADRYEL rejoint OMEGA, à côté d'IMLADRIK (CADRAGE-CARADRYEL.md, A1).
+verdicts.omegaQuatreCaps = JSON.stringify(NOEUDS.omega.enfants)
+  === JSON.stringify(['riven', 'nicol-bolas', 'imladrik', 'caradryel'])
+  && NOEUDS.caradryel.cible === 'caradryel.html' && NOEUDS.caradryel.blason === 'phenix'
+  && !NOEUDS.caradryel.enfants
   && NOEUDS.omega.cible === 'omega.html' && NOEUDS.omega.nom === 'OMEGA'
   && estBoussole('omega');
 // Éprouvé par l'ABSENCE autant que par la présence : ALTHEA pend à la racine, et
@@ -330,7 +333,7 @@ const texteNoscript = (page) => {
   return bloc ? bloc[1] : null;
 };
 verdicts.noscriptOmegaEgaleLeRegistre = JSON.stringify(capsDuNoscript('omega.html'))
-  === JSON.stringify(ciblesDe('omega')) && ciblesDe('omega').length === 3;
+  === JSON.stringify(ciblesDe('omega')) && ciblesDe('omega').length === 4;
 // IMLADRIK : les liens du repli = les cibles non nulles des caps ET de ce que
 // portent ses constellations (6 : les trois dragons, ADRAMELECH, RESHIRAM,
 // ZEKROM ; TAO n'y est plus), dans l'ordre du registre. L'ancien verdict comparait aux seuls enfants directs :
