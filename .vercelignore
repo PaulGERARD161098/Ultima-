@@ -46,3 +46,4 @@ design/
 .github/
 .env.example
 /leo/
+deploy/
