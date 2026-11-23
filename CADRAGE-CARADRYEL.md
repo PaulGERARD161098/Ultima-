@@ -15,7 +15,9 @@
 > en transaction annulée ; advisors sécurité : 0 alerte ; table vide.
 > ⏭ **Reste à C1 : le geste de Paul** — sur Ultima, OMEGA → CARADRYEL, « Poser mes
 > quatre œuvres », puis coller les 4 liens Docs, et voir la page sur iPhone.
-> C2 à C4 : non commencées. A2 et A3 restent ouverts.
+> C2 à C4 : non commencées. A2 et A3 tranchés le 23/11 (voir §5).
+> **Suites du 23/11** : Ultima-#477 fusionnée (`7cf7f25`), correctifs de la revue
+> Codex. Mesuré en base le 23/11 : 4 œuvres posées par Paul, 0 reliée à son Doc.
 
 ## 0. Interprétation retenue (dictée vocale)
 
@@ -149,12 +151,12 @@ marqués comme tels** : aucun identifiant de fichier, aucun extrait réel.
 ## 5. Arbitrages attendus de Paul
 
 - **A1** ✅ **Tranché par Paul le 22/11 : cap d'OMEGA, à côté d'IMLADRIK.**
-- **A2** *Lettres à Léo* : la destinataire est-elle Léo, l'agent ? Si oui,
-  Léo relit-elle ces lettres comme les autres œuvres, ou les tient-elle à part ?
-  (reco : à part, relecture de style seulement, sur demande explicite)
-- **A3** Accord de principe : le texte d'une œuvre peut partir vers l'API
-  Claude le temps d'une relecture (rien n'est stocké). Sans cet accord, C3 et C4 n'existent
-  pas.
+- **A2** ✅ **Tranché par Paul le 23/11 : non**, *Lettres à Léo* ne s'adresse pas à
+  Léo l'agent. L'œuvre est relue comme les trois autres, sans régime à part.
+- **A3** ✅ **Tranché par Paul le 23/11 : oui** (« ok pour envoi temporaire »). Le texte
+  d'une œuvre peut partir vers l'API Claude **le temps d'une relecture**. Rien n'est
+  stocké, rien n'est journalisé. C3 et C4 sont débloquées sur le principe ; elles restent
+  à cadrer, après C2.
 - **A4** ✅ **Tranché par Paul le 22/11 : « non, c'est perso ».** Aucun horizon
   de publication. La ligne MS reste « aucun client, perso assumé ».
 - **A5** ~~Le blason~~ — **tranché par Paul le 22/11 : une plume de phénix**
