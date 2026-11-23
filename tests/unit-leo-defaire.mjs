@@ -104,7 +104,7 @@ const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
 // DOUZE / ONZE depuis le 23/10/2026 : proposer_contact (vert, défaire par suppression).
 // TREIZE / ONZE depuis le 31/10 : proposer_supervision est ORANGE — sans défaire :
 // une proposition en attente se retire au cockpit (supervision_retirer).
-verdicts.nonVacuiteCatalogue = tousLesOutils.length === 13 && verts.length === 11;
+verdicts.nonVacuiteCatalogue = tousLesOutils.length === 16 && verts.length === 11;
 verdicts.chaqueVertASonDefaire = verts.join(',') === Object.keys(DEFAIRES).sort().join(',');
 verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRES) &&
   anneauDe('proposer_enrichissement_idee') === 'orange';
