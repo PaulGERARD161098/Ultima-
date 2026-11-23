@@ -2,7 +2,11 @@ import { chargerCockpit } from './cockpit-parole.mjs';
 import { NOEUDS } from './registre-lv3.mjs';
 
 const caps = [
-  { id: 'renodevis', nom: 'RenoDevis', cible: 'https://relance-renoboostia.com/', alias: ['reno devis', 'rd', 'sola'] },
+  { id: 'direction', nom: 'Direction', cible: 'direction.html?scope=direction', alias: ['global', 'pro', 'multi structures'] },
+  { id: 'renoboost-ia', nom: 'Renoboost IA', cible: 'direction.html?scope=renoboost-ia', alias: ['renoboost', 'reno boost'] },
+  { id: 'sola-air-paris', nom: 'Sola Air Paris', cible: 'direction.html?scope=sola-air-paris', alias: ['sola', 'sola air', 'clim'] },
+  { id: 'amo', nom: 'AMO', cible: 'direction.html?scope=amo', alias: ['maitrise ouvrage'] },
+  { id: 'renodevis', nom: 'RenoDevis', cible: 'https://relance-renoboostia.com/', alias: ['reno devis', 'rd'] },
   { id: 'artidispo', nom: 'Artidispo', cible: 'https://artidispo.com/', alias: ['arti dispo'] },
   { id: 'riven', nom: 'Riven', cible: NOEUDS.riven.cible + '?vue=relances', alias: ['relances'] },
   { id: 'renoagenda', nom: 'RenoAgenda', cible: 'https://reno-agenda.vercel.app/', alias: ['reno agenda', 'agenda'] },
