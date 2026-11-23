@@ -2,7 +2,7 @@
 
 Paul, 22/11 : créer CARADRYEL, cap d'OMEGA à côté d'IMLADRIK, pour centraliser ses écrits (Lettres à Léo, Vies volées, Catabasis, Anabasis) avec un accès direct à chaque Google Doc, et que Léo l'aide à écrire et à garder la cohérence. Cadrage `CADRAGE-CARADRYEL.md`, maquette `design/preview-caradryel.html` (plume de phénix), puis C1 construite sur `claude/busy-mccarthy-snss8y` : table `caradryel_oeuvres` (RLS), `/api/caradryel`, `caradryel.html`. PR Ultima-#475.
 
-**Prochaine action :** Paul applique la migration CARADRYEL et sa vérification, pose ses quatre œuvres et colle les liens ; fusion sur son accord.
+**Prochaine action :** ✅ 23/11 : migration appliquée (6/6 contrôles) et Ultima-#475 fusionnée (`1111713`). Reste : Paul pose ses quatre œuvres et colle les liens Docs.
 
 ---
 
@@ -63,13 +63,13 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-22",
-    "commit": "14f0e332e343c3f920bd9e830449fe986da0b937",
-    "quoi": "22/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste l'éditeur). Cadrage CADRAGE-CARADRYEL.md (C0 + C1 détaillé, A1/A4/A5 tranchés), maquette design/preview-caradryel.html (blason plume de phénix). Boucle C1 construite sur claude/busy-mccarthy-snss8y : table caradryel_oeuvres (RLS, 1268b91), route /api/caradryel, porte caradryel.html (14f0e33) ; unitaires 96/96, PGlite, smoke-caradryel vert, 14 sabotages rouges. PR Ultima-#475 (brouillon). Migration NON appliquée."
+    "le": "2026-11-23",
+    "commit": "1111713838b4ce55ad860447c10fa5e04bd09704",
+    "quoi": "22–23/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste l'éditeur). Cadrage CADRAGE-CARADRYEL.md, maquette (plume de phénix), boucle C1 : table caradryel_oeuvres, /api/caradryel, caradryel.html. Ultima-#475 fusionnée (1111713) sur accord de Paul, CI verte. Migration appliquée le 23/11 par la séance sur mandat de Paul : 6/6 contrôles vrais, refus anon et DELETE éprouvés, advisors 0 alerte."
   },
-  "prochaine_action": "Paul applique la migration supabase/migrations/20261122220000_caradryel_oeuvres.sql (SQL Editor) et lance le script de vérification en pied de fichier (5 lignes à true) ; puis, sur l'aperçu, « Poser mes quatre œuvres » et colle les 4 liens Docs ; puis fusion de Ultima-#475 sur son accord (SHA). Ensuite seulement : cadrage C2 (Google Picker). La suite ADR-013 (relance d'impayé dans RenoDevis) reste la prochaine boucle hors CARADRYEL.",
+  "prochaine_action": "Paul ouvre Ultima → OMEGA → CARADRYEL, clique « Poser mes quatre œuvres », colle les 4 liens de ses Google Docs, et regarde la page sur iPhone ; la séance suivante relit la table en base (4 lignes, liens posés) avant de fermer C1. Ensuite seulement : cadrage C2 (Google Picker). Hors CARADRYEL, la prochaine boucle reste ADR-013 (relance d'impayé dans RenoDevis).",
   "bloque_par": [
-    "CARADRYEL C1 — migration caradryel_oeuvres à appliquer par Paul (gate rouge) ; A2 (« Lettres à Léo » adressées à Léo l'agent ?) et A3 (accord d'envoi d'un texte à l'API le temps d'une relecture, requis pour C3/C4) ouverts.",
+    "CARADRYEL C1 — geste de Paul : poser ses quatre œuvres et coller les 4 liens Docs (la migration est appliquée et la PR fusionnée le 23/11) ; A2 (« Lettres à Léo » adressées à Léo l'agent ?) et A3 (accord d'envoi d'un texte à l'API le temps d'une relecture, requis pour C3/C4) ouverts.",
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
@@ -244,7 +244,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-11-22"
+  "maj": "2026-11-23"
 }
 ```
 
