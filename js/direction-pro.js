@@ -253,7 +253,7 @@ function rendreStructure(donnees) {
     }
   }
 
-  // Dossiers
+  // Dossiers (statut + prochaine action éditables en ligne via PATCH /api/pro-pilotage)
   const ulDossiers = $('str-liste-dossiers');
   ulDossiers.textContent = '';
   const dossiers = donnees.dossiers || [];
@@ -265,20 +265,62 @@ function rendreStructure(donnees) {
   } else {
     for (const d of dossiers) {
       const li = document.createElement('li');
-      li.className = 'dir-item';
-      const bloc = document.createElement('div');
+      li.className = 'dir-item dir-item--col';
+      const haut = document.createElement('div');
+      haut.className = 'dir-item-head';
       const titre = document.createElement('strong');
       titre.textContent = d.titre;
-      const meta = document.createElement('div');
-      meta.className = 'dir-item-meta';
-      meta.textContent = [d.statut, d.prochaine_action].filter(Boolean).join(' · ');
-      bloc.append(titre, meta);
-      li.appendChild(bloc);
+      const sel = document.createElement('select');
+      sel.className = 'dir-select-mini';
+      sel.setAttribute('aria-label', `Statut du dossier ${d.titre}`);
+      for (const [val, lib] of [['actif', 'Actif'], ['en_attente', 'En attente'], ['clos', 'Clos']]) {
+        const opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = lib;
+        if (d.statut === val) opt.selected = true;
+        sel.appendChild(opt);
+      }
+      haut.append(titre, sel);
+
+      const edition = document.createElement('div');
+      edition.className = 'dir-dossier-edit';
+      const champAction = document.createElement('input');
+      champAction.type = 'text';
+      champAction.maxLength = 300;
+      champAction.className = 'dir-input-mini';
+      champAction.placeholder = 'Prochaine action…';
+      champAction.value = d.prochaine_action || '';
+      champAction.setAttribute('aria-label', `Prochaine action pour ${d.titre}`);
+
+      const btnSauver = document.createElement('button');
+      btnSauver.type = 'button';
+      btnSauver.className = 'dir-btn-mini';
+      btnSauver.textContent = 'Sauver';
+      btnSauver.addEventListener('click', async () => {
+        btnSauver.disabled = true;
+        const res = await appelApi('PATCH', '/api/pro-pilotage', {
+          ressource: 'dossier',
+          id: d.id,
+          structure_id: scopeActif,
+          statut: sel.value,
+          prochaine_action: champAction.value
+        });
+        btnSauver.disabled = false;
+        if (res.status === 200) {
+          annoncer('Dossier mis à jour.');
+          await chargerScope(false);
+        } else {
+          annoncer(res.json?.error || 'Impossible de mettre à jour le dossier.');
+        }
+      });
+
+      edition.append(champAction, btnSauver);
+      li.append(haut, edition);
       ulDossiers.appendChild(li);
     }
   }
 
-  // Documents (avec bouton Copier 1 clic)
+  // Documents (Voir tout / Réduire + Copier 1 clic, rendu 100 % textContent)
   const ulDocs = $('str-liste-documents');
   ulDocs.textContent = '';
   const docs = donnees.documents || [];
@@ -290,17 +332,39 @@ function rendreStructure(donnees) {
   } else {
     for (const doc of docs) {
       const li = document.createElement('li');
-      li.className = 'dir-item';
-      const bloc = document.createElement('div');
+      li.className = 'dir-item dir-item--col';
+      const haut = document.createElement('div');
+      haut.className = 'dir-item-head';
+      const info = document.createElement('div');
       const tag = document.createElement('span');
       tag.className = 'dir-item-tag';
       tag.textContent = doc.type;
       const titre = document.createElement('strong');
       titre.textContent = doc.titre;
-      const extrait = document.createElement('div');
-      extrait.className = 'dir-item-meta';
-      extrait.textContent = String(doc.contenu || '').slice(0, 220);
-      bloc.append(tag, titre, extrait);
+      info.append(tag, titre);
+
+      const actions = document.createElement('div');
+      actions.className = 'dir-doc-actions';
+
+      const texteComplet = String(doc.contenu || '');
+      const estLong = texteComplet.length > 220;
+      const corps = document.createElement('div');
+      corps.className = 'dir-doc-corps';
+      corps.textContent = estLong ? `${texteComplet.slice(0, 220)}…` : texteComplet;
+
+      if (estLong) {
+        let deplie = false;
+        const btnVoir = document.createElement('button');
+        btnVoir.type = 'button';
+        btnVoir.className = 'dir-btn-mini';
+        btnVoir.textContent = 'Voir tout';
+        btnVoir.addEventListener('click', () => {
+          deplie = !deplie;
+          corps.textContent = deplie ? texteComplet : `${texteComplet.slice(0, 220)}…`;
+          btnVoir.textContent = deplie ? 'Réduire' : 'Voir tout';
+        });
+        actions.appendChild(btnVoir);
+      }
 
       const btnCopier = document.createElement('button');
       btnCopier.type = 'button';
@@ -308,14 +372,17 @@ function rendreStructure(donnees) {
       btnCopier.textContent = 'Copier';
       btnCopier.addEventListener('click', async () => {
         try {
-          await navigator.clipboard.writeText(doc.contenu || '');
+          await navigator.clipboard.writeText(texteComplet);
           btnCopier.textContent = 'Copié';
           setTimeout(() => { btnCopier.textContent = 'Copier'; }, 1500);
         } catch {
           annoncer('Copie impossible depuis ce navigateur.');
         }
       });
-      li.append(bloc, btnCopier);
+      actions.appendChild(btnCopier);
+
+      haut.append(info, actions);
+      li.append(haut, corps);
       ulDocs.appendChild(li);
     }
   }
