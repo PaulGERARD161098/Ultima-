@@ -8,8 +8,47 @@ const MAX_RECENTS = 5;
 
 function texte(value) { return typeof value === 'string' ? value.trim() : ''; }
 
+const DESTINATIONS_PRO = [
+  {
+    id: 'direction-pro',
+    nom: 'Direction (Global)',
+    sens: 'Assistante de direction',
+    resume: 'Vue consolidée des 3 structures : Renoboost IA, Sola Air Paris et AMO.',
+    cible: 'direction.html?scope=direction',
+    externe: false,
+    chemin: 'ULTIMA › ALPHA › DIRECTION',
+  },
+  {
+    id: 'structure-renoboost-ia',
+    nom: 'Renoboost IA (Espace)',
+    sens: 'Structure cloisonnée',
+    resume: 'Priorités, tâches, dossiers et brouillons dédiés à Renoboost IA.',
+    cible: 'direction.html?scope=renoboost-ia',
+    externe: false,
+    chemin: 'ULTIMA › ALPHA › DIRECTION › RENOBOOST IA',
+  },
+  {
+    id: 'structure-sola-air-paris',
+    nom: 'Sola Air Paris',
+    sens: 'Structure cloisonnée',
+    resume: 'Entreprise de climatisation à Paris — priorités, dossiers et brouillons.',
+    cible: 'direction.html?scope=sola-air-paris',
+    externe: false,
+    chemin: 'ULTIMA › ALPHA › DIRECTION › SOLA AIR PARIS',
+  },
+  {
+    id: 'structure-amo',
+    nom: 'AMO',
+    sens: 'Structure cloisonnée',
+    resume: 'Assistance à Maîtrise d’Ouvrage — projet à part, dossiers et suivi.',
+    cible: 'direction.html?scope=amo',
+    externe: false,
+    chemin: 'ULTIMA › ALPHA › DIRECTION › AMO',
+  },
+];
+
 export function destinations(noeuds = NOEUDS) {
-  return Object.entries(noeuds)
+  const depuisRegistre = Object.entries(noeuds)
     .filter(([, n]) => n && texte(n.cible))
     .map(([id, n]) => ({
       id,
@@ -20,6 +59,7 @@ export function destinations(noeuds = NOEUDS) {
       externe: Boolean(n.externe),
       chemin: chemin(id, noeuds).map((partie) => (noeuds[partie] || {}).nom || partie).join(' › '),
     }));
+  return [...DESTINATIONS_PRO, ...depuisRegistre];
 }
 
 export function filtrerDestinations(requete, liste = destinations()) {

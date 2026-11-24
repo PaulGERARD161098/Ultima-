@@ -43,7 +43,9 @@ function erreurBase(res, contexte, error) {
   return fail(res, 500, 'Erreur interne');
 }
 
-export function creerHandler({ authentifier = requireUser } = {}) {
+const DEFAULT_VPS_HEALTH_URL = 'https://leo.srv2051208.hstgr.cloud/health';
+
+export function creerHandler({ authentifier = requireUser, fetcher = fetch } = {}) {
   return async function handler(req, res) {
     if (!['GET', 'POST', 'PATCH'].includes(req.method)) {
       return methodNotAllowed(res, ['GET', 'POST', 'PATCH']);
@@ -56,6 +58,20 @@ export function creerHandler({ authentifier = requireUser } = {}) {
 
     try {
       if (req.method === 'GET') {
+        if (req.query?.ressource === 'vps-health') {
+          const cible = process.env.LEO_VPS_HEALTH_URL || DEFAULT_VPS_HEALTH_URL;
+          if (!/^https:\/\/[a-z0-9.-]+(?:\/health)?$/i.test(cible)) {
+            return ok(res, { vps: 'non_configure' });
+          }
+          try {
+            const r = await fetcher(cible, { signal: AbortSignal.timeout(3000) });
+            const j = r.ok ? await r.json().catch(() => null) : null;
+            return ok(res, { vps: j?.ok === true ? 'en_ligne' : 'hors_ligne' });
+          } catch {
+            return ok(res, { vps: 'hors_ligne' });
+          }
+        }
+
         const scopeBrut = req.query?.scope ?? VUE_DIRECTION;
         const scope = normaliserScopePro(scopeBrut);
         if (!scope) return fail(res, 400, 'Périmètre professionnel inconnu');

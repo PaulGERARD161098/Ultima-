@@ -100,12 +100,16 @@
   pointer-events: none;
 }
 
-.leo-rose [data-cap="renodevis"] { --angle: 0deg; --x: 50%; --y: 7%; --teinte: #edb56d; }
-.leo-rose [data-cap="artidispo"] { --angle: 60deg; --x: 85%; --y: 29%; --teinte: #64c4a6; }
-.leo-rose [data-cap="riven"] { --angle: 120deg; --x: 85%; --y: 71%; --teinte: #f0837b; }
+.leo-rose [data-cap="direction"] { --angle: 0deg; --x: 50%; --y: 7%; --teinte: #e8bf83; }
+.leo-rose [data-cap="renoboost-ia"] { --angle: 36deg; --x: 74%; --y: 16%; --teinte: #edb56d; }
+.leo-rose [data-cap="sola-air-paris"] { --angle: 72deg; --x: 79%; --y: 38%; --teinte: #f0a46c; }
+.leo-rose [data-cap="amo"] { --angle: 108deg; --x: 84%; --y: 62%; --teinte: #d8bd82; }
+.leo-rose [data-cap="renodevis"] { --angle: 144deg; --x: 74%; --y: 84%; --teinte: #e2c078; }
 .leo-rose [data-cap="renoagenda"] { --angle: 180deg; --x: 50%; --y: 93%; --teinte: #77bafa; }
-.leo-rose [data-cap="finubar"] { --angle: 240deg; --x: 15%; --y: 71%; --teinte: #bb9bf0; }
-.leo-rose [data-cap="althea"] { --angle: 300deg; --x: 15%; --y: 29%; --teinte: #a8c77a; }
+.leo-rose [data-cap="artidispo"] { --angle: 216deg; --x: 26%; --y: 84%; --teinte: #64c4a6; }
+.leo-rose [data-cap="riven"] { --angle: 252deg; --x: 17%; --y: 62%; --teinte: #f0837b; }
+.leo-rose [data-cap="finubar"] { --angle: 288deg; --x: 17%; --y: 38%; --teinte: #bb9bf0; }
+.leo-rose [data-cap="althea"] { --angle: 324deg; --x: 26%; --y: 16%; --teinte: #a8c77a; }
 
 .leo-rose button.leo-rose-aiguille {
   position: absolute;

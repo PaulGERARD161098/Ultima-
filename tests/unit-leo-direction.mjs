@@ -22,6 +22,10 @@ import {
   assert.match(sysDir, /Renoboost IA, Sola Air Paris et AMO/);
   assert.match(sysRb, /Mode STRUCTURE CLOISONNÉE \(Renoboost IA\)/);
   assert.match(sysSola, /Mode STRUCTURE CLOISONNÉE \(Sola Air Paris\)/);
+  assert.match(sysSola, /Posture CHALLENGER CHANTIER/);
+  assert.match(sysSola, /Rétroplanning daté/);
+  assert.doesNotMatch(sysAmo, /Posture CHALLENGER CHANTIER/);
+  assert.doesNotMatch(sysRb, /Posture CHALLENGER CHANTIER/);
   assert.match(sysAmo, /Mode STRUCTURE CLOISONNÉE \(AMO\)/);
   assert.match(sysAmo, /Projet à part/);
 

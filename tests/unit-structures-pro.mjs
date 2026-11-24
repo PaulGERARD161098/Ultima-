@@ -269,6 +269,27 @@ function creerClientMemoire(etat, { fuiteVolontaire = false, erreurCode = null }
   assert.equal(okFil.donnees.messages[0].content, 'Point sur Sola Air Paris');
 }
 
+// ---------- 4ter. Contrôle santé VPS via /api/pro-pilotage?ressource=vps-health ----------
+{
+  const hEnLigne = creerHandler({
+    authentifier: async () => ({ status: 'ok', client: creerClientMemoire({}) }),
+    fetcher: async () => ({ ok: true, json: async () => ({ ok: true, service: 'leo-vps' }) })
+  });
+  const resOn = creerFausseReponse();
+  await hEnLigne(creerRequete({ method: 'GET', query: { ressource: 'vps-health' } }), resOn);
+  assert.equal(resOn.statusCode, 200);
+  assert.equal(resOn.body.data.vps, 'en_ligne');
+
+  const hHorsLigne = creerHandler({
+    authentifier: async () => ({ status: 'ok', client: creerClientMemoire({}) }),
+    fetcher: async () => { throw new Error('timeout'); }
+  });
+  const resOff = creerFausseReponse();
+  await hHorsLigne(creerRequete({ method: 'GET', query: { ressource: 'vps-health' } }), resOff);
+  assert.equal(resOff.statusCode, 200);
+  assert.equal(resOff.body.data.vps, 'hors_ligne');
+}
+
 // ---------- 5. Contrôle statique du contrat SQL de la migration ----------
 {
   const sql = readFileSync(

@@ -4,131 +4,202 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
-  <title>Ultima — Direction &amp; Structures</title>
-  <meta name="description" content="Pilotage assistante de direction multi-structures : vue globale Direction et espaces cloisonnés Renoboost IA, Sola Air Paris et AMO.">
-  <meta name="theme-color" content="#0b1119">
+  <title>Ultima — Poste de commandement Léo</title>
+  <meta name="description" content="Interface unique Ultima pilotée par Léo : Direction globale, espaces cloisonnés Renoboost IA, Sola Air Paris et AMO, et accès pôles personnels.">
+  <meta name="theme-color" content="#050911">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230e3a52'/%3E%3Cpath d='M16 5 L19 16 L16 27 L13 16 Z' fill='%23e8bf83'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23050911' stroke='%23d8bd82' stroke-width='1.5'/%3E%3Cpath d='M16 5 L18 14 L27 16 L18 18 L16 27 L14 18 L5 16 L14 14 Z' fill='%23d8bd82'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/leo.css">
   <link rel="stylesheet" href="css/direction-pro.css">
 </head>
 <body class="direction-page" data-leo-quadrant="direction">
 
-  <nav class="dir-retour" aria-label="Navigation principale">
-    <a href="alpha.html">↞ ALPHA</a>
-    <a href="/">Accueil</a>
-  </nav>
+  <!-- ===== BARRE UNIQUE ÉPURÉE (V2.1 — PRO + PERSO + VPS + ROSE) ===== -->
+  <header class="dir-topbar">
+    <div class="dir-topbar-inner">
+      <div class="dir-topbar-left">
+        <a class="dir-brand-link" href="/" aria-label="Ultima Accueil">
+          <svg class="dir-brand-sceau" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="13.5" stroke="currentColor" stroke-width="1" opacity="0.7"></circle>
+            <path d="M16 4.5 L18 14 L27.5 16 L18 18 L16 27.5 L14 18 L4.5 16 L14 14 Z" fill="currentColor"></path>
+          </svg>
+          <span>ULTIMA</span>
+        </a>
+        <span class="dir-sep" aria-hidden="true"></span>
+        <nav class="dir-switcher" role="tablist" aria-label="Structures professionnelles">
+          <button type="button" class="dir-tab is-actif" role="tab" aria-selected="true" data-scope="direction">Direction</button>
+          <button type="button" class="dir-tab" role="tab" aria-selected="false" data-scope="renoboost-ia">Renoboost IA</button>
+          <button type="button" class="dir-tab" role="tab" aria-selected="false" data-scope="sola-air-paris">Sola Air Paris</button>
+          <button type="button" class="dir-tab" role="tab" aria-selected="false" data-scope="amo">AMO</button>
+        </nav>
+      </div>
 
-  <header class="dir-entete">
-    <p class="dir-surligne">ALPHA · Assistante de direction multi-structures</p>
-    <h1 id="dir-titre">Direction — Vue globale</h1>
-    <p id="dir-sous-titre" class="dir-sous-titre">Vision consolidée de tes trois structures professionnelles, sans mélange de données.</p>
-
-    <div class="dir-switcher" role="tablist" aria-label="Choisir la vue ou la structure">
-      <button type="button" class="dir-tab is-actif" role="tab" aria-selected="true" data-scope="direction">Direction (Global)</button>
-      <button type="button" class="dir-tab" role="tab" aria-selected="false" data-scope="renoboost-ia">Renoboost IA</button>
-      <button type="button" class="dir-tab" role="tab" aria-selected="false" data-scope="sola-air-paris">Sola Air Paris</button>
-      <button type="button" class="dir-tab" role="tab" aria-selected="false" data-scope="amo">AMO</button>
-    </div>
-
-    <div class="dir-barre-actions">
-      <span id="dir-badge-cloison" class="dir-badge">Vue consolidée · 3 structures</span>
-      <button type="button" id="dir-parler-leo" class="dir-btn-leo">Parler à Léo dans ce contexte</button>
+      <nav class="dir-topbar-right" aria-label="Pôles personnels et navigation">
+        <a class="dir-pole-link" href="omega.html">Omega</a>
+        <a class="dir-pole-link" href="riven.html">Riven</a>
+        <a class="dir-pole-link" href="althea.html">Althéa</a>
+        <a class="dir-pole-link" href="finubar.html">Finubar</a>
+        <span class="dir-sep" aria-hidden="true"></span>
+        <span id="dir-vps-statut" class="dir-vps-pill" aria-live="polite">VPS 24/7…</span>
+        <a class="dir-rose-pill" href="/">✦ Rose des vents</a>
+      </nav>
     </div>
   </header>
 
-  <main class="dir-contenu">
-    <p id="dir-chargement" class="dir-etat">Chargement du pilotage…</p>
+  <!-- ===== POSTE DE COMMANDEMENT 2 COLONNES (ESPACE ACTIF + CARNET LÉO) ===== -->
+  <div class="dir-shell">
 
-    <section id="dir-auth" class="dir-etat" hidden>
-      <p>Ta session est fermée. Connecte-toi pour ouvrir tes espaces professionnels.</p>
-      <p><a class="dir-lien" href="/">Se reconnecter</a></p>
-    </section>
+    <main class="dir-workspace">
+      <header class="dir-entete">
+        <p id="dir-badge-cloison" class="dir-surligne">Direction générale · Trois structures cloisonnées</p>
+        <h1 id="dir-titre">Vue d’ensemble</h1>
+        <p id="dir-sous-titre" class="dir-sous-titre">Arbitre tes priorités transverses ici, ou entre dans l’une de tes trois structures cloisonnées.</p>
+      </header>
 
-    <section id="dir-non-installe" class="dir-etat" hidden>
-      <p>Le socle multi-structures attend l’application de la migration SQL dans Supabase.</p>
-    </section>
+      <p id="dir-chargement" class="dir-etat">Chargement du pilotage…</p>
 
-    <section id="dir-erreur" class="dir-etat" hidden>
-      <p>Le pilotage ne répond pas pour le moment. Réessaie dans un instant.</p>
-    </section>
-
-    <!-- ===== VUE GLOBALE : DIRECTION ===== -->
-    <section id="vue-direction" class="dir-vue" hidden aria-label="Vue globale Direction">
-      <div id="dir-cartes-structures" class="dir-grille-structures"></div>
-
-      <section class="dir-panneau" aria-labelledby="titre-transverses">
-        <h2 id="titre-transverses">Priorités transverses (étiquetées par structure)</h2>
-        <ul id="dir-liste-transverses" class="dir-liste"></ul>
+      <section id="dir-auth" class="dir-etat" hidden>
+        <p>Ta session est fermée. Connecte-toi pour ouvrir tes espaces professionnels.</p>
+        <p><a class="dir-lien" href="/">Se reconnecter →</a></p>
       </section>
-    </section>
 
-    <!-- ===== VUE SÉPARÉE : STRUCTURE CLOISONNÉE ===== -->
-    <section id="vue-structure" class="dir-vue" hidden aria-label="Espace structure cloisonné">
-      <div id="str-liens" class="dir-liens-externes" hidden></div>
+      <section id="dir-non-installe" class="dir-etat" hidden>
+        <p>Le socle multi-structures attend l’application de la migration SQL dans Supabase.</p>
+      </section>
 
-      <div class="dir-colonnes">
-        <section class="dir-panneau" aria-labelledby="titre-taches">
-          <h2 id="titre-taches">Priorités, tâches &amp; relances</h2>
-          <form id="form-tache" class="dir-form">
-            <input id="tache-titre" type="text" maxlength="160" required placeholder="Nouvelle tâche ou relance…">
-            <div class="dir-form-ligne">
-              <select id="tache-type" aria-label="Type">
-                <option value="tache">Tâche</option>
-                <option value="relance">Relance</option>
-                <option value="decision">Décision</option>
-              </select>
-              <select id="tache-priorite" aria-label="Priorité">
-                <option value="haute">Haute</option>
-                <option value="normale" selected>Normale</option>
-                <option value="basse">Basse</option>
-              </select>
-              <input id="tache-echeance" type="date" aria-label="Échéance">
-              <button type="submit" class="dir-btn">Ajouter</button>
-            </div>
-          </form>
-          <ul id="str-liste-taches" class="dir-liste"></ul>
+      <section id="dir-erreur" class="dir-etat" hidden>
+        <p>Le pilotage ne répond pas pour le moment. Réessaie dans un instant.</p>
+      </section>
+
+      <!-- ===== VUE GLOBALE : DIRECTION ===== -->
+      <section id="vue-direction" class="dir-vue" hidden aria-label="Vue globale Direction">
+        <div id="dir-metriques" class="dir-metriques" aria-label="Indicateurs consolidés"></div>
+        <div id="dir-cartes-structures" class="dir-grille-structures"></div>
+
+        <section class="dir-section" aria-labelledby="titre-transverses">
+          <div class="dir-section-head">
+            <h2 id="titre-transverses">Priorités transverses</h2>
+            <span class="dir-section-note">Étiquetées par structure</span>
+          </div>
+          <ul id="dir-liste-transverses" class="dir-liste"></ul>
         </section>
+      </section>
 
-        <section class="dir-panneau" aria-labelledby="titre-dossiers">
-          <h2 id="titre-dossiers">Dossiers actifs</h2>
-          <form id="form-dossier" class="dir-form">
-            <input id="dossier-titre" type="text" maxlength="160" required placeholder="Nouveau dossier…">
-            <div class="dir-form-ligne">
-              <input id="dossier-action" type="text" maxlength="300" placeholder="Prochaine action (optionnelle)">
-              <button type="submit" class="dir-btn">Ouvrir</button>
+      <!-- ===== VUE SÉPARÉE : STRUCTURE CLOISONNÉE ===== -->
+      <section id="vue-structure" class="dir-vue" hidden aria-label="Espace structure cloisonné">
+        <div id="str-liens" class="dir-liens-externes" hidden></div>
+
+        <div class="dir-colonnes">
+          <section class="dir-section" aria-labelledby="titre-taches">
+            <div class="dir-section-head">
+              <h2 id="titre-taches">Priorités &amp; relances</h2>
             </div>
-          </form>
-          <ul id="str-liste-dossiers" class="dir-liste"></ul>
+            <div class="dir-panneau">
+              <form id="form-tache" class="dir-form">
+                <input id="tache-titre" type="text" maxlength="160" required placeholder="Nouvelle priorité ou relance…">
+                <div class="dir-form-ligne">
+                  <select id="tache-type" aria-label="Type">
+                    <option value="tache">Tâche</option>
+                    <option value="relance">Relance</option>
+                    <option value="decision">Décision</option>
+                  </select>
+                  <select id="tache-priorite" aria-label="Priorité">
+                    <option value="haute">Haute</option>
+                    <option value="normale" selected>Normale</option>
+                    <option value="basse">Basse</option>
+                  </select>
+                  <input id="tache-echeance" type="date" aria-label="Échéance">
+                  <button type="submit" class="dir-btn">+ Ajouter</button>
+                </div>
+              </form>
+              <ul id="str-liste-taches" class="dir-liste"></ul>
+            </div>
+          </section>
+
+          <section class="dir-section" aria-labelledby="titre-dossiers">
+            <div class="dir-section-head">
+              <h2 id="titre-dossiers">Dossiers actifs</h2>
+            </div>
+            <div class="dir-panneau">
+              <form id="form-dossier" class="dir-form">
+                <input id="dossier-titre" type="text" maxlength="160" required placeholder="Ouvrir un dossier…">
+                <div class="dir-form-ligne">
+                  <input id="dossier-action" type="text" maxlength="300" placeholder="Prochaine action (optionnelle)">
+                  <button type="submit" class="dir-btn">Ouvrir</button>
+                </div>
+              </form>
+              <ul id="str-liste-dossiers" class="dir-liste"></ul>
+            </div>
+          </section>
+        </div>
+
+        <section class="dir-section" aria-labelledby="titre-docs">
+          <div class="dir-section-head">
+            <h2 id="titre-docs">Comptes-rendus, préparations &amp; brouillons</h2>
+            <span class="dir-section-note">Premier jet · jamais envoyé automatiquement</span>
+          </div>
+          <div class="dir-panneau">
+            <form id="form-document" class="dir-form">
+              <div class="dir-form-ligne">
+                <select id="doc-type" aria-label="Type de document">
+                  <option value="compte_rendu">Compte rendu</option>
+                  <option value="preparation_reunion">Préparation réunion</option>
+                  <option value="brouillon_mail">Brouillon e-mail</option>
+                  <option value="synthese">Synthèse</option>
+                </select>
+                <input id="doc-titre" type="text" maxlength="160" required placeholder="Titre du document…">
+              </div>
+              <textarea id="doc-contenu" rows="3" maxlength="20000" required placeholder="Contenu (premier jet, copiable en 1 clic)…"></textarea>
+              <div class="dir-form-pied">
+                <button type="submit" class="dir-btn">Enregistrer dans cette structure</button>
+              </div>
+            </form>
+            <ul id="str-liste-documents" class="dir-liste"></ul>
+          </div>
         </section>
+      </section>
+
+      <p id="dir-statut-live" class="dir-statut-live" role="status" aria-live="polite"></p>
+    </main>
+
+    <!-- ===== CARNET DE BORD LÉO PERMANENT (FIL PERSISTÉ & CLOISONNÉ PAR STRUCTURE) ===== -->
+    <aside class="dir-leo-panel" aria-label="Léo — Assistante de direction">
+      <div class="dir-leo-head">
+        <div>
+          <div class="dir-leo-identite">
+            <span class="dir-leo-nom">Léo</span>
+            <span id="dir-leo-scope" class="dir-leo-scope">Direction</span>
+          </div>
+          <p id="dir-leo-desc" class="dir-leo-desc">Fil cloisonné · assistante de direction</p>
+        </div>
+        <button type="button" id="dir-leo-reset" class="dir-leo-reset" title="Vider ce fil">Nouveau fil</button>
       </div>
 
-      <section class="dir-panneau" aria-labelledby="titre-docs">
-        <h2 id="titre-docs">Comptes-rendus, préparations &amp; brouillons</h2>
-        <form id="form-document" class="dir-form">
-          <div class="dir-form-ligne">
-            <select id="doc-type" aria-label="Type de document">
-              <option value="compte_rendu">Compte rendu</option>
-              <option value="preparation_reunion">Préparation réunion</option>
-              <option value="brouillon_mail">Brouillon e-mail</option>
-              <option value="synthese">Synthèse</option>
-            </select>
-            <input id="doc-titre" type="text" maxlength="160" required placeholder="Titre du document…">
-          </div>
-          <textarea id="doc-contenu" rows="3" maxlength="20000" required placeholder="Contenu (premier jet, jamais envoyé automatiquement)…"></textarea>
-          <button type="submit" class="dir-btn">Enregistrer dans cette structure</button>
-        </form>
-        <ul id="str-liste-documents" class="dir-liste"></ul>
-      </section>
-    </section>
+      <div class="dir-raccourcis-leo" aria-label="Raccourcis assistante de direction">
+        <button type="button" class="dir-chip" data-leo-prompt="priorites">Priorités</button>
+        <button type="button" class="dir-chip" data-leo-prompt="chantier">Planifier chantier</button>
+        <button type="button" class="dir-chip" data-leo-prompt="achats">Achats 100 %</button>
+        <button type="button" class="dir-chip" data-leo-prompt="reunion">Réunion</button>
+        <button type="button" class="dir-chip" data-leo-prompt="cr">CR 12 lignes</button>
+        <button type="button" class="dir-chip" data-leo-prompt="mail">Brouillon mail</button>
+      </div>
 
-    <p id="dir-statut-live" class="dir-statut-live" role="status" aria-live="polite"></p>
-  </main>
+      <div id="dir-leo-fil" class="dir-leo-fil" aria-live="polite"></div>
+
+      <form id="dir-leo-form" class="dir-leo-form">
+        <textarea id="dir-leo-input" rows="2" maxlength="16000" required placeholder="Parler à Léo dans ce contexte (Entrée pour envoyer, Maj+Entrée pour ligne)…"></textarea>
+        <button type="submit" id="dir-leo-envoyer" class="dir-btn-leo">Envoyer</button>
+      </form>
+    </aside>
+
+  </div>
 
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/leo-accueil.js"></script>
+  <script src="js/leo-partout.js"></script>
+  <script src="js/dictee.js"></script>
   <script type="module" src="js/direction-pro.js"></script>
 </body>
 </html>

@@ -1067,6 +1067,21 @@ export function construireSysteme(quadrant, avecOutils) {
         'ou en vue Direction. Tes propositions d’outils doivent viser structure_id="' +
         meta.id + '" uniquement ; tout brouillon reste un premier jet jamais envoyé.'
     );
+    if (quadrant === 'sola-air-paris') {
+      reglesAction.push(
+        '- Posture CHALLENGER CHANTIER (Sola Air Paris) : ton rôle est d’aider Paul à ' +
+          'obtenir une organisation de chantier irréprochable, sans complaisance. Pour tout ' +
+          'chantier évoqué, challenge systématiquement les 6 verrous : ' +
+          '(1) Technique & accès (UI/UE, liaisons frigo/condensats, tableau électrique, accord copro/syndic, stationnement) ; ' +
+          '(2) Achats 100 % certains (qui commande, où, prix HT, retrait/livraison, zéro doublon câbles/goulottes/condensats) ; ' +
+          '(3) Sous-traitant & pose (accord écrit périmètre + fournitures, mise en service/fluides, équipe & horaires) ; ' +
+          '(4) Client & cash (acompte encaissé, créneau confirmé écrit, clés/accès, protection logement) ; ' +
+          '(5) Rétroplanning daté (J-7 verrouillage, J-3 reconfirmation matériel/poseur/client, J-1 check-list, J0 pose, J+1 PV + solde) ; ' +
+          '(6) Marge réelle (coût complet vs devis signé). ' +
+          'Tout point oral = « déclaré », tout point absent = « à confirmer » : pose les 2 ou 3 ' +
+          'questions les plus critiques pour boucher les trous et propose les relances/tâches correspondantes.'
+      );
+    }
   }
   return [
     "Tu es Léo, la majordome d'Ultima, la plateforme personnelle de Paul.",

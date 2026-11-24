@@ -103,6 +103,17 @@ import { validerEtatQuadrant } from '../api/_lib/leo.js';
   assert.match(html, /data-scope="renoboost-ia"/);
   assert.match(html, /data-scope="sola-air-paris"/);
   assert.match(html, /data-scope="amo"/);
+  assert.match(html, /id="dir-leo-fil"/);
+  assert.match(html, /id="dir-leo-form"/);
+  for (const p of ['priorites', 'chantier', 'achats', 'reunion', 'cr', 'mail']) {
+    assert.match(html, new RegExp(`data-leo-prompt="${p}"`));
+  }
+  const jsDir = readFileSync(new URL('../js/direction-pro.js', import.meta.url), 'utf8');
+  assert.match(jsDir, /ressource:\s*'dossier'/);
+  assert.match(jsDir, /Voir tout/);
+  assert.match(jsDir, /Réduire/);
+  assert.match(html, /src="js\/dictee\.js"/);
+  assert.match(jsDir, /UltimaDictee\?\.attacher/);
 }
 
 console.log('OK unit-direction-front');

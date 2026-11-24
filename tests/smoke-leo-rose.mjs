@@ -74,7 +74,7 @@ try {
     await ouvrir.click();
     const rose = page.getByRole('dialog', { name: 'Rose des vents' });
     await rose.getByRole('button', { name: /2 relances à traiter/ }).waitFor();
-    assert.equal(await rose.locator('.leo-rose-aiguille').count(), 6);
+    assert.equal(await rose.locator('.leo-rose-aiguille').count(), 10);
     const micro = rose.getByRole('button', { name: /Dicter/ });
     assert.equal(await micro.count(), mobile ? 1 : 0);
     assert.equal(await rose.evaluate((el) => el.scrollWidth <= el.clientWidth + 1), true);
