@@ -103,6 +103,11 @@ import { validerEtatQuadrant } from '../api/_lib/leo.js';
   assert.match(html, /data-scope="renoboost-ia"/);
   assert.match(html, /data-scope="sola-air-paris"/);
   assert.match(html, /data-scope="amo"/);
+  assert.match(html, /id="dir-leo-fil"/);
+  assert.match(html, /id="dir-leo-form"/);
+  for (const p of ['priorites', 'chantier', 'achats', 'reunion', 'cr', 'mail']) {
+    assert.match(html, new RegExp(`data-leo-prompt="${p}"`));
+  }
 }
 
 console.log('OK unit-direction-front');
