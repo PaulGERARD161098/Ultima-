@@ -9,8 +9,25 @@ import { createHash } from 'node:crypto';
 
 // LISTE BLANCHE : seules les compétences métier utilisables sans outil de séance.
 // Les compétences de développement (sécurité, tests, design…) n'entrent jamais.
-export const COMPETENCES_PROJETEES = ['administratif', 'achats-chantier', 'preparation-reunion'];
-export const MAX_CARACTERES = 9000; // garde de coût : ~2 300 tokens, mis en cache
+// Organisées en socle + 3 packs de 2 cohérents entre eux (chargement sélectif au runtime).
+export const COMPETENCES_PROJETEES = [
+  'administratif',
+  'achats-chantier',
+  'preparation-reunion',
+  // Pack 1 : Pilotage & Décision
+  'rythme-direction',
+  'arbitrage-direction',
+  // Pack 2 : Communication & Réunions
+  'email-naturel',
+  'compte-rendu-express',
+  // Pack 3 : Opérations & Interlocuteurs
+  'suivi-sous-traitants',
+  'brief-interlocuteur',
+];
+
+export const MAX_CARACTERES = 10000; // garde de coût PAR TOUR (chargement sélectif : ~2 500 tokens max)
+export const MAX_CARACTERES_PAR_COMPETENCE = 5500; // borne individuelle d'un SKILL.md projeté (socle administratif = 5250 car.)
+export const MAX_CARACTERES_CATALOGUE = 24000; // borne globale du catalogue projeté
 
 const racine = new URL('../', import.meta.url);
 const cible = new URL('api/_lib/leo-competences.mjs', racine);
@@ -30,16 +47,25 @@ export function corps(texte, nom) {
 
 export function generer(lire = (chemin) => readFileSync(new URL(chemin, racine), 'utf8')) {
   const empreintes = {};
+  const parNom = {};
   const blocs = [];
   for (const nom of COMPETENCES_PROJETEES) {
     const texte = lire(`.claude/skills/${nom}/SKILL.md`);
     empreintes[nom] = createHash('sha256').update(texte).digest('hex');
-    blocs.push(`### Compétence « ${nom} »\n${corps(texte, nom)}`);
+    const bloc = `### Compétence « ${nom} »\n${corps(texte, nom)}`;
+    if (bloc.length > MAX_CARACTERES_PAR_COMPETENCE) {
+      throw new Error(`Compétence « ${nom} » trop volumineuse (${bloc.length} > ${MAX_CARACTERES_PAR_COMPETENCE})`);
+    }
+    parNom[nom] = bloc;
+    blocs.push(bloc);
   }
   const tout = blocs.join('\n\n');
-  if (tout.length > MAX_CARACTERES) throw new Error(`Compétences trop volumineuses (${tout.length} > ${MAX_CARACTERES})`);
+  if (tout.length > MAX_CARACTERES_CATALOGUE) {
+    throw new Error(`Compétences trop volumineuses (${tout.length} > ${MAX_CARACTERES_CATALOGUE})`);
+  }
   return '// GÉNÉRÉ par outils/publier-competences-leo.mjs ; ne pas modifier à la main.\n'
     + `export const EMPREINTES_COMPETENCES = ${JSON.stringify(empreintes)};\n`
+    + `export const COMPETENCES_PAR_NOM = ${JSON.stringify(parNom)};\n`
     + `export const COMPETENCES_LEO = ${JSON.stringify(tout)};\n`;
 }
 
