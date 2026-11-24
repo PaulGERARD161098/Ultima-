@@ -295,6 +295,7 @@ function basculerScope(nouveauScope) {
 
 const SALUTATIONS_RACCOURCIS = {
   priorites: (nom) => `Mode ${nom} · Dis-moi si tu veux l’arbitrage des priorités du jour ou les relances urgentes.`,
+  achats: (nom) => `Mode ${nom} · Chantier 100 % certain : donne-moi le chantier, le sous-traitant et les devis/échanges — je construis le tableau achats (qui commande, où, prix HT, livraison, preuve) et la question prête au prestataire.`,
   reunion: (nom) => `Mode ${nom} · Donne-moi l’interlocuteur et l’objet de la réunion : je prépare l’ordre du jour et les points à trancher.`,
   cr: (nom) => `Mode ${nom} · Colle tes notes brutes (et la date) : je sors le compte rendu en 12 lignes max (Décidé · À confirmer · Actions · Axe vente).`,
   mail: (nom) => `Mode ${nom} · Donne-moi le destinataire et l’intention : je prépare le brouillon d’e-mail (jamais envoyé automatiquement).`
