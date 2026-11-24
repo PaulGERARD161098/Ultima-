@@ -112,6 +112,8 @@ import { validerEtatQuadrant } from '../api/_lib/leo.js';
   assert.match(jsDir, /ressource:\s*'dossier'/);
   assert.match(jsDir, /Voir tout/);
   assert.match(jsDir, /Réduire/);
+  assert.match(html, /src="js\/dictee\.js"/);
+  assert.match(jsDir, /UltimaDictee\?\.attacher/);
 }
 
 console.log('OK unit-direction-front');

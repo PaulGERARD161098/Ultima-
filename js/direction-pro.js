@@ -590,6 +590,7 @@ async function demarrer() {
   });
 
   const leoInput = $('dir-leo-input');
+  window.UltimaDictee?.attacher?.(leoInput, 'Parler à Léo');
   leoInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -598,6 +599,7 @@ async function demarrer() {
   });
   $('dir-leo-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    window.UltimaDictee?.annuler?.(leoInput);
     const val = leoInput.value;
     leoInput.value = '';
     await envoyerALeo(val);
