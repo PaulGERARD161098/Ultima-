@@ -76,11 +76,12 @@ export default async function handler(req, res) {
   // de RIVEN venu d'un front qui dit encore « traveler ».
   const quadrant = normaliserQuadrant(corps.quadrant);
   const outils = outilsPour(quadrant);
-  const systeme = construireSysteme(quadrant, outils !== null);
-  if (!systeme) return fail(res, 400, 'Quadrant inconnu');
+  if (!construireSysteme(quadrant, outils !== null)) return fail(res, 400, 'Quadrant inconnu');
 
   const conversation = validerConversation(corps.messages);
   if (!conversation.ok) return fail(res, 400, 'Conversation invalide');
+
+  const systeme = construireSysteme(quadrant, outils !== null, conversation.messages);
 
   // Les yeux de Léo : l'état du quadrant, calculé et borné par le front.
   // Fail-closed : une forme inattendue fait échouer l'appel, jamais un
