@@ -47,6 +47,15 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 
 ## 1. Mesurer, et croire ce qu'on mesure
 
+**`execute_sql` NE REND QUE LE DERNIER RÉSULTAT — UN « 0 » LU PLUS HAUT N'EST RIEN**
+*(2026-11-24, RenoDevis, inscription du devis SOMAS pour la relance).* Une seule requête contenait
+deux `select` ; l'outil Supabase n'a rendu que le second. Le premier — « ce client existe-t-il déjà ? » —
+a été lu comme « 0 » sans avoir été affiché, et la transaction préparée créait une fiche client en
+double. Elle portait son propre verrou (`raise exception` si l'e-mail existe) : refusée, rien écrit. La
+fiche existait depuis le 24/07 (synchro RénoBoost, attribuée à Matthieu). ⛔ **La règle** : une requête
+de contrôle = un seul `select` par appel, ou une seule ligne qui agrège tout ; et toute écriture métier
+garde son verrou d'existence DANS la transaction, quelle que soit la lecture qui l'a précédée.
+
 **UNE ÉCRITURE EXPIRÉE N'EST NI FAITE NI PAS FAITE — ELLE EST EN SUSPENS**
 *(2026-11-04, RenoDevis, nettoyage SOLA).* La suppression validée par Paul (10
 dossiers, 3 entrées de corpus) passait par `execute_sql` de l'outil Supabase, qui
@@ -1707,6 +1716,14 @@ chiffrés est portée par le devis, et l'écran ne produit aucun PDF tant qu'ell
 (`RenoDevis/components/VocalDevis.tsx`, sabotages V61–V65 et N12).
 
 ## 3. Ce qu'on donne à Paul
+
+**UN INTERRUPTEUR SE RELIT EN BASE AVANT D'ÊTRE CITÉ — PAS DANS LE DOC QUI LE DATE**
+*(2026-11-24, RenoDevis, devis SOMAS).* J'ai écrit à Paul « relances automatiques coupées depuis le
+21/10, elles attendront ta validation », d'après `RenoDevis/CLAUDE.md`. La clé `relances:envoi-auto`
+était ouverte pour les comptes SOLA depuis le 23/11 : le renvoi partait seul le 27/11. Rattrapé une
+réponse plus tard, par la requête de contrôle de l'inscription. ⛔ **La règle** : l'état d'un interrupteur
+(envoi, canal, autonomie) se lit à sa clé, au moment où on le dit ; « au 21/10 : 0 » est une date, pas un
+état. Sonde de `RenoDevis/CLAUDE.md` mise à jour dans le même passage.
 
 **UN NUMÉRO VU À L'ÉCRAN N'EST PAS UNE LIGNE EN BASE — ON LA LIT AVANT DE PROPOSER DE LA SUPPRIMER**
 *(2026-11-14, RenoDevis, recette Devis express SOLA).* Un essai de recette affichait « n°307 » ; l'agent a affirmé que ce devis d'essai était enregistré et a mis sa suppression dans la liste des gestes. Lu en base ensuite : le vrai n°307 est un devis client réel, envoyé le 14/11 à 12:29 UTC ; Devis express est un mode d'essai qui n'enregistre rien. Rien n'a été supprimé, l'autre séance a été prévenue d'urgence. Coût constaté : un échange avec Paul et une alerte inter-séance ; perte évitée de justesse, un devis client effacé. ⇒ **Avant toute suppression proposée ou faite, lire la ligne visée en base (référence, date de création, source, statut) et la rapprocher du geste d'essai (heure, contenu). Si la ligne ne correspond pas, ou si le parcours n'écrit rien, le dire au lieu de supprimer.** Une affirmation « c'est enregistré » sur un mode que l'on n'a pas lu au code est une déduction (Directive EL).
