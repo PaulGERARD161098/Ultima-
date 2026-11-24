@@ -9,7 +9,7 @@ import { createHash } from 'node:crypto';
 
 // LISTE BLANCHE : seules les compétences métier utilisables sans outil de séance.
 // Les compétences de développement (sécurité, tests, design…) n'entrent jamais.
-export const COMPETENCES_PROJETEES = ['administratif', 'achats-chantier'];
+export const COMPETENCES_PROJETEES = ['administratif', 'achats-chantier', 'preparation-reunion'];
 export const MAX_CARACTERES = 9000; // garde de coût : ~2 300 tokens, mis en cache
 
 const racine = new URL('../', import.meta.url);
