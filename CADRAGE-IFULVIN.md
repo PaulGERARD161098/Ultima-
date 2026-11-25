@@ -380,10 +380,18 @@ Paris et l'AMO gardent leurs propres outils.
 
 Chaque étape se cadre en 6 points avant la première ligne (EL).
 
-### 8.13 Décisions ouvertes (Paul)
+### 8.13 Décisions rendues par Paul le 25/11
+
+- **RIVEN fait référence.** Le Google Sheet « Vivier artisans 93 connus » devient
+  une archive. Les nouveaux contacts passent par Léo (ou par une séance) et vont
+  dans RIVEN, pour qu'il n'y ait qu'une seule vérité.
+- **Mickael BENICI (PILOS, BELKI) reste en cercle 1.** Il est concurrent comme
+  prospect RénoBoost, mais c'est un partenaire de toute confiance : les deux
+  axes sont distincts.
+- Les mails du tableau Leroy Merlin sont complétés (capture non tronquée).
+
+### 8.14 Décisions ouvertes (Paul)
 
 1. Le cercle de Roger et celui de Jérémy.
-2. Compléter les mails coupés dans la capture du tableau Leroy Merlin.
-3. Confirmer que Michael = Mickael BENICI. L'orthographe de Faycal et le sens de
-   « CCDI ».
-4. La règle d'entrée dans un cercle (reportée le 30/09).
+2. L'orthographe de Faycal et le sens de « CCDI ».
+3. La règle d'entrée dans un cercle (reportée le 30/09).
