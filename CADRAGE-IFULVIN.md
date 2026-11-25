@@ -170,3 +170,144 @@ intouché.
 | Elle déborde sur les autres écrans | option opt-in, passée seulement si un nœud visible porte `nebuleuse` ; test négatif |
 | Test vert par le mauvais chemin (mesure sur fond déjà coloré) | témoin sans l'option, sabotage (teinte identique ⇒ rouge) |
 | Le rendu « embellit » au détriment du sérieux antique | teintes spécifiées par `graphisme`, capture relue avant commit |
+
+---
+
+## ⑧ IFULVIN DEVIENT LE BACK-OFFICE DU RÉSEAU — séance du 25/11/2026
+
+> Dicté par Paul le 25/11. **Ce bloc précise le §0** : IFULVIN n'est plus un
+> réseau « à bâtir » à côté de RIVEN. **RIVEN est la donnée brute, IFULVIN en
+> est l'exécution** : cercles de confiance, demandes entrantes, orientation,
+> mises en relation, relances. Léo est le front-office ; IFULVIN est le
+> back-office. Le §⑤ « aucune table » du 29/09 est levé pour la boucle D, et
+> pour elle seule.
+>
+> Paul, 25/11 : *« rien ne part à la poubelle […] tout doit être cartographié,
+> recensé, avec les dates : qui fait quoi, comment ; si je donne le lead, qui
+> fait quoi ; qui je relance, quoi et comment. »* Et : *« on fait de
+> l'installation, des travaux à domicile : il ne faut pas se tromper de
+> combat. »*
+
+### Ce qui a été fait en séance (base relue après écriture)
+
+- **12 fiches RIVEN** portent la marque `[IFULVIN]` dans leurs notes (cercle,
+  rôle, réserve). 7 fiches créées, 5 complétées ; total 111 → 118. Les
+  écritures ont été faites sur mandat explicite de Paul, en transaction
+  verrouillée (refus si doublon ou second passage).
+- **Cercle 1** : Mickael BENICI (PILOS, BELKI ; identité à confirmer), Romin
+  (dicté « Roman »), Matthieu DUCREST / SOLA GROUPE, Faycal (maître d'œuvre),
+  Nourdine (BRAVO TRAVAUX), Julien LODI, Slavie. **Cercle 2** : Aïtem CHAFFAR
+  (MY DAILY HOME), Esdine (SPC). **Sans cercle** : Roger GOURDIN (GIAGO,
+  couvreur), Jérémy CABIEU (KLIMA, fournisseur).
+- ⚠️ **Provisoire** : le cercle vit dans les notes tant que la colonne n'existe
+  pas (D1). La marque `[IFULVIN]` sert de clé pour le reprendre.
+- **Constat qui fonde la boucle D** : la Léo d'Ultima **ne peut pas** répondre
+  « qui j'appelle ». `api/leo.js` ne lui transmet qu'un état borné (comptes et
+  intitulés), jamais une fiche, une note ou un téléphone. C'est un choix de
+  minimisation, à rouvrir sous revue de sécurité, pas à contourner.
+
+### Les trois cas qui servent de critère de réussite
+
+1. **Roger → Benjamin (Mon Chasseur Immo)**. Un couvreur cherche des clients,
+   un partenaire a des acheteurs qui rénovent. Léo propose la mise en relation,
+   **dans le périmètre assuré** (décennale = couverture seule), avec Paul en
+   intermédiaire, et dépose le brouillon.
+2. **Les poteaux en acier en T de 3 m (demande perso)**. Personne dans le
+   réseau ne fait du métal (mesuré le 25/11 : 0 fiche métal, acier,
+   serrurerie, ferronnerie). Léo le dit, **la demande est gardée** comme
+   « non servie », et elle devient une piste pour enrichir le réseau.
+3. **Restaurant P17 (chiffrage Midea, KLIMA)**. Une affaire en suspens : Léo
+   sait qui relancer (le client, puis Jérémy), sur quoi, et à quelle date.
+
+### ① Le but
+
+Toute demande, pro ou perso, est **enregistrée, qualifiée, orientée et suivie
+jusqu'à son issue**. Aucune n'est supprimée. À chaque question, Léo répond par
+un nom du réseau, ce qu'il fait, son téléphone et la raison du choix, ou
+« personne », et la demande reste. **MS** : rapproche du prochain chantier
+confié ou vendu. Indicateur lu en base : demandes reçues, orientées, gagnées
+(en propre ou par apport), et délai entre réception et orientation.
+
+### ② Les étapes — une boucle chacune
+
+- **D1 — le schéma.** Une migration rédigée par `data-ingenieur` et
+  **appliquée par Paul**. Elle ajoute à `network_nodes` le `cercle` (1 à 3) et
+  le montant de chantier au-delà duquel on oriente ailleurs. Elle crée la table
+  `demandes` : reçue le, qui l'apporte (fiche RIVEN), canal, sphère pro ou
+  perso, besoin, catégorie, budget estimé, qualité, exigence de service,
+  décision, destinataire, statut, prochaine relance. Pas de politique
+  `DELETE` : une demande se clôt (« sans suite »), elle ne s'efface pas. Les
+  relances réutilisent `journal` (`relance_at` existe déjà). Reprise des
+  marques `[IFULVIN]` dans la colonne `cercle`, puis retrait des marques.
+- **D2 — Léo enregistre et qualifie.** Sur une demande dictée, Léo pose trois
+  questions au plus (budget, délai, niveau de service attendu) et propose la
+  décision :
+  - en propre (clim par Sola) ;
+  - sous-traitance (Romin : salle de bain, travaux généraux) ;
+  - AMO ;
+  - partenaire du réseau ;
+  - personne.
+
+  L'écriture suit le régime des cartes de Léo (orange par défaut).
+- **D3 — Léo cherche dans le réseau.** Un outil de lecture borné : métier,
+  zone, cercle, montant → cinq fiches au plus, chacune avec la raison du choix.
+  Il exclut ce qui sort du périmètre assuré quand il est connu. **Gate** : revue
+  `securite-auditeur` (téléphones envoyés à l'API Anthropic) et accord de Paul.
+- **D4 — le pilotage.** La vue back-office d'IFULVIN : demandes par statut,
+  relances dues, qui a reçu quoi et quand. Elle vit dans IFULVIN, pas dans un
+  outil à côté (JL, et la règle « pilotage en back-office »).
+
+### ③ Les moyens
+
+`supabase/migrations/` (nouvelle migration), `api/_lib/leo.js` (outils),
+`api/reseau/` (lecture et écriture des demandes), une page IFULVIN branchée sur
+l'étoile qui existe déjà, `tests/`. Agents : `data-ingenieur`,
+`securite-auditeur`, `front-carto`, `verificateur`.
+
+**ZS** : l'alternative de l'année est un CRM du marché ou un tableur partagé.
+Elle est écartée : la donnée est déjà dans RIVEN, et Léo est déjà le front. Un
+second outil créerait deux vérités (JL). On garde Supabase et Léo, et on ne
+crée qu'une table. L'alternative interne serait de réutiliser
+`network_nodes.type = 'lead'` (0 ligne à ce jour). Elle est écartée aussi : une
+demande n'est pas une personne, et ses champs (décision, qualité, relance)
+pollueraient la fiche.
+
+### ④ Critères de réussite (vérifiables)
+
+- Les trois cas ci-dessus passent de bout en bout, joués en production, avec la
+  base relue.
+- Aucune demande ne peut être supprimée. Une tentative `DELETE` sous le rôle du
+  propriétaire est refusée par la RLS ; harnais avec sabotage.
+- Une fiche de cercle 1 ressort avant une de cercle 2 à critères égaux. Un
+  chantier au-delà du montant d'un artisan ne lui est pas proposé.
+- Léo ne propose jamais Roger pour de la plomberie (périmètre assuré).
+- Chaque harnais vire au rouge quand on casse ce qu'il garde.
+
+### ⑤ Ce qu'on ne fait PAS
+
+Aucun envoi réel : Léo dépose des brouillons, Paul envoie. Pas de lecture
+automatique de la boîte mail pour créer des demandes (boucle ultérieure). Pas
+de scraping, pas de notation publique des artisans, pas de nouvel outil hors
+d'Ultima. RenoBoost et RenoDevis ne sont pas touchés.
+
+### ⑥ Pre-mortem — « la boucle a échoué : pourquoi ? »
+
+| Mode de défaillance | Ce qui le prévient |
+|---|---|
+| La saisie est trop lourde, Paul arrête de dicter | trois questions au plus ; Léo propose, Paul dit oui |
+| Une demande « sans intérêt » est effacée, la mémoire du réseau se perd | pas de `DELETE` en RLS ; statut « sans suite » |
+| Léo recommande quelqu'un hors de son assurance ou à la décennale expirée | périmètre assuré et date de fin stockés ; filtre dans l'outil |
+| Un membre de cercle 1 n'est plus fiable (ex. Romin : « attention aux papiers ») | réserve affichée avec la recommandation ; cercle révisable |
+| Fuite de téléphones vers l'extérieur | outil borné à cinq fiches, revue de sécurité, journal des lectures |
+| Les demandes perso polluent le pilotage pro | champ « sphère », filtres séparés |
+| Doublons de fiches (la même personne dictée deux fois) | verrou d'existence à l'écriture, comme le 25/11 |
+
+**Décisions attendues de Paul avant D1** :
+1. La grille de qualité d'une demande (proposition : budget, délai, exigence
+   de service, zone).
+2. La règle d'orientation : à partir de quand Sola en propre, Romin ou l'AMO ?
+3. Le cercle de Roger et de Jérémy.
+4. Les artisans de Laura Merlin (cercle 2) : leurs noms.
+
+**Prochaine action unique** : D1 — `data-ingenieur` rédige la migration ; Paul
+l'applique.
