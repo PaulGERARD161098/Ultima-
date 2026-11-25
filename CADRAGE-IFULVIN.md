@@ -263,7 +263,7 @@ passe devant.
   Jean-Luc PRADAL (Association Suzanne Michaux), Jean PAYS (Compétences &
   Stratégie), Thibault GONNET (Nortrade / Sonupac, lié à IceStream).
 - **Cercle 1** : Mickael BENICI (PILOS, BELKI ; identité à confirmer), Romin
-  (dicté « Roman »), Matthieu DUCREST et SOLA GROUPE, Faycal (maître d'œuvre),
+  (dicté « Roman »), Matthieu DUCREST et SOLA GROUPE, Fayçal (maître d'œuvre),
   Nourdine (BRAVO TRAVAUX), Julien LAUDY, Slavie.
 - **Cercle 2** : Aïtem CHAFFAR (MY DELIHOME, dicté « My Daily Home »), Esdine
   (SPC ; interlocutrice Asmaa), et 9 artisans du tableau Leroy Merlin de Paul :
@@ -272,8 +272,8 @@ passe devant.
 - **Repérés, sans cercle** (Paul ne les connaît pas) : SOCIÉTÉ DATA PHONE, LJN
   MENUISERIE ET AGENCEMENT, LES MAÎTRES BÂTISSEURS. **Non recommandé, gardé** :
   FCR JP. BRAVOTRAVO du tableau est rapproché de Nourdine (BRAVO TRAVAUX).
-- **Sans cercle** : Roger GOURDIN (GIAGO, couvreur), Jérémy CABIEU (KLIMA,
-  fournisseur).
+- **Repéré, sans cercle** : Roger GOURDIN (GIAGO, couvreur). **Cercle 2** :
+  Jérémy CABIEU (KLIMA, fournisseur).
 - **Trous mesurés** :
   - prestations renseignées sur 3 fiches sur 111 avant la séance ;
   - fiabilité et capacité : 0 fiche ;
@@ -389,9 +389,11 @@ Chaque étape se cadre en 6 points avant la première ligne (EL).
   prospect RénoBoost, mais c'est un partenaire de toute confiance : les deux
   axes sont distincts.
 - Les mails du tableau Leroy Merlin sont complétés (capture non tronquée).
+- **Roger GOURDIN** : repéré, sans cercle (pièces vérifiées, jamais travaillé
+  ensemble). **Jérémy CABIEU (KLIMA)** : cercle 2 (déjà travaillé ensemble).
+  Orthographe : **Fayçal**.
 
 ### 8.14 Décisions ouvertes (Paul)
 
-1. Le cercle de Roger et celui de Jérémy.
-2. L'orthographe de Faycal et le sens de « CCDI ».
-3. La règle d'entrée dans un cercle (reportée le 30/09).
+1. Le sens de « CCDI » dans la fiche de Fayçal.
+2. La règle d'entrée dans un cercle (reportée le 30/09).
