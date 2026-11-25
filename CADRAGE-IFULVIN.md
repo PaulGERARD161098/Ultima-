@@ -251,9 +251,10 @@ passe devant.
 
 ### 8.6 L'état mesuré au 25/11 (base relue après chaque écriture)
 
-- **RIVEN : 123 fiches** (111 au début de la séance). 18 portent la marque
-  `[IFULVIN]` dans leurs notes. 12 fiches ont été créées et 6 complétées, sur
-  mandat de Paul, en transactions verrouillées contre les doublons. Un
+- **RIVEN : 136 fiches** (111 au début de la séance). 31 portent la marque
+  `[IFULVIN]` dans leurs notes. 25 fiches ont été créées, les autres
+  complétées, sur mandat de Paul, en transactions verrouillées contre les
+  doublons (nom et téléphone). Un
   doublon créé à tort (« Julien LODI », dictée de Julien LAUDY, déjà en base)
   a été supprimé sur l'accord explicite de Paul, après vérification qu'aucune
   donnée n'en dépendait.
@@ -264,8 +265,13 @@ passe devant.
 - **Cercle 1** : Mickael BENICI (PILOS, BELKI ; identité à confirmer), Romin
   (dicté « Roman »), Matthieu DUCREST et SOLA GROUPE, Faycal (maître d'œuvre),
   Nourdine (BRAVO TRAVAUX), Julien LAUDY, Slavie.
-- **Cercle 2** : Aïtem CHAFFAR (MY DAILY HOME), Esdine (SPC), et les artisans
-  de Leroy Merlin (noms à donner).
+- **Cercle 2** : Aïtem CHAFFAR (MY DELIHOME, dicté « My Daily Home »), Esdine
+  (SPC ; interlocutrice Asmaa), et 9 artisans du tableau Leroy Merlin de Paul :
+  SUN CLIMAT, PRO CLIMAT, Stefan STAVILA, MAUGINO VINCENT, GAZTHERM, ILIA'SOLS,
+  LES ARTISANS PARISIENS, BIVOL VALERIU, REBAC FENÊTRES.
+- **Repérés, sans cercle** (Paul ne les connaît pas) : SOCIÉTÉ DATA PHONE, LJN
+  MENUISERIE ET AGENCEMENT, LES MAÎTRES BÂTISSEURS. **Non recommandé, gardé** :
+  FCR JP. BRAVOTRAVO du tableau est rapproché de Nourdine (BRAVO TRAVAUX).
 - **Sans cercle** : Roger GOURDIN (GIAGO, couvreur), Jérémy CABIEU (KLIMA,
   fournisseur).
 - **Trous mesurés** :
@@ -377,7 +383,7 @@ Chaque étape se cadre en 6 points avant la première ligne (EL).
 ### 8.13 Décisions ouvertes (Paul)
 
 1. Le cercle de Roger et celui de Jérémy.
-2. Les noms des artisans de Leroy Merlin.
+2. Compléter les mails coupés dans la capture du tableau Leroy Merlin.
 3. Confirmer que Michael = Mickael BENICI. L'orthographe de Faycal et le sens de
    « CCDI ».
 4. La règle d'entrée dans un cercle (reportée le 30/09).
