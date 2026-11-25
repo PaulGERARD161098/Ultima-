@@ -209,7 +209,7 @@ elles en sont des **destinations**, au même titre que le réseau :
 
 1. **RénoBoost** ;
 2. **Sola Air Paris** ;
-3. **l'AMO**, que Paul monte avec Julien LODI ;
+3. **l'AMO**, que Paul monte avec Julien LAUDY ;
 4. **un membre du réseau** : artisan, fournisseur, prescripteur, partenaire ;
 5. **personne**. La demande est **gardée** : elle signale un trou du réseau à
    combler.
@@ -251,12 +251,19 @@ passe devant.
 
 ### 8.6 L'état mesuré au 25/11 (base relue après chaque écriture)
 
-- **RIVEN : 118 fiches.** 12 portent la marque `[IFULVIN]` dans leurs notes. 7
-  ont été créées et 5 complétées en séance, sur mandat de Paul, en
-  transactions verrouillées contre les doublons.
+- **RIVEN : 123 fiches** (111 au début de la séance). 18 portent la marque
+  `[IFULVIN]` dans leurs notes. 12 fiches ont été créées et 6 complétées, sur
+  mandat de Paul, en transactions verrouillées contre les doublons. Un
+  doublon créé à tort (« Julien LODI », dictée de Julien LAUDY, déjà en base)
+  a été supprimé sur l'accord explicite de Paul, après vérification qu'aucune
+  donnée n'en dépendait.
+- **Réseau d'accompagnement** (libellé Gmail « 02 - Réseau ») : Maël FLEURET
+  (CCI Paris), Vincent OLIVEIRA (WEBYN), Valérie DUVAL (conseillère CCI),
+  Jean-Luc PRADAL (Association Suzanne Michaux), Jean PAYS (Compétences &
+  Stratégie), Thibault GONNET (Nortrade / Sonupac, lié à IceStream).
 - **Cercle 1** : Mickael BENICI (PILOS, BELKI ; identité à confirmer), Romin
   (dicté « Roman »), Matthieu DUCREST et SOLA GROUPE, Faycal (maître d'œuvre),
-  Nourdine (BRAVO TRAVAUX), Julien LODI, Slavie.
+  Nourdine (BRAVO TRAVAUX), Julien LAUDY, Slavie.
 - **Cercle 2** : Aïtem CHAFFAR (MY DAILY HOME), Esdine (SPC), et les artisans
   de Laura Merlin (noms à donner).
 - **Sans cercle** : Roger GOURDIN (GIAGO, couvreur), Jérémy CABIEU (KLIMA,
