@@ -391,9 +391,8 @@ Chaque étape se cadre en 6 points avant la première ligne (EL).
 - Les mails du tableau Leroy Merlin sont complétés (capture non tronquée).
 - **Roger GOURDIN** : repéré, sans cercle (pièces vérifiées, jamais travaillé
   ensemble). **Jérémy CABIEU (KLIMA)** : cercle 2 (déjà travaillé ensemble).
-  Orthographe : **Fayçal**.
+  Orthographe : **Fayçal** (le « CCDI » dicté était « ç, c cédille »).
 
 ### 8.14 Décisions ouvertes (Paul)
 
-1. Le sens de « CCDI » dans la fiche de Fayçal.
-2. La règle d'entrée dans un cercle (reportée le 30/09).
+1. La règle d'entrée dans un cercle (reportée le 30/09).
