@@ -265,7 +265,7 @@ passe devant.
   (dicté « Roman »), Matthieu DUCREST et SOLA GROUPE, Faycal (maître d'œuvre),
   Nourdine (BRAVO TRAVAUX), Julien LAUDY, Slavie.
 - **Cercle 2** : Aïtem CHAFFAR (MY DAILY HOME), Esdine (SPC), et les artisans
-  de Laura Merlin (noms à donner).
+  de Leroy Merlin (noms à donner).
 - **Sans cercle** : Roger GOURDIN (GIAGO, couvreur), Jérémy CABIEU (KLIMA,
   fournisseur).
 - **Trous mesurés** :
@@ -377,7 +377,7 @@ Chaque étape se cadre en 6 points avant la première ligne (EL).
 ### 8.13 Décisions ouvertes (Paul)
 
 1. Le cercle de Roger et celui de Jérémy.
-2. Les noms des artisans de Laura Merlin.
+2. Les noms des artisans de Leroy Merlin.
 3. Confirmer que Michael = Mickael BENICI. L'orthographe de Faycal et le sens de
    « CCDI ».
 4. La règle d'entrée dans un cercle (reportée le 30/09).
