@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v131 2026-11-24 sha256:f3542320d1cd -->
+<!-- lecons:empreinte v132 2026-11-25 sha256:5b4267303e4b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -55,6 +55,17 @@ double. Elle portait son propre verrou (`raise exception` si l'e-mail existe) : 
 fiche existait depuis le 24/07 (synchro RénoBoost, attribuée à Matthieu). ⛔ **La règle** : une requête
 de contrôle = un seul `select` par appel, ou une seule ligne qui agrège tout ; et toute écriture métier
 garde son verrou d'existence DANS la transaction, quelle que soit la lecture qui l'a précédée.
+
+**UN NOM DICTÉ SE CHERCHE PAR SA SONORITÉ, PAS PAR L'ORTHOGRAPHE ENTENDUE**
+*(2026-11-25, Ultima-, séance IFULVIN, saisie du réseau dans RIVEN).* Paul dicte « Julien Lodi ». Le
+verrou anti-doublon cherchait `lodi` : il n'a rien trouvé, et la fiche a été créée. Or Julien LAUDY
+existait déjà, avec la note « contact de catégorie 1 ». Le doublon n'a été vu qu'en lisant ses mails ; il
+a fallu l'accord de Paul pour le supprimer. Dans la même séance, d'autres déformations ont été évitées
+de justesse, par le téléphone ou la boîte mail : « Roman » = Romin, « Item » = Aïtem, « My Daily Home » =
+MY DELIHOME, « Climat » = KLIMA, « Laura Merlin » = Leroy Merlin. ⛔ **La règle** : avant de créer une
+fiche à partir d'une dictée, chercher par le téléphone quand il est donné, par la société et par des
+variantes du nom (les premières lettres, les voyelles libres) ; le verrou de la transaction porte aussi
+sur le téléphone normalisé, pas seulement sur le nom.
 
 **UNE ÉCRITURE EXPIRÉE N'EST NI FAITE NI PAS FAITE — ELLE EST EN SUSPENS**
 *(2026-11-04, RenoDevis, nettoyage SOLA).* La suppression validée par Paul (10

@@ -14,6 +14,8 @@
 > prochaines livraisons métier ; gain de temps et gain commercial non mesurés.
 
 
+> **25/11 — ✅ IFULVIN cadré en macro-réseau, sans code** (`CADRAGE-IFULVIN.md` §⑧, PR #486, documentation seule) : Léo front, IFULVIN middle, RIVEN back ; boussole confiance × capacité × assurance ; aucune demande supprimée ; pas de prix. RIVEN enrichi en base sur mandat de Paul : 111 → 136 fiches, 31 marquées `[IFULVIN]` (cercles 1 et 2, artisans Leroy Merlin, réseau d'accompagnement). ⏭ Construction : à son go (§8.12).
+
 > **29/09 — ✅ OMEGA fait (commits sur `claude/omega-imladrik-macro`)** : Ultima→OMEGA, GRIMA/NAGA supprimés, IMLADRIK macro-projet (+ADRAMELECH +TAO). ⏭ **IFULVIN cadré, non codé** (`CADRAGE-IFULVIN.md`) : bloqué sur un choix produit (voir « Actions humaines » du rapport).
 
 > **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
