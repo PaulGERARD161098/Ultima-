@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v131 2026-11-24 sha256:f3542320d1cd -->
+<!-- lecons:empreinte v132 2026-11-25 sha256:cee7b23396a7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1715,6 +1715,14 @@ rend faux voyage avec lui ou l'empêche de sortir. Ici, la liste des postes écr
 chiffrés est portée par le devis, et l'écran ne produit aucun PDF tant qu'elle n'est pas vide
 (`RenoDevis/components/VocalDevis.tsx`, sabotages V61–V65 et N12).
 
+**UNE RECETTE PEUT COMPTER CE QUE LE FRAMEWORK FAIT — AVANT DE POUSSER UNE ROUTE, REJOUER LES RECETTES QUI LA CHARGENT**
+*(2026-11-25, RenoDevis, sentinelle SOLA #613).* J'ai ajouté un second `after()` à `/api/vocal/preparer` pour prévenir Paul,
+après `tsc` et `npm test` verts. La CI a rougi sur `scripts/recette-vocal.mjs` : la recette remplace `after()` par un
+compteur de calculs, et mon `after()` y comptait pour un second calcul (« un seul calcul pour ces POST concurrents » : 2).
+Un job de build perdu (≈ 12 min) et un aller-retour. ⛔ **La règle** : avant de pousser une modification de route,
+`grep` le chemin du fichier dans `scripts/` et `tests/`, et rejouer en local chaque recette qui le charge — `npm test` ne
+les lance pas. Le correctif ne touche pas la recette : la sentinelle part dans le MÊME travail que le calcul.
+
 ## 3. Ce qu'on donne à Paul
 
 **UN INTERRUPTEUR SE RELIT EN BASE AVANT D'ÊTRE CITÉ — PAS DANS LE DOC QUI LE DATE**
@@ -2428,6 +2436,12 @@ et c'est ce qui rend la faute facile à ne pas voir : elle ne laisse pas de trac
 dans le produit, seulement dans qui a décidé.
 
 ---
+
+**`git mv -k` SUR UN FICHIER NON SUIVI NE FAIT RIEN, ET NE LE DIT PAS — NE JAMAIS ENCHAÎNER UNE SUPPRESSION DERRIÈRE**
+*(2026-11-25, RenoDevis, sentinelle SOLA #613).* Pour déplacer une route pas encore committée, j'ai lancé
+`git mv -k a b || mv a b ; rm -rf ancien_dossier`. `-k` ignore l'erreur « non suivi » et rend 0 : le `mv` de secours n'a
+pas joué, et `rm -rf` a effacé l'original. Recréé de mémoire, puis revérifié. ⛔ **La règle** : déplacer un fichier non
+suivi avec `mv` seul ; vérifier que la cible existe (`test -f`) AVANT toute suppression ; jamais `-k` dans une chaîne.
 
 ## 5. Plusieurs dépôts, plusieurs séances
 
