@@ -63,11 +63,11 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-23",
-    "commit": "7cf7f25bc37ae3d790ff2e0f2c38d73f65b0da70",
-    "quoi": "22–23/11 (séance CARADRYEL) : nouveau cap d'OMEGA à côté d'IMLADRIK, le scriptorium des écrits de Paul (Lettres à Léo, Vies volées, Catabasis, Anabasis ; Google Docs reste l'éditeur). Ultima-#475 fusionnée (1111713 : cadrage, maquette, C1 = table caradryel_oeuvres, /api/caradryel, caradryel.html), #476 (ac9ce7a, documentation), #477 (7cf7f25 : correctifs de la revue Codex — bouton Léo, « Changer le lien », jeton relu — et dock de Léo qui masquait « Lier »). Migration appliquée le 23/11 (6/6 contrôles, advisors 0). A1, A2, A3, A4, A5 tranchés. Mesuré en base le 23/11 : 4 œuvres posées, 0 reliée."
+    "le": "2026-11-25",
+    "commit": "e483aa5f",
+    "quoi": "25/11 : IFULVIN cadré en macro-réseau (Léo front, IFULVIN middle, RIVEN back ; boussole ; aucune demande supprimée). RIVEN 111 → 136 fiches, 31 [IFULVIN]. Sans code."
   },
-  "prochaine_action": "Paul colle les 4 liens de ses Google Docs dans CARADRYEL (« Lier le Doc » ; pour Lettres à Léo, le Google Doc et pas le .docx) et regarde la page sur iPhone ; la séance suivante relit la table en base (count(drive_file_id) = 4) et ferme C1. Ensuite : cadrage C2 (Google Picker). Hors CARADRYEL, la prochaine boucle reste ADR-013 (relance d'impayé dans RenoDevis).",
+  "prochaine_action": "IFULVIN : à ton go, cadrer en 6 points l'étape ① de CADRAGE-IFULVIN.md §8.12 (cercle, capacité, assurance, la demande). Sinon : CARADRYEL C1, puis ADR-013.",
   "bloque_par": [
     "CARADRYEL C1 — geste de Paul : coller les 4 liens Docs (4 œuvres posées, 0 reliée au 23/11). A2 et A3 tranchés le 23/11 (A3 : envoi temporaire à l'API accordé ; C3/C4 restent à cadrer après C2).",
     "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
