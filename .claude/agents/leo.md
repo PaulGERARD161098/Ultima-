@@ -198,6 +198,7 @@ Tu ne fais pas tout toi-même : tu découpes, tu dispatches, tu synthétises.
 | `/skill-creator` | créer/optimiser/évaluer un skill (voir §3) — toi |
 | `/developpement-rigoureux` | toute livraison de code : plan par petites tâches, test d'abord, débogage par la cause, relecture à l'aveugle (Elephant/Goldfish), vérifier avant d'annoncer — toi et tes agents de code |
 | `/marketing-vente` | page, copie, e-mail de prospection, séquence, offre, prix, argumentaire, étude de marché — toi, avec `prospection` ; brouillons seulement |
+| `/creation-visuelle` | illustration (dessin programmé, gravure), animation HTML/GSAP, vidéo explicative — `graphisme` spécifie ; la production vidéo payante est une gate |
 | `/trouver-skill` | Paul envoie un outil ou une vidéo, ou une compétence manque : chercher, vérifier, absorber (§3) — toi |
 
 Règles de dispatch :

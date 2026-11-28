@@ -166,7 +166,8 @@ attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §
 | Blotato, Higgsfield, Picsart | Écarté | payants, Canva déjà raccordé ; publication = envoi réel (gate) |
 | Graphify + Obsidian | Écarté pour l'instant | doublon de Finubar/Ultima (JL) ; envoie docs et PDF au modèle |
 | ECC (everything-claude-code) | **Pioché** le 28/11 : 11 guides sur 328, répartis dans les 3 skills | 328 skills + hooks automatiques : contexte et surface ; piocher au cas par cas |
-| OmniRoute | **Refusé** | tout le code et la PII routés vers des fournisseurs inconnus, mode MITM (sécurité, RGPD) |
+| Vox Explainer, Claude Drawing, Bang Motion (vidéo de @Itssssss_Jack, MIT) | **Absorbés** le 28/11 → skill `creation-visuelle` ; production vidéo Atlas Cloud payante = gate | dessin et animation locaux et gratuits (ZS) ; vidéo explicative pour la vente (MS) |
+| OmniRoute | **Refusé**, maintenu le 28/11 après nouvelle demande de Paul | tout le code et la PII (RIVEN) routés vers des fournisseurs inconnus, mode MITM (sécurité, RGPD) ; une séance cloud refuse les variables qui détournent le modèle ; alternative officielle déjà raccordée : passerelle IA de Vercel (`ai-gateway.vercel.sh`) |
 | Paperclip, Suna/Kortix, Odysseus | Refusé | plateformes d'agents à côté d'Ultima : contraire à JL et à « un seul agent » |
 | OpenJarvis (open-jarvis, Stanford, Apache-2.0, assistant local + Ollama) | Refusé | un « Jarvis » personnel à côté de Léo (JL) ; repose sur un modèle local, sans GPU dans la pile ; aucune intégration Claude Code |
 | honcho (mémoire d'agents, AGPL) | Écarté | mémoire de Léo déjà tenue (`memoire/`, mémoire Claude) ; données chez un tiers |
