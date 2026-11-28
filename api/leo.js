@@ -26,6 +26,7 @@ import { ok, fail, methodNotAllowed, logError, readJsonBody, bodyFail } from './
 import { requireProprietaire } from './_lib/proprietaire.js';
 import { ecrituresAutoCoupees } from './_lib/leo-execution.js';
 import { ouvrirAppel, cloreAppel } from './_lib/leo-appels.js';
+import { webActif, outilsWeb, REGLES_WEB, extraireSources, appelerAvecReprises } from './_lib/leo-web.mjs';
 import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import {
   LEO_MODELE,
@@ -46,6 +47,7 @@ import {
 } from './_lib/leo.js';
 
 const TIMEOUT_MS = 30_000; // appel IA sortant borné (au-dessus : 502 générique)
+const TIMEOUT_WEB_MS = 60_000; // recherche + lecture web : plus long, toujours borné
 
 // S-L2-1 : endpoint FACTURÉ → au plus un appel par utilisateur par 3 s
 // (par-dessus le rate-limit global 60/min/IP du middleware, qui ne borne
@@ -115,19 +117,28 @@ export default async function handler(req, res) {
   // ⛔ maxRetries 0 : une relance du SDK est une REQUÊTE FACTURÉE de plus que la
   // ligne 'tentee' ne compte pas. Un échec se rejoue par un nouvel appel de
   // Paul, donc par un nouveau passage au plafond.
-  const client = new Anthropic({ apiKey: cle, timeout: TIMEOUT_MS, maxRetries: 0 });
+  // Léo lit le web (28/11) : outils SERVEUR Anthropic, derrière LEO_WEB=actif
+  // (geste de Paul : chaque recherche est facturée). Coupé → appel inchangé.
+  const web = webActif(process.env);
+  const tousOutils = [...(outils || []), ...(web ? outilsWeb() : [])];
+  const client = new Anthropic({ apiKey: cle, timeout: web ? TIMEOUT_WEB_MS : TIMEOUT_MS, maxRetries: 0 });
   try {
-    const reponse = await client.messages.create({
+    const envoyer = (fil) => client.messages.create({
       model: modele,
       max_tokens: MAX_TOKENS_REPONSE,
       // Seules les règles écrites côté serveur ont autorité système.
       system: [
-        { type: 'text', text: systeme, cache_control: { type: 'ephemeral' } }
+        { type: 'text', text: systeme, cache_control: { type: 'ephemeral' } },
+        ...(web ? [{ type: 'text', text: REGLES_WEB }] : [])
       ],
       // Spread conditionnel : pas de champ tools quand le catalogue est vide.
-      ...(outils ? { tools: outils } : {}),
-      messages
+      ...(tousOutils.length ? { tools: tousOutils } : {}),
+      messages: fil
     });
+    // pause_turn (recherche longue) : reprises bornées, cf. leo-web.mjs.
+    const { reponse, contenus } = await appelerAvecReprises(envoyer, messages);
+    const sources = web ? extraireSources(contenus) : [];
+    const retourSources = sources.length ? { sources } : {};
     // L'appel est payé : son issue et ses tokens sont posés, best-effort (un
     // échec du journal ne change rien pour Paul). Les tokens, jamais le contenu.
     await cloreAppel(auth.client, appel.traceId, {
@@ -148,6 +159,7 @@ export default async function handler(req, res) {
           reponse: texte,
           ...retourInteraction,
           ...journal,
+          ...retourSources,
           proposition: {
             outil: verdict.proposition.outil,
             args: verdict.proposition.args,
@@ -170,7 +182,7 @@ export default async function handler(req, res) {
       logError('leo.voix.vide', reponse.stop_reason || '');
       return fail(res, 502, "Léo n'a pas pu répondre", { cause: 'ia vide' });
     }
-    return ok(res, { reponse: texte, ...journal, ...retourInteraction });
+    return ok(res, { reponse: texte, ...journal, ...retourInteraction, ...retourSources });
   } catch (erreur) {
     await cloreAppel(auth.client, appel.traceId, { phase: 'echouee', quadrant, modele });
     // Jamais le contenu ni le message brut : statut HTTP ou nom d'erreur.
