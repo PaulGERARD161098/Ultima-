@@ -152,20 +152,20 @@ attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §
 | Context7 (Upstash, MIT, clé gratuite) | **Geste de Paul** — connecteur claude.ai | docs à jour : « le moderne se vérifie » (ZS) |
 | Images Gemini « Nano Banana » (skill communautaire + clé Google) | **À cadrer** — rendu avant/après pour RénoBoost | comble C38 et sert la vente (MS) ; facturation Google = gate dépense ; skill tiers à relire |
 | Transcription de vidéos YouTube (skills communautaires) | **À cadrer** | lire les vidéos que Paul envoie au lieu de captures ; code tiers, réseau à vérifier |
-| marketingskills (coreyhaines31, MIT) | **Récupérer en partie** | source amont probable de `copy-editing`/`emails` (§4 point 2) ; landing RénoBoost/Artidispo (MS) |
+| marketingskills (coreyhaines31, MIT) | **Absorbé** le 28/11 → skill `marketing-vente` (10 guides) | source amont probable de `copy-editing`/`emails` (§4 point 2) ; landing RénoBoost/Artidispo (MS) |
 | Humanizer (blader, MIT) | **Absorbé en méthode** dans `email-naturel` | anti-« ton IA » déjà exigé ; pas d'installation |
 | Skill Creator (Anthropic) | Déjà installé | `.claude/skills/skill-creator`, utilisé par la charte §3 |
 | Logiciel « indispensable pour Claude » (vue en graphe) | Obsidian, confirmé par Paul le 28/11 → même verdict que Graphify + Obsidian | doublon de Finubar/Ultima (JL) |
 | « Un prompt qui branche 5 connecteurs » | Perplexity, Firecrawl, Playwright confirmés par Paul ; 2 icônes restent non identifiées | verdicts ci-dessous ; le prompt fait coller des clés d'API dans la conversation : refusé (secrets) |
 | Grill Me (mattpocock) | Déjà couvert | `arbitrage-direction`, `anti-pattern`, POV adversaire |
-| Superpowers (obra), elephant-goldfish (Google) | Déjà couvert | EL (plan avant), DR (relecture adversaire), `verificateur` sans contexte |
+| Superpowers (obra), elephant-goldfish (Google) | **Absorbé** le 28/11 → skill `developpement-rigoureux` (8 + 5 guides) | EL (plan avant), DR (relecture adversaire), `verificateur` sans contexte |
 | Caveman | Écarté | concision déjà dans la méthode ; ajoute un proxy local |
-| find-skills / skills.sh (vercel-labs) | Absorbé en méthode (charte §3) | chercher avant de créer ; CLI à télémétrie non installée |
+| find-skills / skills.sh (vercel-labs) | **Absorbé** le 28/11 → skill `trouver-skill` | chercher avant de créer ; CLI à télémétrie non installée |
 | Playwright MCP | Déjà couvert | Playwright + Chromium préinstallés, `webapp-testing` |
 | Firecrawl, Perplexity | Écarté | WebSearch/WebFetch + `deep-research` ; payants |
 | Blotato, Higgsfield, Picsart | Écarté | payants, Canva déjà raccordé ; publication = envoi réel (gate) |
 | Graphify + Obsidian | Écarté pour l'instant | doublon de Finubar/Ultima (JL) ; envoie docs et PDF au modèle |
-| ECC (everything-claude-code) | Écarté en bloc | 328 skills + hooks automatiques : contexte et surface ; piocher au cas par cas |
+| ECC (everything-claude-code) | **Pioché** le 28/11 : 11 guides sur 328, répartis dans les 3 skills | 328 skills + hooks automatiques : contexte et surface ; piocher au cas par cas |
 | OmniRoute | **Refusé** | tout le code et la PII routés vers des fournisseurs inconnus, mode MITM (sécurité, RGPD) |
 | Paperclip, Suna/Kortix, Odysseus | Refusé | plateformes d'agents à côté d'Ultima : contraire à JL et à « un seul agent » |
 | OpenJarvis (open-jarvis, Stanford, Apache-2.0, assistant local + Ollama) | Refusé | un « Jarvis » personnel à côté de Léo (JL) ; repose sur un modèle local, sans GPU dans la pile ; aucune intégration Claude Code |
@@ -182,3 +182,34 @@ tous les projets : déposer au compte claude.ai `methode-paul`, `directive-zs`,
 `anti-pattern` et un skill « léo » portable — geste de Paul (Réglages → Skills),
 à préparer en archive par Léo. Les connecteurs claude.ai (data.gouv, Context7)
 valent eux aussi pour tous les projets.
+
+## 7. Absorption du 28/11/2026 (go de Paul) — ce qui est fait, ce qui attend
+
+**Fait** — trois skills-parapluies, textes seulement (aucun script, aucune
+clé), licences et commits amont épinglés dans chaque `references/`, `SKILL.md`
+amont renommés `GUIDE.md` pour ne pas se charger seuls (3 descriptions au lieu
+de 27 : économie de contexte à chaque séance) :
+- `marketing-vente` : marketingskills (10 guides) + ECC market-research ;
+- `developpement-rigoureux` : Superpowers (8), elephant-goldfish (5), ECC (7 :
+  search-first, verification-loop, database-migrations, postgres-patterns,
+  error-handling, strategic-compact, context-budget) ;
+- `trouver-skill` : find-skills + ECC skill-scout, skill-stocktake,
+  mcp-dependency-review.
+Écartés d'ECC après lecture : lead-intelligence (clés Exa/Apollo payantes),
+les 300+ guides de piles absentes (Django, Rust, Kotlin, Laravel…).
+Non projetés dans le prompt serveur de Léo (`api/_lib/leo-competences.mjs`,
+liste blanche de 9) : ce sont des procédés d'agent de développement.
+
+**Attend un cadrage ou un geste de Paul** :
+- **Images « Nano Banana » (RénoBoost IA + Léo)** : rendu avant/après d'une
+  pièce à partir d'une photo. Prérequis : clé Google AI Studio avec
+  facturation (gate dépense, la gratuité ne couvre pas ces modèles selon la
+  recherche du 28/11), hôte `generativelanguage.googleapis.com` à autoriser,
+  photos de clients = données personnelles (consentement, pas de visage, pas
+  de stockage hors Supabase). À cadrer en 6 points avant toute ligne.
+- **Lecture de vidéos YouTube** : hôte youtube.com refusé par le réseau de la
+  séance (constaté le 28/11) ; skill communautaire à relire avant reprise.
+- **Graphify** : l'installation du paquet tiers a été refusée par le garde de
+  la séance (code tiers non relu). Finubar couvre l'état des dépôts, pas le
+  graphe du code (qui appelle quoi) : écart réel, à mesurer sur un clone isolé
+  si Paul le demande.

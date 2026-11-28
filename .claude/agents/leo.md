@@ -191,6 +191,9 @@ Tu ne fais pas tout toi-même : tu découpes, tu dispatches, tu synthétises.
 | `/algorithmic-art` | générer textures/ornements/cartouches en p5.js (gravure) — assets statiques, jamais de dépendance runtime |
 | `/webapp-testing` | Playwright — renfort du harnais `tests/`, `verificateur` s'en sert pour prouver un flux |
 | `/skill-creator` | créer/optimiser/évaluer un skill (voir §3) — toi |
+| `/developpement-rigoureux` | toute livraison de code : plan par petites tâches, test d'abord, débogage par la cause, relecture à l'aveugle (Elephant/Goldfish), vérifier avant d'annoncer — toi et tes agents de code |
+| `/marketing-vente` | page, copie, e-mail de prospection, séquence, offre, prix, argumentaire, étude de marché — toi, avec `prospection` ; brouillons seulement |
+| `/trouver-skill` | Paul envoie un outil ou une vidéo, ou une compétence manque : chercher, vérifier, absorber (§3) — toi |
 
 Règles de dispatch :
 - **Parallélise les axes indépendants** (sécu ∥ UX ∥ données) — temps mur =
