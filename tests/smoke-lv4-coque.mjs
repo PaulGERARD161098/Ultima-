@@ -398,11 +398,23 @@ const plongee = await pageNav.evaluate(async (foyer) => {
   // dirait plus si elles se sont EFFACÉES ou si elles ont simplement été
   // remplacées. 190 ms : dans les 220 ms de l'approche, assez tard pour que la
   // transition de 220 ms ait fait son chemin.
-  await new Promise((r) => setTimeout(r, 190));
-  const pendant = {
-    eteinte: opacite('nicol-bolas'), gardee: opacite(foyer),
-    distance: window.UltimaCiel.courant().distance()
-  };
+  // 23/11/2026 — L'INSTANT FIXE NE SUFFISAIT PAS : relevée à 190 ms pile, sur
+  // une transition de 220 ms, l'opacité dépendait de la charge de la machine
+  // (CI de Ultima-#479 : 0,284 au lieu de < 0,25, alors que la transition allait
+  // bien à son terme). On relève donc, image par image, l'état le PLUS éteint
+  // atteint pendant l'approche — tant que l'étoile existe encore, c'est-à-dire
+  // avant le re-dessin. L'exigence est inchangée : il faut que l'extinction ait
+  // VRAIMENT eu lieu pendant l'approche.
+  const debut = performance.now();
+  let pendant = { eteinte: null, gardee: null, distance: null };
+  while (performance.now() - debut < 800) {
+    await new Promise((r) => requestAnimationFrame(r));
+    const e = opacite('nicol-bolas');
+    if (e === null) { break; } // re-dessiné : l'approche est finie
+    if (pendant.eteinte === null || e < pendant.eteinte) {
+      pendant = { eteinte: e, gardee: opacite(foyer), distance: window.UltimaCiel.courant().distance() };
+    }
+  }
   await new Promise((r) => setTimeout(r, 1500));
   return {
     avant, pendant, apres: idsPeints(), url: location.href,
