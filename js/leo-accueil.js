@@ -1752,7 +1752,19 @@
         var proposition = data && propositionRecevable(data.proposition) ? data.proposition : null;
         if (typeof texteLeo === 'string' && texteLeo) {
           historique.push({ role: 'assistant', content: texteLeo });
-          bulle('leo', texteLeo);
+          var bulleLeo = bulle('leo', texteLeo);
+          // 28/11 : Léo a lu le web — ses sources, sous la bulle. Liens http(s)
+          // seulement, construits nœud par nœud (jamais de HTML venu du serveur).
+          if (data && Array.isArray(data.sources) && data.sources.length) {
+            var liste = el('ul', 'leo-sources');
+            data.sources.slice(0, 8).forEach(function (s) {
+              if (!s || typeof s.url !== 'string' || !/^https?:\/\//i.test(s.url)) { return; }
+              var lien = el('a', '', typeof s.titre === 'string' && s.titre ? s.titre : s.url);
+              lien.href = s.url; lien.target = '_blank'; lien.rel = 'noopener noreferrer';
+              var item = el('li'); item.appendChild(lien); liste.appendChild(item);
+            });
+            if (liste.childNodes.length) { bulleLeo.appendChild(el('p', 'leo-sources-titre', 'Sources')); bulleLeo.appendChild(liste); }
+          }
           // 19/10 : le journal des appels est injoignable → plafond local, plus bas
           // que celui de la base. Dit une fois par réponse, valeur exacte seulement.
           if (data && data.journal === 'local') {

@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "agent": "leo",
   "permissions": {
     "allow": [
       "mcp__Supabase__get_advisors",
@@ -34,6 +35,10 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR:-.}/zohshia/renodevis/derive.mjs\" --rappel"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/leo-portable/leo-rappel.mjs\""
           }
         ]
       }

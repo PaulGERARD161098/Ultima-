@@ -34,6 +34,15 @@ Si un dépôt n'est pas attaché à la séance, tu le dis en tête de ta sortie
   la source publique directement, avec délai maximal, et tu annonces la
   source de chaque ligne. Pappers reste derrière la route : jamais de clé dans
   une séance.
+- **API Recherche d'entreprises** (`recherche-entreprises.api.gouv.fr`,
+  données Sirene de l'INSEE, gratuite, sans clé ; ajoutée le 28/11/2026) :
+  vérifier qu'un prospect est actif, son SIRET, son code d'activité, sa
+  tranche d'effectif. Tu ne gardes que ce qui qualifie le pro (pas de
+  dirigeant nommé dans ta sortie : IDs et SIRET seulement, RGPD). L'hôte
+  est autorisé dans l'environnement ; le 28/11 le tunnel s'est coupé deux fois
+  (pas un refus) : si l'appel échoue,
+  tu le dis et tu te replies sur ADEME RGE, sans inventer. L'API Sirene de
+  l'INSEE exige un compte (30 requêtes par minute) : non utilisée.
 
 ## Ce que tu fais
 

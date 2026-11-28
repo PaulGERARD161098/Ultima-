@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as leo from '../api/_lib/leo.js';
+import * as leoWeb from '../api/_lib/leo-web.mjs';
 import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import {
   construireSysteme, validerEtatQuadrant, joindreEtatConversation,
@@ -65,7 +66,7 @@ const routeSource = readFileSync(new URL('../api/leo.js', import.meta.url), 'utf
   .replace(/^import[\s\S]*?;\n/gm, '')
   .replace('export default async function handler', 'return async function handler');
 const deps = {
-  ...leo,
+  ...leo, ...leoWeb,
   // Imports retirés de la route : injecter les vraies fonctions pures du
   // suivi, sans masquer sa validation par des mocks.
   validerInteraction, decrireInteraction, lireReponseInteraction,

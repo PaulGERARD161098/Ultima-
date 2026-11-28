@@ -1,3 +1,11 @@
+# 28 novembre 2026 — Léo absorbe la veille d'outils, devient l'agent par défaut et lit le web
+
+Paul, 28/11 : passer au crible les outils vus en vidéo, tout absorber dans Léo, la rendre agent par défaut de tous les dépôts, et combler le manque « Léo ne lit pas le web » (« Léo est ma Jarvis »). Livré sur `claude/affectionate-ptolemy-d7qlu9` (PR #489) : 4 skills, charte portable scellée et rappel d'ouverture, 8 PR de propagation, recherche et lecture web avec sources, recettées par Paul sur l'aperçu.
+
+**Prochaine action :** `ROADMAP-2026-11-28-fin-de-session.md` §1 (gestes de Paul), puis §2 (fusion, #489 d'abord).
+
+---
+
 # 22 novembre 2026 — CARADRYEL, le scriptorium : cadrage, maquette, boucle C1
 
 Paul, 22/11 : créer CARADRYEL, cap d'OMEGA à côté d'IMLADRIK, pour centraliser ses écrits (Lettres à Léo, Vies volées, Catabasis, Anabasis) avec un accès direct à chaque Google Doc, et que Léo l'aide à écrire et à garder la cohérence. Cadrage `CADRAGE-CARADRYEL.md`, maquette `design/preview-caradryel.html` (plume de phénix), puis C1 construite sur `claude/busy-mccarthy-snss8y` : table `caradryel_oeuvres` (RLS), `/api/caradryel`, `caradryel.html`. PR Ultima-#475.
@@ -56,27 +64,22 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "CADRAGE-2026-10-31-couts-github-vercel.md (budget Vercel/GitHub : leviers L1–L5, bilan du 25/11) · PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md · zohshia/fin-controle-securite/TECHNO.md",
+  "rattache_a": "ROADMAP-2026-11-28-fin-de-session.md (planning de reprise) · CADRAGE-2026-10-31-couts-github-vercel.md (budget Vercel/GitHub : leviers L1–L5, bilan du 25/11) · PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md · outils/presentations-claires/RECETTE.md · RECETTE-LEO-STOCK-ZOH-2026-10-25.md · zohshia/fin-controle-securite/TECHNO.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "En pause — Léo et Fin, conservation des acquis",
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-11-25",
-    "commit": "e483aa5f",
-    "quoi": "25/11 : IFULVIN cadré en macro-réseau (Léo front, IFULVIN middle, RIVEN back ; boussole ; aucune demande supprimée). RIVEN 111 → 136 fiches, 31 [IFULVIN]. Sans code."
+    "le": "2026-11-28",
+    "commit": "6b34af7c",
+    "quoi": "28/11 : veille de 38 outils → 4 skills absorbés ; Léo agent par défaut (charte portable scellée bac049939979, 8 dépôts en PR) ; Léo lit le web dans l'application (LEO_WEB posé prod + preview, recetté 2× par Paul). PR #489 ouverte, CI bloquée par la facturation GitHub."
   },
-  "prochaine_action": "IFULVIN : à ton go, cadrer en 6 points l'étape ① de CADRAGE-IFULVIN.md §8.12 (cercle, capacité, assurance, la demande). Sinon : CARADRYEL C1, puis ADR-013.",
+  "prochaine_action": "Suivre ROADMAP-2026-11-28-fin-de-session.md : gestes de Paul (port 3000, Billing GitHub, skills au compte, photos avant/après), puis fusion #489 en premier et les 8 PR Léo, puis Sirene dans prospection (indicateur : prospects qualifiés).",
   "bloque_par": [
-    "CARADRYEL C1 — geste de Paul : coller les 4 liens Docs (4 œuvres posées, 0 reliée au 23/11). A2 et A3 tranchés le 23/11 (A3 : envoi temporaire à l'API accordé ; C3/C4 restent à cadrer après C2).",
-    "proposer_contact en production (fusionné 77b475a, 23/10) : la preuve réelle est un geste de Paul — dicter un contact à Léo sur RIVEN, puis « rappelle-le lundi » ; la lecture en base (RIVEN, leo_ecritures) est possible : le connecteur Supabase du projet Ultima est raccordé (constaté le 03/11, 33 tables listées).",
-    "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
-    "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
-    "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
-    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
-    "La précision sur « mon dpe.fr » (VITRUVE)",
-    "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
+    "Facturation GitHub Actions : toute la CI en startup_failure depuis le 28/11 — geste de Paul (Billing).",
+    "Port 3000 du VPS Hostinger ouvert en HTTP clair — geste de Paul (pare-feu), puis `claude remote-control` pour l'audit.",
+    "CARADRYEL C1 — geste de Paul : coller les 4 liens Docs (4 œuvres posées, 0 reliée au 23/11). A2 et A3 tranchés le 23/11 (A3 : envoi temporaire à l'API accordé ; C3/C4 restent à cadrer après C2)."
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
@@ -244,7 +247,7 @@ Brique `zohshia/plateforme-paiement-artisan/` : contrat neutre, moteur détermin
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-11-23"
+  "maj": "2026-11-28"
 }
 ```
 

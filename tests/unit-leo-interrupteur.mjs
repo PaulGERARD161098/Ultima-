@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as leo from '../api/_lib/leo.js';
+import * as leoWeb from '../api/_lib/leo-web.mjs';
 import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import { ecrituresAutoCoupees, ouvrirEcriture } from '../api/_lib/leo-execution.js';
 
@@ -56,7 +57,7 @@ const routeSource = readFileSync(new URL('../api/leo.js', import.meta.url), 'utf
   .replace('export default async function handler', 'return async function handler');
 function route({ auth = 'ok', coupees = false, appel = null } = {}) {
   const deps = {
-    ...leo,
+    ...leo, ...leoWeb,
     // Dépendances pures réelles de la route après suppression des imports.
     validerInteraction, decrireInteraction, lireReponseInteraction,
     Anthropic: AnthropicFactice,

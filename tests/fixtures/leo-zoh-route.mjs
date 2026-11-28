@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as leo from '../../api/_lib/leo.js';
+import * as leoWeb from '../../api/_lib/leo-web.mjs';
 import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../../js/leo-interaction.mjs';
 const routeSource = readFileSync(new URL('../../api/leo.js', import.meta.url), 'utf8')
   .replace(/^import[\s\S]*?;\n/gm, '')
@@ -21,7 +22,7 @@ export function creerRoute({ auth = 'ok', quota = true, content = NOMINAL, panne
     }
   }
   const deps = {
-    ...leo, validerInteraction, decrireInteraction, lireReponseInteraction,
+    ...leo, ...leoWeb, validerInteraction, decrireInteraction, lireReponseInteraction,
     Anthropic: FournisseurFactice,
     process: { env: { ANTHROPIC_API_KEY: 'cle-fictive-sans-reseau' } },
     requireProprietaire: async () => auth === 'ok'

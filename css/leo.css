@@ -695,3 +695,8 @@ body { font-kerning: normal; font-variant-ligatures: common-ligatures; }
 @media (pointer: coarse) {
   .leo-dock-action, .leo-dock-parler { min-height: 44px; }
 }
+
+/* 28/11 : sources lues sur le web par Léo, sous sa réponse. */
+.leo-bulle-leo .leo-sources-titre { margin: .6em 0 .2em; font-size: .8em; letter-spacing: .06em; text-transform: uppercase; opacity: .75; }
+.leo-bulle-leo .leo-sources { margin: 0; padding-left: 1.1em; font-size: .85em; }
+.leo-bulle-leo .leo-sources a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
