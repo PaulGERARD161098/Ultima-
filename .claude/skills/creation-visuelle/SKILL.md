@@ -23,8 +23,11 @@ parchemin, cartouches — jamais au détriment de la lisibilité.
   aucun appel réseau dans `lib/` (balayage du 28/11). Piège rencontré :
   `hatch(density=…)` attend une fonction `(x, y) → 0..1`, pas un nombre.
   Ordre utile : tailler le fond d'abord, laisser le sujet debout ensuite.
-  Une silhouette d'animal demande des points denses : la première panthère
-  ressemblait à un rongeur.
+  **Verdict de Paul (28/11)** : tournesol validé, panthère jugée « horrible ».
+  Le dessin programmé convient aux plantes, paysages, motifs, ornements et
+  cartouches ; **pas aux animaux ni aux personnages** — pour ceux-là, proposer
+  une image générée (Canva déjà raccordé, ou l'API image du cadrage
+  avant/après, gate dépense) au lieu de dessiner à la main.
 - Les images et vidéos produites ne vont **pas** dans le dépôt sauf décision
   (poids, coût de build) : dossier temporaire, puis Drive ou Canva.
 - Aucun visuel ne représente une personne réelle, une marque tierce ou un
