@@ -83,6 +83,22 @@ console.log(`unit-leo-web : ${n} vérifications vertes`);
   ok(/sources officielles/.test(REGLES_WEB) && /Ne raconte pas ta recherche/.test(REGLES_WEB), 'règles : sources officielles, pas de narration');
 }
 
+// Paragraphes gardés entre deux phrases ; pages lues comptées comme sources.
+{
+  const c = [
+    { type: 'web_fetch_tool_result', content: { type: 'web_fetch_result', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F23568', content: { type: 'document', title: 'Taux de TVA pour les travaux' } } },
+    { type: 'text', text: 'Voici la réponse (vérifiée le 21 février 2026).' },
+    { type: 'text', text: 'Pour les travaux, le taux est de ' },
+    { type: 'text', text: '5,5 %', citations: [{ type: 'char_location', document_index: 0, cited_text: 'x' }] },
+    { type: 'text', text: ' en métropole.' },
+  ];
+  const t = texteFinalWeb(c);
+  ok(t === 'Voici la réponse (vérifiée le 21 février 2026).\n\nPour les travaux, le taux est de 5,5 % en métropole.', 'paragraphe gardé, phrase recollée', JSON.stringify(t));
+  const s = extraireSources(c);
+  ok(s.length === 1 && s[0].url.includes('F23568') && s[0].titre === 'Taux de TVA pour les travaux', 'page lue = source', JSON.stringify(s));
+  ok(extraireSources([{ type: 'web_fetch_tool_result', content: { url: 'javascript:x' } }]).length === 0, 'page lue : URL sûre seulement');
+}
+
 // Câblage dans la route : outils web seulement derrière l'interrupteur, sources rendues.
 {
   const { readFileSync } = await import('node:fs');

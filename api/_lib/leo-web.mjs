@@ -69,6 +69,19 @@ export function extraireSources(contenu) {
   if (!Array.isArray(contenu)) return [];
   const vues = new Set();
   const sources = [];
+  // 1. Les pages que Léo a LUES (web_fetch) : leurs citations ne portent pas
+  //    toujours d'URL, la page lue elle-même est la source.
+  for (const bloc of contenu) {
+    if (!bloc || bloc.type !== 'web_fetch_tool_result') continue;
+    const r = bloc.content;
+    const url = urlSure(r && r.url);
+    if (!url || vues.has(url)) continue;
+    vues.add(url);
+    const titreDoc = r?.content?.title;
+    sources.push({ titre: typeof titreDoc === 'string' && titreDoc.trim() ? titreDoc.trim().slice(0, 160) : new URL(url).hostname, url });
+    if (sources.length >= MAX_SOURCES) return sources;
+  }
+  // 2. Les résultats de recherche effectivement CITÉS dans la réponse.
   for (const bloc of contenu) {
     if (!bloc || bloc.type !== 'text' || !Array.isArray(bloc.citations)) continue;
     for (const c of bloc.citations) {
@@ -141,9 +154,17 @@ export function texteFinalWeb(contenu) {
   contenu.forEach((bloc, i) => {
     if (bloc && (bloc.type === 'web_search_tool_result' || bloc.type === 'web_fetch_tool_result')) debut = i + 1;
   });
-  return contenu.slice(debut)
+  const textes = contenu.slice(debut)
     .filter((bloc) => bloc && bloc.type === 'text' && typeof bloc.text === 'string')
-    .map((bloc) => bloc.text)
-    .join('')
-    .trim();
+    .map((bloc) => bloc.text);
+  // Recollage : sans séparateur au milieu d'une phrase (découpe par citation),
+  // mais un saut de paragraphe quand un bloc finit une phrase et que le suivant
+  // en commence une (« … 2026). » + « Pour les travaux … »).
+  let texte = '';
+  for (const morceau of textes) {
+    const finPhrase = /[.!?»)]\s*$/.test(texte) && !/\n\s*$/.test(texte);
+    const debutPhrase = /^\s*[A-ZÀ-ÖØ-Þ0-9«]/.test(morceau);
+    texte += texte && finPhrase && debutPhrase ? '\n\n' + morceau.replace(/^\s+/, '') : morceau;
+  }
+  return texte.trim();
 }
