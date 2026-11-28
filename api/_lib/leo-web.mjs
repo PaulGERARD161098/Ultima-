@@ -98,14 +98,33 @@ export async function appelerAvecReprises(envoyer, messages) {
   let fil = messages;
   let reponse = await envoyer(fil);
   const contenus = [...(reponse.content || [])];
+  const usages = [reponse.usage];
   let reprises = 0;
   while (reponse.stop_reason === 'pause_turn' && reprises < MAX_REPRISES) {
     fil = [...fil, { role: 'assistant', content: reponse.content }];
     reponse = await envoyer(fil);
     contenus.push(...(reponse.content || []));
+    usages.push(reponse.usage);
     reprises++;
   }
-  // La réponse rendue porte TOUT le contenu produit (texte d'avant la pause compris) ;
-  // `usage` reste celui du dernier envoi (les tokens des reprises ne sont pas sommés).
-  return { reponse: { ...reponse, content: contenus }, contenus, reprises };
+  // La réponse rendue porte TOUT le contenu produit (texte d'avant la pause compris)
+  // et l'usage SOMMÉ de tous les envois : le journal des appels compte ce qui est payé.
+  return { reponse: { ...reponse, content: contenus, usage: sommerUsage(usages) }, contenus, reprises };
+}
+
+// Somme des compteurs numériques de plusieurs `usage` (tokens, recherches…).
+// Les champs non numériques du dernier envoi sont gardés tels quels.
+export function sommerUsage(usages) {
+  const lisibles = usages.filter((u) => u && typeof u === 'object');
+  if (!lisibles.length) return undefined;
+  const somme = { ...lisibles.at(-1) };
+  for (const cle of Object.keys(somme)) {
+    if (typeof somme[cle] === 'number') somme[cle] = lisibles.reduce((t, u) => t + (Number.isFinite(u[cle]) ? u[cle] : 0), 0);
+  }
+  const outils = lisibles.map((u) => u.server_tool_use).filter((s) => s && typeof s === 'object');
+  if (outils.length) {
+    somme.server_tool_use = {};
+    for (const s of outils) for (const [k, v] of Object.entries(s)) if (Number.isFinite(v)) somme.server_tool_use[k] = (somme.server_tool_use[k] || 0) + v;
+  }
+  return somme;
 }

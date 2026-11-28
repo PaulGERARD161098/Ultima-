@@ -1,6 +1,6 @@
 // Léo lit le web : interrupteur, outils bornés, sources sûres, reprises bornées.
 import assert from 'node:assert/strict';
-import { webActif, outilsWeb, extraireSources, compterUsageWeb, appelerAvecReprises, REGLES_WEB,
+import { sommerUsage, webActif, outilsWeb, extraireSources, compterUsageWeb, appelerAvecReprises, REGLES_WEB,
   MAX_RECHERCHES, MAX_LECTURES, MAX_REPRISES, MAX_SOURCES } from '../api/_lib/leo-web.mjs';
 
 let n = 0;
@@ -52,6 +52,18 @@ const r2 = await appelerAvecReprises(finit, [{ role: 'user', content: 'q' }]);
 ok(r2.reprises === 1 && r2.reponse.stop_reason === 'end_turn' && r2.contenus.length === 2, 'reprise puis fin');
 ok(r2.reponse.content.map((b) => b.text).join('') === 'ab', 'la réponse rendue garde le texte d\'avant la pause');
 console.log(`unit-leo-web : ${n} vérifications vertes`);
+
+// Usage sommé sur les reprises : le journal compte tout ce qui est payé.
+{
+  let k = 0;
+  const deuxEnvois = async () => (k++ === 0
+    ? { stop_reason: 'pause_turn', content: [], usage: { input_tokens: 100, output_tokens: 10, server_tool_use: { web_search_requests: 2 } } }
+    : { stop_reason: 'end_turn', content: [], usage: { input_tokens: 150, output_tokens: 20, server_tool_use: { web_search_requests: 1 } } });
+  const r = await appelerAvecReprises(deuxEnvois, [{ role: 'user', content: 'q' }]);
+  ok(r.reponse.usage.input_tokens === 250 && r.reponse.usage.output_tokens === 30, 'tokens sommés sur les reprises');
+  ok(r.reponse.usage.server_tool_use.web_search_requests === 3, 'recherches sommées');
+  ok(sommerUsage([undefined, null]) === undefined, 'usage absent → indéfini');
+}
 
 // Câblage dans la route : outils web seulement derrière l'interrupteur, sources rendues.
 {

@@ -254,5 +254,5 @@ réseau dans une recherche ». **Interrupteur `LEO_WEB=actif`** (variable Vercel
 geste de Paul : chaque recherche est facturée en plus des tokens ; coupé par
 défaut, Léo répond alors comme avant). Gardes : `tests/unit-leo-web.mjs` (21,
 sabotage de l'interrupteur → rouge), `tests/smoke-leo-sources.mjs` (6, sabotage
-du filtre de liens → rouge). Limite : les tokens des reprises ne sont pas sommés
-dans le journal des appels (seul le dernier envoi).
+du filtre de liens → rouge). Les tokens et recherches des reprises sont sommés
+avant d'être posés au journal des appels (`sommerUsage`, corrigé le 28/11).
