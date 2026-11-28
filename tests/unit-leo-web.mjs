@@ -1,6 +1,6 @@
 // Léo lit le web : interrupteur, outils bornés, sources sûres, reprises bornées.
 import assert from 'node:assert/strict';
-import { sommerUsage, webActif, outilsWeb, extraireSources, compterUsageWeb, appelerAvecReprises, REGLES_WEB,
+import { texteFinalWeb, sommerUsage, webActif, outilsWeb, extraireSources, compterUsageWeb, appelerAvecReprises, REGLES_WEB,
   MAX_RECHERCHES, MAX_LECTURES, MAX_REPRISES, MAX_SOURCES } from '../api/_lib/leo-web.mjs';
 
 let n = 0;
@@ -63,6 +63,24 @@ console.log(`unit-leo-web : ${n} vérifications vertes`);
   ok(r.reponse.usage.input_tokens === 250 && r.reponse.usage.output_tokens === 30, 'tokens sommés sur les reprises');
   ok(r.reponse.usage.server_tool_use.web_search_requests === 3, 'recherches sommées');
   ok(sommerUsage([undefined, null]) === undefined, 'usage absent → indéfini');
+}
+
+// Texte final : la narration d'avant la recherche ne sort pas ; les blocs découpés par les citations se recollent.
+{
+  const c = [
+    { type: 'text', text: 'Laisse-moi vérifier.' },
+    { type: 'server_tool_use', name: 'web_search' },
+    { type: 'web_search_tool_result', content: [] },
+    { type: 'text', text: 'Le taux est de ' },
+    { type: 'text', text: '5,5 %', citations: [{ url: 'https://www.service-public.fr/x' }] },
+    { type: 'text', text: ' sous conditions :\n- ' },
+    { type: 'text', text: 'Certains travaux', citations: [{ url: 'https://a.fr/' }] },
+  ];
+  const t = texteFinalWeb(c);
+  ok(!t.includes('Laisse-moi'), 'narration d\'avant la recherche retirée');
+  ok(t === 'Le taux est de 5,5 % sous conditions :\n- Certains travaux', 'blocs recollés sans saut parasite', JSON.stringify(t));
+  ok(texteFinalWeb([{ type: 'text', text: 'Sans recherche.' }]) === 'Sans recherche.', 'sans recherche : tout le texte');
+  ok(/sources officielles/.test(REGLES_WEB) && /Ne raconte pas ta recherche/.test(REGLES_WEB), 'règles : sources officielles, pas de narration');
 }
 
 // Câblage dans la route : outils web seulement derrière l'interrupteur, sources rendues.

@@ -26,7 +26,7 @@ import { ok, fail, methodNotAllowed, logError, readJsonBody, bodyFail } from './
 import { requireProprietaire } from './_lib/proprietaire.js';
 import { ecrituresAutoCoupees } from './_lib/leo-execution.js';
 import { ouvrirAppel, cloreAppel } from './_lib/leo-appels.js';
-import { webActif, outilsWeb, REGLES_WEB, extraireSources, appelerAvecReprises } from './_lib/leo-web.mjs';
+import { webActif, outilsWeb, REGLES_WEB, extraireSources, appelerAvecReprises, texteFinalWeb } from './_lib/leo-web.mjs';
 import { validerInteraction, decrireInteraction, lireReponseInteraction } from '../js/leo-interaction.mjs';
 import {
   LEO_MODELE,
@@ -144,7 +144,7 @@ export default async function handler(req, res) {
     await cloreAppel(auth.client, appel.traceId, {
       phase: 'reussie', usage: reponse.usage, quadrant, modele
     });
-    const interaction = lireReponseInteraction(extraireTexte(reponse.content),suivi.valeur,conversation.messages.at(-1).content);
+    const interaction = lireReponseInteraction(web ? texteFinalWeb(reponse.content) || extraireTexte(reponse.content) : extraireTexte(reponse.content),suivi.valeur,conversation.messages.at(-1).content);
     const texte = interaction.texte || (interaction.plan?'Voici le plan proposé pour cette tâche.':interaction.focus?'Je garde cette nouvelle piste pour la suite.':'');
     const retourInteraction=interaction.plan||interaction.focus?{interaction:{plan:interaction.plan,focus:interaction.focus}}:{};
     // L2b : un tool_use devient une PROPOSITION validée + reformulée côté
