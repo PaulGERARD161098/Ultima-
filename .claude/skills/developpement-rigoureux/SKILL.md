@@ -33,6 +33,18 @@ gates priment (fusion, migrations, RLS, envois, dépenses).
 9. **Recevoir une revue** : `superpowers/receiving-code-review` — vérifier
    chaque remarque avant de l'appliquer ou de la contester.
 
+## Mesurer l'impact avant de toucher le code (graphe du code)
+`scripts/graphe-code.sh` (Graphify 0.9.122, Apache-2.0, épinglé) construit en
+≈ 12 s le graphe d'un dépôt — 10 010 nœuds, 17 692 liens sur Ultima le 28/11 —
+par analyse syntaxique locale : aucun modèle, aucun envoi du code. Il travaille
+sur une copie de `HEAD` dans un dossier temporaire, jamais dans le dépôt.
+`construire` puis `expliquer "fonction"` (qui l'appelle, ce qu'elle appelle,
+quels tests l'importent), `chemin "a.js" "b.js"`, `question "…"`. À lancer
+avant de modifier une fonction partagée ou de supprimer du code présumé mort.
+Ce que Finubar ne fait pas : Finubar dit où en est chaque dépôt, le graphe dit
+qui dépend de quoi. Non utilisés : l'extraction des docs et PDF (elle passe par
+un modèle) et le serveur MCP hébergé de Graphify (données chez un tiers).
+
 ## Références techniques (stack de Paul : JS/TS, Supabase, Vercel)
 `ecc/database-migrations`, `ecc/postgres-patterns` (migration = SQL rédigé,
 jamais appliqué sans le go de Paul) · `ecc/error-handling` (erreurs génériques
