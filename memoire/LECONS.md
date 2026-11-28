@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v134 2026-11-26 sha256:40f3a612ee1c -->
+<!-- lecons:empreinte v135 2026-11-28 sha256:efc6aa409d08 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,14 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UNE COÏNCIDENCE DE CALCUL N'EST PAS UNE PREUVE D'ERREUR** *(2026-11-25, devis Paris P001)*. Un
+brouillon de devis portait des prix de vente égaux à « achat ÷ 0,6 puis + 20 % ». J'ai annoncé à Paul que le
+brouillon avait pris le total TTC du fournisseur pour du HT, soit 552 € HT de trop. C'était faux : le chantier
+relevait de SOLA AIR Paris, dont la règle est « achat ÷ 0,5 ». Or ÷ 0,6 × 1,2 = ÷ 0,5 : les deux explications
+donnent exactement les mêmes chiffres, sur toutes les lignes. Il a fallu une correction annoncée puis retirée,
+et une ligne fausse au §11 des standards à reprendre dans la même PR. ⛔ **Quand deux hypothèses produisent le
+même nombre, le nombre ne départage rien** : on demande quelle règle s'applique au lieu de nommer une erreur.
 
 **`execute_sql` NE REND QUE LE DERNIER RÉSULTAT — UN « 0 » LU PLUS HAUT N'EST RIEN**
 *(2026-11-24, RenoDevis, inscription du devis SOMAS pour la relance).* Une seule requête contenait
@@ -2474,6 +2482,22 @@ pas joué, et `rm -rf` a effacé l'original. Recréé de mémoire, puis revérif
 suivi avec `mv` seul ; vérifier que la cible existe (`test -f`) AVANT toute suppression ; jamais `-k` dans une chaîne.
 
 ## 5. Plusieurs dépôts, plusieurs séances
+
+**UNE BIBLIOTHÈQUE DE PRIX APPARTIENT À UNE ENTITÉ : L'IDENTIFIER AVANT D'Y ÉCRIRE** *(2026-11-25,
+RenoDevis `banques_reno`)*. Paul a demandé de verser dans la bibliothèque les prix d'un devis KLIMA. Je les ai
+écrits dans celle de SOLA GROUPE, en production, alors que le chantier relevait de SOLA AIR Paris (règles et
+bibliothèque distinctes). Paul l'a vu en cours de tour. L'écriture a été annulée le jour même, avec une
+empreinte md5 rétablie à l'identique. Sans son arrêt, la règle « prix KLIMA le plus élevé » faisait monter le
+groupe M3O27N8 de 1 010 € à 1 070,02 € dans tous les devis SOLA GROUPE. ⛔ **Avant tout versement de prix,
+nommer l'entité du chantier** (numérotation, adresse, émetteur) et la faire confirmer si elle n'est pas écrite.
+
+**ARRÊTER UNE TÂCHE N'ANNULE PAS UNE CRÉATION, ET UN MESSAGE VAGUE N'EST PAS UN FEU VERT** *(2026-11-26,
+projet Supabase « SOLA Air Paris »)*. J'ai lu « c'est vert sur le job » comme un GO, et j'ai relancé la
+création d'un projet Supabase payant. Paul a écrit « stop ». J'ai arrêté la tâche et relu la liste des projets :
+4 projets, et j'ai annoncé « aucun projet n'a été créé ». Le projet avait pourtant été créé, et il est apparu
+plus tard. Résultat : un projet indésirable dans la mauvaise organisation, et un « comment ça, le projet existe
+déjà ? ». ⛔ **Une action qui coûte ne part que sur un GO sans ambiguïté**. ⛔ **Après l'arrêt d'une création
+externe, on dit « elle a peut-être abouti », et on relit plus tard avant d'affirmer quoi que ce soit.**
 
 **UN ACCORD DE FUSION SE DEMANDE SUR UN `main` RELU À L'INSTANT** *(2026-11-03,
 Ultima #441)*. Paul a dit « Go fusion » sur `b701e54` ; la fusion a été refusée
