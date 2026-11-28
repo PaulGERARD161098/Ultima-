@@ -15,8 +15,8 @@
 //   Léo ne font que proposer (validation serveur inchangée) ;
 // - jamais de donnée personnelle du réseau (RIVEN) dans une requête de recherche.
 
-export const MAX_RECHERCHES = 3;
-export const MAX_LECTURES = 3;
+export const MAX_RECHERCHES = 2;
+export const MAX_LECTURES = 2;
 export const MAX_REPRISES = 2;
 export const MAX_SOURCES = 8;
 
