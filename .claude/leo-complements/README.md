@@ -154,6 +154,8 @@ attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §
 | Transcription de vidéos YouTube (skills communautaires) | **À cadrer** | lire les vidéos que Paul envoie au lieu de captures ; code tiers, réseau à vérifier |
 | marketingskills (coreyhaines31, MIT) | **Récupérer en partie** | source amont probable de `copy-editing`/`emails` (§4 point 2) ; landing RénoBoost/Artidispo (MS) |
 | Humanizer (blader, MIT) | **Absorbé en méthode** dans `email-naturel` | anti-« ton IA » déjà exigé ; pas d'installation |
+| Skill Creator (Anthropic) | Déjà installé | `.claude/skills/skill-creator`, utilisé par la charte §3 |
+| Captures non identifiées : le logiciel « indispensable pour Claude » (vue en graphe, supposé Obsidian) et 2 des 5 icônes du « prompt qui branche 5 connecteurs » | Non tranché | identité non lisible sur la capture ; à confirmer par Paul (nom ou lien) |
 | Grill Me (mattpocock) | Déjà couvert | `arbitrage-direction`, `anti-pattern`, POV adversaire |
 | Superpowers (obra), elephant-goldfish (Google) | Déjà couvert | EL (plan avant), DR (relecture adversaire), `verificateur` sans contexte |
 | Caveman | Écarté | concision déjà dans la méthode ; ajoute un proxy local |
