@@ -17,11 +17,14 @@ parchemin, cartouches — jamais au détriment de la lisibilité.
 | Production complète de la vidéo (images, animation, voix, musique) | `video-explicative/GUIDE.md` + `references/atlas-cloud-api.md` | **payant** : Atlas Cloud, ≈ 3 à 8 $ par film d'une minute → clé + nouvelle dépense = **gate de Paul** |
 
 ## Règles
-- **Code tiers non encore éprouvé dans Ultima** : le 28/11/2026, l'exécution
-  des exemples a été refusée par le garde de la séance. Avant le premier usage :
-  relire le module de style utilisé, l'exécuter dans un dossier temporaire avec
-  `python3 -I`, jamais depuis le dépôt ; aucun appel réseau dans `lib/`
-  (balayage du 28/11).
+- **Éprouvé le 28/11/2026** sur accord de Paul : un tournesol et une panthère
+  en linogravure (`lib/linocut.py`), scripts écrits dans un dossier temporaire,
+  `sys.path` vers `lib/`, lancés avec `python3 -I`, jamais depuis le dépôt ;
+  aucun appel réseau dans `lib/` (balayage du 28/11). Piège rencontré :
+  `hatch(density=…)` attend une fonction `(x, y) → 0..1`, pas un nombre.
+  Ordre utile : tailler le fond d'abord, laisser le sujet debout ensuite.
+  Une silhouette d'animal demande des points denses : la première panthère
+  ressemblait à un rongeur.
 - Les images et vidéos produites ne vont **pas** dans le dépôt sauf décision
   (poids, coût de build) : dossier temporaire, puis Drive ou Canva.
 - Aucun visuel ne représente une personne réelle, une marque tierce ou un

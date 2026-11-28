@@ -220,3 +220,22 @@ liste blanche de 9) : ce sont des procédés d'agent de développement.
   préchargés ; les autres se déclenchent par leur description. Effet en séance
   cloud non documenté : à constater à l'ouverture de la prochaine séance
   (en-tête `@leo`). Garde : `tests/unit-leo-activation.mjs`.
+
+## 8. Léo agent par défaut dans les dix dépôts — 28/11/2026
+
+Source unique : `.claude/leo-portable/leo.md` (sceau `sha256:bac049939979`),
+outil `outils/leo-portable.mjs`, garde `tests/unit-leo-portable.mjs`. Ultima :
+`"agent": "leo"` avec la charte complète. Propagée le 28/11 sur une branche
+`claude/leo-agent-par-defaut` (copie identique vérifiée, `settings.json` du
+dépôt conservé, agents existants — Réno, etc. — gardés comme sous-agents) :
+RenoBoost `2efc1af` · RenoDevis `b0fc971` · RenoAgenda `1555d1a` ·
+RenoPredict `2860b51` · renoboost-console `51b9076` · mon-dpe.fr `aaa1de4` ·
+artisan-builder `263f46d` · DATARENO- `23d4329`. Aucune PR ouverte (fusion =
+geste de Paul ; une PR lance la CI du dépôt). **Artidispo** (compte
+`paggerard-boop`) : raccordement refusé par le garde de la séance — à faire
+depuis une séance ouverte sur Artidispo. **Skills du compte claude.ai** : les
+4 préchargés (directive-zs, anti-pattern, developpement-rigoureux,
+trouver-skill) n'existent hors d'Ultima que s'ils sont déposés au compte
+(archives préparées le 28/11) ; sinon le préchargement est ignoré sans
+erreur. Limite connue : `anti-pattern`, `methode-paul` et `trouver-skill`
+pointent des fichiers d'Ultima, lus seulement si Ultima est attaché.
