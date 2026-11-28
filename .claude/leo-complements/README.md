@@ -147,7 +147,7 @@ attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §
 
 | Élément | Verdict | Raison (directive) |
 |---|---|---|
-| API Recherche d'entreprises (Sirene, data.gouv, sans clé) | **Absorber** — source de l'agent `prospection` | qualifier un pro par SIRET, activité, état actif (MS) ; hôte refusé par le réseau de la séance du 28/11 |
+| API Recherche d'entreprises (Sirene, data.gouv, sans clé) | **Absorber** — source de l'agent `prospection` | qualifier un pro par SIRET, activité, état actif (MS) ; hôte autorisé dans l'environnement, appel du 28/11 coupé par le proxy (à réessayer) |
 | MCP officiel data.gouv.fr (`mcp.data.gouv.fr`, lecture seule, sans clé) | **Geste de Paul** — connecteur personnalisé claude.ai | gratuit, officiel (ZS) ; hôte refusé par le réseau de la séance |
 | Context7 (Upstash, MIT, clé gratuite) | **Geste de Paul** — connecteur claude.ai | docs à jour : « le moderne se vérifie » (ZS) |
 | Images Gemini « Nano Banana » (skill communautaire + clé Google) | **À cadrer** — rendu avant/après pour RénoBoost | comble C38 et sert la vente (MS) ; facturation Google = gate dépense ; skill tiers à relire |
@@ -207,9 +207,15 @@ liste blanche de 9) : ce sont des procédés d'agent de développement.
   recherche du 28/11), hôte `generativelanguage.googleapis.com` à autoriser,
   photos de clients = données personnelles (consentement, pas de visage, pas
   de stockage hors Supabase). À cadrer en 6 points avant toute ligne.
-- **Lecture de vidéos YouTube** : hôte youtube.com refusé par le réseau de la
-  séance (constaté le 28/11) ; skill communautaire à relire avant reprise.
-- **Graphify** : l'installation du paquet tiers a été refusée par le garde de
-  la séance (code tiers non relu). Finubar couvre l'état des dépôts, pas le
-  graphe du code (qui appelle quoi) : écart réel, à mesurer sur un clone isolé
-  si Paul le demande.
+- **Lecture de vidéos YouTube** : ✅ skill `regarder-youtube` posé le 28/11
+  (TranscriptAPI ; YouTube bloque les IP de centres de données). Attend la clé
+  TranscriptAPI de Paul, enregistrée comme secret réseau (formulaire), 100
+  crédits offerts puis abonnement = gate dépense.
+- **Graphify** : ✅ couvert le 28/11 — `developpement-rigoureux/scripts/graphe-code.sh`
+  (0.9.122 épinglé, analyse locale sur copie de HEAD, aucun modèle) :
+  10 010 nœuds, 17 692 liens en 12 s sur Ultima ; « qui appelle
+  `construireSysteme` » → 17 liens exacts, tests compris.
+- **Activation** : ✅ `"agent": "leo"` (fil principal = Léo) et 4 skills
+  préchargés ; les autres se déclenchent par leur description. Effet en séance
+  cloud non documenté : à constater à l'ouverture de la prochaine séance
+  (en-tête `@leo`). Garde : `tests/unit-leo-activation.mjs`.
