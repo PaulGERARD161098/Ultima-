@@ -35,6 +35,10 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR:-.}/zohshia/renodevis/derive.mjs\" --rappel"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/leo-portable/leo-rappel.mjs\""
           }
         ]
       }

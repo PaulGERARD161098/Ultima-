@@ -14,6 +14,8 @@ import { fileURLToPath } from 'node:url';
 
 const ULTIMA = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const SOURCE = join(ULTIMA, '.claude/leo-portable/leo.md');
+export const RAPPEL = join(ULTIMA, '.claude/leo-portable/leo-rappel.mjs');
+const COMMANDE_RAPPEL = 'node "${CLAUDE_PROJECT_DIR:-.}/.claude/leo-rappel.mjs"';
 const SCEAU = /<!-- leo-portable:empreinte [^>]* -->/;
 
 export function empreinte(texte) {
@@ -32,6 +34,16 @@ export function fusionnerReglages(json) {
   if (typeof r !== 'object' || Array.isArray(r) || r === null) throw new Error('settings.json : objet attendu');
   const { $schema, ...reste } = r;
   delete reste.agent;
+  // Rappel d'ouverture de séance : ajouté une seule fois, hooks existants conservés.
+  const hooks = { ...(reste.hooks || {}) };
+  const debut = Array.isArray(hooks.SessionStart) ? hooks.SessionStart.map((g) => ({ ...g, hooks: [...(g.hooks || [])] })) : [];
+  const deja = debut.some((g) => g.hooks.some((h) => h.command === COMMANDE_RAPPEL));
+  if (!deja) {
+    if (debut.length) debut[0].hooks.push({ type: 'command', command: COMMANDE_RAPPEL });
+    else debut.push({ hooks: [{ type: 'command', command: COMMANDE_RAPPEL }] });
+  }
+  hooks.SessionStart = debut;
+  reste.hooks = hooks;
   return JSON.stringify({ ...($schema ? { $schema } : {}), agent: 'leo', ...reste }, null, 2) + '\n';
 }
 
@@ -51,6 +63,8 @@ function principal() {
   if (mode === '--verifier') {
     const ecarts = [];
     if (!existsSync(agent) || readFileSync(agent, 'utf8') !== source) ecarts.push('copie de la charte absente ou différente');
+    const rappel = join(cible, '.claude/leo-rappel.mjs');
+    if (!existsSync(rappel) || readFileSync(rappel, 'utf8') !== readFileSync(RAPPEL, 'utf8')) ecarts.push('rappel d\'ouverture absent ou différent');
     if (!existsSync(reglages) || JSON.parse(readFileSync(reglages, 'utf8')).agent !== 'leo') ecarts.push('"agent": "leo" absent');
     if (ecarts.length) { console.error(`${cible} : ${ecarts.join(' ; ')}`); process.exit(1); }
     console.log(`${cible} : Léo par défaut, copie identique (sha256:${empreinte(source)})`);
@@ -59,6 +73,7 @@ function principal() {
   if (mode === '--propager') {
     mkdirSync(dirname(agent), { recursive: true });
     writeFileSync(agent, source);
+    writeFileSync(join(cible, '.claude/leo-rappel.mjs'), readFileSync(RAPPEL, 'utf8'));
     writeFileSync(reglages, fusionnerReglages(existsSync(reglages) ? readFileSync(reglages, 'utf8') : ''));
     console.log(`${cible} : charte copiée, agent par défaut posé`);
     return;
