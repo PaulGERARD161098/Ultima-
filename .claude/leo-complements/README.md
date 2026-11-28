@@ -151,7 +151,7 @@ attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §
 | MCP officiel data.gouv.fr (`mcp.data.gouv.fr`, lecture seule, sans clé) | **Geste de Paul** — connecteur personnalisé claude.ai | gratuit, officiel (ZS) ; hôte refusé par le réseau de la séance |
 | Context7 (Upstash, MIT, clé gratuite) | **Geste de Paul** — connecteur claude.ai | docs à jour : « le moderne se vérifie » (ZS) |
 | Images Gemini « Nano Banana » (skill communautaire + clé Google) | **À cadrer** — rendu avant/après pour RénoBoost | comble C38 et sert la vente (MS) ; facturation Google = gate dépense ; skill tiers à relire |
-| Transcription de vidéos YouTube (skills communautaires) | **Fermé** le 28/11 | Paul a refusé la clé TranscriptAPI (service tiers payant) ; skill posé puis retiré |
+| Transcription de vidéos YouTube (skills communautaires) | **En attente** (28/11) | skill `regarder-youtube` gardé ; clé TranscriptAPI à fournir plus tard par Paul (« on branchera YT plus tard ») |
 | marketingskills (coreyhaines31, MIT) | **Absorbé** le 28/11 → skill `marketing-vente` (10 guides) | source amont probable de `copy-editing`/`emails` (§4 point 2) ; landing RénoBoost/Artidispo (MS) |
 | Humanizer (blader, MIT) | **Absorbé en méthode** dans `email-naturel` | anti-« ton IA » déjà exigé ; pas d'installation |
 | Skill Creator (Anthropic) | Déjà installé | `.claude/skills/skill-creator`, utilisé par la charte §3 |
@@ -208,9 +208,10 @@ liste blanche de 9) : ce sont des procédés d'agent de développement.
   recherche du 28/11), hôte `generativelanguage.googleapis.com` à autoriser,
   photos de clients = données personnelles (consentement, pas de visage, pas
   de stockage hors Supabase). À cadrer en 6 points avant toute ligne.
-- **Lecture de vidéos YouTube** : ❌ **fermé le 28/11** — Paul a refusé la clé
-  TranscriptAPI ; le skill `regarder-youtube` est retiré (une description de
-  moins chargée à chaque séance). Ne pas le rouvrir sans nouvelle décision.
+- **Lecture de vidéos YouTube** : ⏸ **en attente** — skill `regarder-youtube`
+  gardé (Paul, 28/11 : « on branchera YT plus tard »). Manque : la clé
+  TranscriptAPI, enregistrée comme secret réseau par Paul ; au-delà des 100
+  crédits offerts, abonnement = gate dépense.
 - **Graphify** : ✅ couvert le 28/11 — `developpement-rigoureux/scripts/graphe-code.sh`
   (0.9.122 épinglé, analyse locale sur copie de HEAD, aucun modèle) :
   10 010 nœuds, 17 692 liens en 12 s sur Ultima ; « qui appelle

@@ -7,7 +7,7 @@
 
 ## 0. Ce que la séance du 28/11 a livré (branche `claude/affectionate-ptolemy-d7qlu9`, PR #489)
 - Veille de 38 outils → verdicts (§6) ; règle d'absorption (charte §3).
-- Skills : `marketing-vente`, `developpement-rigoureux` (+ `scripts/graphe-code.sh`, Graphify épinglé), `trouver-skill`, `creation-visuelle` ; `email-naturel` complété. `regarder-youtube` posé puis **retiré** (clé refusée).
+- Skills : `marketing-vente`, `developpement-rigoureux` (+ `scripts/graphe-code.sh`, Graphify épinglé), `trouver-skill`, `creation-visuelle` ; `email-naturel` complété. `regarder-youtube` gardé, **en attente de la clé** TranscriptAPI.
 - Léo agent par défaut : `"agent": "leo"` + charte portable scellée `sha256:bac049939979` + rappel d'ouverture ; propagée sur 8 dépôts (PR ci-dessous).
 - **Léo lit le web dans l'application** (`api/_lib/leo-web.mjs`), recettée deux fois par Paul sur l'aperçu ; `LEO_WEB` posé en Production et Preview (lu dans Vercel le 28/11) ; bornes 2 recherches + 2 lectures par question.
 - Cadrage images avant/après : `CADRAGE-2026-11-28-images-avant-apres.md`.
@@ -15,7 +15,7 @@
 ## 1. Gestes de Paul — une seule passe, dans cet ordre
 1. **Fermer le port 3000** du VPS Hostinger (pare-feu) : `http://191.215.46.50:3000` sert un cockpit en HTTP clair, contraire au kit `deploy/hostinger` (80/443 via Caddy). Si l'écran affichait un jeton ou un secret : le changer.
 2. **GitHub → Settings → Billing → Actions** : toute la CI est en `startup_failure` depuis le 28/11 (dernière verte : 27/11 14:16 UTC). Lire si c'est le budget (renouvellement du cycle ?) ou un paiement refusé ; payer ou attendre.
-3. **Déposer 8 skills au compte claude.ai** (claude.ai/customize/skills) : directive-zs, anti-pattern, developpement-rigoureux, trouver-skill, methode-paul, marketing-vente, creation-visuelle, email-naturel. **Ne pas déposer `regarder-youtube`** (retiré).
+3. **Déposer 9 skills au compte claude.ai** (claude.ai/customize/skills) : directive-zs, anti-pattern, developpement-rigoureux, trouver-skill, methode-paul, marketing-vente, creation-visuelle, email-naturel, regarder-youtube (inactif tant que la clé TranscriptAPI n'est pas fournie).
 4. **Images avant/après** : lire le prix sur ai.google.dev/pricing, fixer un plafond mensuel, fournir 3 photos sans personne ni adresse.
 
 ## 2. Dès que la CI repart (agent, puis Paul)
@@ -31,7 +31,7 @@
 5. **Cadrage « Léo Jarvis »** (modèle OpenJarvis : résumé du matin parlé, routines plafonnées) — reporté après l'audit, pas coupé (but déclaré de Paul).
 
 ## 4. Fermé ou reporté (ne pas rouvrir sans décision)
-- `regarder-youtube` : fermé (clé refusée). OmniRoute, Paperclip, Suna, OpenJarvis : refusés (JL, sécurité).
+- `regarder-youtube` : en attente de la clé TranscriptAPI (Paul la branchera plus tard). OmniRoute, Paperclip, Suna, OpenJarvis : refusés (JL, sécurité).
 - Connecteurs data.gouv et Context7 : reportés (aucune vente rapprochée ; l'API Sirene n'a pas besoin de clé).
 - Boucles antérieures, inchangées : IFULVIN étape ①, CARADRYEL C1 (4 liens Docs), ADR-013.
 
