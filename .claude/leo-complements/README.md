@@ -137,9 +137,9 @@ d'envoi (Paul, 03/11), rejeu de T11, T15 et T18 : 2 CONFORME, 1 PARTIEL (T18, §
 modèle) : `RECETTE.md` §7 — écarts stables T06 et T18, variance réelle sur T05,
 T08 et T11 ; règle T06 ajoutée à la charte (`1453f28`), rejeu T06 encore PARTIEL (sources).
 
-## 6. Veille d'outils externes du 28/11/2026 — 37 éléments passés au crible
+## 6. Veille d'outils externes du 28/11/2026 — 38 éléments passés au crible
 
-Source : 20 captures de vidéos courtes envoyées par Paul le 28/11, chacune
+Source : 21 captures de vidéos courtes envoyées par Paul le 28/11, chacune
 vérifiée à sa source officielle le même jour (dépôt GitHub ou éditeur ; étoiles
 relevées sur GitHub ; prix contradictoires signalés comme tels). **Aucune
 installation faite** : ce tableau dit ce que Léo absorbe en méthode, ce qui
@@ -165,6 +165,7 @@ attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §
 | ECC (everything-claude-code) | Écarté en bloc | 328 skills + hooks automatiques : contexte et surface ; piocher au cas par cas |
 | OmniRoute | **Refusé** | tout le code et la PII routés vers des fournisseurs inconnus, mode MITM (sécurité, RGPD) |
 | Paperclip, Suna/Kortix, Odysseus | Refusé | plateformes d'agents à côté d'Ultima : contraire à JL et à « un seul agent » |
+| OpenJarvis (open-jarvis, Stanford, Apache-2.0, assistant local + Ollama) | Refusé | un « Jarvis » personnel à côté de Léo (JL) ; repose sur un modèle local, sans GPU dans la pile ; aucune intégration Claude Code |
 | honcho (mémoire d'agents, AGPL) | Écarté | mémoire de Léo déjà tenue (`memoire/`, mémoire Claude) ; données chez un tiers |
 | scrolltide, MotionSites, Google Flow, GSAP/Remotion/three.js/Lottie | Écarté | sites vitrines « so 2010 » (ZS) ; `frontend-design` suffit ; Remotion payant au-delà de 3 personnes |
 | Gemma local (Ollama, 12 Go), skill Rust, openui, DeepTutor, bama | Hors besoin | pas de GPU ni de Rust dans la pile ; identités ambiguës |

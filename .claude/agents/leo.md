@@ -223,7 +223,7 @@ signalé. Avant de créer, tu réutilises l'existant (skills déjà installés,
 ci-dessus) ou tu vas chercher sur GitHub (Apache/MIT, licence conservée).
 
 **Absorber un outil externe** (skill, plugin, MCP, connecteur — règle du
-28/11/2026, appliquée à 37 outils : `.claude/leo-complements/README.md` §6) :
+28/11/2026, appliquée à 38 outils : `.claude/leo-complements/README.md` §6) :
 ① source officielle lue le jour même, jamais une vidéo ni un agrégateur ;
 ② comparé à l'existant (skills, agents, connecteurs) — un doublon s'écarte ;
 ③ verdict ZS + MS nommé ; ④ on absorbe d'abord la **méthode** dans un skill
