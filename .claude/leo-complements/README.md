@@ -136,3 +136,45 @@ d'envoi (Paul, 03/11), rejeu de T11, T15 et T18 : 2 CONFORME, 1 PARTIEL (T18, §
 **Second passage indépendant** (dossier §9 en main, autres scénarios, barrière hors
 modèle) : `RECETTE.md` §7 — écarts stables T06 et T18, variance réelle sur T05,
 T08 et T11 ; règle T06 ajoutée à la charte (`1453f28`), rejeu T06 encore PARTIEL (sources).
+
+## 6. Veille d'outils externes du 28/11/2026 — 37 éléments passés au crible
+
+Source : 20 captures de vidéos courtes envoyées par Paul le 28/11, chacune
+vérifiée à sa source officielle le même jour (dépôt GitHub ou éditeur ; étoiles
+relevées sur GitHub ; prix contradictoires signalés comme tels). **Aucune
+installation faite** : ce tableau dit ce que Léo absorbe en méthode, ce qui
+attend un geste de Paul, et ce qui est écarté. Règle d'absorption : charte §3.
+
+| Élément | Verdict | Raison (directive) |
+|---|---|---|
+| API Recherche d'entreprises (Sirene, data.gouv, sans clé) | **Absorber** — source de l'agent `prospection` | qualifier un pro par SIRET, activité, état actif (MS) ; hôte refusé par le réseau de la séance du 28/11 |
+| MCP officiel data.gouv.fr (`mcp.data.gouv.fr`, lecture seule, sans clé) | **Geste de Paul** — connecteur personnalisé claude.ai | gratuit, officiel (ZS) ; hôte refusé par le réseau de la séance |
+| Context7 (Upstash, MIT, clé gratuite) | **Geste de Paul** — connecteur claude.ai | docs à jour : « le moderne se vérifie » (ZS) |
+| Images Gemini « Nano Banana » (skill communautaire + clé Google) | **À cadrer** — rendu avant/après pour RénoBoost | comble C38 et sert la vente (MS) ; facturation Google = gate dépense ; skill tiers à relire |
+| Transcription de vidéos YouTube (skills communautaires) | **À cadrer** | lire les vidéos que Paul envoie au lieu de captures ; code tiers, réseau à vérifier |
+| marketingskills (coreyhaines31, MIT) | **Récupérer en partie** | source amont probable de `copy-editing`/`emails` (§4 point 2) ; landing RénoBoost/Artidispo (MS) |
+| Humanizer (blader, MIT) | **Absorbé en méthode** dans `email-naturel` | anti-« ton IA » déjà exigé ; pas d'installation |
+| Grill Me (mattpocock) | Déjà couvert | `arbitrage-direction`, `anti-pattern`, POV adversaire |
+| Superpowers (obra), elephant-goldfish (Google) | Déjà couvert | EL (plan avant), DR (relecture adversaire), `verificateur` sans contexte |
+| Caveman | Écarté | concision déjà dans la méthode ; ajoute un proxy local |
+| find-skills / skills.sh (vercel-labs) | Absorbé en méthode (charte §3) | chercher avant de créer ; CLI à télémétrie non installée |
+| Playwright MCP | Déjà couvert | Playwright + Chromium préinstallés, `webapp-testing` |
+| Firecrawl, Perplexity | Écarté | WebSearch/WebFetch + `deep-research` ; payants |
+| Blotato, Higgsfield, Picsart | Écarté | payants, Canva déjà raccordé ; publication = envoi réel (gate) |
+| Graphify + Obsidian | Écarté pour l'instant | doublon de Finubar/Ultima (JL) ; envoie docs et PDF au modèle |
+| ECC (everything-claude-code) | Écarté en bloc | 328 skills + hooks automatiques : contexte et surface ; piocher au cas par cas |
+| OmniRoute | **Refusé** | tout le code et la PII routés vers des fournisseurs inconnus, mode MITM (sécurité, RGPD) |
+| Paperclip, Suna/Kortix, Odysseus | Refusé | plateformes d'agents à côté d'Ultima : contraire à JL et à « un seul agent » |
+| honcho (mémoire d'agents, AGPL) | Écarté | mémoire de Léo déjà tenue (`memoire/`, mémoire Claude) ; données chez un tiers |
+| scrolltide, MotionSites, Google Flow, GSAP/Remotion/three.js/Lottie | Écarté | sites vitrines « so 2010 » (ZS) ; `frontend-design` suffit ; Remotion payant au-delà de 3 personnes |
+| Gemma local (Ollama, 12 Go), skill Rust, openui, DeepTutor, bama | Hors besoin | pas de GPU ni de Rust dans la pile ; identités ambiguës |
+| Vidéo de motivation « Did we make it? » | Sans objet | aucun outil |
+
+**Diffusion dans les dix dépôts** (constat du 28/11) : les skills du dossier
+`.claude/skills/` d'Ultima ne sont chargés que dans les séances ouvertes sur
+Ultima ; seuls les skills ajoutés au **compte claude.ai** (dossier `synced` de
+la séance) sont chargés partout. Pour que Léo et sa méthode suivent Paul sur
+tous les projets : déposer au compte claude.ai `methode-paul`, `directive-zs`,
+`anti-pattern` et un skill « léo » portable — geste de Paul (Réglages → Skills),
+à préparer en archive par Léo. Les connecteurs claude.ai (data.gouv, Context7)
+valent eux aussi pour tous les projets.

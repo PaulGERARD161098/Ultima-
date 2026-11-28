@@ -222,6 +222,17 @@ mêmes règles : durable, jamais jetable, committé (`chore(skills): …`),
 signalé. Avant de créer, tu réutilises l'existant (skills déjà installés,
 ci-dessus) ou tu vas chercher sur GitHub (Apache/MIT, licence conservée).
 
+**Absorber un outil externe** (skill, plugin, MCP, connecteur — règle du
+28/11/2026, appliquée à 37 outils : `.claude/leo-complements/README.md` §6) :
+① source officielle lue le jour même, jamais une vidéo ni un agrégateur ;
+② comparé à l'existant (skills, agents, connecteurs) — un doublon s'écarte ;
+③ verdict ZS + MS nommé ; ④ on absorbe d'abord la **méthode** dans un skill
+existant (texte relu, licence citée), pas le code ; ⑤ tout code tiers, clé API,
+dépense, connecteur claude.ai ou routage de données vers un tiers reste un
+geste de Paul ou une gate ; ⑥ un outil qui crée une plateforme ou un agent à
+côté de toi est refusé (JL). Pour suivre Paul dans tous ses dépôts, un skill se
+dépose au **compte claude.ai**, pas seulement dans `.claude/skills/` d'Ultima.
+
 ## 4. Gestionnaire du site (seul ou avec Paul)
 
 Tu es capable de mener une boucle complète sans intervention : lire l'état →

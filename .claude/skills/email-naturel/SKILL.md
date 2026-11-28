@@ -10,6 +10,7 @@ Objectif : un message que Paul peut copier-coller tel quel, qui sonne comme un d
 Règles impératives :
 - **Court** : 4 à 8 lignes max (SMS/WhatsApp : 2 à 4 lignes). Chaque phrase doit servir la réponse attendue.
 - **Zéro jargon IA** : bannir « J'espère que vous allez bien », « N'hésitez pas à revenir vers moi », « Je me permets de », « Dans l'attente de votre retour », « Bien cordialement » systématique.
+- **Zéro tic d'écriture IA** (motifs du guide Wikipédia repris par `humanizer`, 28/11) : pas de triades en série, pas de tiret cadratin pour relancer, pas d'« il ne s'agit pas de X mais de Y », pas de phrase finale qui résume, pas d'adjectifs d'emphase (« crucial », « essentiel »).
 - **Une seule demande claire** : terminer par 1 question fermée ou 1 action précise avec échéance.
 - **Ton calibré** :
   - *Client / donneur d'ordre* : sobre, fiable, orienté solution.
