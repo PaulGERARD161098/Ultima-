@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v134 2026-11-27 sha256:a10294443260 -->
+<!-- lecons:empreinte v135 2026-11-28 sha256:efc6aa409d08 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -707,6 +707,17 @@ pas les tests. Coût : un commit à défaire, un tour de contrôle, un second co
 ⛔ **La règle** : avant de toucher au moteur sur le verdict d'un oracle, rejouer le cas sur
 la donnée réelle (ou une fixture qui a sa forme). Si le défaut tient à une propriété que la
 réalité n'a pas, c'est la fixture ou l'oracle qui se corrige, pas le moteur.
+
+**UNE RÉPARTITION DE CAUSES SE LIT CAS PAR CAS, PAS PAR MOTS-CLÉS DU MESSAGE**
+*(2026-11-26, RenoDevis, blocages de Devis Express).* Paul demande pourquoi Matthieu bute. Le tri des 54 messages de
+blocage par motifs de texte rend « moitié catalogue, moitié lecture » — annoncé à Paul comme un constat. Léo, en
+contrôle indépendant, reprend les blocages un par un : la cause dominante est un **défaut de code** (un e-mail de
+client lu comme une référence, 8 devis le 24/11, déjà corrigé par #598), que le tri rangeait dans « catalogue » parce
+que le message disait « pas dans votre bibliothèque ». Après correctif : 1 blocage sur 9. Le diagnostic faux aurait
+lancé un chantier catalogue pour une panne déjà réparée.
+⛔ **Avant de donner à Paul une répartition de causes, relire au moins un cas de chaque catégorie jusqu'à sa cause**
+(le code qui a produit le message), et dater chaque catégorie : une cause éteinte depuis deux jours n'explique pas
+« encore des soucis ce matin ».
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1741,6 +1752,14 @@ compteur de calculs, et mon `after()` y comptait pour un second calcul (« un se
 Un job de build perdu (≈ 12 min) et un aller-retour. ⛔ **La règle** : avant de pousser une modification de route,
 `grep` le chemin du fichier dans `scripts/` et `tests/`, et rejouer en local chaque recette qui le charge — `npm test` ne
 les lance pas. Le correctif ne touche pas la recette : la sentinelle part dans le MÊME travail que le calcul.
+
+**UN TEST DE FUITE EMPLOIE UNE DONNÉE QUE SEULE LA GARDE VISÉE ATTRAPE**
+*(2026-11-26, RenoDevis, signalement d'anomalie).* La garde : le texte libre d'un signalement ne part jamais par mail.
+Le test vérifiait l'absence d'un message contenant… un téléphone. Sabotage : le texte libre ajouté au mail — **le test
+reste vert**, parce que le filet `verrouiller` retirait toute ligne portant un téléphone. Le cas réellement dangereux
+(« Devis bloqué chez Madame Durand ») passait les deux.
+⛔ **Une donnée de test de fuite ne doit déclencher QUE la garde éprouvée** ; un second filet qui l'attrape aussi rend
+le test vert par accident. On ne le sait qu'en cassant la garde seule.
 
 ## 3. Ce qu'on donne à Paul
 
